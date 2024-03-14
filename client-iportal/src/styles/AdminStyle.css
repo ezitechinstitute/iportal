@@ -1,0 +1,74 @@
+.nav-color {
+    background-color: white;
+}
+
+.btn-color {
+    background-color: #7367f0;
+
+}
+
+.admin-profile {
+    margin-left: 1140px;
+
+}
+
+@media screen and (max-width: 600px) {
+    .admin-profile {
+        margin-left: 220px;
+    }
+
+    .card-m {
+        margin-top: 15px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .admin-profile {
+        margin-left: 220px;
+    }
+
+    .card-m {
+        margin-top: 15px;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .admin-profile {
+        margin-left: 210px;
+    }
+
+    .card-m {
+        margin-top: 15px;
+    }
+}
+
+
+@media screen and (max-width: 412px) {
+    .admin-profile {
+        margin-left: 200px;
+    }
+
+    .card-m {
+        margin-top: 15px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .admin-profile {
+        margin-left: 190px;
+    }
+
+    .card-m {
+        margin-top: 15px;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .admin-profile {
+        margin-left: 170px;
+    }
+
+    .card-m {
+        margin-top: 15px;
+    }
+}
