@@ -1,13 +1,9 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { AdminSidebar } from "./components/admin-components/AdminSidebar";
-import { AdminDashboard } from "./pages/admin-pages/AdminDashboard";
+import { AdminHome } from "./pages/admin-pages/AdminHome";
 
 function App() {
   return (
     <>
-      <AdminSidebar />
-      <AdminDashboard />
-      <br/>
+      <AdminHome />
     </>
   );
 }
