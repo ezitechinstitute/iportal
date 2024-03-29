@@ -1,4 +1,5 @@
 import React from "react";
+import { FiDollarSign } from "react-icons/fi";
 
 export const ManagerSidebar = () => {
   return (
@@ -64,14 +65,14 @@ export const ManagerSidebar = () => {
               </a>
             </li>
 
-            <li className="nav-item active">
+            <li className="nav-item">
               <a
                 className="d-flex align-items-center"
                 href="dashboard-ecommerce.html"
               >
-                <i data-feather="grid"></i>
+                <i data-feather="users"></i>
                 <span className="menu-item" data-i18n="eCommerce">
-                  Porjects
+                  Interns
                 </span>
               </a>
             </li>
@@ -81,12 +82,36 @@ export const ManagerSidebar = () => {
                 className="d-flex align-items-center"
                 href="dashboard-ecommerce.html"
               >
+                <i data-feather="monitor"></i>
+                <span className="menu-item" data-i18n="eCommerce">
+                  Remote Interns
+                </span>
+              </a>
+            </li>
+
+            <li className="nav-item active">
+              <a
+                className="d-flex align-items-center"
+                href="dashboard-ecommerce.html"
+              >
+                <i data-feather="grid"></i>
+                <span className="menu-item" data-i18n="eCommerce">
+                  Intern Porjects
+                </span>
+              </a>
+            </li>
+
+            {/* <li className="nav-item">
+              <a
+                className="d-flex align-items-center"
+                href="dashboard-ecommerce.html"
+              >
                 <i data-feather="check"></i>
                 <span className="menu-item" data-i18n="eCommerce">
                   Attendance
                 </span>
               </a>
-            </li>
+            </li> */}
 
             <li className=" nav-item">
               <a className="d-flex align-items-center" href="app-calendar.html">
@@ -100,57 +125,18 @@ export const ManagerSidebar = () => {
 
             <li className=" nav-item">
               <a className="d-flex align-items-center" href="#">
-                <i data-feather="info"></i>
+                <FiDollarSign />
                 <span className="menu-title text-truncate" data-i18n="User">
-                  KB Information
+                  Balance
                 </span>
               </a>
             </li>
 
-            <li className="nav-item">
-              <a
-                className="d-flex align-items-center"
-                href="ext-component-sweet-alerts.html"
-              >
-                <i data-feather="shopping-cart"></i>
-                <span className="menu-item" data-i18n="Sweet Alert">
-                  Shop
-                </span>
-              </a>
-            </li>
-
-            <li className="nav-item">
-              <a
-                className="d-flex align-items-center"
-                href="ext-component-sweet-alerts.html"
-              >
-                <i data-feather="database"></i>
-                <span className="menu-item" data-i18n="Sweet Alert">
-                  Points
-                </span>
-              </a>
-            </li>
-
-            <li className="nav-item">
-              <a
-                className="d-flex align-items-center"
-                href="ext-component-sweet-alerts.html"
-              >
-                <i data-feather="message-square"></i>
-                <span className="menu-item" data-i18n="Sweet Alert">
-                  Feedback
-                </span>
-              </a>
-            </li>
-
-            <li className="nav-item">
-              <a
-                className="d-flex align-items-center"
-                href="ext-component-sweet-alerts.html"
-              >
-                <i data-feather="image"></i>
-                <span className="menu-item" data-i18n="Sweet Alert">
-                  Post
+            <li className=" nav-item">
+              <a className="d-flex align-items-center" href="#">
+                <i data-feather="file-text"></i>
+                <span className="menu-title text-truncate" data-i18n="User">
+                  Invoice
                 </span>
               </a>
             </li>

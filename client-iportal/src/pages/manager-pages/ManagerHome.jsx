@@ -8,7 +8,7 @@ export const ManagerHome = () => {
     <>
       <ManagerTopbar />
       <ManagerSidebar />
-      {/* <ManagerDashboard /> */}
+      <ManagerDashboard />
     </>
   );
 };

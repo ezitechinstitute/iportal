@@ -21,8 +21,14 @@ export const ManagerTopbar = () => {
                 className="nav-link"
                 href="javascript:void(0);"
                 data-toggle="dropdown"
-              ></a>
+              >
+                <i className="ficon" data-feather="bell"></i>
+                <span className="badge badge-pill badge-danger badge-up">
+                  5
+                </span>
+              </a>
             </li>
+
             <li className="nav-item dropdown dropdown-user">
               <a
                 className="nav-link dropdown-toggle dropdown-user-link"
@@ -34,7 +40,7 @@ export const ManagerTopbar = () => {
               >
                 <div className="user-nav d-sm-flex d-none">
                   <span className="user-name font-weight-bolder">John Doe</span>
-                  <span className="user-status">Intern</span>
+                  <span className="user-status">Manager</span>
                 </div>
                 <span className="avatar">
                   <img
