@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { FiDollarSign } from "react-icons/fi";
+import { Link, NavLink } from "react-router-dom";
+// import "../../styles/ManagerStyle.css";
 
 export const ManagerSidebar = () => {
+  const [active, setActive] = useState("");
+
+  const updateMenuStatus = (e) => {
+    setActive(e);
+  };
   return (
     <>
       {/* BEGIN: Main Menu */}
@@ -47,98 +54,105 @@ export const ManagerSidebar = () => {
           </ul>
         </div>
         <div className="shadow-bottom"></div>
-        <div className="main-menu-content">
+        <div className="main-menu-content mt-2">
           <ul
             className="navigation navigation-main"
             id="main-menu-navigation"
             data-menu="menu-navigation"
           >
-            <li className="nav-item">
-              <a className="d-flex align-items-center" href="index.html">
+            <li className={active === "1" ? "active" : undefined}>
+              <NavLink
+                className="d-flex align-items-center"
+                onClick={() => updateMenuStatus("1")}
+                to="/manager-dashboard"
+              >
                 <i data-feather="home"></i>
                 <span
                   className="menu-title text-truncate"
                   data-i18n="Dashboards"
                 >
-                  Dashboards
+                  Dashboard
                 </span>
-              </a>
+              </NavLink>
             </li>
 
-            <li className="nav-item">
-              <a
+            <li className={active === "2" ? "active" : undefined}>
+              <NavLink
                 className="d-flex align-items-center"
-                href="dashboard-ecommerce.html"
+                onClick={() => updateMenuStatus("2")}
+                id={"2"}
+                to="/onsite-interns"
               >
                 <i data-feather="users"></i>
                 <span className="menu-item" data-i18n="eCommerce">
                   Interns
                 </span>
-              </a>
+              </NavLink>
             </li>
 
-            <li className="nav-item">
-              <a
+            <li className={active === "3" ? "active" : undefined}>
+              <NavLink
                 className="d-flex align-items-center"
-                href="dashboard-ecommerce.html"
+                onClick={() => updateMenuStatus("3")}
+                id={"3"}
+                to="/remote-interns"
               >
                 <i data-feather="monitor"></i>
                 <span className="menu-item" data-i18n="eCommerce">
                   Remote Interns
                 </span>
-              </a>
+              </NavLink>
             </li>
 
-            <li className="nav-item active">
-              <a
+            <li className={active === "4" ? "active" : undefined}>
+              <NavLink
                 className="d-flex align-items-center"
-                href="dashboard-ecommerce.html"
+                onClick={() => updateMenuStatus("4")}
+                id={"4"}
               >
                 <i data-feather="grid"></i>
                 <span className="menu-item" data-i18n="eCommerce">
                   Intern Porjects
                 </span>
-              </a>
+              </NavLink>
             </li>
 
-            {/* <li className="nav-item">
-              <a
+            <li className={active === "5" ? "active" : undefined}>
+              <NavLink
                 className="d-flex align-items-center"
-                href="dashboard-ecommerce.html"
+                onClick={() => updateMenuStatus("5")}
               >
-                <i data-feather="check"></i>
-                <span className="menu-item" data-i18n="eCommerce">
-                  Attendance
-                </span>
-              </a>
-            </li> */}
-
-            <li className=" nav-item">
-              <a className="d-flex align-items-center" href="app-calendar.html">
                 <i data-feather="calendar"></i>
-
                 <span className="menu-title text-truncate" data-i18n="Calendar">
                   Leave
                 </span>
-              </a>
+              </NavLink>
             </li>
 
-            <li className=" nav-item">
-              <a className="d-flex align-items-center" href="#">
+            <li className={active === "6" ? "active" : undefined}>
+              <NavLink
+                className="d-flex align-items-center"
+                onClick={() => updateMenuStatus("6")}
+                to={"/"}
+              >
                 <FiDollarSign />
                 <span className="menu-title text-truncate" data-i18n="User">
                   Balance
                 </span>
-              </a>
+              </NavLink>
             </li>
 
-            <li className=" nav-item">
-              <a className="d-flex align-items-center" href="#">
+            <li className={active === "7" ? "active" : undefined}>
+              <NavLink
+                className="d-flex align-items-center"
+                onClick={() => updateMenuStatus("7")}
+                to={"/"}
+              >
                 <i data-feather="file-text"></i>
                 <span className="menu-title text-truncate" data-i18n="User">
                   Invoice
                 </span>
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>

@@ -32,8 +32,120 @@ export const ManagerDashboard = () => {
               </div>
               <div className="row match-height">
                 {/* <!-- Medal Card --> */}
+                <div class="col-xl-4 col-md-6 col-12">
+                  <div class="card card-congratulation-medal p-1">
+                    <div class="card-body">
+                      <h5>Congratulations 🎉 John!</h5>
+                      <p class="card-text font-small-3">
+                        You have earn in March
+                      </p>
+                      <h3 class="mb-75 pt-70">
+                        <a href="javascript:void(0);">PKR : 3,499</a>
+                      </h3>
+                      <button
+                        type="button"
+                        class="btn btn-primary"
+                        style={{ marginTop: "20px" }}
+                      >
+                        Withdraw
+                      </button>
+                      <img
+                        src="./images/coin.svg"
+                        class="congratulation-medal"
+                        alt="Medal Pic"
+                        width={100}
+                        style={{ marginTop: "85px" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                {/* <!--/ Medal Card --> */}
 
-                <div className="col-xl-3 col-md-6 col-12">
+                {/* <!-- Statistics Card --> */}
+                <div class="col-12 col-xl-8 col-md-6">
+                  <div class="card card-statistics">
+                    <div class="card-header">
+                      <h4 class="card-title">Statistics</h4>
+                      <div class="d-flex align-items-center">
+                        <p class="card-text font-small-2 mr-25 mb-0">
+                          Updated 1 month ago
+                        </p>
+                      </div>
+                    </div>
+                    <div class="card-body statistics-body">
+                      <div class="row">
+                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
+                          <div class="media">
+                            <div class="avatar bg-light-primary mr-2">
+                              <div class="avatar-content">
+                                <i data-feather="users" class="avatar-icon"></i>
+                              </div>
+                            </div>
+                            <div class="media-body my-auto">
+                              <h4 class="font-weight-bolder mb-0">230k</h4>
+                              <p class="card-text font-small-3 mb-0">Interns</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
+                          <div class="media">
+                            <div class="avatar bg-light-info mr-2">
+                              <div class="avatar-content">
+                                <i
+                                  data-feather="clipboard"
+                                  class="avatar-icon"
+                                ></i>
+                              </div>
+                            </div>
+                            <div class="media-body my-auto">
+                              <h4 class="font-weight-bolder mb-0">8.549k</h4>
+                              <p class="card-text font-small-3 mb-0">Test</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-sm-0">
+                          <div class="media">
+                            <div class="avatar bg-light-danger mr-2">
+                              <div class="avatar-content">
+                                <i
+                                  data-feather="loader"
+                                  class="avatar-icon"
+                                ></i>
+                              </div>
+                            </div>
+                            <div class="media-body my-auto">
+                              <h4 class="font-weight-bolder mb-0">1.423k</h4>
+                              <p class="card-text font-small-3 mb-0">
+                                Progress
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 col-12">
+                          <div class="media">
+                            <div class="avatar bg-light-success mr-2">
+                              <div class="avatar-content">
+                                <i
+                                  data-feather="check-square"
+                                  class="avatar-icon"
+                                ></i>
+                              </div>
+                            </div>
+                            <div class="media-body my-auto">
+                              <h4 class="font-weight-bolder mb-0">$9745</h4>
+                              <p class="card-text font-small-3 mb-0">
+                                Completed
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* <!--/ Statistics Card --> */}
+
+                {/* <div className="col-xl-3 col-md-6 col-12">
                   <div className="card card-congratulation-medal">
                     <div className="card-body text-center mt-2">
                       <i data-feather="users" style={{ color: "#988ff4" }}></i>
@@ -41,9 +153,9 @@ export const ManagerDashboard = () => {
                       <h5 className="roboto mb-75 mt-2 pt-10">Total Interns</h5>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
-                <div className="col-xl-3 col-md-6 col-12">
+                {/* <div className="col-xl-3 col-md-6 col-12">
                   <div className="card card-congratulation-medal">
                     <div className="card-body text-center mt-2">
                       <i
@@ -54,9 +166,9 @@ export const ManagerDashboard = () => {
                       <h5 className="roboto mb-75 mt-2 pt-10">Test</h5>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
-                <div className="col-xl-3 col-md-6 col-12">
+                {/* <div className="col-xl-3 col-md-6 col-12">
                   <div className="card card-congratulation-medal">
                     <div className="card-body text-center mt-2">
                       <i data-feather="loader" style={{ color: "#988ff4" }}></i>
@@ -77,7 +189,7 @@ export const ManagerDashboard = () => {
                       <h5 className="roboto mb-75 mt-2 pt-10">Completed</h5>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </section>
 
@@ -232,44 +344,17 @@ export const ManagerDashboard = () => {
                                   Angular Project
                                 </span>
                               </td>
-                              <td>Peter Charls</td>
-                              <td>
-                                <div class="avatar-group">
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Lilian Nenez"
-                                  ></div>
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Alberto Glotzbach"
-                                  ></div>
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Alberto Glotzbach"
-                                  ></div>
-                                </div>
-                              </td>
+                              <td>0/0</td>
+                              <td>0/0</td>
 
                               <td>
                                 <div class="dropdown">
                                   <button
                                     type="button"
-                                    class="btn btn-sm dropdown-toggle hide-arrow"
+                                    class="btn btn-warning dropdown-toggle hide-arrow"
                                     data-toggle="dropdown"
                                   >
-                                    <i data-feather="more-vertical"></i>
+                                    Action
                                   </button>
                                   <div class="dropdown-menu">
                                     <a
@@ -277,17 +362,17 @@ export const ManagerDashboard = () => {
                                       href="javascript:void(0);"
                                     >
                                       <i
-                                        data-feather="edit-2"
+                                        data-feather="check-square"
                                         class="mr-50"
                                       ></i>
-                                      <span>Edit</span>
+                                      <span>Complete</span>
                                     </a>
                                     <a
                                       class="dropdown-item"
                                       href="javascript:void(0);"
                                     >
-                                      <i data-feather="trash" class="mr-50"></i>
-                                      <span>Delete</span>
+                                      <i data-feather="x" class="mr-50"></i>
+                                      <span>Incomplete</span>
                                     </a>
                                   </div>
                                 </div>
@@ -299,44 +384,17 @@ export const ManagerDashboard = () => {
                                   Angular Project
                                 </span>
                               </td>
-                              <td>Peter Charls</td>
-                              <td>
-                                <div class="avatar-group">
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Lilian Nenez"
-                                  ></div>
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Alberto Glotzbach"
-                                  ></div>
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Alberto Glotzbach"
-                                  ></div>
-                                </div>
-                              </td>
+                              <td>0/0</td>
+                              <td>0/0</td>
 
                               <td>
                                 <div class="dropdown">
                                   <button
                                     type="button"
-                                    class="btn btn-sm dropdown-toggle hide-arrow"
+                                    class="btn btn-warning dropdown-toggle hide-arrow"
                                     data-toggle="dropdown"
                                   >
-                                    <i data-feather="more-vertical"></i>
+                                    Action
                                   </button>
                                   <div class="dropdown-menu">
                                     <a
@@ -344,17 +402,17 @@ export const ManagerDashboard = () => {
                                       href="javascript:void(0);"
                                     >
                                       <i
-                                        data-feather="edit-2"
+                                        data-feather="check-square"
                                         class="mr-50"
                                       ></i>
-                                      <span>Edit</span>
+                                      <span>Complete</span>
                                     </a>
                                     <a
                                       class="dropdown-item"
                                       href="javascript:void(0);"
                                     >
-                                      <i data-feather="trash" class="mr-50"></i>
-                                      <span>Delete</span>
+                                      <i data-feather="x" class="mr-50"></i>
+                                      <span>Incomplete</span>
                                     </a>
                                   </div>
                                 </div>
@@ -367,44 +425,17 @@ export const ManagerDashboard = () => {
                                   Angular Project
                                 </span>
                               </td>
-                              <td>Peter Charls</td>
-                              <td>
-                                <div class="avatar-group">
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Lilian Nenez"
-                                  ></div>
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Alberto Glotzbach"
-                                  ></div>
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Alberto Glotzbach"
-                                  ></div>
-                                </div>
-                              </td>
+                              <td>0/0</td>
+                              <td>0/0</td>
 
                               <td>
                                 <div class="dropdown">
                                   <button
                                     type="button"
-                                    class="btn btn-sm dropdown-toggle hide-arrow"
+                                    class="btn btn-warning dropdown-toggle hide-arrow"
                                     data-toggle="dropdown"
                                   >
-                                    <i data-feather="more-vertical"></i>
+                                    Action
                                   </button>
                                   <div class="dropdown-menu">
                                     <a
@@ -412,17 +443,17 @@ export const ManagerDashboard = () => {
                                       href="javascript:void(0);"
                                     >
                                       <i
-                                        data-feather="edit-2"
+                                        data-feather="check-square"
                                         class="mr-50"
                                       ></i>
-                                      <span>Edit</span>
+                                      <span>Complete</span>
                                     </a>
                                     <a
                                       class="dropdown-item"
                                       href="javascript:void(0);"
                                     >
-                                      <i data-feather="trash" class="mr-50"></i>
-                                      <span>Delete</span>
+                                      <i data-feather="x" class="mr-50"></i>
+                                      <span>Incomplete</span>
                                     </a>
                                   </div>
                                 </div>
@@ -435,44 +466,17 @@ export const ManagerDashboard = () => {
                                   React Project
                                 </span>
                               </td>
-                              <td>Ronald Frest</td>
-                              <td>
-                                <div class="avatar-group">
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Lilian Nenez"
-                                  ></div>
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Alberto Glotzbach"
-                                  ></div>
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Alberto Glotzbach"
-                                  ></div>
-                                </div>
-                              </td>
+                              <td>0/0</td>
+                              <td>0/0</td>
 
                               <td>
                                 <div class="dropdown">
                                   <button
                                     type="button"
-                                    class="btn btn-sm dropdown-toggle hide-arrow"
+                                    class="btn btn-warning dropdown-toggle hide-arrow"
                                     data-toggle="dropdown"
                                   >
-                                    <i data-feather="more-vertical"></i>
+                                    Action
                                   </button>
                                   <div class="dropdown-menu">
                                     <a
@@ -480,17 +484,17 @@ export const ManagerDashboard = () => {
                                       href="javascript:void(0);"
                                     >
                                       <i
-                                        data-feather="edit-2"
+                                        data-feather="check-square"
                                         class="mr-50"
                                       ></i>
-                                      <span>Edit</span>
+                                      <span>Complete</span>
                                     </a>
                                     <a
                                       class="dropdown-item"
                                       href="javascript:void(0);"
                                     >
-                                      <i data-feather="trash" class="mr-50"></i>
-                                      <span>Delete</span>
+                                      <i data-feather="x" class="mr-50"></i>
+                                      <span>Incomplete</span>
                                     </a>
                                   </div>
                                 </div>
@@ -502,44 +506,17 @@ export const ManagerDashboard = () => {
                                   Vuejs Project
                                 </span>
                               </td>
-                              <td>Jack Obes</td>
-                              <td>
-                                <div class="avatar-group">
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Lilian Nenez"
-                                  ></div>
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Alberto Glotzbach"
-                                  ></div>
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Alberto Glotzbach"
-                                  ></div>
-                                </div>
-                              </td>
+                              <td>0/0</td>
+                              <td>0/0</td>
 
                               <td>
                                 <div class="dropdown">
                                   <button
                                     type="button"
-                                    class="btn btn-sm dropdown-toggle hide-arrow"
+                                    class="btn btn-warning dropdown-toggle hide-arrow"
                                     data-toggle="dropdown"
                                   >
-                                    <i data-feather="more-vertical"></i>
+                                    Action
                                   </button>
                                   <div class="dropdown-menu">
                                     <a
@@ -547,17 +524,17 @@ export const ManagerDashboard = () => {
                                       href="javascript:void(0);"
                                     >
                                       <i
-                                        data-feather="edit-2"
+                                        data-feather="check-square"
                                         class="mr-50"
                                       ></i>
-                                      <span>Edit</span>
+                                      <span>Complete</span>
                                     </a>
                                     <a
                                       class="dropdown-item"
                                       href="javascript:void(0);"
                                     >
-                                      <i data-feather="trash" class="mr-50"></i>
-                                      <span>Delete</span>
+                                      <i data-feather="x" class="mr-50"></i>
+                                      <span>Incomplete</span>
                                     </a>
                                   </div>
                                 </div>
@@ -569,44 +546,17 @@ export const ManagerDashboard = () => {
                                   Bootstrap Project
                                 </span>
                               </td>
-                              <td>Jerry Milton</td>
-                              <td>
-                                <div class="avatar-group">
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Lilian Nenez"
-                                  ></div>
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Alberto Glotzbach"
-                                  ></div>
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Alberto Glotzbach"
-                                  ></div>
-                                </div>
-                              </td>
+                              <td>0/0</td>
+                              <td>0/0</td>
 
                               <td>
                                 <div class="dropdown">
                                   <button
                                     type="button"
-                                    class="btn btn-sm dropdown-toggle hide-arrow"
+                                    class="btn btn-warning dropdown-toggle hide-arrow"
                                     data-toggle="dropdown"
                                   >
-                                    <i data-feather="more-vertical"></i>
+                                    Action
                                   </button>
                                   <div class="dropdown-menu">
                                     <a
@@ -614,17 +564,58 @@ export const ManagerDashboard = () => {
                                       href="javascript:void(0);"
                                     >
                                       <i
-                                        data-feather="edit-2"
+                                        data-feather="check-square"
                                         class="mr-50"
                                       ></i>
-                                      <span>Edit</span>
+                                      <span>Complete</span>
                                     </a>
                                     <a
                                       class="dropdown-item"
                                       href="javascript:void(0);"
                                     >
-                                      <i data-feather="trash" class="mr-50"></i>
-                                      <span>Delete</span>
+                                      <i data-feather="x" class="mr-50"></i>
+                                      <span>Incomplete</span>
+                                    </a>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+
+                            <tr>
+                              <td>
+                                <span class="font-weight-bold">
+                                  Bootstrap Project
+                                </span>
+                              </td>
+                              <td>0/0</td>
+                              <td>0/0</td>
+
+                              <td>
+                                <div class="dropdown">
+                                  <button
+                                    type="button"
+                                    class="btn btn-warning dropdown-toggle hide-arrow"
+                                    data-toggle="dropdown"
+                                  >
+                                    Action
+                                  </button>
+                                  <div class="dropdown-menu">
+                                    <a
+                                      class="dropdown-item"
+                                      href="javascript:void(0);"
+                                    >
+                                      <i
+                                        data-feather="check-square"
+                                        class="mr-50"
+                                      ></i>
+                                      <span>Complete</span>
+                                    </a>
+                                    <a
+                                      class="dropdown-item"
+                                      href="javascript:void(0);"
+                                    >
+                                      <i data-feather="x" class="mr-50"></i>
+                                      <span>Incomplete</span>
                                     </a>
                                   </div>
                                 </div>
