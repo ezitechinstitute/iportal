@@ -4,7 +4,7 @@ import { Link, NavLink } from "react-router-dom";
 // import "../../styles/ManagerStyle.css";
 
 export const ManagerSidebar = () => {
-  const [active, setActive] = useState("");
+  const [active, setActive] = useState();
 
   const updateMenuStatus = (e) => {
     setActive(e);
@@ -60,10 +60,10 @@ export const ManagerSidebar = () => {
             id="main-menu-navigation"
             data-menu="menu-navigation"
           >
-            <li className={active === "1" ? "active" : undefined}>
+            <li className={active === "dashboard" ? "active" : undefined}>
               <NavLink
                 className="d-flex align-items-center"
-                onClick={() => updateMenuStatus("1")}
+                onClick={() => updateMenuStatus("dashboard")}
                 to="/manager-dashboard"
               >
                 <i data-feather="home"></i>
@@ -76,10 +76,10 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={active === "2" ? "active" : undefined}>
+            <li className={active === "interns" ? "active" : undefined}>
               <NavLink
                 className="d-flex align-items-center"
-                onClick={() => updateMenuStatus("2")}
+                onClick={() => updateMenuStatus("interns")}
                 id={"2"}
                 to="/onsite-interns"
               >
@@ -90,10 +90,10 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={active === "3" ? "active" : undefined}>
+            <li className={active === "remote" ? "active" : undefined}>
               <NavLink
                 className="d-flex align-items-center"
-                onClick={() => updateMenuStatus("3")}
+                onClick={() => updateMenuStatus("remote")}
                 id={"3"}
                 to="/remote-interns"
               >
@@ -104,35 +104,38 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={active === "4" ? "active" : undefined}>
+            <li className={active === "projects" ? "active" : undefined}>
               <NavLink
                 className="d-flex align-items-center"
-                onClick={() => updateMenuStatus("4")}
-                id={"4"}
+                onClick={() => updateMenuStatus("projects")}
+                id={"3"}
+                to="/remote-interns"
               >
                 <i data-feather="grid"></i>
                 <span className="menu-item" data-i18n="eCommerce">
-                  Intern Porjects
+                  Intern Projects
                 </span>
               </NavLink>
             </li>
 
-            <li className={active === "5" ? "active" : undefined}>
+            <li className={active === "leave" ? "active" : undefined}>
               <NavLink
                 className="d-flex align-items-center"
-                onClick={() => updateMenuStatus("5")}
+                onClick={() => updateMenuStatus("leave")}
+                id={"3"}
+                to="/remote-interns"
               >
                 <i data-feather="calendar"></i>
-                <span className="menu-title text-truncate" data-i18n="Calendar">
+                <span className="menu-item" data-i18n="eCommerce">
                   Leave
                 </span>
               </NavLink>
             </li>
 
-            <li className={active === "6" ? "active" : undefined}>
+            <li className={active === "balance" ? "active" : undefined}>
               <NavLink
                 className="d-flex align-items-center"
-                onClick={() => updateMenuStatus("6")}
+                onClick={() => updateMenuStatus("balance")}
                 to={"/"}
               >
                 <FiDollarSign />
@@ -142,10 +145,10 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={active === "7" ? "active" : undefined}>
+            <li className={active === "invoice" ? "active" : undefined}>
               <NavLink
                 className="d-flex align-items-center"
-                onClick={() => updateMenuStatus("7")}
+                onClick={() => updateMenuStatus("invoice")}
                 to={"/"}
               >
                 <i data-feather="file-text"></i>
