@@ -1,0 +1,8 @@
+.PhoneInputInput {
+    flex: 1 1;
+    min-width: 0;
+    border: none;
+}
+ :focus-visible{
+    outline: none;
+ }

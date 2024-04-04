@@ -1,0 +1,593 @@
+import React, { useEffect, useState } from "react";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
+import "../styles/custom.css";
+
+export const Register = () => {
+  const [value, setValue] = useState({ cnic: " " });
+  const [tel, setTel] = useState(0);
+  const [checkCnic, setCheckCnic] = useState(false);
+  const [checkPhone, setCheckPhone] = useState(false);
+
+  const handleInput = (e) => {
+    setValue({
+      ...value,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const isValidCNIC = (id) => {
+    const cnicPattern = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
+
+    return cnicPattern.test(id);
+  };
+
+  const isValidPhone = (cell) => {
+    const phonePattern = /^\+(?:[0-9] ?){6,14}[0-9]$/;
+
+    return phonePattern.test(cell);
+  };
+
+  useEffect(() => {
+    if (value.cnic !== " ") {
+      setCheckCnic(isValidCNIC(value.cnic));
+    }
+
+    if (tel !== 0) {
+      setCheckPhone(isValidPhone(tel));
+    }
+  });
+
+  //   ^\+(?:[0-9] ?){6,14}[0-9]$
+
+  return (
+    <>
+      {/* <!-- BEGIN: Content--> */}
+      {/* <div className="app-content content ">
+        <div className="content-overlay"></div>
+        <div className="header-navbar-shadow"></div> */}
+      <div className="content-wrapper">
+        <div className="content-header row"></div>
+        <div className="content-body">
+          <div className="auth-wrapper auth-v1 px-2">
+            <div className="auth-inner py-2">
+              {/* <!-- Register v1 --> */}
+              <div className="card mb-0">
+                <div className="card-body">
+                  <a href="javascript:void(0);" className="brand-logo">
+                    <h2 className="brand-text text-primary ml-1 text-center">
+                      Vuexy
+                    </h2>
+                  </a>
+
+                  <h4 className="card-title mb-1 text-center">
+                    Welcome to Ezitech Institute Registration Form 🚀
+                  </h4>
+
+                  <form className="auth-register-form mt-2 p-2">
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label for="register-username" className="form-label">
+                            Username
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="register-username"
+                            name="register-username"
+                            placeholder="johndoe"
+                            aria-describedby="register-username"
+                            tabindex="1"
+                            autofocus
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label for="register-email" className="form-label">
+                            Email
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id="register-email"
+                            name="register-email"
+                            placeholder="john@example.com"
+                            aria-describedby="register-email"
+                            tabindex="2"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label for="register-email" className="form-label">
+                            Phone
+                          </label>
+                          <PhoneInput
+                            international
+                            defaultCountry="PK"
+                            value={tel}
+                            onChange={setTel}
+                            name="phone"
+                            placeholder="Enter phone number"
+                            className="form-control"
+                          />
+                          {checkPhone ? (
+                            <span style={{ color: "limegreen" }}>Valid</span>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label for="register-email" className="form-label">
+                            CNIC
+                          </label>
+
+                          <input
+                            type="text"
+                            id="cnic"
+                            name="cnic"
+                            placeholder=" XXXXX-XXXXXXX-X"
+                            className="form-control"
+                            onChange={handleInput}
+                            required
+                          />
+                          {checkCnic ? (
+                            <span style={{ color: "limegreen" }}>Valid</span>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label for="register-email" className="form-label">
+                            Join Date
+                          </label>
+                          <input type="date" className="form-control" />
+                        </div>
+                      </div>
+
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label for="register-email" className="form-label">
+                            Date of Birth
+                          </label>
+                          <input
+                            type="date"
+                            min={"1995-01-01"}
+                            className="form-control"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label for="register-email" className="form-label">
+                            University
+                          </label>
+                          <select
+                            className="form-control"
+                            name=""
+                            id="universties"
+                          >
+                            <option selected disabled>
+                              --Select--
+                            </option>
+                            <option value="Others">
+                              Others (For Undergraduate)
+                            </option>
+                            <option value="Aga Khan University">
+                              Aga Khan University
+                            </option>
+                            <option value="Air University">
+                              Air University
+                            </option>
+                            <option value="Allama Iqbal Open University">
+                              Allama Iqbal Open University
+                            </option>
+                            <option value="Bahauddin Zakariya University">
+                              Bahauddin Zakariya University
+                            </option>
+                            <option value="Bahria University">
+                              Bahria University
+                            </option>
+                            <option value="COMSATS University Islamabad">
+                              COMSATS University Islamabad
+                            </option>
+                            <option value="Dow University of Health Sciences">
+                              Dow University of Health Sciences
+                            </option>
+                            <option value="Fatima Jinnah Medical University">
+                              Fatima Jinnah Medical University
+                            </option>
+                            <option value="Federal Urdu University of Arts, Science & Technology">
+                              Federal Urdu University of Arts, Science &
+                              Technology
+                            </option>
+                            <option value="Ghulam Ishaq Khan Institute of Engineering Sciences and Technology">
+                              Ghulam Ishaq Khan Institute of Engineering
+                              Sciences and Technology
+                            </option>
+                            <option value="Government College University Lahore">
+                              Government College University Lahore
+                            </option>
+                            <option value="Hazara University">
+                              Hazara University
+                            </option>
+                            <option value="Islamia University of Bahawalpur">
+                              Islamia University of Bahawalpur
+                            </option>
+                            <option value="International Islamic University, Islamabad">
+                              International Islamic University, Islamabad
+                            </option>
+                            <option value="Karachi University">
+                              Karachi University
+                            </option>
+                            <option value="Khyber Medical University">
+                              Khyber Medical University
+                            </option>
+                            <option value="Lahore College for Women University">
+                              Lahore College for Women University
+                            </option>
+                            <option value="Lahore University of Management Sciences (LUMS)">
+                              Lahore University of Management Sciences (LUMS)
+                            </option>
+                            <option value="National Textile University">
+                              National Textile University
+                            </option>
+                            <option value="National University of Computer and Emerging Sciences">
+                              National University of Computer and Emerging
+                              Sciences
+                            </option>
+                            <option value="National University of Modern Languages">
+                              National University of Modern Languages
+                            </option>
+                            <option value="National University of Sciences and Technology (NUST)">
+                              National University of Sciences and Technology
+                              (NUST)
+                            </option>
+                            <option value="Pakistan Institute of Engineering and Applied Sciences (PIEAS)">
+                              Pakistan Institute of Engineering and Applied
+                              Sciences (PIEAS)
+                            </option>
+                            <option value="Pir Mehr Ali Shah Arid Agriculture University">
+                              Pir Mehr Ali Shah Arid Agriculture University
+                            </option>
+                            <option value="Quaid-i-Azam University">
+                              Quaid-i-Azam University
+                            </option>
+                            <option value="University of Agriculture, Faisalabad">
+                              University of Agriculture, Faisalabad
+                            </option>
+                            <option value="University of Balochistan">
+                              University of Balochistan
+                            </option>
+                            <option value="University of Education, Lahore">
+                              University of Education, Lahore
+                            </option>
+                            <option value="University of Engineering and Technology, Lahore">
+                              University of Engineering and Technology, Lahore
+                            </option>
+                            <option value="University of Health Sciences, Lahore">
+                              University of Health Sciences, Lahore
+                            </option>
+                            <option value="University of Karachi">
+                              University of Karachi
+                            </option>
+                            <option value="University of Lahore">
+                              University of Lahore
+                            </option>
+                            <option value="University of Malakand">
+                              University of Malakand
+                            </option>
+                            <option value="University of Management and Technology">
+                              University of Management and Technology
+                            </option>
+                            <option value="University of Peshawar">
+                              University of Peshawar
+                            </option>
+                            <option value="University of the Punjab, Lahore">
+                              University of the Punjab, Lahore
+                            </option>
+                            <option value="University of Sargodha">
+                              University of Sargodha
+                            </option>
+                            <option value="University of Science and Technology Bannu">
+                              University of Science and Technology Bannu
+                            </option>
+                            <option value="University of Sindh">
+                              University of Sindh
+                            </option>
+                            <option value="University of Swat">
+                              University of Swat
+                            </option>
+                            <option value="University of Turbat">
+                              University of Turbat
+                            </option>
+                            <option value="University of Veterinary and Animal Sciences, Lahore">
+                              University of Veterinary and Animal Sciences,
+                              Lahore
+                            </option>
+                            <option value="Virtual University of Pakistan">
+                              Virtual University of Pakistan
+                            </option>
+                            <option value="Balochistan University of Information Technology, Engineering and Management Sciences">
+                              Balochistan University of Information Technology,
+                              Engineering and Management Sciences
+                            </option>
+                            <option value="Benazir Bhutto Shaheed University, Karachi">
+                              Benazir Bhutto Shaheed University, Karachi
+                            </option>
+                            <option value="Capital University of Science & Technology">
+                              Capital University of Science & Technology
+                            </option>
+                            <option value="City University of Science and Information Technology, Peshawar">
+                              City University of Science and Information
+                              Technology, Peshawar
+                            </option>
+                            <option value="Dadabhoy Institute of Higher Education">
+                              Dadabhoy Institute of Higher Education
+                            </option>
+                            <option value="Federal Urdu University">
+                              Federal Urdu University
+                            </option>
+                            <option value="Foundation University Islamabad">
+                              Foundation University Islamabad
+                            </option>
+                            <option value="Gandhara University">
+                              Gandhara University
+                            </option>
+                            <option value="Ghulam Ishaq Khan Institute of Science and Technology">
+                              Ghulam Ishaq Khan Institute of Science and
+                              Technology
+                            </option>
+                            <option value="Greenwich University">
+                              Greenwich University
+                            </option>
+                            <option value="Hamdard University">
+                              Hamdard University
+                            </option>
+                            <option value="Habib University">
+                              Habib University
+                            </option>
+                            <option value="HITEC University">
+                              HITEC University
+                            </option>
+                            <option value="Indus University">
+                              Indus University
+                            </option>
+                            <option value="Institute of Business Administration, Karachi">
+                              Institute of Business Administration, Karachi
+                            </option>
+                            <option value="Iqra University">
+                              Iqra University
+                            </option>
+                            <option value="Islamabad Institute of Technology">
+                              Islamabad Institute of Technology
+                            </option>
+                            <option value="Islamabad School of Law">
+                              Islamabad School of Law
+                            </option>
+                            <option value="Jinnah University for Women">
+                              Jinnah University for Women
+                            </option>
+                            <option value="Karachi Institute of Economics & Technology">
+                              Karachi Institute of Economics & Technology
+                            </option>
+                            <option value="Karachi School for Business & Leadership">
+                              Karachi School for Business & Leadership
+                            </option>
+                            <option value="KASB Institute of Technology">
+                              KASB Institute of Technology
+                            </option>
+                            <option value="Lahore Garrison University">
+                              Lahore Garrison University
+                            </option>
+                            <option value="Lahore Leads University">
+                              Lahore Leads University
+                            </option>
+                            <option value="Lahore School of Economics">
+                              Lahore School of Economics
+                            </option>
+                            <option value="Mohammad Ali Jinnah University">
+                              Mohammad Ali Jinnah University
+                            </option>
+                            <option value="Namal University">
+                              Namal University
+                            </option>
+                            <option value="National College of Business Administration & Economics">
+                              National College of Business Administration &
+                              Economics
+                            </option>
+                            <option value="National University of Computer & Emerging Sciences">
+                              National University of Computer & Emerging
+                              Sciences
+                            </option>
+                            <option value="Newports Institute of Communications and Economics">
+                              Newports Institute of Communications and Economics
+                            </option>
+                            <option value="NFC Institute of Engineering & Technology">
+                              NFC Institute of Engineering & Technology
+                            </option>
+                            <option value="Northern University, Nowshera">
+                              Northern University, Nowshera
+                            </option>
+                            <option value="Peoples University of Medical & Health Sciences for Women">
+                              Peoples University of Medical & Health Sciences
+                              for Women
+                            </option>
+                            <option value="Preston University, Pakistan">
+                              Preston University, Pakistan
+                            </option>
+                            <option value="Qarshi University">
+                              Qarshi University
+                            </option>
+                            <option value="Qurtuba University of Science and Information Technology">
+                              Qurtuba University of Science and Information
+                              Technology
+                            </option>
+                            <option value="Riphah International University">
+                              Riphah International University
+                            </option>
+                            <option value="Sarhad University of Science and Information Technology">
+                              Sarhad University of Science and Information
+                              Technology
+                            </option>
+                            <option value="Shaheed Benazir Bhutto City University">
+                              Shaheed Benazir Bhutto City University
+                            </option>
+                            <option value="Shaheed Benazir Bhutto University">
+                              Shaheed Benazir Bhutto University
+                            </option>
+                            <option value="Sindh Madressatul Islam University">
+                              Sindh Madressatul Islam University
+                            </option>
+                            <option value="Sukkur IBA University">
+                              Sukkur IBA University
+                            </option>
+                            <option value="Textile Institute of Pakistan">
+                              Textile Institute of Pakistan
+                            </option>
+                            <option value="University of Faisalabad">
+                              University of Faisalabad
+                            </option>
+                            <option value="University of Management and Technology, Lahore">
+                              University of Management and Technology, Lahore
+                            </option>
+                            <option value="University of South Asia">
+                              University of South Asia
+                            </option>
+                            <option value="University of Wah">
+                              University of Wah
+                            </option>
+                            <option value="University of Central Punjab">
+                              University of Central Punjab
+                            </option>
+                            <option value="University of Sialkot">
+                              University of Sialkot
+                            </option>
+                            <option value="University of the Punjab, Lahore">
+                              University of the Punjab, Lahore
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <label for="register-email" className="form-label">
+                            Degree Program
+                          </label>
+                          <select className="form-control" name="degree" id="">
+                            <option selected disabled>--Select--</option>
+                            <option value="Matric">Matric</option>
+                            <option value="Inter">Inter</option>
+                            <option value="Bs">Bs</option>
+                            <option value="Ms">Ms</option>
+                            <option value="Bsc">Bsc</option>
+                            <option value="Msc">Msc</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* <div className="form-group">
+                      <label for="register-password" className="form-label">
+                        Password
+                      </label>
+
+                      <div className="input-group input-group-merge form-password-toggle">
+                        <input
+                          type="password"
+                          className="form-control form-control-merge"
+                          id="register-password"
+                          name="register-password"
+                          placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                          aria-describedby="register-password"
+                          tabindex="3"
+                        />
+                        <div className="input-group-append">
+                          <span className="input-group-text cursor-pointer">
+                            <i data-feather="eye"></i>
+                          </span>
+                        </div>
+                      </div>
+                    </div> */}
+                    <div className="form-group">
+                      <div className="custom-control custom-checkbox">
+                        <input
+                          className="custom-control-input"
+                          type="checkbox"
+                          id="register-privacy-policy"
+                          tabindex="4"
+                        />
+                        <label
+                          className="custom-control-label"
+                          for="register-privacy-policy"
+                        >
+                          I agree to{" "}
+                          <a href="javascript:void(0);">
+                            privacy policy & terms
+                          </a>
+                        </label>
+                      </div>
+                    </div>
+                    <button className="btn btn-primary btn-block" tabindex="5">
+                      Sign up
+                    </button>
+                  </form>
+
+                  <p className="text-center mt-2">
+                    <span>Already have an account?</span>
+                    <a href="page-auth-login-v1.html">
+                      <span>Sign in instead</span>
+                    </a>
+                  </p>
+
+                  {/* <div className="divider my-2">
+                    <div className="divider-text">or</div>
+                  </div>
+
+                  <div className="auth-footer-btn d-flex justify-content-center">
+                    <a href="javascript:void(0)" className="btn btn-facebook">
+                      <i data-feather="facebook"></i>
+                    </a>
+                    <a
+                      href="javascript:void(0)"
+                      className="btn btn-twitter white"
+                    >
+                      <i data-feather="twitter"></i>
+                    </a>
+                    <a href="javascript:void(0)" className="btn btn-google">
+                      <i data-feather="mail"></i>
+                    </a>
+                    <a href="javascript:void(0)" className="btn btn-github">
+                      <i data-feather="github"></i>
+                    </a>
+                  </div> */}
+                </div>
+              </div>
+              {/* <!-- /Register v1 --> */}
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* </div> */}
+      {/* <!-- END: Content--> */}
+    </>
+  );
+};

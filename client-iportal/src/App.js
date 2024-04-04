@@ -3,12 +3,16 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { InternHome } from "./pages/interns-pages/InternHome";
 import { ManagerHome } from "./pages/manager-pages/ManagerHome";
 import { OnsiteInterns } from "./pages/manager-pages/OnsiteInterns";
+import { Register } from "./pages/Register";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
+          {/* Index Routes */}
+          <Route index exact path="/" element={<Register />} />
+
           <Route exact path="/admin-dashboard" element={<AdminHome />} />
 
           {/* Manager Routes */}
