@@ -4,6 +4,7 @@ import { InternHome } from "./pages/interns-pages/InternHome";
 import { ManagerHome } from "./pages/manager-pages/ManagerHome";
 import { OnsiteInterns } from "./pages/manager-pages/OnsiteInterns";
 import { Register } from "./pages/Register";
+// import AdminTestPage from "./pages/admin-pages/AdminTestPage";
 
 function App() {
   return (
@@ -11,6 +12,9 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Index Routes */}
+        
+          {/* <Route index exact path="/" element={<AdminTestPage />} /> */}
+
           <Route index exact path="/" element={<Register />} />
 
           <Route exact path="/admin-dashboard" element={<AdminHome />} />
