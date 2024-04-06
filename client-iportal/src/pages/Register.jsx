@@ -1,13 +1,32 @@
 import React, { useEffect, useState } from "react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import Calendar from "react-calendar";
 import "../styles/custom.css";
+import logo from "../assets/AdminAssets/logo.png";
 
 export const Register = () => {
   const [value, setValue] = useState({ cnic: " " });
   const [tel, setTel] = useState(0);
   const [checkCnic, setCheckCnic] = useState(false);
   const [checkPhone, setCheckPhone] = useState(false);
+
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const handleDateClick = (date) => {
+    setSelectedDate(date);
+    setShowTimePicker(true);
+  };
+
+  const handleTimeSelect = (time) => {
+    console.log("Selected time:", time);
+    // Here you can handle the selected time, e.g., store it in state
+    // You may also want to close the time picker here
+    setShowTimePicker(true);
+  };
+
+  // ----------------------------------
 
   const handleInput = (e) => {
     setValue({
@@ -726,12 +745,95 @@ export const Register = () => {
                             </div>
                           </div>
                         </div>
-                        
+
                         {/* Meeting */}
                         <div className="mt-5">
-                          <h4 className="card-title mb-1 text-center">Meeting</h4>
+                          <h4 className="card-title mb-1 text-center">
+                            Meeting
+                          </h4>
 
-                          <form className="interview-register-form mt-2 p-2"></form>
+                          <form className="interview-register-form mt-2 p-2">
+                            <div className="row">
+                              <div
+                                className={
+                                  !showTimePicker ? "col-sm-6" : "col-sm-4"
+                                }
+
+                                style={{border: "2px solid gainsboro", borderLeft: "0", borderTop: "0", borderBottom: "0"}}
+                              >
+                                <img src={logo} alt="" width={100} />
+                                <h1>Interview Meeting</h1>
+                                <br />
+                                <span>
+                                  <i data-feather="clock"></i> &nbsp; 5 Min
+                                </span>
+                                <br />
+                                <br />
+                                <span>
+                                  <i data-feather="video"></i>
+                                  &nbsp; Web conferencing details provided upon
+                                  confirmation.
+                                </span>
+                                <br />
+                                <br />
+
+                                <strong>
+                                  Kindly schedule your interview for the
+                                  specified day and time, Please be ready to
+                                  answer the following questions during the
+                                  interview.
+                                </strong>
+                                <br />
+                                <br />
+                                <strong>
+                                  Kindly be present at the meeting on selected
+                                  day or time.
+                                </strong>
+                              </div>
+                              <div
+                                className={
+                                  !showTimePicker ? "col-sm-6" : "col-sm-5"
+                                }
+                              >
+                                <h2>Select a Date & Time</h2>
+                                <br />
+                                <Calendar
+                                  onClickDay={handleDateClick}
+                                  value={selectedDate}
+                                />
+
+                                {/* <br /> */}
+
+                                {/* </div> */}
+                              </div>
+
+                              <div className="col-sm-3"  style={{border: "2px solid gainsboro", borderRight: "0", borderTop: "0", borderBottom: "0"}}>
+                                <h5>
+                                  {selectedDate
+                                    ? selectedDate.toDateString()
+                                    : ""}
+                                </h5>
+                                {showTimePicker && (
+                                  <div>
+                                    {/* <h3>Select Time</h3> */}
+                                    {/* Example time picker, you can replace it with your preferred time picker component */}
+                                    <input
+                                      className="form-control"
+                                      type="time"
+                                      onChange={(e) =>
+                                        handleTimeSelect(e.target.value)
+                                      }
+                                    />
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* </div> */}
+
+                              {/* </div> */}
+                              {/* </div> */}
+                            </div>
+                          </form>
                         </div>
                         <div className="form-group">
                           <div className="custom-control custom-checkbox">

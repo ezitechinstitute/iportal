@@ -1,3 +1,4 @@
+import 'react-calendar/dist/Calendar.css';
 import { AdminHome } from "./pages/admin-pages/AdminHome";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { InternHome } from "./pages/interns-pages/InternHome";

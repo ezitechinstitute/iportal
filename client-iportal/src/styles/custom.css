@@ -3,6 +3,37 @@
     min-width: 0;
     border: none;
 }
- :focus-visible{
+
+:focus-visible {
     outline: none;
- }
+}
+
+
+/* ------------------ */
+/* File: styles.css */
+
+.custom-calendar-container {
+    margin: 20px;
+}
+
+.custom-calendar {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+}
+
+.react-calendar{
+    border: 0;
+}
+
+.custom-calendar .react-calendar__tile {
+    font-size: 25px;
+    
+}
+
+.custom-calendar .react-calendar__tile--active {
+    background-color: #007bff;
+    color: #fff;
+}
