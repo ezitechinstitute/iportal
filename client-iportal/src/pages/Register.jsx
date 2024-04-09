@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import Calendar from "react-calendar";
+import axios from "axios";
+
 import "../styles/custom.css";
-import { axios } from "axios";
+
 // import logo from "../assets/AdminAssets/logo.png";
 
 export const Register = () => {
-  const [value, setValue] = useState({ cnic: " " });
+  const [value, setValue] = useState({ internCnic: " " });
   const [tel, setTel] = useState(0);
   const [checkCnic, setCheckCnic] = useState(false);
   const [checkPhone, setCheckPhone] = useState(false);
@@ -50,8 +52,8 @@ export const Register = () => {
   };
 
   useEffect(() => {
-    if (value.cnic !== " ") {
-      setCheckCnic(isValidCNIC(value.cnic));
+    if (value.internCnic !== " ") {
+      setCheckCnic(isValidCNIC(value.internCnic));
     }
 
     if (tel !== 0) {
@@ -78,9 +80,20 @@ export const Register = () => {
   const RegisterIntern = (e) => {
     e.preventDefault();
 
-    if (checkCnic !== false && checkPhone !== false && interview !== false) {
-      // axios.post("http://localhost:")
-    }
+    // setValue({...value, ["internPhone"]: tel});
+
+    console.log(value)
+
+    // if (checkCnic !== false && checkPhone !== false && interview !== false) {
+    // axios
+    //   .post("http://localhost:8800/register-inters", { value })
+    //   .then((res) => {
+    //     alert(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    // }
   };
 
   //   ^\+(?:[0-9] ?){6,14}[0-9]$
@@ -130,7 +143,7 @@ export const Register = () => {
                                 type="text"
                                 className="form-control"
                                 id="register-username"
-                                name="register-username"
+                                name="internUsername"
                                 placeholder="johndoe"
                                 aria-describedby="register-username"
                                 tabindex="1"
@@ -151,8 +164,8 @@ export const Register = () => {
                               <input
                                 type="text"
                                 className="form-control"
-                                id="register-email"
-                                name="register-email"
+                                id="internEmail"
+                                name="internemail"
                                 placeholder="john@example.com"
                                 aria-describedby="register-email"
                                 tabindex="2"
@@ -175,7 +188,7 @@ export const Register = () => {
                                 defaultCountry="PK"
                                 value={tel}
                                 onChange={setTel}
-                                name="register-phone"
+                                name="internPhone"
                                 placeholder="Enter phone number"
                                 className="form-control"
                               />
@@ -201,8 +214,8 @@ export const Register = () => {
                               <input
                                 type="text"
                                 id="cnic"
-                                name="register-cnic"
-                                placeholder=" XXXXX-XXXXXXX-X"
+                                name="internCnic"
+                                placeholder="XXXXX-XXXXXXX-X"
                                 className="form-control"
                                 onChange={handleInput}
                                 required
@@ -229,7 +242,7 @@ export const Register = () => {
 
                               <select
                                 className="form-control"
-                                name="register-gender"
+                                name="internGender"
                                 onChange={handleInput}
                                 id=""
                               >
@@ -256,7 +269,7 @@ export const Register = () => {
                                 type="file"
                                 className="form-control"
                                 // onChange={handleInput}
-                                name="register-img"
+                                name="internImg"
                                 id=""
                               />
                             </div>
@@ -274,7 +287,7 @@ export const Register = () => {
                               <input
                                 type="date"
                                 className="form-control"
-                                name="register-join-date"
+                                name="internJoinDate"
                                 onChange={handleInput}
                               />
                             </div>
@@ -293,7 +306,7 @@ export const Register = () => {
                                 min={"1995-01-01"}
                                 max={"2010-12-31"}
                                 className="form-control"
-                                name="register-dob"
+                                name="internDob"
                                 onChange={handleInput}
                               />
                             </div>
@@ -310,7 +323,7 @@ export const Register = () => {
                               </label>
                               <select
                                 className="form-control"
-                                name="register-university"
+                                name="internUniversity"
                                 id="universties"
                                 onChange={handleInput}
                               >
@@ -632,7 +645,7 @@ export const Register = () => {
                               </label>
                               <select
                                 className="form-control"
-                                name="register-degree"
+                                name="internDegree"
                                 id=""
                                 onChange={handleInput}
                               >
@@ -660,7 +673,7 @@ export const Register = () => {
                               </label>
 
                               <select
-                                name="register-dpt"
+                                name="internDpt"
                                 id=""
                                 className="form-control"
                                 onChange={handleInput}
@@ -692,7 +705,7 @@ export const Register = () => {
                               </label>
 
                               <select
-                                name="register-technology"
+                                name="internTechnology"
                                 id=""
                                 className="form-control"
                                 onChange={handleInput}
@@ -774,7 +787,7 @@ export const Register = () => {
                               </label>
                               <select
                                 className="form-control"
-                                name="register-duration"
+                                name="internDuration"
                                 id=""
                                 onChange={handleInput}
                               >
@@ -798,7 +811,7 @@ export const Register = () => {
                               </label>
                               <select
                                 className="form-control"
-                                name="register-intern-type"
+                                name="internType"
                                 id="intern-type"
                                 onChange={handleInput}
                               >

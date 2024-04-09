@@ -14,4 +14,18 @@ const getAllInterns = () => {
   });
 };
 
-module.exports = getAllInterns;
+const registerInters = (data) => {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "INSERT INTO `intern_tab`(`username`, `email`, `phone`, `cnic`, `gender`, `join_date`, `birth_date`, `university`, `degree`, `department`, `technology`, `duration`, `intern_type`) VALUES (?)";
+    connection.query(sql, [data], (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
+module.exports = { getAllInterns, registerInters};
