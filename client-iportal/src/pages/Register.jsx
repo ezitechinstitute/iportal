@@ -748,22 +748,23 @@ export const Register = () => {
 
                         {/* Meeting */}
                         <div className="mt-5">
-                          <h4 className="card-title mb-1 text-center">
+                          {/* <h4 className="card-title mb-1 text-center">
                             Meeting
-                          </h4>
+                          </h4> */}
 
                           <form className="interview-register-form mt-2 p-2">
                             <div className="row">
                               <div
                                 className={
-                                  !showTimePicker ? "col-sm-6" : "col-sm-4"
+                                  !showTimePicker
+                                    ? "col-sm-6 rules"
+                                    : "col-sm-4 rules"
                                 }
-
-                                style={{border: "2px solid gainsboro", borderLeft: "0", borderTop: "0", borderBottom: "0"}}
                               >
-                                <img src={logo} alt="" width={100} />
-                                <h1>Interview Meeting</h1>
-                                <br />
+                                {/* <div className="overflow-y-auto"> */}
+                                {/* <img src={logo} alt="" width={100} /> */}
+                                <h2>Interview Meeting</h2>
+                                {/* <br /> */}
                                 <span>
                                   <i data-feather="clock"></i> &nbsp; 5 Min
                                 </span>
@@ -771,12 +772,11 @@ export const Register = () => {
                                 <br />
                                 <span>
                                   <i data-feather="video"></i>
-                                  &nbsp; Web conferencing details provided upon
+                                  &nbsp; Web conferencing details provided
                                   confirmation.
                                 </span>
                                 <br />
                                 <br />
-
                                 <strong>
                                   Kindly schedule your interview for the
                                   specified day and time, Please be ready to
@@ -789,13 +789,52 @@ export const Register = () => {
                                   Kindly be present at the meeting on selected
                                   day or time.
                                 </strong>
+                                <br />
+                                <br />
+                                <strong>Brief Introduction:</strong> <br />
+                                <span>
+                                  Briefly introduce yourself and highlight your
+                                  key qualifications in selected technology.
+                                </span>
+                                <br />
+                                <br />
+                                <strong>Relevant Experience:</strong> <br />
+                                <span>
+                                  What specific experience do you bring to this
+                                  role?
+                                </span>
+                                <br />
+                                <br />
+                                <strong>Key Skills:</strong> <br />
+                                <span>
+                                  You can mention in interview a few key skills
+                                  or strengths that you believe make you
+                                  well-suited for this position.
+                                </span>
+                                <br />
+                                <br />
+                                <strong>Project Contributions:</strong> <br />
+                                <span>
+                                  Could you share a brief example of a project
+                                  (If You Have) where you made a significant
+                                  contribution.
+                                </span>
+                                <br />
+                                <br />
+                                <strong>Internship Benefit:</strong> <br />
+                                <span>
+                                  Why you want to join our internship, What
+                                  excites you most about this role, and how does
+                                  it align with your career aspirations?
+                                </span>
                               </div>
+                              {/* </div> */}
                               <div
                                 className={
                                   !showTimePicker ? "col-sm-6" : "col-sm-5"
                                 }
                               >
-                                <h2>Select a Date & Time</h2>
+                                <h2>Select Date & Time</h2>
                                 <br />
                                 <Calendar
                                   onClickDay={handleDateClick}
@@ -807,7 +846,10 @@ export const Register = () => {
                                 {/* </div> */}
                               </div>
 
-                              <div className="col-sm-3"  style={{border: "2px solid gainsboro", borderRight: "0", borderTop: "0", borderBottom: "0"}}>
+                              <div
+                                className="col-sm-3 time-picker"
+                               
+                              >
                                 <h5>
                                   {selectedDate
                                     ? selectedDate.toDateString()
