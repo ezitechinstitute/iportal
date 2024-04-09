@@ -3,7 +3,8 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import Calendar from "react-calendar";
 import "../styles/custom.css";
-import logo from "../assets/AdminAssets/logo.png";
+import { axios } from "axios";
+// import logo from "../assets/AdminAssets/logo.png";
 
 export const Register = () => {
   const [value, setValue] = useState({ cnic: " " });
@@ -13,6 +14,7 @@ export const Register = () => {
 
   const [selectedDate, setSelectedDate] = useState(null);
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [interview, setInterview] = useState(false);
 
   const handleDateClick = (date) => {
     setSelectedDate(date);
@@ -55,7 +57,31 @@ export const Register = () => {
     if (tel !== 0) {
       setCheckPhone(isValidPhone(tel));
     }
+
+    // if(checkCnic === true && checkPhone === true){
+    //   setValue({...prevState => })
+    // }
+
+    const interviewForm = document.getElementById("interview-form");
+    const selectOption = document.getElementById("intern-type").value;
+
+    if (selectOption === "Remote") {
+      // console.log(selectOption);
+      interviewForm.style.display = "block";
+      setInterview(true);
+    } else {
+      interviewForm.style.display = "none";
+      setInterview(false);
+    }
   });
+
+  const RegisterIntern = (e) => {
+    e.preventDefault();
+
+    if (checkCnic !== false && checkPhone !== false && interview !== false) {
+      // axios.post("http://localhost:")
+    }
+  };
 
   //   ^\+(?:[0-9] ?){6,14}[0-9]$
 
@@ -86,7 +112,11 @@ export const Register = () => {
                         Welcome to Ezitech Institute Registration Form 🚀
                       </h4>
 
-                      <form className="auth-register-form mt-2 p-2">
+                      <form
+                        className="auth-register-form mt-2 p-2"
+                        onSubmit={RegisterIntern}
+                      >
+                        {/* <section className="auth-register-form mt-2 p-2"> */}
                         <div className="row">
                           <div className="col-sm-6">
                             <div className="form-group">
@@ -105,6 +135,7 @@ export const Register = () => {
                                 aria-describedby="register-username"
                                 tabindex="1"
                                 autofocus
+                                onChange={handleInput}
                               />
                             </div>
                           </div>
@@ -125,6 +156,7 @@ export const Register = () => {
                                 placeholder="john@example.com"
                                 aria-describedby="register-email"
                                 tabindex="2"
+                                onChange={handleInput}
                               />
                             </div>
                           </div>
@@ -143,7 +175,7 @@ export const Register = () => {
                                 defaultCountry="PK"
                                 value={tel}
                                 onChange={setTel}
-                                name="phone"
+                                name="register-phone"
                                 placeholder="Enter phone number"
                                 className="form-control"
                               />
@@ -169,7 +201,7 @@ export const Register = () => {
                               <input
                                 type="text"
                                 id="cnic"
-                                name="cnic"
+                                name="register-cnic"
                                 placeholder=" XXXXX-XXXXXXX-X"
                                 className="form-control"
                                 onChange={handleInput}
@@ -195,7 +227,12 @@ export const Register = () => {
                                 Gender
                               </label>
 
-                              <select className="form-control" name="" id="">
+                              <select
+                                className="form-control"
+                                name="register-gender"
+                                onChange={handleInput}
+                                id=""
+                              >
                                 <option selected disabled>
                                   --Select--
                                 </option>
@@ -218,7 +255,8 @@ export const Register = () => {
                               <input
                                 type="file"
                                 className="form-control"
-                                name=""
+                                // onChange={handleInput}
+                                name="register-img"
                                 id=""
                               />
                             </div>
@@ -233,7 +271,12 @@ export const Register = () => {
                               >
                                 Join Date
                               </label>
-                              <input type="date" className="form-control" />
+                              <input
+                                type="date"
+                                className="form-control"
+                                name="register-join-date"
+                                onChange={handleInput}
+                              />
                             </div>
                           </div>
 
@@ -250,6 +293,8 @@ export const Register = () => {
                                 min={"1995-01-01"}
                                 max={"2010-12-31"}
                                 className="form-control"
+                                name="register-dob"
+                                onChange={handleInput}
                               />
                             </div>
                           </div>
@@ -265,8 +310,9 @@ export const Register = () => {
                               </label>
                               <select
                                 className="form-control"
-                                name=""
+                                name="register-university"
                                 id="universties"
+                                onChange={handleInput}
                               >
                                 <option selected disabled>
                                   --Select--
@@ -586,8 +632,9 @@ export const Register = () => {
                               </label>
                               <select
                                 className="form-control"
-                                name="degree"
+                                name="register-degree"
                                 id=""
+                                onChange={handleInput}
                               >
                                 <option selected disabled>
                                   --Select--
@@ -612,7 +659,12 @@ export const Register = () => {
                                 Department
                               </label>
 
-                              <select name="" id="" className="form-control">
+                              <select
+                                name="register-dpt"
+                                id=""
+                                className="form-control"
+                                onChange={handleInput}
+                              >
                                 <option selected disabled>
                                   --Select--
                                 </option>
@@ -639,7 +691,12 @@ export const Register = () => {
                                 Technology
                               </label>
 
-                              <select name="" id="" className="form-control">
+                              <select
+                                name="register-technology"
+                                id=""
+                                className="form-control"
+                                onChange={handleInput}
+                              >
                                 <option selected disabled>
                                   --Select--
                                 </option>
@@ -715,7 +772,12 @@ export const Register = () => {
                               >
                                 Duration
                               </label>
-                              <select className="form-control" name="" id="">
+                              <select
+                                className="form-control"
+                                name="register-duration"
+                                id=""
+                                onChange={handleInput}
+                              >
                                 <option selected disabled>
                                   --Select--
                                 </option>
@@ -734,7 +796,12 @@ export const Register = () => {
                               >
                                 Internship Type
                               </label>
-                              <select className="form-control" name="" id="">
+                              <select
+                                className="form-control"
+                                name="register-intern-type"
+                                id="intern-type"
+                                onChange={handleInput}
+                              >
                                 <option selected disabled>
                                   --Select--
                                 </option>
@@ -752,7 +819,11 @@ export const Register = () => {
                             Meeting
                           </h4> */}
 
-                          <form className="interview-register-form mt-2 p-2">
+                          <form
+                            className="interview-register-form mt-2 p-2"
+                            id="interview-form"
+                            style={{ display: "none" }}
+                          >
                             <div className="row">
                               <div
                                 className={
@@ -846,10 +917,7 @@ export const Register = () => {
                                 {/* </div> */}
                               </div>
 
-                              <div
-                                className="col-sm-3 time-picker"
-                               
-                              >
+                              <div className="col-sm-3 time-picker">
                                 <h5>
                                   {selectedDate
                                     ? selectedDate.toDateString()
@@ -899,10 +967,20 @@ export const Register = () => {
                         <button
                           className="btn btn-primary btn-block"
                           tabindex="5"
+                          type="submit"
                         >
-                          Sign up
+                          Register
                         </button>
+
+                        {/* <input
+                          type="submit"
+                          className="btn btn-primary btn-block"
+                          name=""
+                          id=""
+                          value={"Register"}
+                        /> */}
                       </form>
+                      {/* </section> */}
 
                       <p className="text-center mt-2">
                         <span>Already have an account?</span>
