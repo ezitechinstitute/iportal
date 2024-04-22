@@ -1,9 +1,6 @@
-import 'react-calendar/dist/Calendar.css';
-import { AdminHome } from "./pages/admin-pages/AdminHome";
+import "react-calendar/dist/Calendar.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { InternHome } from "./pages/interns-pages/InternHome";
-import { ManagerHome } from "./pages/manager-pages/ManagerHome";
-import { OnsiteInterns } from "./pages/manager-pages/OnsiteInterns";
+// import { InternHome } from "./pages/InternHome";
 import { Register } from "./pages/Register";
 // import AdminTestPage from "./pages/admin-pages/AdminTestPage";
 
@@ -12,19 +9,9 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          <Route exact path="/register" element={<Register />} />
           {/* Index Routes */}
-        
-          {/* <Route index exact path="/" element={<AdminTestPage />} /> */}
-
-          <Route index exact path="/" element={<Register />} />
-
-          <Route exact path="/admin-dashboard" element={<AdminHome />} />
-
-          {/* Manager Routes */}
-          <Route exact path="/manager-dashboard" element={<ManagerHome />} />
-          <Route exact path="/onsite-interns" element={<OnsiteInterns />} />
-
-          <Route exact path="/intern-dashboard" element={<InternHome />} />
+          {/* <Route exact path="/intern-dashboard" element={<InternHome />} /> */}
         </Routes>
       </BrowserRouter>
     </>

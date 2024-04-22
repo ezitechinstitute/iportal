@@ -3,10 +3,9 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import Calendar from "react-calendar";
 import axios from "axios";
-
 import "../styles/custom.css";
 
-// import logo from "../assets/AdminAssets/logo.png";
+import logo from "../assets/AdminAssets/logo.png";
 
 export const Register = () => {
   const [value, setValue] = useState({ internCnic: " " });
@@ -82,7 +81,7 @@ export const Register = () => {
 
     // setValue({...value, ["internPhone"]: tel});
 
-    console.log(value)
+    console.log(value);
 
     // if (checkCnic !== false && checkPhone !== false && interview !== false) {
     // axios
@@ -101,9 +100,7 @@ export const Register = () => {
   return (
     <>
       {/* <!-- BEGIN: Content--> */}
-      {/* <div className="app-content content ">
-        <div className="content-overlay"></div>
-        <div className="header-navbar-shadow"></div> */}
+
       <div className="content-wrapper">
         <div className="content-header row"></div>
         <div className="content-body">
@@ -117,7 +114,7 @@ export const Register = () => {
                     <div className="card-body">
                       <a href="javascript:void(0);" className="brand-logo">
                         <h2 className="brand-text text-primary ml-1 text-center">
-                          Vuexy
+                          <img src={logo} alt="" width={100} />
                         </h2>
                       </a>
 
@@ -995,12 +992,12 @@ export const Register = () => {
                       </form>
                       {/* </section> */}
 
-                      <p className="text-center mt-2">
+                      {/* <p className="text-center mt-2">
                         <span>Already have an account?</span>
                         <a href="page-auth-login-v1.html">
                           <span>Sign in instead</span>
                         </a>
-                      </p>
+                      </p> */}
                     </div>
                   </div>
                   {/* <!-- /Register v1 --> */}
