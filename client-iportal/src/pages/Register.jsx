@@ -14,6 +14,7 @@ export const Register = () => {
   const [checkPhone, setCheckPhone] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState();
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [interview, setInterview] = useState(false);
 
@@ -24,8 +25,7 @@ export const Register = () => {
 
   const handleTimeSelect = (time) => {
     console.log("Selected time:", time);
-    // Here you can handle the selected time, e.g., store it in state
-    // You may also want to close the time picker here
+    setSelectedTime(time);
     setShowTimePicker(true);
   };
 
@@ -59,10 +59,6 @@ export const Register = () => {
       setCheckPhone(isValidPhone(tel));
     }
 
-    // if(checkCnic === true && checkPhone === true){
-    //   setValue({...prevState => })
-    // }
-
     const interviewForm = document.getElementById("interview-form");
     const selectOption = document.getElementById("intern-type").value;
 
@@ -79,20 +75,24 @@ export const Register = () => {
   const RegisterIntern = (e) => {
     e.preventDefault();
 
-    // setValue({...value, ["internPhone"]: tel});
+    setValue((prev) => ({
+      ...prev,
+      date: selectedDate,
+      time: selectedTime,
+    }));
 
     console.log(value);
 
-    // if (checkCnic !== false && checkPhone !== false && interview !== false) {
-    // axios
-    //   .post("http://localhost:8800/register-inters", { value })
-    //   .then((res) => {
-    //     alert(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    // }
+    if (checkCnic !== false && checkPhone !== false && interview !== false) {
+      axios
+        .post("http://localhost:8800/register", { value })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   //   ^\+(?:[0-9] ?){6,14}[0-9]$
@@ -939,6 +939,8 @@ export const Register = () => {
                                     {/* Example time picker, you can replace it with your preferred time picker component */}
                                     <input
                                       className="form-control"
+                                      min={"20:00"}
+                                      max={"23:00"}
                                       type="time"
                                       onChange={(e) =>
                                         handleTimeSelect(e.target.value)
