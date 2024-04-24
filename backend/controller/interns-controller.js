@@ -1,5 +1,9 @@
 const axios = require("axios");
 const { connection } = require("../config/connection");
+const dotenv = require("dotenv").config();
+
+const id = process.env.INSTANCEID;
+const token = process.env.ACCESSTOKEN;
 
 const TotalInterns = async (req, res) => {
   try {
@@ -29,24 +33,6 @@ const RegisterInterns = async (req, res) => {
     interviewDate,
     interviewTime,
   } = req.body.value;
-
-  // const {
-  //   name,
-  //   email,
-  //   phone,
-  //   cnic,
-  //   gender,
-  //   join_date,
-  //   birth_date,
-  //   university,
-  //   degree,
-  //   depart,
-  //   technonolgy,
-  //   duration,
-  //   intern_type,
-  //   date,
-  //   time,
-  // } = req.body;
 
   let data = [
     internUsername,
@@ -78,99 +64,89 @@ const RegisterInterns = async (req, res) => {
       return res.json(err);
     } else {
       if (data.affectedRows === 1) {
-        check = 1;
-        // console.log(internPhone.)
-        SendMessage(internUsername, interviewDate, interviewTime);
+        if (internType === "Remote") {
+          SendMessageRemote(
+            internUsername,
+            internPhone.slice(1, 13),
+            interviewDate,
+            interviewTime
+          );
+        } else {
+          SendMessageOnsite(internPhone.slice(1, 13), internUsername);
+        }
+
+        return res.json(data.affectedRows);
       }
     }
   });
-
-  // if (check === 1) {
-  //   if (internType === "Remote") {
-  //     // alert(interview);
-  //     axios.post("https://mkt.eziline.com/api/send", {
-  //       number: internPhone.slice(1, 12),
-  //       type: "text",
-
-  //       message: `
-  //       Subject: Registration Successful! Interview Process Details
-
-  //       Dear ${internUsername},
-
-  //       Congratulations! We are delighted to inform you that your registration was successful. Welcome to Ezitech's platform/community! 🎉
-
-  //       Interview Process Details:
-
-  //       Remote Interview:
-  //       Date: ${interviewDate}
-  //       Time: Date: ${interviewTime}
-  //       Platform: [e.g., Zoom, Google Meet]
-
-  //       Please make sure to mark these dates on your calendar and prepare accordingly. If you have any questions or need further assistance, feel free to reach out to us at [Contact Email/Phone].
-
-  //       Once again, congratulations on your successful registration, and we look forward to meeting you during the interview process!
-
-  //       Best regards,
-  //       Ibrahim Shah
-  //       CEO Ezitech
-
-  //       `,
-  //       instance_id: "6543C35B16249",
-  //       access_token: "648f4715d6c58",
-  //     });
-  //   } else {
-  //     axios
-  //       .post("https://mkt.eziline.com/api/send", {
-  //         number: internPhone.slice(1, 12),
-  //         type: "text",
-  //         message: "Hello From Node",
-
-  //         // message: `
-  //         // Subject: Registration Successful! Interview Process Details
-
-  //         // Dear ${internUsername},
-
-  //         // Congratulations! We are delighted to inform you that your registration was successful. Welcome to Ezitech's platform/community! 🎉
-
-  //         // Interview Process Details:
-
-  //         // Onsite Interview:
-  //         // Date: ${interviewDate}
-  //         // Time: Date: ${interviewTime}
-  //         // Location: Ezitech Institute, Amna Plaza, Main Peshawar Rd, Rawalpindi
-
-  //         // Please make sure to mark these dates on your calendar and prepare accordingly. If you have any questions or need further assistance, feel free to reach out to us at [Contact Email/Phone].
-
-  //         // Once again, congratulations on your successful registration, and we look forward to meeting you during the interview process!
-
-  //         // Best regards,
-  //         // Ibrahim Shah
-  //         // CEO Ezitech
-
-  //         // `,
-  //         instance_id: "6543C35B16249",
-  //         access_token: "648f4715d6c58",
-  //       })
-  //       .then((rs) => {
-  //         console.log("Message Sent");
-  //       })
-  //       .catch((err) => {
-  //         console.log("aaa", err);
-  //       });
-  //   }
-  // }
 };
 
-async function SendMessage(name, date, time) {
+async function SendMessageRemote(name, phone, date, time) {
+  console.log(phone);
   try {
     const response = await axios.post("https://mkt.eziline.com/api/send", {
-      number: "923176349954",
+      number: phone,
       type: "text",
-      message: `From Node ${name}, ${date}, ${time}`,
-      instance_id: "6543C35B16249",
-      access_token: "648f4715d6c58",
+      message: `
+Send from Automatic System 🤖
+
+Subject: Registration Successful! Interview Process Details
+
+Dear ${name},
+
+We are delighted to inform you that your registration was successful. Welcome to Ezitech's platform/community! 🎉
+
+Interview Process Details:
+
+Remote Interview:
+Date: ${date}
+Time: ${time}
+Platform: Google Meet
+
+Please make sure to mark these dates on your calendar and prepare accordingly. If you have any questions or need further assistance, feel free to reach out to us at [Contact Email/Phone].
+
+Once again, congratulations on your successful registration, and we look forward to meeting you during the interview process!
+
+Best regards
+  `,
+      instance_id: id,
+      access_token: token,
     });
-    console.log("Send", name, date, time);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function SendMessageOnsite(phone, name) {
+  try {
+    const response = await axios.post("https://mkt.eziline.com/api/send", {
+      number: phone,
+      type: "text",
+      message: `
+Send from Automatic System 🤖
+
+Subject: Registration Successful! Interview Process Details
+
+Dear ${name},
+
+Congratulations! We are delighted to inform you that your registration was successful. Welcome to Ezitech's platform/community! 🎉
+
+Interview Process Details:
+
+Onsite Interview:
+Days: Monday to Friday
+Time: 11:00Am to 3:00Pm
+Address: Office #304-B Amna Plaza, Near Radio Pakistan, Rawalpindi, Punjab 46000
+Location: https://maps.app.goo.gl/Q78i6r1DifnBWJtA8
+
+Please make sure to mark these dates on your calendar and prepare accordingly. If you have any questions or need further assistance, feel free to reach out to us at [Contact Email/Phone].
+
+Once again, congratulations on your successful registration, and we look forward to meeting you during the interview process!
+
+Best regards`,
+      instance_id: id,
+      access_token: token,
+    });
   } catch (error) {
     console.log(error);
   }

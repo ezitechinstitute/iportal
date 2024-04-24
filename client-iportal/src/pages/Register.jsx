@@ -91,18 +91,25 @@ export const Register = () => {
 
   const RegisterIntern = (e) => {
     e.preventDefault();
-
-    console.log(value);
-
     setValue({ ...value, internPhone: tel });
-    axios
-      .post("http://localhost:8800/register-inters", { value })
-      .then((res) => {
-       
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+
+    if (value.internPhone !== " ") {
+      axios
+        .post("http://localhost:8800/register-inters", { value })
+        .then((res) => {
+          if (res.data === 1) {
+            alert("Registered Successfuly");
+            window.location.reload();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      alert(
+        "Are your sure to submit this form? If yes click again on Register"
+      );
+    }
   };
 
   return (
