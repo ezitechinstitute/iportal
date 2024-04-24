@@ -9,7 +9,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route exact path="/register" element={<Register />} />
+          <Route index path="/" element={<Register />} />
           {/* Index Routes */}
           {/* <Route exact path="/intern-dashboard" element={<InternHome />} /> */}
         </Routes>

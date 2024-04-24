@@ -8,7 +8,13 @@ import "../styles/custom.css";
 import logo from "../assets/AdminAssets/logo.png";
 
 export const Register = () => {
-  const [value, setValue] = useState({ internCnic: " " });
+  const [value, setValue] = useState({
+    internCnic: " ",
+    internPhone: " ",
+    interviewDate: " ",
+    interviewTime: " ",
+    internImage: " ",
+  });
   const [tel, setTel] = useState(0);
   const [checkCnic, setCheckCnic] = useState(false);
   const [checkPhone, setCheckPhone] = useState(false);
@@ -19,12 +25,13 @@ export const Register = () => {
   const [interview, setInterview] = useState(false);
 
   const handleDateClick = (date) => {
+    setValue({ ...value, interviewDate: date.toDateString() });
     setSelectedDate(date);
     setShowTimePicker(true);
   };
 
   const handleTimeSelect = (time) => {
-    console.log("Selected time:", time);
+    setValue({ ...value, interviewTime: time });
     setSelectedTime(time);
     setShowTimePicker(true);
   };
@@ -63,8 +70,8 @@ export const Register = () => {
     const selectOption = document.getElementById("intern-type").value;
 
     if (selectOption === "Remote") {
-      // console.log(selectOption);
       interviewForm.style.display = "block";
+
       setInterview(true);
     } else {
       interviewForm.style.display = "none";
@@ -72,30 +79,31 @@ export const Register = () => {
     }
   });
 
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.addEventListener("load", () => {
+      setValue({ ...value, internImage: reader.result });
+    });
+  };
+
   const RegisterIntern = (e) => {
     e.preventDefault();
 
-    setValue((prev) => ({
-      ...prev,
-      date: selectedDate,
-      time: selectedTime,
-    }));
-
     console.log(value);
 
-    if (checkCnic !== false && checkPhone !== false && interview !== false) {
-      axios
-        .post("http://localhost:8800/register", { value })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    setValue({ ...value, internPhone: tel });
+    axios
+      .post("http://localhost:8800/register-inters", { value })
+      .then((res) => {
+       
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-
-  //   ^\+(?:[0-9] ?){6,14}[0-9]$
 
   return (
     <>
@@ -146,6 +154,7 @@ export const Register = () => {
                                 tabindex="1"
                                 autofocus
                                 onChange={handleInput}
+                                required
                               />
                             </div>
                           </div>
@@ -167,6 +176,7 @@ export const Register = () => {
                                 aria-describedby="register-email"
                                 tabindex="2"
                                 onChange={handleInput}
+                                required
                               />
                             </div>
                           </div>
@@ -241,6 +251,7 @@ export const Register = () => {
                                 className="form-control"
                                 name="internGender"
                                 onChange={handleInput}
+                                required
                                 id=""
                               >
                                 <option selected disabled>
@@ -265,9 +276,10 @@ export const Register = () => {
                               <input
                                 type="file"
                                 className="form-control"
-                                // onChange={handleInput}
+                                onChange={handleImage}
                                 name="internImg"
                                 id=""
+                                required
                               />
                             </div>
                           </div>
@@ -286,6 +298,7 @@ export const Register = () => {
                                 className="form-control"
                                 name="internJoinDate"
                                 onChange={handleInput}
+                                required
                               />
                             </div>
                           </div>
@@ -305,6 +318,7 @@ export const Register = () => {
                                 className="form-control"
                                 name="internDob"
                                 onChange={handleInput}
+                                required
                               />
                             </div>
                           </div>
@@ -323,6 +337,7 @@ export const Register = () => {
                                 name="internUniversity"
                                 id="universties"
                                 onChange={handleInput}
+                                required
                               >
                                 <option selected disabled>
                                   --Select--
@@ -645,6 +660,7 @@ export const Register = () => {
                                 name="internDegree"
                                 id=""
                                 onChange={handleInput}
+                                required
                               >
                                 <option selected disabled>
                                   --Select--
@@ -674,6 +690,7 @@ export const Register = () => {
                                 id=""
                                 className="form-control"
                                 onChange={handleInput}
+                                required
                               >
                                 <option selected disabled>
                                   --Select--
@@ -706,6 +723,7 @@ export const Register = () => {
                                 id=""
                                 className="form-control"
                                 onChange={handleInput}
+                                required
                               >
                                 <option selected disabled>
                                   --Select--
@@ -787,6 +805,7 @@ export const Register = () => {
                                 name="internDuration"
                                 id=""
                                 onChange={handleInput}
+                                required
                               >
                                 <option selected disabled>
                                   --Select--
@@ -811,6 +830,7 @@ export const Register = () => {
                                 name="internType"
                                 id="intern-type"
                                 onChange={handleInput}
+                                required
                               >
                                 <option selected disabled>
                                   --Select--
