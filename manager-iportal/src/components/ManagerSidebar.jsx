@@ -64,7 +64,7 @@ export const ManagerSidebar = () => {
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => updateMenuStatus("dashboard")}
-                to="/manager-dashboard"
+                to="/"
               >
                 <i data-feather="home"></i>
                 <span
@@ -72,6 +72,22 @@ export const ManagerSidebar = () => {
                   data-i18n="Dashboards"
                 >
                   Dashboard
+                </span>
+              </NavLink>
+            </li>
+
+            <li className={active === "dashboard" ? "active" : undefined}>
+              <NavLink
+                className="d-flex align-items-center"
+                onClick={() => updateMenuStatus("dashboard")}
+                to="/interviews"
+              >
+                <i data-feather='briefcase'></i>
+                <span
+                  className="menu-title text-truncate"
+                  data-i18n="Dashboards"
+                >
+                  Interviews
                 </span>
               </NavLink>
             </li>
@@ -136,7 +152,7 @@ export const ManagerSidebar = () => {
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => updateMenuStatus("balance")}
-                to={"/"}
+                to={"/balance"}
               >
                 <FiDollarSign />
                 <span className="menu-title text-truncate" data-i18n="User">
@@ -149,7 +165,7 @@ export const ManagerSidebar = () => {
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => updateMenuStatus("invoice")}
-                to={"/"}
+                to={"/invoice"}
               >
                 <i data-feather="file-text"></i>
                 <span className="menu-title text-truncate" data-i18n="User">
