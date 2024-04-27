@@ -1,11 +1,24 @@
 const express = require("express");
+const { RegisterInterns } = require("../controller/intern/interns-controller");
 const {
-  TotalInterns,
-  RegisterInterns,
-} = require("../controller/interns-controller");
+  ManagerAuth,
+  ManagerForgotPassword,
+  ManagerAvatar,
+} = require("../controller/manager/manager-auth-controller");
+const {
+  AssignTest,
+} = require("../controller/manager/manager-interview-controller");
 const router = express.Router();
 
-router.get("/interns", TotalInterns);
+/* Interns Endpoints */
 router.post("/register-inters", RegisterInterns);
+
+/* Manager Auth Endpoints */
+router.post("/manager-auth", ManagerAuth);
+router.post("manager-avatar", ManagerAvatar);
+router.post("/manager-forgot-password", ManagerForgotPassword);
+
+/* Manager Inters Endpoints */
+router.post("/assign-test", AssignTest);
 
 module.exports = router;

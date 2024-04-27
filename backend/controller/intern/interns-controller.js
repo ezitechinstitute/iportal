@@ -1,5 +1,5 @@
 const axios = require("axios");
-const { connection } = require("../config/connection");
+const { connection } = require("../../config/connection");
 const dotenv = require("dotenv").config();
 
 const id = process.env.INSTANCEID;
@@ -57,7 +57,7 @@ const RegisterInterns = async (req, res) => {
   let check = 0;
 
   const sql0 =
-    "INSERT INTO `intern_data`(`name`, `email`, `phone`, `cnic`, `gender`, `image`, `join_date`, `birth_date`, `university`, `degree`, `department`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
+    "INSERT INTO `intern_table`(`name`, `email`, `phone`, `cnic`, `gender`, `image`, `join_date`, `birth_date`, `university`, `degree`, `department`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
 
   connection.query(sql0, [data], (err, data) => {
     if (err) {

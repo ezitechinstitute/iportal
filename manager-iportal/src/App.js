@@ -16,8 +16,7 @@ function App() {
           <Route index path="/" element={<ManagerHome />} />
           <Route exact path="/interviews" element={<InterViews />} />
 
-          <Route exact path="/onsite-interns" element={<OnsiteInterns />} />
-          {/* <Route exact path="/intern-dashboard" element={<InternHome />} /> */}
+        
         </Routes>
       </BrowserRouter>
     </>
