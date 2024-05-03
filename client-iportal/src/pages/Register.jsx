@@ -4,10 +4,12 @@ import "react-phone-number-input/style.css";
 import Calendar from "react-calendar";
 import axios from "axios";
 import "../styles/custom.css";
-
 import logo from "../assets/AdminAssets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 export const Register = () => {
+  const navigate = useNavigate();
+
   const [value, setValue] = useState({
     internCnic: " ",
     internPhone: " ",
@@ -95,11 +97,12 @@ export const Register = () => {
 
     if (value.internPhone !== " ") {
       axios
-        .post("http://localhost:8800/register-inters", { value })
+        .post("https://api.ezitech.org/register-inters", { value })
         .then((res) => {
           if (res.data === 1) {
             alert("Registered Successfuly");
-            window.location.reload();
+            navigate("/popup");
+            // window.location.reload();
           }
         })
         .catch((err) => {
@@ -852,16 +855,19 @@ export const Register = () => {
 
                         {/* Meeting */}
                         <div className="mt-5">
-                          {/* <h4 className="card-title mb-1 text-center">
-                            Meeting
-                          </h4> */}
-
                           <form
                             className="interview-register-form mt-2 p-2"
                             id="interview-form"
                             style={{ display: "none" }}
                           >
+                            <h4
+                              className="card-title mb-1 text-center bg-warning p-1"
+                              style={{ color: "white" }}
+                            >
+                              Note: Select Interview Time Between 8:00Pm - 11Pm
+                            </h4>
                             <div className="row">
+                              <br />
                               <div
                                 className={
                                   !showTimePicker

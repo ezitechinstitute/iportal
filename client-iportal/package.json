@@ -1,6 +1,7 @@
 {
   "name": "client-iportal",
   "version": "0.1.0",
+  "homepage": "https://register.ezitech.org/",
   "private": true,
   "dependencies": {
     "@aldabil/react-scheduler": "^2.8.4",

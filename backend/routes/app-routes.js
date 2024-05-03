@@ -15,10 +15,10 @@ router.post("/register-inters", RegisterInterns);
 
 /* Manager Auth Endpoints */
 router.post("/manager-auth", ManagerAuth);
-router.post("manager-avatar", ManagerAvatar);
+router.post("/manager-avatar", ManagerAvatar);
 router.post("/manager-forgot-password", ManagerForgotPassword);
 
-/* Manager Inters Endpoints */
+/* Manager Interns Endpoints */
 router.post("/assign-test", AssignTest);
 
 module.exports = router;
