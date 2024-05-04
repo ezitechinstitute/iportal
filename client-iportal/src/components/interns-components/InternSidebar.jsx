@@ -1,5 +1,6 @@
 import React from "react";
 
+
 export const InternSidebar = () => {
   return (
     <>
@@ -8,7 +9,7 @@ export const InternSidebar = () => {
         className="main-menu menu-fixed menu-light menu-accordion menu-shadow"
         data-scroll-to-active="true"
       >
-        <div className="navbar-header">
+        <div className="navbar-header mb-3">
           <ul className="nav navbar-nav flex-row">
             <li className="nav-item mr-auto">
               <a className="navbar-brand" href="/">
@@ -81,7 +82,7 @@ export const InternSidebar = () => {
                 className="d-flex align-items-center"
                 href="dashboard-ecommerce.html"
               >
-                <i data-feather="check"></i>
+                <i data-feather='check-square'></i>
                 <span className="menu-item" data-i18n="eCommerce">
                   Attendance
                 </span>
@@ -98,16 +99,9 @@ export const InternSidebar = () => {
               </a>
             </li>
 
-            <li className=" nav-item">
-              <a className="d-flex align-items-center" href="#">
-                <i data-feather="info"></i>
-                <span className="menu-title text-truncate" data-i18n="User">
-                  KB Information
-                </span>
-              </a>
-            </li>
 
-            <li className="nav-item">
+
+            {/* <li className="nav-item">
               <a
                 className="d-flex align-items-center"
                 href="ext-component-sweet-alerts.html"
@@ -117,9 +111,9 @@ export const InternSidebar = () => {
                   Shop
                 </span>
               </a>
-            </li>
+            </li> */}
 
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <a
                 className="d-flex align-items-center"
                 href="ext-component-sweet-alerts.html"
@@ -129,7 +123,7 @@ export const InternSidebar = () => {
                   Points
                 </span>
               </a>
-            </li>
+            </li> */}
 
             <li className="nav-item">
               <a
@@ -151,6 +145,24 @@ export const InternSidebar = () => {
                 <i data-feather="image"></i>
                 <span className="menu-item" data-i18n="Sweet Alert">
                   Post
+                </span>
+              </a>
+            </li>
+
+            <li className=" nav-item">
+              <a className="d-flex align-items-center" href="#">
+                <i data-feather="info"></i>
+                <span className="menu-title text-truncate" data-i18n="User">
+                  KB Information
+                </span>
+              </a>
+            </li>
+
+            <li className=" nav-item">
+              <a className="profile d-flex align-items-center" href="#">
+              <i data-feather='user'></i>
+                <span className="menu-title text-truncate" data-i18n="User">
+                  View Profile
                 </span>
               </a>
             </li>

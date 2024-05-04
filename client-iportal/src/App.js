@@ -1,12 +1,17 @@
 import { AdminHome } from "./pages/admin-pages/AdminHome";
+import { InternDashboard } from "./components/interns-components/InternDashboard";
+import { InternSidebar } from "./components/interns-components/InternSidebar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { InternHome } from "./pages/interns-pages/InternHome";
 import { ManagerHome } from "./pages/manager-pages/ManagerHome";
 import { OnsiteInterns } from "./pages/manager-pages/OnsiteInterns";
 
+
 function App() {
   return (
     <>
+    <InternSidebar />
+<InternDashboard />
       <BrowserRouter>
         <Routes>
           <Route exact path="/admin-dashboard" element={<AdminHome />} />
