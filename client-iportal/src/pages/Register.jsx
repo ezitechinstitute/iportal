@@ -25,6 +25,8 @@ export const Register = () => {
   const [selectedTime, setSelectedTime] = useState();
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [interview, setInterview] = useState(false);
+  const [phoneMsg, setPhoneMsg] = useState(" ");
+  const [registerMsg, setRegisterMsg] = useState(" ");
 
   const handleDateClick = (date) => {
     setValue({ ...value, interviewDate: date.toDateString() });
@@ -100,8 +102,10 @@ export const Register = () => {
         .post("https://api.ezitech.org/register-inters", { value })
         .then((res) => {
           if (res.data === 1) {
-            alert("Registered Successfuly");
-            navigate("/popup");
+            setRegisterMsg("Successfully Register, Kindly Check Your WhatsApp");
+            setTimeout(() => {
+              window.location.reload();
+            }, 5000);
             // window.location.reload();
           }
         })
@@ -113,6 +117,10 @@ export const Register = () => {
         "Are your sure to submit this form? If yes click again on Register"
       );
     }
+  };
+
+  const MessageNote = () => {
+    setPhoneMsg("Kindly: Use Active WhatsApp Number Start Without (0)");
   };
 
   return (
@@ -137,7 +145,7 @@ export const Register = () => {
                       </a>
 
                       <h4 className="card-title mb-1 text-center">
-                        Welcome to Ezitech Institute Registration Form 🚀
+                        Welcome to Ezitech Institute Registration Form
                       </h4>
 
                       <form
@@ -152,14 +160,14 @@ export const Register = () => {
                                 for="register-username"
                                 className="form-label"
                               >
-                                Username
+                                Full Name
                               </label>
                               <input
                                 type="text"
                                 className="form-control"
                                 id="register-username"
                                 name="internUsername"
-                                placeholder="johndoe"
+                                placeholder="Full Name"
                                 aria-describedby="register-username"
                                 tabindex="1"
                                 autofocus
@@ -182,7 +190,7 @@ export const Register = () => {
                                 className="form-control"
                                 id="internEmail"
                                 name="internemail"
-                                placeholder="john@example.com"
+                                placeholder="info@ezitech.org"
                                 aria-describedby="register-email"
                                 tabindex="2"
                                 onChange={handleInput}
@@ -198,7 +206,12 @@ export const Register = () => {
                                 for="register-email"
                                 className="form-label"
                               >
-                                Phone
+                                Phone{" "}
+                                {phoneMsg !== " " ? (
+                                  <span>{phoneMsg}</span>
+                                ) : (
+                                  ""
+                                )}
                               </label>
                               <PhoneInput
                                 international
@@ -208,6 +221,8 @@ export const Register = () => {
                                 name="internPhone"
                                 placeholder="Enter phone number"
                                 className="form-control"
+                                onFocus={MessageNote}
+                                limitMaxLength="10"
                               />
                               {checkPhone ? (
                                 <span style={{ color: "limegreen" }}>
@@ -227,10 +242,10 @@ export const Register = () => {
                               >
                                 CNIC
                               </label>
-
                               <input
                                 type="text"
                                 id="cnic"
+                                maxLength={15}
                                 name="internCnic"
                                 placeholder="XXXXX-XXXXXXX-X"
                                 className="form-control"
@@ -352,9 +367,7 @@ export const Register = () => {
                                 <option selected disabled>
                                   --Select--
                                 </option>
-                                <option value="Others">
-                                  Others (For Undergraduate)
-                                </option>
+                                <option value="Others">Others</option>
                                 <option value="Aga Khan University">
                                   Aga Khan University
                                 </option>
@@ -370,8 +383,8 @@ export const Register = () => {
                                 <option value="Bahria University">
                                   Bahria University
                                 </option>
-                                <option value="COMSATS University Islamabad">
-                                  COMSATS University Islamabad
+                                <option value="COMSATS University">
+                                  COMSATS University
                                 </option>
                                 <option value="Dow University of Health Sciences">
                                   Dow University of Health Sciences
@@ -387,8 +400,8 @@ export const Register = () => {
                                   Ghulam Ishaq Khan Institute of Engineering
                                   Sciences and Technology
                                 </option>
-                                <option value="Government College University Lahore">
-                                  Government College University Lahore
+                                <option value="Government College University">
+                                  Government College University
                                 </option>
                                 <option value="Hazara University">
                                   Hazara University
@@ -396,8 +409,8 @@ export const Register = () => {
                                 <option value="Islamia University of Bahawalpur">
                                   Islamia University of Bahawalpur
                                 </option>
-                                <option value="International Islamic University, Islamabad">
-                                  International Islamic University, Islamabad
+                                <option value="International Islamic University">
+                                  International Islamic University
                                 </option>
                                 <option value="Karachi University">
                                   Karachi University
@@ -436,21 +449,20 @@ export const Register = () => {
                                 <option value="Quaid-i-Azam University">
                                   Quaid-i-Azam University
                                 </option>
-                                <option value="University of Agriculture, Faisalabad">
-                                  University of Agriculture, Faisalabad
+                                <option value="University of Agriculture">
+                                  University of Agriculture
                                 </option>
                                 <option value="University of Balochistan">
                                   University of Balochistan
                                 </option>
                                 <option value="University of Education, Lahore">
-                                  University of Education, Lahore
+                                  University of Education
                                 </option>
-                                <option value="University of Engineering and Technology, Lahore">
+                                <option value="University of Engineering and Technology">
                                   University of Engineering and Technology,
-                                  Lahore
                                 </option>
-                                <option value="University of Health Sciences, Lahore">
-                                  University of Health Sciences, Lahore
+                                <option value="University of Health Sciences">
+                                  University of Health Sciences
                                 </option>
                                 <option value="University of Karachi">
                                   University of Karachi
@@ -467,14 +479,14 @@ export const Register = () => {
                                 <option value="University of Peshawar">
                                   University of Peshawar
                                 </option>
-                                <option value="University of the Punjab, Lahore">
-                                  University of the Punjab, Lahore
+                                <option value="University of the Punjab">
+                                  University of the Punjab
                                 </option>
                                 <option value="University of Sargodha">
                                   University of Sargodha
                                 </option>
-                                <option value="University of Science and Technology Bannu">
-                                  University of Science and Technology Bannu
+                                <option value="University of Science and Technology">
+                                  University of Science and Technology
                                 </option>
                                 <option value="University of Sindh">
                                   University of Sindh
@@ -485,9 +497,8 @@ export const Register = () => {
                                 <option value="University of Turbat">
                                   University of Turbat
                                 </option>
-                                <option value="University of Veterinary and Animal Sciences, Lahore">
-                                  University of Veterinary and Animal Sciences,
-                                  Lahore
+                                <option value="University of Veterinary and Animal Sciences">
+                                  University of Veterinary and Animal Sciences
                                 </option>
                                 <option value="Virtual University of Pakistan">
                                   Virtual University of Pakistan
@@ -497,15 +508,15 @@ export const Register = () => {
                                   Technology, Engineering and Management
                                   Sciences
                                 </option>
-                                <option value="Benazir Bhutto Shaheed University, Karachi">
-                                  Benazir Bhutto Shaheed University, Karachi
+                                <option value="Benazir Bhutto Shaheed University">
+                                  Benazir Bhutto Shaheed University
                                 </option>
                                 <option value="Capital University of Science & Technology">
                                   Capital University of Science & Technology
                                 </option>
-                                <option value="City University of Science and Information Technology, Peshawar">
+                                <option value="City University of Science and Information Technology">
                                   City University of Science and Information
-                                  Technology, Peshawar
+                                  Technology
                                 </option>
                                 <option value="Dadabhoy Institute of Higher Education">
                                   Dadabhoy Institute of Higher Education
@@ -538,8 +549,8 @@ export const Register = () => {
                                 <option value="Indus University">
                                   Indus University
                                 </option>
-                                <option value="Institute of Business Administration, Karachi">
-                                  Institute of Business Administration, Karachi
+                                <option value="Institute of Business Administration">
+                                  Institute of Business Administration
                                 </option>
                                 <option value="Iqra University">
                                   Iqra University
@@ -634,9 +645,8 @@ export const Register = () => {
                                 <option value="University of Faisalabad">
                                   University of Faisalabad
                                 </option>
-                                <option value="University of Management and Technology, Lahore">
-                                  University of Management and Technology,
-                                  Lahore
+                                <option value="University of Management and Technology">
+                                  University of Management and Technology
                                 </option>
                                 <option value="University of South Asia">
                                   University of South Asia
@@ -649,9 +659,6 @@ export const Register = () => {
                                 </option>
                                 <option value="University of Sialkot">
                                   University of Sialkot
-                                </option>
-                                <option value="University of the Punjab, Lahore">
-                                  University of the Punjab, Lahore
                                 </option>
                               </select>
                             </div>
@@ -675,6 +682,7 @@ export const Register = () => {
                                 <option selected disabled>
                                   --Select--
                                 </option>
+                                <option value="Others">Others</option>
                                 <option value="Matric">Matric</option>
                                 <option value="Inter">Inter</option>
                                 <option value="Bs">Bs</option>
@@ -692,12 +700,12 @@ export const Register = () => {
                                 for="register-email"
                                 className="form-label"
                               >
-                                Department
+                                Interview Type
                               </label>
 
                               <select
-                                name="internDpt"
-                                id=""
+                                name="interviewType"
+                                id="intern-type"
                                 className="form-control"
                                 onChange={handleInput}
                                 required
@@ -705,16 +713,8 @@ export const Register = () => {
                                 <option selected disabled>
                                   --Select--
                                 </option>
-                                <option value="Computer Science">
-                                  Computer Scienece
-                                </option>
-                                <option value="Information Technology">
-                                  Information Technology
-                                </option>
-                                <option value="Software Engineering">
-                                  Software Engineering
-                                </option>
-                                <option value="Others">Others</option>
+                                <option value="Onsite">Onsite</option>
+                                <option value="Remote">Remote</option>
                               </select>
                             </div>
                           </div>
@@ -738,63 +738,60 @@ export const Register = () => {
                                 <option selected disabled>
                                   --Select--
                                 </option>
-                                <option value="web_development">
+                                <option value="Web Development">
                                   Web Development
                                 </option>
-                                <option value="frontend_development">
+                                <option value="Frontend Development">
                                   Frontend Development
                                 </option>
-                                <option value="mern_stack">MERN Stack</option>
-                                <option value="php_development">
+                                <option value="Mern Stack">MERN Stack</option>
+                                <option value="PHP Development">
                                   PHP Development
                                 </option>
-                                <option value="java_development">
+                                <option value="Java Development">
                                   Java Development
                                 </option>
-                                <option value="python_development">
+                                <option value="Python Development">
                                   Python Development
                                 </option>
-                                <option value="ruby_on_rails">
+                                <option value="Ruby on Rails">
                                   Ruby on Rails
                                 </option>
-                                <option value="mobile_development">
+                                <option value="Mobile Development">
                                   Mobile Development
                                 </option>
-                                <option value="data_science">
+                                <option value="Data Science">
                                   Data Science
                                 </option>
-                                <option value="cloud_computing">
+                                <option value="Cloud Computing">
                                   Cloud Computing
                                 </option>
-                                <option value="machine_learning">
+                                <option value="Machine Learning">
                                   Machine Learning
                                 </option>
-                                <option value="blockchain">
+                                <option value="Blockchain Development">
                                   Blockchain Development
                                 </option>
-                                <option value="devops">DevOps</option>
-                                <option value="cybersecurity">
+                                <option value="DevOps">DevOps</option>
+                                <option value="Cybersecurity">
                                   Cybersecurity
                                 </option>
-                                <option value="iot">
-                                  Internet of Things (IoT)
-                                </option>
-                                <option value="graphic_design">
+                                <option value="Graphic Design">
                                   Graphic Design
                                 </option>
-                                <option value="seo">
+                                <option value="Search Engine Optimization (SEO)">
                                   Search Engine Optimization (SEO)
                                 </option>
-                                <option value="digital_marketing">
+                                <option value="Digital Marketing">
                                   Digital Marketing
                                 </option>
-                                <option value="ui_ux_design">
+                                <option value="UI/UX Design">
                                   UI/UX Design
                                 </option>
-                                <option value="content_writing">
+                                <option value="Content Writing">
                                   Content Writing
                                 </option>
-                                <option value="video_production">
+                                <option value="Video Production">
                                   Video Production
                                 </option>
                               </select>
@@ -838,7 +835,6 @@ export const Register = () => {
                               <select
                                 className="form-control"
                                 name="internType"
-                                id="intern-type"
                                 onChange={handleInput}
                                 required
                               >
@@ -990,7 +986,7 @@ export const Register = () => {
                             </div>
                           </form>
                         </div>
-                        <div className="form-group">
+                        {/* <div className="form-group">
                           <div className="custom-control custom-checkbox">
                             <input
                               className="custom-control-input"
@@ -1008,9 +1004,18 @@ export const Register = () => {
                               </a>
                             </label>
                           </div>
+                        </div> */}
+                        <div className="text-center">
+                          {registerMsg !== " " ? (
+                            <h4 style={{ color: "limegreen" }}>
+                              {registerMsg}
+                            </h4>
+                          ) : (
+                            " "
+                          )}
                         </div>
                         <button
-                          className="btn btn-primary btn-block"
+                          className="btn btn-primary btn-block mt-2"
                           tabindex="5"
                           type="submit"
                         >
