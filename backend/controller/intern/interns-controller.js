@@ -61,6 +61,23 @@ const RegisterInterns = async (req, res) => {
   // console.log(data);
   let check = 0;
 
+  const sql1 = "SELECT * FROM `intern_table` WHERE `email`= ?";
+
+  connection.query(sql1, ["qamargill427@gmail.com"], (err, data) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      if (data.length > 0) {
+        check = 1;
+      }
+      //   for(let i = 0; i < data.length; i++){
+      //       if(data[i].email === internemail){
+      //           check = 1;
+      //       }
+      //   }
+    }
+  });
+
   const sql0 =
     "INSERT INTO `intern_table`(`name`, `email`, `phone`, `cnic`, `gender`, `image`, `join_date`, `birth_date`, `university`, `degree`, `department`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
 

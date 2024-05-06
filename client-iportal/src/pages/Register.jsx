@@ -6,6 +6,7 @@ import axios from "axios";
 import "../styles/custom.css";
 import logo from "../assets/AdminAssets/logo.png";
 import { useNavigate } from "react-router-dom";
+import { Spinner } from "../components/Spinner";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -27,6 +28,8 @@ export const Register = () => {
   const [interview, setInterview] = useState(false);
   const [phoneMsg, setPhoneMsg] = useState(" ");
   const [registerMsg, setRegisterMsg] = useState(" ");
+  const [errorMsg, setErrorMsg] = useState(" ");
+  const [loader, setLoader] = useState(false);
 
   const handleDateClick = (date) => {
     setValue({ ...value, interviewDate: date.toDateString() });
@@ -98,29 +101,48 @@ export const Register = () => {
     setValue({ ...value, internPhone: tel });
 
     if (value.internPhone !== " ") {
-      axios
-        .post("https://api.ezitech.org/register-inters", { value })
-        .then((res) => {
-          if (res.data === 1) {
-            setRegisterMsg("Successfully Register, Kindly Check Your WhatsApp");
-            setTimeout(() => {
-              window.location.reload();
-            }, 5000);
-            // window.location.reload();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (
+        value.internGender !== undefined &&
+        value.internUniversity !== undefined &&
+        value.internDegree !== undefined &&
+        value.interviewType !== undefined &&
+        value.internTechnology !== undefined &&
+        value.internDuration !== undefined &&
+        value.internType !== undefined
+      ) {
+        setLoader(true);
+
+        axios
+          .post("https://api.ezitech.org/register-inters", { value })
+          .then((res) => {
+            if (res.data === 1) {
+              setRegisterMsg(
+                "Successfully Register, Kindly Check Your WhatsApp"
+              );
+              setTimeout(() => {
+                setLoader(false);
+                window.location.reload();
+              }, 2000);
+              // window.location.reload();
+            }
+            if (res.data.exist === true) {
+              setErrorMsg("You Already Registered");
+              setTimeout(() => {
+                setLoader(false);
+              }, 2000);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        alert("Please Fill Empty Fields First!!!");
+      }
     } else {
       alert(
         "Are your sure to submit this form? If yes click again on Register"
       );
     }
-  };
-
-  const MessageNote = () => {
-    setPhoneMsg("Kindly: Use Active WhatsApp Number Start Without (0)");
   };
 
   return (
@@ -206,12 +228,7 @@ export const Register = () => {
                                 for="register-email"
                                 className="form-label"
                               >
-                                Phone{" "}
-                                {phoneMsg !== " " ? (
-                                  <span>{phoneMsg}</span>
-                                ) : (
-                                  ""
-                                )}
+                                WhatsApp
                               </label>
                               <PhoneInput
                                 international
@@ -221,7 +238,6 @@ export const Register = () => {
                                 name="internPhone"
                                 placeholder="Enter phone number"
                                 className="form-control"
-                                onFocus={MessageNote}
                                 limitMaxLength="10"
                               />
                               {checkPhone ? (
@@ -1006,10 +1022,17 @@ export const Register = () => {
                           </div>
                         </div> */}
                         <div className="text-center">
+                          {loader ? <Spinner /> : " "}
                           {registerMsg !== " " ? (
                             <h4 style={{ color: "limegreen" }}>
                               {registerMsg}
                             </h4>
+                          ) : (
+                            " "
+                          )}
+
+                          {errorMsg !== " " ? (
+                            <h4 style={{ color: "red" }}>{errorMsg}</h4>
                           ) : (
                             " "
                           )}
