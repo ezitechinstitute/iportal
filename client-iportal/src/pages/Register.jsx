@@ -117,7 +117,7 @@ export const Register = () => {
           .then((res) => {
             if (res.data === 1) {
               setRegisterMsg(
-                "Successfully Register, Kindly Check Your WhatsApp"
+                "Successfully Register, Kindly Check Your Email"
               );
               setTimeout(() => {
                 setLoader(false);
