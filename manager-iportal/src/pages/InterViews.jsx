@@ -16,6 +16,7 @@ export const InterViews = () => {
       .post("https://api.ezitech.org/get-interviews", { value })
       .then((res) => {
         setData(res.data);
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -52,6 +53,7 @@ export const InterViews = () => {
                         id=""
                         className="form-control"
                         required
+                        onChange={handleInput}
                       >
                         <option selected disabled>
                           --Select--
@@ -75,97 +77,116 @@ export const InterViews = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>
-                                <div class="avatar-group">
-                                  <div
-                                    data-toggle="tooltip"
-                                    data-popup="tooltip-custom"
-                                    data-placement="top"
-                                    title=""
-                                    class="avatar pull-up my-0"
-                                    data-original-title="Lilian Nenez"
-                                  >
-                                    <img
-                                      src="./app-assets/images/portrait/small/avatar-s-5.jpg"
-                                      alt="Avatar"
-                                      height="50"
-                                      width="50"
-                                    />
-                                  </div>
-                                </div>
-                              </td>
-                              <td>Peter Charls</td>
+                            {
+                            
+                            data.length > 0 ?
+                            
+                            data.map((rs) => {
+                              const {
+                                image,
+                                name,
+                                phone,
+                                technology,
+                                interview_type,
+                                status,
+                              } = rs;
 
-                              <td>+923176349954</td>
+                              return (
+                                <>
+                                  <tr>
+                                    <td>
+                                      <div class="avatar-group">
+                                        <div
+                                          data-toggle="tooltip"
+                                          data-popup="tooltip-custom"
+                                          data-placement="top"
+                                          title=""
+                                          class="avatar pull-up my-0"
+                                          data-original-title="Lilian Nenez"
+                                        >
+                                          <img
+                                            src={image}
+                                            alt="Avatar"
+                                            height="50"
+                                            width="50"
+                                          />
+                                        </div>
+                                      </div>
+                                    </td>
+                                    <td>{name}</td>
 
-                              <td>MERN Stack</td>
-                              <td>
-                                <span class="badge badge-pill badge-light-primary mr-1">
-                                  Remote
-                                </span>
-                              </td>
+                                    <td>{phone}</td>
 
-                              <td>
-                                <span class="badge badge-pill badge-light-success mr-1">
-                                  Interview
-                                </span>
-                              </td>
-                              <td>
-                                <div class="dropdown">
-                                  <button
-                                    type="button"
-                                    class="btn btn-warning dropdown-toggle hide-arrow"
-                                    data-toggle="dropdown"
-                                  >
-                                    Action
-                                  </button>
-                                  <div class="dropdown-menu">
-                                    <a
-                                      class="dropdown-item"
-                                      href="javascript:void(0);"
-                                    >
-                                      <i
-                                        data-feather="message-square"
-                                        class="mr-50"
-                                      ></i>
+                                    <td>{technology}</td>
+                                    <td>
+                                      <span class="badge badge-pill badge-light-primary mr-1">
+                                        {interview_type}
+                                      </span>
+                                    </td>
 
-                                      <span>Send Message</span>
-                                    </a>
-                                    <a
-                                      class="dropdown-item"
-                                      href="javascript:void(0);"
-                                    >
-                                      <i
-                                        data-feather="clipboard"
-                                        class="mr-50"
-                                      ></i>
-                                      <span>Assign Test</span>
-                                    </a>
-                                    <a
-                                      class="dropdown-item"
-                                      href="javascript:void(0);"
-                                    >
-                                      <i
-                                        data-feather="monitor"
-                                        class="mr-50"
-                                      ></i>
-                                      <span>Assign Portal</span>
-                                    </a>
-                                    <a
-                                      class="dropdown-item"
-                                      href="javascript:void(0);"
-                                    >
-                                      <i
-                                        data-feather="x-square"
-                                        class="mr-50"
-                                      ></i>
-                                      <span>Remove</span>
-                                    </a>
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
+                                    <td>
+                                      <span class="badge badge-pill badge-light-success mr-1">
+                                        {status}
+                                      </span>
+                                    </td>
+                                    <td>
+                                      <div class="dropdown">
+                                        <button
+                                          type="button"
+                                          class="btn btn-warning dropdown-toggle hide-arrow"
+                                          data-toggle="dropdown"
+                                        >
+                                          Action
+                                        </button>
+                                        <div class="dropdown-menu">
+                                          <a
+                                            class="dropdown-item"
+                                            href="javascript:void(0);"
+                                          >
+                                            <i
+                                              data-feather="message-square"
+                                              class="mr-50"
+                                            ></i>
+
+                                            <span>Send Message</span>
+                                          </a>
+                                          <a
+                                            class="dropdown-item"
+                                            href="javascript:void(0);"
+                                          >
+                                            <i
+                                              data-feather="clipboard"
+                                              class="mr-50"
+                                            ></i>
+                                            <span>Assign Test</span>
+                                          </a>
+                                          <a
+                                            class="dropdown-item"
+                                            href="javascript:void(0);"
+                                          >
+                                            <i
+                                              data-feather="monitor"
+                                              class="mr-50"
+                                            ></i>
+                                            <span>Assign Portal</span>
+                                          </a>
+                                          <a
+                                            class="dropdown-item"
+                                            href="javascript:void(0);"
+                                          >
+                                            <i
+                                              data-feather="x-square"
+                                              class="mr-50"
+                                            ></i>
+                                            <span>Remove</span>
+                                          </a>
+                                        </div>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </>
+                              );
+                            }) : " "}
                           </tbody>
                         </table>
                       </div>
