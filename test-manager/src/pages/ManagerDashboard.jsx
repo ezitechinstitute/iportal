@@ -15,15 +15,21 @@ export const ManagerDashboard = () => {
     }
   });
 
-  const getLatestRegister = () => {
-    axios
-      .get("https://api.ezitech.org/get-latest-interns")
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const getLatestRegister = async () => {
+    try {
+      const res = await axios.get("https://api.ezitech.org/get-latest-interns");
+      setData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+    // axios
+    //   .get("https://api.ezitech.org/get-latest-interns")
+    //   .then((res) => {
+    //     setData(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   useEffect(() => {
@@ -102,7 +108,7 @@ export const ManagerDashboard = () => {
                 <div class="card-header">
                   <div class="card-title">Latest Registration</div>
 
-                  <div class="card-body">
+                  <div class="card-body overflow-x-scroll">
                     <table class="table">
                       <thead>
                         <tr>

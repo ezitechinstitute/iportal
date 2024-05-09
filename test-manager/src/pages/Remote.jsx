@@ -15,22 +15,44 @@ export const Remote = () => {
     }
   });
 
-  const getRemoteRegister = () => {
-    axios
-      .get("https://api.ezitech.org/get-remote-interns")
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const getRemoteRegister = async () => {
+    try {
+      const res = await axios.get("https://api.ezitech.org/get-remote-interns");
+      setData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    setInterval(() => {
-      getRemoteRegister();
-    }, 2000);
+    // setInterval(() => {
+    getRemoteRegister();
+    // }, 2000);
   }, []);
+
+  const [currentPage, settCurrentPage] = useState(1);
+  const recordPerPage = 15;
+  const lastIndex = currentPage * recordPerPage;
+  const firstIndex = lastIndex - recordPerPage;
+  const records = data.slice(firstIndex, lastIndex);
+  const nPage = Math.ceil(data.length / recordPerPage);
+  const numbers = [...Array(nPage + 1).keys()].slice(1);
+
+  function prevPage() {
+    if (currentPage !== firstIndex) {
+      settCurrentPage(currentPage - 1);
+    }
+  }
+
+  function changeCurrentPage(id) {
+    settCurrentPage(id);
+  }
+
+  function nextPage() {
+    if (currentPage !== nPage) {
+      settCurrentPage(currentPage + 1);
+    }
+  }
 
   const UpdateRemoteStaus = (email) => {
     axios
@@ -141,7 +163,7 @@ export const Remote = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {data.map((rs) => {
+                        {records.map((rs) => {
                           const {
                             id,
                             name,
@@ -209,6 +231,39 @@ export const Remote = () => {
                         })}
                       </tbody>
                     </table>
+                    {/* Pagination */}
+                    <div>
+                      {/* <nav> */}
+                      <ul className="pagination">
+                        <li className="page-item">
+                          <a href="#" className="page-link" onClick={prevPage}>
+                            Prev
+                          </a>
+                        </li>
+                        {/* {numbers.map((n, i) => (
+                          <li
+                            className={`page-item ${
+                              currentPage === n ? "active" : "   "
+                            }`}
+                            key={i}
+                          >
+                            <a
+                              href="#"
+                              className="page-link"
+                              onClick={changeCurrentPage}
+                            >
+                              {n}
+                            </a>
+                          </li>
+                        ))} */}
+                        <li className="page-item">
+                          <a href="#" className="page-link" onClick={nextPage}>
+                            Next
+                          </a>
+                        </li>
+                      </ul>
+                      {/* </nav> */}
+                    </div>
                   </div>
                 </div>
               </div>
