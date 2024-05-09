@@ -11,11 +11,25 @@ const AssignTest = (req, res) => {
     if (err) {
       res.json(err);
     } else {
-      res.json(data);
+      res.json(data.affectedRows);
     }
   });
 };
 
+const RemoveIntern = (req, res) => {
+    const { email } = req.body;
+
+  const sql = "UPDATE `intern_table` SET `status`='Removed' WHERE `email` = ?";
+  connection.query(sql, [email], (err, data) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.json(data.affectedRows);
+    }
+  });
+} 
+
 module.exports = {
   AssignTest,
+  RemoveIntern
 };

@@ -1,8 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ManagerTopbar } from "../components/ManagerTopbar";
 import { ManagerSidebar } from "../components/ManagerSidebar";
+import axios from "axios";
 
 export const InterViews = () => {
+  const [value, setValue] = useState({});
+  const [data, setData] = useState([]);
+
+  const handleInput = (e) => {
+    setValue({ ...value, [e.target.name]: e.target.value });
+  };
+
+  const GetInterviews = () => {
+    axios
+      .post("https://api.ezitech.org/get-interviews", { value })
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    GetInterviews();
+  });
   return (
     <>
       <ManagerTopbar />
@@ -24,6 +46,20 @@ export const InterViews = () => {
                       </div>
                     </div>
                     <div className="card-body">
+                      <label htmlFor="">Select Onsite/Remote: </label>
+                      <select
+                        name="interviewFilter"
+                        id=""
+                        className="form-control"
+                        required
+                      >
+                        <option selected disabled>
+                          --Select--
+                        </option>
+                        <option value="Onsite">Onsite</option>
+                        <option value="Remote">Remote</option>
+                      </select>
+                      <br />
                       {/* <ManagerChartOne chartData={userData} /> */}
                       <div class="table-responsive text-center">
                         <table class="table table-hover">
@@ -53,8 +89,8 @@ export const InterViews = () => {
                                     <img
                                       src="./app-assets/images/portrait/small/avatar-s-5.jpg"
                                       alt="Avatar"
-                                      height="26"
-                                      width="26"
+                                      height="50"
+                                      width="50"
                                     />
                                   </div>
                                 </div>
@@ -93,7 +129,7 @@ export const InterViews = () => {
                                         data-feather="message-square"
                                         class="mr-50"
                                       ></i>
-                                    
+
                                       <span>Send Message</span>
                                     </a>
                                     <a
@@ -110,21 +146,26 @@ export const InterViews = () => {
                                       class="dropdown-item"
                                       href="javascript:void(0);"
                                     >
-                                      <i data-feather="monitor" class="mr-50"></i>
+                                      <i
+                                        data-feather="monitor"
+                                        class="mr-50"
+                                      ></i>
                                       <span>Assign Portal</span>
                                     </a>
                                     <a
                                       class="dropdown-item"
                                       href="javascript:void(0);"
                                     >
-                                      <i data-feather="x-square" class="mr-50"></i>
+                                      <i
+                                        data-feather="x-square"
+                                        class="mr-50"
+                                      ></i>
                                       <span>Remove</span>
                                     </a>
                                   </div>
                                 </div>
                               </td>
                             </tr>
-                            
                           </tbody>
                         </table>
                       </div>

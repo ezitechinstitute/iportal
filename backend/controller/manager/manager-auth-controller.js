@@ -1,16 +1,19 @@
 const { connection } = require("../../config/connection");
 
 const ManagerAuth = (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body.value;
 
   const sql =
     "SELECT `image`, `name`, `email`, `password` FROM `manager_accounts` WHERE `email` = ? AND `password`= ?";
 
   connection.query(sql, [email, password], (err, data) => {
     if (err) {
-      res.json(err);
+      return res.json(err);
     } else {
-      res.json(data);
+        if(data.length > 0){
+           return res.json({isLoggedIn: true, data});
+        }
+      
     }
   });
 };
@@ -21,9 +24,9 @@ const ManagerForgotPassword = (req, res) => {
   const sql = "UPDATE `manager_accounts` SET `password`= ? WHERE `email` = ?";
   connection.query(sql, [password, email], (err, data) => {
     if (err) {
-      res.json(err);
+      return res.json(err);
     } else {
-      res.json(data);
+      return res.json(data);
     }
   });
 };
