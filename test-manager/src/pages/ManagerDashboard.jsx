@@ -22,14 +22,6 @@ export const ManagerDashboard = () => {
     } catch (error) {
       console.log(error);
     }
-    // axios
-    //   .get("https://api.ezitech.org/get-latest-interns")
-    //   .then((res) => {
-    //     setData(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   };
 
   useEffect(() => {

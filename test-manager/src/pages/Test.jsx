@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { TopHeader } from "../components/TopHeader";
-import { Sidebar } from "../components/Sidebar";
 import { useNavigate } from "react-router-dom";
+import { Sidebar } from "../components/Sidebar";
+import { TopHeader } from "../components/TopHeader";
 
-export const Remote = () => {
+export const Test = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
@@ -15,9 +15,9 @@ export const Remote = () => {
     }
   });
 
-  const getRemoteRegister = async () => {
+  const getTestIntern = async () => {
     try {
-      const res = await axios.get("https://api.ezitech.org/get-remote-interns");
+      const res = await axios.get("https://api.ezitech.org/get-test-interns");
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -25,9 +25,7 @@ export const Remote = () => {
   };
 
   useEffect(() => {
-    // setInterval(() => {
-    getRemoteRegister();
-    // }, 1000);
+    getTestIntern();
   });
 
   const [currentPage, settCurrentPage] = useState(1);
@@ -53,30 +51,6 @@ export const Remote = () => {
       settCurrentPage(currentPage + 1);
     }
   }
-
-  const UpdateRemoteStaus = (email) => {
-    axios
-      .post("https://api.ezitech.org/update-intern-status", { email })
-      .then((res) => {
-        if (res.data === 1) {
-          alert("Status Updated");
-        } else {
-          alert("Something Went Wrong!!!");
-        }
-      });
-  };
-
-  const RemoveRemote = (email) => {
-    axios
-      .post("https://api.ezitech.org/remove-intern", { email })
-      .then((res) => {
-        if (res.data === 1) {
-          alert("Removed Successfully");
-        } else {
-          alert("Something Went Wrong!!!");
-        }
-      });
-  };
   return (
     <>
       <div class="wrapper">
@@ -180,9 +154,9 @@ export const Remote = () => {
                                           class="dropdown-item"
                                           href="#"
                                           type="button"
-                                          onClick={() =>
-                                            UpdateRemoteStaus(email)
-                                          }
+                                          //   onClick={() =>
+                                          //     UpdateRemoteStaus(email)
+                                          //   }
                                         >
                                           Update Status
                                         </a>
@@ -192,7 +166,7 @@ export const Remote = () => {
                                           class="dropdown-item"
                                           href="#"
                                           type="button"
-                                          onClick={() => RemoveRemote(email)}
+                                          //   onClick={() => RemoveRemote(email)}
                                         >
                                           Remove
                                         </a>

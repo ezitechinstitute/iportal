@@ -73,17 +73,17 @@ export const Register = () => {
       setCheckPhone(isValidPhone(tel));
     }
 
-    const interviewForm = document.getElementById("interview-form");
-    const selectOption = document.getElementById("intern-type").value;
+    // const interviewForm = document.getElementById("interview-form");
+    // const selectOption = document.getElementById("intern-type").value;
 
-    if (selectOption === "Remote") {
-      interviewForm.style.display = "block";
+    // if (selectOption === "Remote") {
+    //   interviewForm.style.display = "block";
 
-      setInterview(true);
-    } else {
-      interviewForm.style.display = "none";
-      setInterview(false);
-    }
+    //   setInterview(true);
+    // } else {
+    //   interviewForm.style.display = "none";
+    //   setInterview(false);
+    // }
   });
 
   const handleImage = (e) => {
@@ -117,7 +117,7 @@ export const Register = () => {
           .then((res) => {
             if (res.data === 1) {
               setRegisterMsg(
-                "Successfully Register, Kindly Check Your Email"
+                "Successfully Register, Kindly Check Your WhatsApp"
               );
               setTimeout(() => {
                 setLoader(false);

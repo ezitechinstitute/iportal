@@ -4,6 +4,7 @@ import { ManagerDashboard } from "./pages/ManagerDashboard";
 import { Onsite } from "./pages/Onsite";
 import { Remote } from "./pages/Remote";
 import { Login } from "./pages/Login";
+import { Test } from "./pages/Test";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
           <Route path="/onsite-interns" element={<Onsite />} />
           <Route path="/remote-interns" element={<Remote />} />
+          <Route path="/test-interns" element={<Test />} />
         </Routes>
       </BrowserRouter>
     </>

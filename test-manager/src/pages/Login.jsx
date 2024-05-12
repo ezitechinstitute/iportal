@@ -13,7 +13,7 @@ export const Login = () => {
   const Login = () => {
     if (value.email !== undefined && value.password !== undefined) {
       axios
-        .post("https://api.ezitech.org/manager-auth", { value })
+        .post("https://api.ezitech.org/hr-auth", { value })
         .then((res) => {
           if (res.data.isLoggedIn === true) {
             // sessionStorage.setItem("username", res.data[0].name);

@@ -28,7 +28,7 @@ export const Onsite = () => {
     // setInterval(() => {
     getOnsiteRegister();
     // }, 2000);
-  }, []);
+  });
 
   const [currentPage, settCurrentPage] = useState(1);
   const recordPerPage = 15;
