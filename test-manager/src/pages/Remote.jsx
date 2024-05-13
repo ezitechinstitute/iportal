@@ -138,7 +138,7 @@ export const Remote = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {records.map((rs) => {
+                        {data.map((rs) => {
                           const {
                             id,
                             name,

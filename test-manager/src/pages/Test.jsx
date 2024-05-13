@@ -66,7 +66,7 @@ export const Test = () => {
                     <a href="#">Dashboard</a>
                   </li>
                   <li class="breadcrumb-item active" aria-current="page">
-                    Remote
+                    Test
                   </li>
                 </ol>
               </div>
@@ -95,7 +95,7 @@ export const Test = () => {
               </div>
               <div class="card border-0 shadow">
                 <div class="card-header">
-                  <div class="card-title">Remote Registrations</div>
+                  <div class="card-title">Test Assign</div>
 
                   <div class="card-body overflow-x-scroll">
                     <table class="table">

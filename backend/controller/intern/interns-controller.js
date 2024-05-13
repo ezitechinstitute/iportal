@@ -91,14 +91,19 @@ const RegisterInterns = (req, res) => {
                 //   interviewDate,
                 //   interviewTime
                 // );
-                setTimeout(() => {
-                  SendMessageRemote(getRemoteQueue().slice(1, 13));
+                setInterval(() => {
+                  if (dataRemote.length > 0) {
+                    SendMessageRemote(getRemoteQueue().slice(1, 13));
+                  }
                 }, 30000);
               } else {
                 createQueueOnsite(internPhone);
                 // getOnisteQueue();
-                setTimeout(() => {
-                  SendMessageOnsite(getOnisteQueue().slice(1, 13));
+
+                setInterval(() => {
+                  if (dataOnsite.length > 0) {
+                    SendMessageOnsite(getOnisteQueue().slice(1, 13));
+                  }
                 }, 30000);
                 // SendMailOnsite(internUsername, internemail);
               }
@@ -130,4 +135,5 @@ function createQueueRemote(number) {
 function getRemoteQueue() {
   return dataRemote.pop();
 }
+
 module.exports = { RegisterInterns };
