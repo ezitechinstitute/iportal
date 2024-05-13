@@ -1,8 +1,8 @@
-// const {axios} = require("axios");
-const axios = require('axios/dist/node/axios.cjs');
+// const { axios } = require("axios");
+// const axios = require('axios/dist/node/axios.cjs');
+const axios = require("axios");
 
-
-async function SendMessageRemote(name, phone, date, time) {
+async function SendMessageRemote(phone) {
   console.log(phone);
   try {
     const response = await axios.post("https://mkt.eziline.com/api/send", {
@@ -11,16 +11,12 @@ async function SendMessageRemote(name, phone, date, time) {
       message: `
 Registration Successful! Interview Process Details
 
-Dear ${name},
-
 We are delighted to inform you that your registration was successful. Welcome to Ezitech's platform/community!🎉
 
 Interview Process Details:
 
 Remote Interview:
 
-Date: ${date}
-Time: ${time}
 Platform: Google Meet
 
 Please make sure to mark these dates on your calendar and prepare accordingly. If you have any questions or need further assistance, feel free to reach out to us at +1 (737) 235-7111.
@@ -29,7 +25,7 @@ We look forward to meeting you during the interview process!
 
 Best regards
   `,
-      instance_id: "6638E27095482",
+      instance_id: "6640DB6188172",
       access_token: "6635ec7382039",
     });
   } catch (error) {
@@ -37,16 +33,14 @@ Best regards
   }
 }
 
-
-async function SendMessageOnsite(phone, name) {
+async function SendMessageOnsite(phone) {
+  console.log(phone);
   try {
     const response = await axios.post("https://mkt.eziline.com/api/send", {
       number: phone,
       type: "text",
       message: `
 Registration Successful! Interview Process Details
-
-Dear ${name},
 
 We are delighted to inform you that your registration was successful. Welcome to Ezitech's platform/community!🎉
 
@@ -63,7 +57,7 @@ If you have any questions or need further assistance, feel free to reach out to 
 We look forward to meeting you during the interview process!
 
 Best regards`,
-      instance_id: "6635ECA4D59A7",
+      instance_id: "6640DB980CC35",
       access_token: "6635ec7382039",
     });
   } catch (error) {
@@ -71,7 +65,4 @@ Best regards`,
   }
 }
 
-
-
-
-module.exports = {SendMessageRemote, SendMessageOnsite}
+module.exports = { SendMessageRemote, SendMessageOnsite };

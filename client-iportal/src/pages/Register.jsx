@@ -111,10 +111,13 @@ export const Register = () => {
         value.internType !== undefined
       ) {
         setLoader(true);
+        // https://api.ezitech.org/register-inters
 
         axios
-          .post("https://api.ezitech.org/register-inters", { value })
+          .post("http://localhost:8800/register-inters", { value })
           .then((res) => {
+            console.log(res.data);
+
             if (res.data === 1) {
               setRegisterMsg(
                 "Successfully Register, Kindly Check Your WhatsApp"
