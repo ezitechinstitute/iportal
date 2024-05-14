@@ -1,14 +1,14 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ManagerTopbar } from "../components/ManagerTopbar";
 import { ManagerSidebar } from "../components/ManagerSidebar";
-import axios from "axios";
 
-export const OnsiteInterns = () => {
+export const RemoteInterns = () => {
   const [data, setData] = useState([]);
 
-  const GetOnsiteInterns = async () => {
+  const GetRemoteInterns = async () => {
     try {
-      const res = await axios.get("http://localhost:8800/get-manager-onsite");
+      const res = await axios.get("http://localhost:8800/get-manager-remote");
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -16,7 +16,7 @@ export const OnsiteInterns = () => {
   };
 
   useEffect(() => {
-    GetOnsiteInterns();
+    GetRemoteInterns();
   });
 
   const [currentPage, settCurrentPage] = useState(1);
@@ -149,55 +149,55 @@ export const OnsiteInterns = () => {
 
                       {/* <!-- Modal --> */}
                       {/* <div
-                        class="modal fade"
-                        id="staticBackdrop"
-                        data-bs-backdrop="static"
-                        data-bs-keyboard="false"
-                        tabindex="-1"
-                        aria-labelledby="staticBackdropLabel"
-                        aria-hidden="true"
-                      >
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1
-                                class="modal-title fs-5"
-                                id="staticBackdropLabel"
-                              >
-                                Modal title
-                              </h1>
-                              <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                              ></button>
-                            </div>
-                            <div class="modal-body">...</div>
-                            <div class="modal-footer">
-                              <button
-                                type="button"
-                                class="btn btn-secondary"
-                                data-bs-dismiss="modal"
-                              >
-                                Close
-                              </button>
-                              <button type="button" class="btn btn-primary">
-                                Understood
-                              </button>
+                          class="modal fade"
+                          id="staticBackdrop"
+                          data-bs-backdrop="static"
+                          data-bs-keyboard="false"
+                          tabindex="-1"
+                          aria-labelledby="staticBackdropLabel"
+                          aria-hidden="true"
+                        >
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1
+                                  class="modal-title fs-5"
+                                  id="staticBackdropLabel"
+                                >
+                                  Modal title
+                                </h1>
+                                <button
+                                  type="button"
+                                  class="btn-close"
+                                  data-bs-dismiss="modal"
+                                  aria-label="Close"
+                                ></button>
+                              </div>
+                              <div class="modal-body">...</div>
+                              <div class="modal-footer">
+                                <button
+                                  type="button"
+                                  class="btn btn-secondary"
+                                  data-bs-dismiss="modal"
+                                >
+                                  Close
+                                </button>
+                                <button type="button" class="btn btn-primary">
+                                  Understood
+                                </button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div> */}
+                        </div> */}
                     </div>
 
                     {/* <div class="card-body">
-                      <p class="card-text">
-                        Add <code>.table-hover-animation</code> to enable a
-                        hover stat with animation on table rows within a
-                        <code class="highlighter-rouge">&lt;tbody&gt;</code>.
-                      </p>
-                    </div> */}
+                        <p class="card-text">
+                          Add <code>.table-hover-animation</code> to enable a
+                          hover stat with animation on table rows within a
+                          <code class="highlighter-rouge">&lt;tbody&gt;</code>.
+                        </p>
+                      </div> */}
                     <div class="table-responsive text-center">
                       <table class="table table-hover-animation">
                         <thead>
@@ -352,112 +352,112 @@ export const OnsiteInterns = () => {
 
               {/* <!-- Modal to add new record --> */}
               {/* <div class="modal modal-slide-in fade" id="exampleModal">
-                <div class="modal-dialog sidebar-sm">
-                  <form class="add-new-record modal-content pt-0">
-                    <button
-                      type="button"
-                      class="close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    >
-                      ×
-                    </button>
-                    <div class="modal-header mb-1">
-                      <h5 class="modal-title" id="exampleModalLabel">
-                        New Record
-                      </h5>
-                    </div>
-                    <div class="modal-body flex-grow-1">
-                      <div class="form-group">
-                        <label
-                          class="form-label"
-                          for="basic-icon-default-fullname"
-                        >
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          class="form-control dt-full-name"
-                          id="basic-icon-default-fullname"
-                          placeholder="John Doe"
-                          aria-label="John Doe"
-                        />
-                      </div>
-                      <div class="form-group">
-                        <label class="form-label" for="basic-icon-default-post">
-                          Post
-                        </label>
-                        <input
-                          type="text"
-                          id="basic-icon-default-post"
-                          class="form-control dt-post"
-                          placeholder="Web Developer"
-                          aria-label="Web Developer"
-                        />
-                      </div>
-                      <div class="form-group">
-                        <label
-                          class="form-label"
-                          for="basic-icon-default-email"
-                        >
-                          Email
-                        </label>
-                        <input
-                          type="text"
-                          id="basic-icon-default-email"
-                          class="form-control dt-email"
-                          placeholder="john.doe@example.com"
-                          aria-label="john.doe@example.com"
-                        />
-                        <small class="form-text text-muted">
-                          {" "}
-                          You can use letters, numbers & periods{" "}
-                        </small>
-                      </div>
-                      <div class="form-group">
-                        <label class="form-label" for="basic-icon-default-date">
-                          Joining Date
-                        </label>
-                        <input
-                          type="text"
-                          class="form-control dt-date"
-                          id="basic-icon-default-date"
-                          placeholder="MM/DD/YYYY"
-                          aria-label="MM/DD/YYYY"
-                        />
-                      </div>
-                      <div class="form-group mb-4">
-                        <label
-                          class="form-label"
-                          for="basic-icon-default-salary"
-                        >
-                          Salary
-                        </label>
-                        <input
-                          type="text"
-                          id="basic-icon-default-salary"
-                          class="form-control dt-salary"
-                          placeholder="$12000"
-                          aria-label="$12000"
-                        />
-                      </div>
+                  <div class="modal-dialog sidebar-sm">
+                    <form class="add-new-record modal-content pt-0">
                       <button
                         type="button"
-                        class="btn btn-primary data-submit mr-1"
-                      >
-                        Submit
-                      </button>
-                      <button
-                        type="reset"
-                        class="btn btn-outline-secondary"
+                        class="close"
                         data-dismiss="modal"
+                        aria-label="Close"
                       >
-                        Cancel
+                        ×
                       </button>
-                    </div>
-                  </form>
-                </div>
-              </div> */}
+                      <div class="modal-header mb-1">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          New Record
+                        </h5>
+                      </div>
+                      <div class="modal-body flex-grow-1">
+                        <div class="form-group">
+                          <label
+                            class="form-label"
+                            for="basic-icon-default-fullname"
+                          >
+                            Full Name
+                          </label>
+                          <input
+                            type="text"
+                            class="form-control dt-full-name"
+                            id="basic-icon-default-fullname"
+                            placeholder="John Doe"
+                            aria-label="John Doe"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label" for="basic-icon-default-post">
+                            Post
+                          </label>
+                          <input
+                            type="text"
+                            id="basic-icon-default-post"
+                            class="form-control dt-post"
+                            placeholder="Web Developer"
+                            aria-label="Web Developer"
+                          />
+                        </div>
+                        <div class="form-group">
+                          <label
+                            class="form-label"
+                            for="basic-icon-default-email"
+                          >
+                            Email
+                          </label>
+                          <input
+                            type="text"
+                            id="basic-icon-default-email"
+                            class="form-control dt-email"
+                            placeholder="john.doe@example.com"
+                            aria-label="john.doe@example.com"
+                          />
+                          <small class="form-text text-muted">
+                            {" "}
+                            You can use letters, numbers & periods{" "}
+                          </small>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label" for="basic-icon-default-date">
+                            Joining Date
+                          </label>
+                          <input
+                            type="text"
+                            class="form-control dt-date"
+                            id="basic-icon-default-date"
+                            placeholder="MM/DD/YYYY"
+                            aria-label="MM/DD/YYYY"
+                          />
+                        </div>
+                        <div class="form-group mb-4">
+                          <label
+                            class="form-label"
+                            for="basic-icon-default-salary"
+                          >
+                            Salary
+                          </label>
+                          <input
+                            type="text"
+                            id="basic-icon-default-salary"
+                            class="form-control dt-salary"
+                            placeholder="$12000"
+                            aria-label="$12000"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          class="btn btn-primary data-submit mr-1"
+                        >
+                          Submit
+                        </button>
+                        <button
+                          type="reset"
+                          class="btn btn-outline-secondary"
+                          data-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div> */}
             </section>
           </div>
         </div>

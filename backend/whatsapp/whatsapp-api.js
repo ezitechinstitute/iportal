@@ -1,9 +1,8 @@
-// const { axios } = require("axios");
+const {axios} = require("axios");
 // const axios = require('axios/dist/node/axios.cjs');
-const axios = require("axios");
+
 
 async function SendMessageRemote(phone) {
-  console.log(phone);
   try {
     const response = await axios.post("https://mkt.eziline.com/api/send", {
       number: phone,
@@ -15,11 +14,11 @@ We are delighted to inform you that your registration was successful. Welcome to
 
 Interview Process Details:
 
-Remote Interview:
+Our team contact with you as soon as possible.
 
-Platform: Google Meet
+Meeting Platform: WhatsApp
 
-Please make sure to mark these dates on your calendar and prepare accordingly. If you have any questions or need further assistance, feel free to reach out to us at +1 (737) 235-7111.
+If you have any questions or need further assistance, feel free to reach out to us at +1 (737) 235-7111.
 
 We look forward to meeting you during the interview process!
 
@@ -33,8 +32,9 @@ Best regards
   }
 }
 
+
 async function SendMessageOnsite(phone) {
-  console.log(phone);
+    
   try {
     const response = await axios.post("https://mkt.eziline.com/api/send", {
       number: phone,
@@ -65,4 +65,7 @@ Best regards`,
   }
 }
 
-module.exports = { SendMessageRemote, SendMessageOnsite };
+
+
+
+module.exports = {SendMessageRemote, SendMessageOnsite}

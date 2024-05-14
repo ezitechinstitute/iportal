@@ -3,6 +3,19 @@ const SendMail = require("../../mail/mailer-controller");
 
 const SendMaessage = (req, res) => {};
 
+const GetInterview = (req, res) => {
+    const {interviewFilter} = req.body.value;
+    
+    const sql = "SELECT * FROM `intern_table` WHERE `interview_type` = (?)";
+    connection.query(sql, [interviewFilter], (err, data) => {
+        if(err){
+            return res.json(err);
+        }else{
+            return res.json(data);
+        }
+    })
+}  
+
 const AssignTest = (req, res) => {
   const { email } = req.body;
 
@@ -27,9 +40,11 @@ const RemoveIntern = (req, res) => {
       res.json(data.affectedRows);
     }
   });
-} 
+}
+
 
 module.exports = {
   AssignTest,
-  RemoveIntern
+  RemoveIntern,
+  GetInterview
 };

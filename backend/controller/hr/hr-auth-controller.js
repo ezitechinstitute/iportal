@@ -1,6 +1,6 @@
 const { connection } = require("../../config/connection");
 
-const ManagerAuth = (req, res) => {
+const HrAuth = (req, res) => {
   const { email, password } = req.body.value;
 
   const sql =
@@ -18,7 +18,7 @@ const ManagerAuth = (req, res) => {
   });
 };
 
-const ManagerForgotPassword = (req, res) => {
+const HrForgotPassword = (req, res) => {
   const { email, password } = req.body;
 
   const sql = "UPDATE `manager_accounts` SET `password`= ? WHERE `email` = ?";
@@ -31,7 +31,7 @@ const ManagerForgotPassword = (req, res) => {
   });
 };
 
-const ManagerAvatar = (req, res) => {
+const HrAvatar = (req, res) => {
   const { image, email } = req.body;
 
   const sql = "UPDATE `manager_accounts` SET `image`= ? WHERE `email` = ?";
@@ -45,7 +45,7 @@ const ManagerAvatar = (req, res) => {
 };
 
 module.exports = {
-  ManagerAuth,
-  ManagerForgotPassword,
-  ManagerAvatar,
+  HrAuth,
+  HrForgotPassword,
+  HrAvatar,
 };

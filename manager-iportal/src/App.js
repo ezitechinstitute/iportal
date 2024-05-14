@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 // import { InternHome } from "./pages/interns-pages/InternHome";
 import { ManagerHome } from "./pages/ManagerHome";
 import { OnsiteInterns } from "./pages/OnsiteInterns";
+import { RemoteInterns } from "./pages/RemoteInterns";
 // import { InterViews } from "./pages/InterViews";
 
 function App() {
@@ -14,9 +15,8 @@ function App() {
 
           {/* Manager Routes */}
           <Route index path="/" element={<ManagerHome />} />
-          {/* <Route exact path="/interviews" element={<InterViews />} /> */}
-
-        
+          <Route exact path="/onsite-interns" element={<OnsiteInterns />} />
+          <Route exact path="/remote-interns" element={<RemoteInterns />} />
         </Routes>
       </BrowserRouter>
     </>

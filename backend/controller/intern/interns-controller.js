@@ -1,17 +1,17 @@
-const { connection } = require("../../config/connection");
-// const {
-//   SendMailRemote,
-//   SendMailOnsite,
-// } = require("../../mail/mailer-controller");
 
+const { connection } = require("../../config/connection");
 const {
-  SendMessageRemote,
-  SendMessageOnsite,
-} = require("../../whatsapp/whatsapp-api.js");
+  SendMailRemote,
+  SendMailOnsite
+} = require("../../mail/mailer-controller");
+
+const {SendMessageRemote, SendMessageOnsite } = require("../../whatsapp/whatsapp-api.js");
 const dotenv = require("dotenv").config();
 
-const id = process.env.INSTANCEID;
-const token = process.env.ACCESSTOKEN;
+// const id = process.env.INSTANCEID;
+// const token = process.env.ACCESSTOKEN;
+
+
 
 const RegisterInterns = (req, res) => {
   const {
@@ -52,11 +52,7 @@ const RegisterInterns = (req, res) => {
     interviewTime,
   ];
 
-  // console.log(data);
-
-  // createQueueOnsite(internPhone.slice(1, 13));
-  // getOnisteQueue();
-
+  
   const sql0 = "SELECT * FROM `intern_table` WHERE `email`= (?)";
   connection.query(sql0, [internemail], (err, data) => {
     if (err) {
@@ -73,8 +69,7 @@ const RegisterInterns = (req, res) => {
 
       if (flag === 0) {
         console.log("hello");
-        const sql1 =
-          "INSERT INTO `intern_table`(`name`, `email`, `phone`, `cnic`, `gender`, `image`, `join_date`, `birth_date`, `university`, `degree`, `interview_type`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
+        const sql1 = "INSERT INTO `intern_table`(`name`, `email`, `phone`, `cnic`, `gender`, `image`, `join_date`, `birth_date`, `university`, `degree`, `interview_type`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
 
         connection.query(sql1, [interndata], (err, data) => {
           if (err) {
@@ -95,7 +90,7 @@ const RegisterInterns = (req, res) => {
                   if (dataRemote.length > 0) {
                     SendMessageRemote(getRemoteQueue().slice(1, 13));
                   }
-                }, 30000);
+                }, 60000);
               } else {
                 createQueueOnsite(internPhone);
                 // getOnisteQueue();
@@ -104,7 +99,7 @@ const RegisterInterns = (req, res) => {
                   if (dataOnsite.length > 0) {
                     SendMessageOnsite(getOnisteQueue().slice(1, 13));
                   }
-                }, 30000);
+                }, 60000);
                 // SendMailOnsite(internUsername, internemail);
               }
 
@@ -116,6 +111,10 @@ const RegisterInterns = (req, res) => {
     }
   });
 };
+
+
+ //   const sql1 =
+    // "INSERT INTO `intern_table`(`name`, `email`, `phone`, `cnic`, `gender`, `image`, `join_date`, `birth_date`, `university`, `degree`, `interview_type`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
 
 let dataOnsite = [];
 let dataRemote = [];
@@ -135,5 +134,6 @@ function createQueueRemote(number) {
 function getRemoteQueue() {
   return dataRemote.pop();
 }
+
 
 module.exports = { RegisterInterns };

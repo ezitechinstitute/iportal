@@ -1,35 +1,48 @@
 const express = require("express");
 const { RegisterInterns } = require("../controller/intern/interns-controller");
 const {
-  ManagerAuth,
-  ManagerForgotPassword,
-  ManagerAvatar,
-} = require("../controller/manager/manager-auth-controller");
+  HrAuth,
+  HrForgotPassword,
+  HrAvatar,
+} = require("../controller/hr/hr-auth-controller");
 const {
-  AssignTest, RemoveIntern
-} = require("../controller/manager/manager-interview-controller");
-const {GetLatestRegister, GetOnsiteInterview, GetRemoteInterview} = require("../controller/manager/get-interns-controller");
+  AssignTest,
+  RemoveIntern,
+} = require("../controller/hr/hr-interview-controller");
+const {
+  GetLatestRegister,
+  GetOnsiteInterview,
+  GetRemoteInterview,
+  GetTestIntern,
+} = require("../controller/hr/get-interns-controller");
+const {
+  GetManagerOnsite,
+  GetManagerRemote,
+} = require("../controller/manager/get-manager-onsite");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    res.send("Hello from NodeJs Server");
+  res.send("Hello from NodeJs Server");
 });
 
 /* Interns Endpoints */
 router.post("/register-inters", RegisterInterns);
 
 /* Manager Auth Endpoints */
-router.post("/manager-auth", ManagerAuth);
+router.post("/manager-auth", HrAuth);
 // router.post("/manager-avatar", ManagerAvatar);
 // router.post("/manager-forgot-password", ManagerForgotPassword);
 
-/* Manager Interns Endpoints */
+/* HR Endpoints */
 router.get("/get-latest-interns", GetLatestRegister);
-router.get("/get-onsite-interns", GetOnsiteInterview)
+router.get("/get-onsite-interns", GetOnsiteInterview);
 router.post("/update-intern-status", AssignTest);
-router.post("/remove-intern", RemoveIntern)
-router.get("/get-remote-interns", GetRemoteInterview)
+router.post("/remove-intern", RemoveIntern);
+router.get("/get-remote-interns", GetRemoteInterview);
+router.get("/get-test-interns", GetTestIntern);
 
-
+/* Manager Endpoints */
+router.get("/get-manager-onsite", GetManagerOnsite);
+router.get("/get-manager-remote", GetManagerRemote);
 
 module.exports = router;
