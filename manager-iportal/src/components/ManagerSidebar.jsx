@@ -60,11 +60,7 @@ export const ManagerSidebar = () => {
             id="main-menu-navigation"
             data-menu="menu-navigation"
           >
-            <li
-              className={
-                activeLink === "dashboard" ? "activeLink" : "undefined"
-              }
-            >
+            <li className={activeLink === "dashboard" ? "active" : "undefined"}>
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("dashboard")}
@@ -80,9 +76,7 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li
-              className={activeLink === "interns" ? "activeLink" : "undefined"}
-            >
+            <li className={activeLink === "interns" ? "active" : "undefined"}>
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("interns")}
@@ -96,9 +90,7 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li
-              className={activeLink === "remote" ? "activeLink" : "undefined"}
-            >
+            <li className={activeLink === "remote" ? "active" : "undefined"}>
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("remote")}
@@ -112,9 +104,7 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li
-              className={activeLink === "projects" ? "activeLink" : "undefined"}
-            >
+            <li className={activeLink === "projects" ? "active" : "undefined"}>
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("projects")}
@@ -128,7 +118,7 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={activeLink === "leave" ? "activeLink" : "undefined"}>
+            <li className={activeLink === "leave" ? " " : "undefined"}>
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("leave")}
@@ -142,9 +132,7 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li
-              className={activeLink === "announce" ? "activeLink" : "undefined"}
-            >
+            <li className={activeLink === "announce" ? " " : "undefined"}>
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("announce")}
@@ -175,9 +163,7 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li
-              className={activeLink === "reports" ? "activeLink" : "undefined"}
-            >
+            <li className={activeLink === "reports" ? " " : "undefined"}>
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("reports")}
@@ -211,9 +197,7 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li
-              className={activeLink === "balance" ? "activeLink" : "undefined"}
-            >
+            <li className={activeLink === "balance" ? " " : "undefined"}>
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("balance")}
@@ -226,9 +210,7 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li
-              className={activeLink === "invoice" ? "activeLink" : "undefined"}
-            >
+            <li className={activeLink === "invoice" ? " " : "undefined"}>
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("invoice")}
