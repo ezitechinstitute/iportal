@@ -19,6 +19,7 @@ const {
   GetManagerOnsite,
   GetManagerRemote,
   OnsiteSingle,
+  RemoteSingle,
 } = require("../controller/manager/get-manager-interns");
 const router = express.Router();
 
@@ -46,5 +47,6 @@ router.get("/get-test-interns", GetTestIntern);
 router.get("/get-manager-onsite", GetManagerOnsite);
 router.get("/get-manager-remote", GetManagerRemote);
 router.post("/single-onsite", OnsiteSingle);
+router.post("/single-remote", RemoteSingle);
 
 module.exports = router;

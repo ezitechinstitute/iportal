@@ -45,7 +45,6 @@ export const OnsiteInterns = () => {
   }
 
   const GetSingleIntern = async (id) => {
-    alert(id);
     try {
       const res = await axios.post("http://localhost:8800/single-onsite", {
         id,
@@ -56,11 +55,7 @@ export const OnsiteInterns = () => {
     }
   };
 
-  // let dataOnsite = singleIntern.forEach((item) => {
-  //   return item
-  // });
 
-  // console.log(dataOnsite);
 
   return (
     <>
@@ -251,7 +246,7 @@ export const OnsiteInterns = () => {
                                           <div className="dropdown-menu">
                                             <a
                                               className="dropdown-item"
-                                              href="javascript:void(0);"
+                                              // href="javascript:void(0);"
                                               type="button"
                                               data-toggle="modal"
                                               data-target="#exampleModalCenter"
@@ -414,51 +409,218 @@ export const OnsiteInterns = () => {
               </div>
 
               <div
-                class="modal fade"
+                className="modal fade"
                 id="exampleModalCenter"
                 tabindex="-1"
                 role="dialog"
                 aria-labelledby="exampleModalCenterTitle"
                 aria-hidden="true"
               >
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalCenterTitle">
+                <div
+                  className="modal-dialog modal-dialog-centered"
+                  role="document"
+                >
+                  <div className="modal-content w-100">
+                    <div className="modal-header">
+                      <h5 className="modal-title" id="exampleModalCenterTitle">
                         Intern Details
                       </h5>
                       <button
                         type="button"
-                        class="close"
+                        className="close"
                         data-dismiss="modal"
                         aria-label="Close"
                       >
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
-                    <div class="modal-body">
-                      <table className="table">
-                        <thead>
-                          <tr>
-                            <th></th>
-                          </tr>
-                        </thead>
+                    <div className="modal-body">
+                      {Array.isArray(singleIntern)
+                        ? singleIntern.map((res) => {
+                            console.log(res);
+                            const {
+                              image,
+                              name,
+                              email,
+                              phone,
+                              cnic,
+                              join_date,
+                              birth_date,
+                              university,
+                              degree,
+                              technology,
+                              duration,
+                              intern_type,
+                            } = res;
 
-                      </table>
-                      {singleIntern.map((res) => {
-                        const {image, name, email, phone, cnic, join_date, birth_date, university, degree, technology, duration, internship_type} = res;
+                            return (
+                              <>
+                                <div className="row shadow rounded p-3">
+                                  <div className="col-sm-4"></div>
+                                  <div className="col-sm-4 text-center">
+                                    <img
+                                      src={image}
+                                      alt=""
+                                      width={100}
+                                      height={100}
+                                      style={{ borderRadius: "50px" }}
+                                    />
 
-                        return(
-                          <>
-                          
-                          </>
-                        )
-})}
+                                    <h3 className="mt-2">{name}</h3>
+                                  </div>
+                                  <div className="col-sm-4"></div>
+                                </div>
+
+                                <div className="row shadow rounded p-3">
+                                  <div className="col-sm-6">
+                                    <label htmlFor="">Email: </label>
+                                    <input
+                                      type="text"
+                                      name=""
+                                      id=""
+                                      value={email}
+                                      readOnly
+                                      className="form-control border-0"
+                                    />
+                                  </div>
+
+                                  <div className="col-sm-6">
+                                    <label htmlFor="">Phone: </label>
+                                    <input
+                                      type="text"
+                                      name=""
+                                      id=""
+                                      value={phone}
+                                      readOnly
+                                      className="form-control border-0"
+                                    />
+                                  </div>
+                                </div>
+
+                                {/* <h6 className="mt-5">Gender</h6> */}
+                                <div className="row mt-5 shadow rounded p-3">
+                                  <div className="col-sm-6">
+                                    <label htmlFor="">CNIC: </label>
+                                    <input
+                                      type="text"
+                                      name=""
+                                      id=""
+                                      value={cnic}
+                                      readOnly
+                                      className="form-control border-0"
+                                    />
+                                  </div>
+
+                                  <div className="col-sm-6">
+                                    <label htmlFor="">Join Date: </label>
+                                    <input
+                                      type="text"
+                                      name=""
+                                      id=""
+                                      value={join_date}
+                                      readOnly
+                                      className="form-control border-0"
+                                    />
+                                  </div>
+                                </div>
+
+                                <div className="row mt-5 shadow rounded p-3">
+                                  <div className="col-sm-6">
+                                    <label htmlFor="">Birth Date: </label>
+                                    <input
+                                      type="text"
+                                      name=""
+                                      id=""
+                                      value={birth_date}
+                                      readOnly
+                                      className="form-control border-0"
+                                    />
+                                  </div>
+
+                                  <div className="col-sm-6">
+                                    <label htmlFor="">University: </label>
+                                    <input
+                                      type="text"
+                                      name=""
+                                      id=""
+                                      value={university}
+                                      readOnly
+                                      className="form-control border-0"
+                                    />
+                                  </div>
+                                </div>
+
+                                <div className="row mt-1 shadow rounded p-3">
+                                  <div className="col-sm-6">
+                                    <label htmlFor="">Degree: </label>
+                                    <input
+                                      type="text"
+                                      name=""
+                                      id=""
+                                      value={degree}
+                                      readOnly
+                                      className="form-control border-0"
+                                    />
+                                  </div>
+
+                                  <div className="col-sm-6">
+                                    <label htmlFor="">Technology: </label>
+                                    <input
+                                      type="text"
+                                      name=""
+                                      id=""
+                                      value={technology}
+                                      readOnly
+                                      className="form-control border-0"
+                                    />
+                                  </div>
+                                </div>
+
+                                <div className="row mt-1 mb-5 shadow rounded p-3">
+                                  <div className="col-sm-6">
+                                    <label htmlFor="">Duration</label>
+                                    <input
+                                      type="text"
+                                      name=""
+                                      id=""
+                                      value={duration}
+                                      readOnly
+                                      className="form-control border-0"
+                                    />
+                                  </div>
+                                  <div className="col-sm-6">
+                                    <label htmlFor="">Internship Type: </label>
+                                    <input
+                                      type="text"
+                                      name=""
+                                      id=""
+                                      value={intern_type}
+                                      readOnly
+                                      className="form-control border-0"
+                                    />
+                                  </div>
+
+                                  {/* <div className="col-sm-6">
+                                    <label htmlFor="">To</label>
+                                    <input
+                                      type="text"
+                                      name=""
+                                      id=""
+                                      value={to_address}
+                                      readOnly
+                                      className="form-control border-0"
+                                    />
+                                  </div> */}
+                                </div>
+                              </>
+                            );
+                          })
+                        : " "}
                     </div>
-                    {/* <div class="modal-footer">
+                    {/* <div className="modal-footer">
                       <button
                         type="button"
-                        class="btn btn-primary"
+                        className="btn btn-primary"
                         data-dismiss="modal"
                       >
                         Accept

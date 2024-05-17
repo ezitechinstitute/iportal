@@ -27,7 +27,7 @@ const GetManagerRemote = (req, res) => {
 const OnsiteSingle = (req, res) => {
   const { id } = req.body;
 
-  const sql = "SELECT * WHERE `id` = (?)";
+  const sql = "SELECT * FROM `intern_table`  WHERE `id` = (?)";
   connection.query(sql, [id], (err, data) => {
     if (err) {
       return res.json(err);
@@ -37,4 +37,17 @@ const OnsiteSingle = (req, res) => {
   });
 };
 
-module.exports = { GetManagerOnsite, GetManagerRemote, OnsiteSingle };
+const RemoteSingle = (req, res) => {
+  const { id } = req.body;
+
+  const sql = "SELECT * FROM `intern_table`  WHERE `id` = (?)";
+  connection.query(sql, [id], (err, data) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      return res.json(data);
+    }
+  });
+};
+
+module.exports = { GetManagerOnsite, GetManagerRemote, OnsiteSingle, RemoteSingle };
