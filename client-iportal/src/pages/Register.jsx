@@ -114,7 +114,7 @@ export const Register = () => {
         // https://api.ezitech.org/register-inters
 
         axios
-          .post("http://localhost:8800/register-inters", { value })
+          .post("https://api.ezitech.org/register-inters", { value })
           .then((res) => {
             console.log(res.data);
 
@@ -152,7 +152,7 @@ export const Register = () => {
     <>
       {/* <!-- BEGIN: Content--> */}
 
-      <div className="content-wrapper">
+      <div className="content-wrapper" style={{backgroundImage: "url(images/bg.jpg)", backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
         <div className="content-header row"></div>
         <div className="content-body">
           <div className="auth-wrapper auth-v1 px-2">

@@ -20,6 +20,7 @@ const {
   GetManagerRemote,
   OnsiteSingle,
   RemoteSingle,
+  CountOnsite,
 } = require("../controller/manager/get-manager-interns");
 const router = express.Router();
 
@@ -49,4 +50,6 @@ router.get("/get-manager-remote", GetManagerRemote);
 router.post("/single-onsite", OnsiteSingle);
 router.post("/single-remote", RemoteSingle);
 
+/* Testing Area */
+// router.get("/count-onsite", CountOnsite);
 module.exports = router;

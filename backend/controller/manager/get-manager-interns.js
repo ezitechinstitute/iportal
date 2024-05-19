@@ -50,4 +50,29 @@ const RemoteSingle = (req, res) => {
   });
 };
 
-module.exports = { GetManagerOnsite, GetManagerRemote, OnsiteSingle, RemoteSingle };
+// const CountOnsite = (req, res) => {
+//   let month = new Date().getMonth() + 1;
+//   let currentMonth = "0" + month.toLocaleString();
+
+//   console.log(currentMonth);
+
+//   const sql = "SELECT `join_date` FROM `intern_table`";
+//   connection.query(sql, (err, data) => {
+//     if (err) {
+//       return res.json(err);
+//     } else {
+//       // console.log(data)
+//       for (let i = 0; i < data.length; i++) {
+//         console.log(data[i].join_date.slice(0, 7));
+//       }
+//     }
+//   });
+// };
+
+module.exports = {
+  GetManagerOnsite,
+  GetManagerRemote,
+  OnsiteSingle,
+  RemoteSingle,
+  // CountOnsite,
+};

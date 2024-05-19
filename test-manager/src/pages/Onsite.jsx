@@ -164,72 +164,76 @@ export const Onsite = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {data.map((rs) => {
-                          const {
-                            id,
-                            name,
-                            email,
-                            phone,
-                            technology,
-                            interview_type,
-                            status,
-                          } = rs;
+                        {Array.isArray(data)
+                          ? data.map((rs) => {
+                              const {
+                                id,
+                                name,
+                                email,
+                                phone,
+                                technology,
+                                interview_type,
+                                status,
+                              } = rs;
 
-                          return (
-                            <>
-                              <tr>
-                                <th scope="row">{id}</th>
-                                <td>{name}</td>
-                                <td>{email}</td>
-                                <td>{phone}</td>
-                                <td>{technology}</td>
-                                <td>{interview_type}</td>
-                                <td>{status}</td>
-                                <td>
-                                  <div class="btn-group">
-                                    <button
-                                      type="button"
-                                      class="btn btn-primary dropdown-toggle"
-                                      data-bs-toggle="dropdown"
-                                      aria-expanded="false"
-                                    >
-                                      Action
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                      <li>
-                                        <a class="dropdown-item" href="#">
-                                          Send Mail
-                                        </a>
-                                      </li>
-                                      <li>
-                                        <a
-                                          class="dropdown-item"
-                                          href="#"
+                              return (
+                                <>
+                                  <tr>
+                                    <th scope="row">{id}</th>
+                                    <td>{name}</td>
+                                    <td>{email}</td>
+                                    <td>{phone}</td>
+                                    <td>{technology}</td>
+                                    <td>{interview_type}</td>
+                                    <td>{status}</td>
+                                    <td>
+                                      <div class="btn-group">
+                                        <button
                                           type="button"
-                                          onClick={() =>
-                                            UpdateOnsiteStaus(email)
-                                          }
+                                          class="btn btn-primary dropdown-toggle"
+                                          data-bs-toggle="dropdown"
+                                          aria-expanded="false"
                                         >
-                                          Update Status
-                                        </a>
-                                      </li>
-                                      <li>
-                                        <a
-                                          class="dropdown-item"
-                                          href="#"
-                                          type="button"
-                                          onClick={() => RemoveOnsite(email)}
-                                        >
-                                          Remove
-                                        </a>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </td>
-                              </tr>
-                            </>
-                          );
-                        })}
+                                          Action
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                          <li>
+                                            <a class="dropdown-item" href="#">
+                                              Send Mail
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a
+                                              class="dropdown-item"
+                                              href="#"
+                                              type="button"
+                                              onClick={() =>
+                                                UpdateOnsiteStaus(email)
+                                              }
+                                            >
+                                              Update Status
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a
+                                              class="dropdown-item"
+                                              href="#"
+                                              type="button"
+                                              onClick={() =>
+                                                RemoveOnsite(email)
+                                              }
+                                            >
+                                              Remove
+                                            </a>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </>
+                              );
+                            })
+                          : " "}
                       </tbody>
                     </table>
                     {/* Pagination */}
