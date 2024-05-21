@@ -55,8 +55,6 @@ export const OnsiteInterns = () => {
     }
   };
 
-
-
   return (
     <>
       <ManagerTopbar />
@@ -249,7 +247,7 @@ export const OnsiteInterns = () => {
                                               // href="javascript:void(0);"
                                               type="button"
                                               data-toggle="modal"
-                                              data-target="#exampleModalCenter"
+                                              data-target="#large"
                                               onClick={() =>
                                                 GetSingleIntern(id)
                                               }
@@ -409,25 +407,25 @@ export const OnsiteInterns = () => {
               </div>
 
               <div
-                className="modal fade"
-                id="exampleModalCenter"
+                class="modal fade text-left"
+                id="large"
                 tabindex="-1"
                 role="dialog"
-                aria-labelledby="exampleModalCenterTitle"
+                aria-labelledby="myModalLabel17"
                 aria-hidden="true"
               >
                 <div
-                  className="modal-dialog modal-dialog-centered"
+                  class="modal-dialog modal-dialog-centered modal-lg"
                   role="document"
                 >
-                  <div className="modal-content w-100">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="exampleModalCenterTitle">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="myModalLabel17">
                         Intern Details
-                      </h5>
+                      </h4>
                       <button
                         type="button"
-                        className="close"
+                        class="close"
                         data-dismiss="modal"
                         aria-label="Close"
                       >
@@ -471,7 +469,7 @@ export const OnsiteInterns = () => {
                                   <div className="col-sm-4"></div>
                                 </div>
 
-                                <div className="row shadow rounded p-3">
+                                <div className="row mt-1 shadow rounded p-3">
                                   <div className="col-sm-6">
                                     <label htmlFor="">Email: </label>
                                     <input
@@ -498,7 +496,7 @@ export const OnsiteInterns = () => {
                                 </div>
 
                                 {/* <h6 className="mt-5">Gender</h6> */}
-                                <div className="row mt-5 shadow rounded p-3">
+                                <div className="row mt-1 shadow rounded p-3">
                                   <div className="col-sm-6">
                                     <label htmlFor="">CNIC: </label>
                                     <input
@@ -524,7 +522,7 @@ export const OnsiteInterns = () => {
                                   </div>
                                 </div>
 
-                                <div className="row mt-5 shadow rounded p-3">
+                                <div className="row mt-1 shadow rounded p-3">
                                   <div className="col-sm-6">
                                     <label htmlFor="">Birth Date: </label>
                                     <input

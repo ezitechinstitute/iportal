@@ -109,7 +109,7 @@ export const ManagerSidebar = () => {
                 className="d-flex align-items-center"
                 onClick={() => setActive("projects")}
                 id={"3"}
-                // to="/remote-interns"
+                to="/intern-projects"
               >
                 <i data-feather="grid"></i>
                 <span className="menu-item" data-i18n="eCommerce">

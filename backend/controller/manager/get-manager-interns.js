@@ -50,6 +50,23 @@ const RemoteSingle = (req, res) => {
   });
 };
 
+const GetInternsEmail = (req, res) => {
+  const check = req.body.queryFinal;
+  const checkFinal = "%" + check + "%";
+
+  // console.log(req.body);
+
+  const sql = "SELECT email FROM intern_table WHERE email LIKE (?)";
+  connection.query(sql, [checkFinal], (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.json(err);
+    } else {
+      return res.json(data);
+    }
+  });
+};
+
 // const CountOnsite = (req, res) => {
 //   let month = new Date().getMonth() + 1;
 //   let currentMonth = "0" + month.toLocaleString();
@@ -74,5 +91,6 @@ module.exports = {
   GetManagerRemote,
   OnsiteSingle,
   RemoteSingle,
+  GetInternsEmail,
   // CountOnsite,
 };

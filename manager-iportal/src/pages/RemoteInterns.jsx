@@ -45,7 +45,6 @@ export const RemoteInterns = () => {
   }
 
   const GetSingleIntern = async (id) => {
-    
     try {
       const res = await axios.post("http://localhost:8800/single-remote", {
         id,
@@ -84,12 +83,17 @@ export const RemoteInterns = () => {
                         <div className="media">
                           <div className="avatar bg-light-primary mr-2">
                             <div className="avatar-content">
-                              <i data-feather="users" className="avatar-icon"></i>
+                              <i
+                                data-feather="users"
+                                className="avatar-icon"
+                              ></i>
                             </div>
                           </div>
                           <div className="media-body my-auto">
                             <h4 className="font-weight-bolder mb-0">230k</h4>
-                            <p className="card-text font-small-3 mb-0">Interns</p>
+                            <p className="card-text font-small-3 mb-0">
+                              Interns
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -113,12 +117,17 @@ export const RemoteInterns = () => {
                         <div className="media">
                           <div className="avatar bg-light-danger mr-2">
                             <div className="avatar-content">
-                              <i data-feather="loader" className="avatar-icon"></i>
+                              <i
+                                data-feather="loader"
+                                className="avatar-icon"
+                              ></i>
                             </div>
                           </div>
                           <div className="media-body my-auto">
                             <h4 className="font-weight-bolder mb-0">1.423k</h4>
-                            <p className="card-text font-small-3 mb-0">Progress</p>
+                            <p className="card-text font-small-3 mb-0">
+                              Progress
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -134,7 +143,9 @@ export const RemoteInterns = () => {
                           </div>
                           <div className="media-body my-auto">
                             <h4 className="font-weight-bolder mb-0">$9745</h4>
-                            <p className="card-text font-small-3 mb-0">Completed</p>
+                            <p className="card-text font-small-3 mb-0">
+                              Completed
+                            </p>
                           </div>
                         </div>
                       </div>
@@ -286,7 +297,7 @@ export const RemoteInterns = () => {
                                               // href="javascript:void(0);"
                                               type="button"
                                               data-toggle="modal"
-                                              data-target="#exampleModalCenter"
+                                              data-target="#large"
                                               onClick={() =>
                                                 GetSingleIntern(id)
                                               }
@@ -447,25 +458,25 @@ export const RemoteInterns = () => {
               {/* <!-- Table head options end --> */}
 
               <div
-                className="modal fade"
-                id="exampleModalCenter"
+                class="modal fade text-left"
+                id="large"
                 tabindex="-1"
                 role="dialog"
-                aria-labelledby="exampleModalCenterTitle"
+                aria-labelledby="myModalLabel17"
                 aria-hidden="true"
               >
                 <div
-                  className="modal-dialog modal-dialog-centered"
+                  class="modal-dialog modal-dialog-centered modal-lg"
                   role="document"
                 >
-                  <div className="modal-content w-100">
-                    <div className="modal-header">
-                      <h5 className="modal-title" id="exampleModalCenterTitle">
-                        Intern Details
-                      </h5>
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="myModalLabel17">
+                        Large Modal
+                      </h4>
                       <button
                         type="button"
-                        className="close"
+                        class="close"
                         data-dismiss="modal"
                         aria-label="Close"
                       >
@@ -509,7 +520,7 @@ export const RemoteInterns = () => {
                                   <div className="col-sm-4"></div>
                                 </div>
 
-                                <div className="row shadow rounded p-3">
+                                <div className="row mt-1 shadow rounded p-3">
                                   <div className="col-sm-6">
                                     <label htmlFor="">Email: </label>
                                     <input
@@ -536,7 +547,7 @@ export const RemoteInterns = () => {
                                 </div>
 
                                 {/* <h6 className="mt-5">Gender</h6> */}
-                                <div className="row mt-5 shadow rounded p-3">
+                                <div className="row mt-1 shadow rounded p-3">
                                   <div className="col-sm-6">
                                     <label htmlFor="">CNIC: </label>
                                     <input
@@ -562,7 +573,7 @@ export const RemoteInterns = () => {
                                   </div>
                                 </div>
 
-                                <div className="row mt-5 shadow rounded p-3">
+                                <div className="row mt-1 shadow rounded p-3">
                                   <div className="col-sm-6">
                                     <label htmlFor="">Birth Date: </label>
                                     <input
