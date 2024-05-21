@@ -23,6 +23,9 @@ const {
   CountOnsite,
   GetInternsEmail,
 } = require("../controller/manager/get-manager-interns");
+const {
+  AssignProject,
+} = require("../controller/manager/assignproject-controller");
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -51,6 +54,9 @@ router.get("/get-manager-remote", GetManagerRemote);
 router.post("/single-onsite", OnsiteSingle);
 router.post("/single-remote", RemoteSingle);
 router.post("/get-emails", GetInternsEmail);
+
+/* Assign Project Endpoints */
+router.post("/assign-project", AssignProject);
 
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);

@@ -12,11 +12,11 @@ export const InternProjects = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [selected, setSelected] = useState(false);
   const [data, setData] = useState([]);
+  const [values, setValues] = useState({});
 
   const handleQuery = async (e) => {
     const value = e.target.value;
     setQuery(value);
-
     if (value.length > 2) {
       fetchSuggestions(value);
     } else {
@@ -38,6 +38,7 @@ export const InternProjects = () => {
 
   const selectEmail = (e) => {
     setQuery(e);
+    setValues({ ...values, email: e });
     setSelected(true);
   };
 
@@ -64,6 +65,40 @@ export const InternProjects = () => {
       settCurrentPage(currentPage + 1);
     }
   }
+
+  const handleInput = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  const SubmitProject = (e) => {
+    e.preventDefault();
+
+    if (
+      values.title !== undefined &&
+      values.startDate !== undefined &&
+      values.endDate !== undefined &&
+      values.supervisor &&
+      values.email !== undefined &&
+      values.technology !== undefined
+    ) {
+      axios
+        .post("http://localhost:8800/assign-project", { values })
+        .then((res) => {
+          if (res.data === 1) {
+            alert("Project Assigned Successfuly");
+            window.location.reload();
+          } else {
+            alert("Something Went Wrong!!!");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      alert("Please fill empty field first!!!");
+    }
+  };
+
   return (
     <>
       <ManagerTopbar />
@@ -155,7 +190,7 @@ export const InternProjects = () => {
 
               {/* <!-- Modal --> */}
               <div
-                class="modal fade text-left"
+                className="modal fade text-left"
                 id="large"
                 tabindex="-1"
                 role="dialog"
@@ -163,102 +198,107 @@ export const InternProjects = () => {
                 aria-hidden="true"
               >
                 <div
-                  class="modal-dialog modal-dialog-centered modal-lg"
+                  className="modal-dialog modal-dialog-centered modal-lg"
                   role="document"
                 >
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title" id="myModalLabel17">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h4 className="modal-title" id="myModalLabel17">
                         Assign Project
                       </h4>
                       <button
                         type="button"
-                        class="close"
+                        className="close"
                         data-dismiss="modal"
                         aria-label="Close"
                       >
                         <span aria-hidden="true">&times;</span>
                       </button>
                     </div>
-                    <div class="modal-body">
-                      <div class="row">
-                        <div class="col-12">
-                          <form class="form">
-                            <div class="row">
-                              <div class="col-md-6 col-12">
-                                <div class="form-group">
+                    <div className="modal-body">
+                      <div className="row">
+                        <div className="col-12">
+                          <form className="form" onSubmit={SubmitProject}>
+                            <div className="row">
+                              <div className="col-md-6 col-12">
+                                <div className="form-group">
                                   <label for="first-name-column">
                                     Project Title
                                   </label>
                                   <input
+                                    onChange={handleInput}
                                     type="text"
                                     id="first-name-column"
-                                    class="form-control"
+                                    className="form-control"
                                     placeholder="Project Title"
-                                    name="fname-column"
+                                    name="title"
                                   />
                                 </div>
                               </div>
-                              <div class="col-md-6 col-12">
-                                <div class="form-group">
+                              <div className="col-md-6 col-12">
+                                <div className="form-group">
                                   <label for="last-name-column">
                                     Project URL
                                   </label>
                                   <input
+                                    onChange={handleInput}
                                     type="text"
                                     id="last-name-column"
-                                    class="form-control"
+                                    className="form-control"
                                     placeholder="Project URL"
-                                    name="lname-column"
+                                    name="url"
                                   />
                                 </div>
                               </div>
-                              <div class="col-md-6 col-12">
-                                <div class="form-group">
+                              <div className="col-md-6 col-12">
+                                <div className="form-group">
                                   <label for="city-column">Start Date</label>
                                   <input
+                                    onChange={handleInput}
                                     type="date"
                                     id="city-column"
-                                    class="form-control"
+                                    className="form-control"
                                     // placeholder="City"
-                                    name="city-column"
+                                    name="startDate"
                                   />
                                 </div>
                               </div>
-                              <div class="col-md-6 col-12">
-                                <div class="form-group">
+                              <div className="col-md-6 col-12">
+                                <div className="form-group">
                                   <label for="city-column">End Date</label>
                                   <input
+                                    onChange={handleInput}
                                     type="date"
                                     id="city-column"
-                                    class="form-control"
+                                    className="form-control"
                                     // placeholder="City"
-                                    name="city-column"
+                                    name="endDate"
                                   />
                                 </div>
                               </div>
-                              <div class="col-md-6 col-12">
-                                <div class="form-group">
+                              <div className="col-md-6 col-12">
+                                <div className="form-group">
                                   <label for="company-column">Supervisor</label>
                                   <input
+                                    onChange={handleInput}
                                     type="text"
                                     id="company-column"
-                                    class="form-control"
-                                    name="company-column"
+                                    className="form-control"
+                                    name="supervisor"
                                     placeholder="Supervisor"
                                   />
                                 </div>
                               </div>
-                              <div class="col-md-6 col-12">
-                                <div class="form-group">
+                              <div className="col-md-6 col-12">
+                                <div className="form-group">
                                   <label for="email-id-column">Email</label>
                                   <input
                                     type="text"
                                     id="email-id-column"
                                     value={query}
                                     onChange={handleQuery}
-                                    class="form-control"
-                                    name="email-id-column"
+                                    className="form-control"
+                                    name="email"
                                     placeholder="Email"
                                   />
 
@@ -281,13 +321,30 @@ export const InternProjects = () => {
                                 </div>
                               </div>
 
-                              <div class="col-md-12">
-                                <div class="form-group">
+                              <div className="col-md-6 col-12">
+                                <div className="form-group">
+                                  <label for="email-id-column">
+                                    Technology
+                                  </label>
+                                  <input
+                                    type="text"
+                                    id="email-id-column"
+                                    onChange={handleInput}
+                                    className="form-control"
+                                    name="technology"
+                                    placeholder="Technology"
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="col-md-6 col-12">
+                                <div className="form-group">
                                   <label for="email-id-column">
                                     Description
                                   </label>
                                   <textarea
-                                    name=""
+                                    onChange={handleInput}
+                                    name="description"
                                     className="form-control"
                                     id=""
                                     placeholder="Description"
@@ -303,16 +360,16 @@ export const InternProjects = () => {
                                   {/* </div> */}
                                 </div>
                               </div>
-                              <div class="col-12">
+                              <div className="col-12">
                                 <button
-                                  type="reset"
-                                  class="btn btn-primary mr-1"
+                                  type="submit"
+                                  className="btn btn-primary mr-1"
                                 >
                                   Submit
                                 </button>
                                 <button
                                   type="reset"
-                                  class="btn btn-outline-secondary"
+                                  className="btn btn-outline-secondary"
                                 >
                                   Reset
                                 </button>
