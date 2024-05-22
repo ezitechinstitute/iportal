@@ -26,6 +26,9 @@ const {
 const {
   AssignProject,
 } = require("../controller/manager/assignproject-controller");
+const {
+  AssignPortal,
+} = require("../controller/manager/assignPortal-controller");
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -54,6 +57,9 @@ router.get("/get-manager-remote", GetManagerRemote);
 router.post("/single-onsite", OnsiteSingle);
 router.post("/single-remote", RemoteSingle);
 router.post("/get-emails", GetInternsEmail);
+
+/* Assign Portal Endpoint */
+router.post("/assign-portal", AssignPortal);
 
 /* Assign Project Endpoints */
 router.post("/assign-project", AssignProject);

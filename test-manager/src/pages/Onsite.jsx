@@ -17,7 +17,7 @@ export const Onsite = () => {
 
   const getOnsiteRegister = async () => {
     try {
-      const res = await axios.get("https://api.ezitech.org/get-onsite-interns");
+      const res = await axios.get("http://localhost:8800/get-onsite-interns");
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -56,7 +56,7 @@ export const Onsite = () => {
 
   const UpdateOnsiteStaus = (email) => {
     axios
-      .post("https://api.ezitech.org/update-intern-status", { email })
+      .post("http://localhost:8800/update-intern-status", { email })
       .then((res) => {
         if (res.data === 1) {
           alert("Status Updated");
@@ -68,7 +68,7 @@ export const Onsite = () => {
 
   const RemoveOnsite = (email) => {
     axios
-      .post("https://api.ezitech.org/remove-intern", { email })
+      .post("http://localhost:8800/remove-intern", { email })
       .then((res) => {
         if (res.data === 1) {
           alert("Removed Successfully");

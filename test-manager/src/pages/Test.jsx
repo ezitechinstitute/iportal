@@ -17,7 +17,7 @@ export const Test = () => {
 
   const getTestIntern = async () => {
     try {
-      const res = await axios.get("https://api.ezitech.org/get-test-interns");
+      const res = await axios.get("http://localhost:8800/get-test-interns");
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -51,13 +51,54 @@ export const Test = () => {
       settCurrentPage(currentPage + 1);
     }
   }
+
+  const AssignPortal = (name, email, phone, technology) => {
+    const charset =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+<>?";
+    const length = 8;
+    let password = "";
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      password += charset[randomIndex];
+    }
+
+    const day = new Date().getDate();
+    const month = new Date().getMonth() + 1;
+    const year = new Date().getFullYear().toLocaleString();
+    const id = Math.floor(1000 + Math.random() * 9000);
+
+    let EZI_ID = "EZI-" + day + "-" + month + "-" + year.slice(3, 5) + "/" + id;
+
+    alert(EZI_ID);
+    alert(password);
+
+    axios
+      .post("http://localhost:8800/assign-portal", {
+        EZI_ID,
+        name,
+        email,
+        password,
+        phone,
+        technology,
+      })
+      .then((res) => {
+        if (res.data === 1) {
+          alert("Assign Portal Successfully");
+        } else {
+          alert("Something Went Wrong!!!");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <div class="wrapper">
         <Sidebar />
         <div class="main">
           <TopHeader />
-
           <main class="content px-3 py-2">
             <div class="container-fluid">
               <div class="mt-4 mb-5" aria-label="breadcrumb">
@@ -154,11 +195,16 @@ export const Test = () => {
                                           class="dropdown-item"
                                           href="#"
                                           type="button"
-                                          //   onClick={() =>
-                                          //     UpdateRemoteStaus(email)
-                                          //   }
+                                          onClick={() =>
+                                            AssignPortal(
+                                              name,
+                                              email,
+                                              phone,
+                                              technology
+                                            )
+                                          }
                                         >
-                                          Update Status
+                                          Assign Portal
                                         </a>
                                       </li>
                                       <li>

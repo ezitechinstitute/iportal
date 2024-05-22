@@ -1,6 +1,5 @@
-const {axios} = require("axios");
+const axios = require("axios");
 // const axios = require('axios/dist/node/axios.cjs');
-
 
 async function SendMessageRemote(phone) {
   try {
@@ -32,9 +31,7 @@ Best regards
   }
 }
 
-
 async function SendMessageOnsite(phone) {
-    
   try {
     const response = await axios.post("https://mkt.eziline.com/api/send", {
       number: phone,
@@ -65,7 +62,41 @@ Best regards`,
   }
 }
 
+async function SendMessageAssignPortal(phone, name, email, password) {
+  try {
+    const response = await axios.post("https://mkt.eziline.com/api/send", {
+      number: phone,
+      type: "text",
+      message: `
+Welcome to the Ezitech Institute IPortal! Your Portal Login Details
 
+Dear ${name},
 
+To help you get started, we have created an account for you on our company portal. Below are your login details:
 
-module.exports = {SendMessageRemote, SendMessageOnsite}
+Portal URL: https://interns.ezitech.org
+Email: ${email}
+Password:${password}
+
+Please follow these steps to log in:
+
+1. Click on the portal link above or copy and paste it into your browser.
+2. Enter your email address and temporary password.
+3. Please update your password.
+
+If you encounter any issues while logging in or have any questions, feel free to reach out at +1 (737) 235-7111.
+
+Best regards`,
+      instance_id: "6640DB980CC35",
+      access_token: "6635ec7382039",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+module.exports = {
+  SendMessageRemote,
+  SendMessageOnsite,
+  SendMessageAssignPortal,
+};

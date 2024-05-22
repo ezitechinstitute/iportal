@@ -1,0 +1,90 @@
+const { connection } = require("../../config/connection");
+const { SendMessageAssignPortal } = require("../../whatsapp/whatsapp-api");
+const bcrypt = require("bcryptjs");
+
+const AssignPortal = (req, res) => {
+  const { EZI_ID, name, email, password, phone, technology } = req.body;
+  //   console.log(req.body);
+
+  const sql0 =
+    "UPDATE `intern_table` SET `status`='Active' WHERE `email` = (?)";
+  connection.query(sql0, [email], async (err, data) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      if (data.affectedRows === 1) {
+        let hashPassword = await bcrypt.hash(password, 8);
+        const internData = [EZI_ID, name, email, hashPassword, technology];
+
+        const sql1 =
+          "INSERT INTO `intern_accounts`(`ezi_id`, `name`, `email`, `password`, `technology`) VALUES (?)";
+
+        connection.query(sql1, [internData], (reject, resolve) => {
+          if (reject) {
+            return res.json(reject);
+          } else {
+            createPhoneQueue(phone);
+            createNameQueue(name);
+            createEmailQueue(email);
+            createPasswordQueue(password);
+            setInterval(() => {
+              if (
+                portalPhoneQueue.length > 0 &&
+                portalNameQueue.length > 0 &&
+                portalEmailQueue.length > 0 &&
+                portalPasswordQueue.length > 0
+              ) {
+                SendMessageAssignPortal(
+                  getPhoneQueue().slice(1, 13),
+                  getNameQueue(),
+                  getEmailQueue(),
+                  getPasswordQueue()
+                );
+              }
+            }, 30000);
+          }
+          return res.json(resolve.affectedRows);
+        });
+      }
+    }
+  });
+};
+
+let portalPhoneQueue = [];
+let portalNameQueue = [];
+let portalEmailQueue = [];
+let portalPasswordQueue = [];
+
+function createPhoneQueue(number) {
+  portalPhoneQueue.push(number);
+}
+
+function createNameQueue(name) {
+  portalNameQueue.push(name);
+}
+
+function createEmailQueue(email) {
+  portalEmailQueue.push(email);
+}
+
+function createPasswordQueue(password) {
+  portalPasswordQueue.push(password);
+}
+
+function getPhoneQueue() {
+  return portalPhoneQueue.pop();
+}
+
+function getNameQueue() {
+  return portalNameQueue.pop();
+}
+
+function getEmailQueue() {
+  return portalEmailQueue.pop();
+}
+
+function getPasswordQueue() {
+  return portalPasswordQueue.pop();
+}
+
+module.exports = { AssignPortal };
