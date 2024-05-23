@@ -1,0 +1,53 @@
+.clock {
+    margin-Right: "10px";
+    align-items: center;
+    font-weight: 400;
+    /* font-size: 8px; */
+
+}
+
+.clock-para {
+    align-items: center;
+    font-weight: 400;
+    font-size: 8px;
+}
+
+.show-profile {
+    display: block;
+}
+
+.timer {
+    margin-left: -145%;
+}
+
+.clock {
+    font-size: 5px,
+}
+
+.timer-text{
+    font-size: large;
+}
+
+@media screen and (max-width: 600px) {
+    .show-profile {
+        display: none;
+    }
+
+    .timer {
+        margin-left: 0;
+        width: 150px;
+    }
+
+    .clock {
+        display: none;
+    }
+
+    .timer-text{
+        font-size: small;
+    }
+
+    .profile-set{
+        margin-right: -16px;
+    }
+    
+}

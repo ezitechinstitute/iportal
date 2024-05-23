@@ -1,0 +1,41 @@
+#basic-table{
+    padding-bottom: 30px;
+}
+
+
+
+.att-btns{
+    margin-top: 15px;
+    margin-left: 70px;
+    margin-bottom: 20px;
+}
+
+.att-btns .btn1{
+    padding: 10px 10px ;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-left: 70px;
+    border: none;
+    background-color: transparent;
+}
+
+.att-btns .btn1:active{
+
+    background-color: purple;
+}
+
+.att-btns .btn2{
+    padding: 10px ;
+    border-radius: 5px;
+    margin-right: 5px;
+    border: none;
+    background-color: transparent;
+    
+}
+
+
+.attTable{
+    margin-left: 95px;
+    width: 1000px;
+    /* background-color: transparent; */
+}
