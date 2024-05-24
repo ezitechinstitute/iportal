@@ -29,6 +29,11 @@ const {
 const {
   AssignPortal,
 } = require("../controller/manager/assignPortal-controller");
+const {
+  StartShift,
+  EndShift,
+  CurrentShift,
+} = require("../controller/intern/internAttendance-controller");
 const router = express.Router();
 
 router.get("/", (req, res) => {
@@ -37,6 +42,9 @@ router.get("/", (req, res) => {
 
 /* Interns Endpoints */
 router.post("/register-inters", RegisterInterns);
+router.post("/start-shift", StartShift);
+router.post("/end-shift", EndShift);
+router.get("/current-shift/:email", CurrentShift);
 
 /* Manager Auth Endpoints */
 router.post("/manager-auth", HrAuth);

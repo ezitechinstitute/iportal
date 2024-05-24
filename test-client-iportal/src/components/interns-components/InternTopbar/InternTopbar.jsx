@@ -1,63 +1,72 @@
 import React, { useEffect, useState } from "react";
 import "./InternTopbar.css";
+import axios from "axios";
 
 export const InternTopbar = () => {
-  const [time, setTime] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
+  const [shiftStarted, setShiftStarted] = useState(false);
+  const [timer, setTimer] = useState(0);
+  // const [totalTime, setTotalTime] = useState({});
+  const [message, setMessage] = useState("");
   const [intervalId, setIntervalId] = useState(null);
-
-  const StartShift = (e) => {
-    if (!isRunning) {
-      const id = setInterval(() => {
-        setTime((prevTime) => prevTime + 1);
-      }, 1000);
-      setIntervalId(id);
-      setIsRunning(true);
-    }
-  };
-
-  const EndShift = (e) => {
-    if (isRunning) {
-      clearInterval(intervalId);
-      setIsRunning(false);
-    }
-  };
+  let email = "umar@gmail.com";
 
   useEffect(() => {
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
+    axios.get(`http://localhost:8800/current-shift/:${email}`).then((res) => {
+      if (res.data.shiftActive) {
+        const startTime = new Date(res.data.shiftTime);
+        const now = new Date();
+        const elapsedSeconds = Math.floor((now - startTime) / 1000);
+        setTimer(elapsedSeconds);
+        shiftStarted(true);
+        StartTimer();
+      } else if (res.data.hasMarked) {
+        setMessage("Attendance Marked");
       }
-    };
-  }, [intervalId]);
-  // const [status, setStatus] = useState();
-  // const [seconds, setSeconds] = useState(0);
-  // const [minutes, setMinutes] = useState(0);
-  // const [hours, setHours] = useState(0);
-  // let timer = 0;
+    });
+  }, []);
 
-  // const StartShift = (e) => {
-  //   setStatus(e);
-  //   timer = setTimeout(() => {
-  //     setSeconds(seconds + 1);
+  const StartShift = () => {
+    axios
+      .post("http://localhost:8800/start-shift", { email: "umar@gmail.com" })
+      .then((res) => {
+        if (res.data.status === "success") {
+          alert(res.data.status);
+          const startTime = new Date(res.data.shiftTime);
+          const now = new Date();
+          const elapsedSeconds = Math.floor((now - startTime) / 1000);
+          setTimer(elapsedSeconds);
+          shiftStarted(true);
+          StartTimer();
+          // alert("Attendanced Marked");
+        } else {
+         setMessage("You have already marked your attendance today.")
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  //     if (seconds === 59) {
-  //       setMinutes(minutes + 1);
-  //       setSeconds(0);
-  //     }
+  const EndShift = () => {
+    axios
+      .post("http://localhost:8800/end-shift", { email: "umar@gmail.com" })
+      .then((res) => {
+        alert(res.data.status);
+        setShiftStarted(false);
+        clearInterval(intervalId);
+        setTimer(0);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  //     if (minutes === 60) {
-  //       setHours(hours + 1);
-  //       setMinutes(0);
-  //     }
-  //   }, 1000);
-
-  //   return () => clearInterval(timer);
-  // };
-
-  // const EndShift = (e) => {
-  //   setStatus(e);
-  // };
+  const StartTimer = () => {
+    const id = setInterval(() => {
+      setTimer((prevTimer) => prevTimer + 1);
+    }, 1000);
+    setIntervalId(id);
+  };
 
   return (
     <>
@@ -84,7 +93,17 @@ export const InternTopbar = () => {
                   <i className="clock" data-feather="clock"></i>
                   &nbsp;
                   <span className="timer-text">
-                    {time}
+                    {Number(timer)}
+                    {/* <p> */}
+                    {/* {Math.floor(timer / 3600) < 10
+                      ? "0" + Math.floor(timer / 3600)
+                      : Math.floor(timer / 3600)}
+                    :
+                    {Math.floor((timer % 3600) / 60) < 10
+                      ? "0" + Math.floor((timer % 3600) / 60)
+                      : Math.floor((timer % 3600) / 60)}
+                    :{timer % 60 < 10 ? "0" + (timer % 60) : timer % 60} */}
+                    {/* </p> */}
                     {/* {hours < 10 ? "0" + hours : hours} :{" "}
                     {minutes < 10 ? "0" + minutes : minutes} :{" "}
                     {seconds < 10 ? "0" + seconds : seconds} */}
@@ -105,15 +124,12 @@ export const InternTopbar = () => {
                 data-toggle="dropdown"
               >
                 {/* <i className="ficon" data-feather="bell"></i> */}
-                {/* {status === 1 ? ( */}
-                <button className="btn btn-danger" onClick={() => EndShift(0)}>
+                {/* {shiftStarted ? ( */}
+                <button className="btn btn-danger" onClick={EndShift}>
                   Check Out
                 </button>
                 {/* ) : ( */}
-                <button
-                  className="btn btn-success"
-                  onClick={() => StartShift(1)}
-                >
+                <button className="btn btn-success" onClick={StartShift}>
                   Check In
                 </button>
                 {/* )} */}
