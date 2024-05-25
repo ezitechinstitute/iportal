@@ -1,17 +1,17 @@
-
 const { connection } = require("../../config/connection");
 const {
   SendMailRemote,
-  SendMailOnsite
+  SendMailOnsite,
 } = require("../../mail/mailer-controller");
 
-const {SendMessageRemote, SendMessageOnsite } = require("../../whatsapp/whatsapp-api.js");
+const {
+  SendMessageRemote,
+  SendMessageOnsite,
+} = require("../../whatsapp/whatsapp-api.js");
 const dotenv = require("dotenv").config();
 
 // const id = process.env.INSTANCEID;
 // const token = process.env.ACCESSTOKEN;
-
-
 
 const RegisterInterns = (req, res) => {
   const {
@@ -52,7 +52,6 @@ const RegisterInterns = (req, res) => {
     interviewTime,
   ];
 
-  
   const sql0 = "SELECT * FROM `intern_table` WHERE `email`= (?)";
   connection.query(sql0, [internemail], (err, data) => {
     if (err) {
@@ -69,7 +68,8 @@ const RegisterInterns = (req, res) => {
 
       if (flag === 0) {
         console.log("hello");
-        const sql1 = "INSERT INTO `intern_table`(`name`, `email`, `phone`, `cnic`, `gender`, `image`, `join_date`, `birth_date`, `university`, `degree`, `interview_type`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
+        const sql1 =
+          "INSERT INTO `intern_table`(`name`, `email`, `phone`, `cnic`, `gender`, `image`, `join_date`, `birth_date`, `university`, `degree`, `interview_type`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
 
         connection.query(sql1, [interndata], (err, data) => {
           if (err) {
@@ -112,9 +112,8 @@ const RegisterInterns = (req, res) => {
   });
 };
 
-
- //   const sql1 =
-    // "INSERT INTO `intern_table`(`name`, `email`, `phone`, `cnic`, `gender`, `image`, `join_date`, `birth_date`, `university`, `degree`, `interview_type`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
+//   const sql1 =
+// "INSERT INTO `intern_table`(`name`, `email`, `phone`, `cnic`, `gender`, `image`, `join_date`, `birth_date`, `university`, `degree`, `interview_type`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
 
 let dataOnsite = [];
 let dataRemote = [];
@@ -134,6 +133,5 @@ function createQueueRemote(number) {
 function getRemoteQueue() {
   return dataRemote.pop();
 }
-
 
 module.exports = { RegisterInterns };

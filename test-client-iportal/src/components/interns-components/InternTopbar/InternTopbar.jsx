@@ -1,45 +1,50 @@
 import React, { useEffect, useState } from "react";
 import "./InternTopbar.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const InternTopbar = () => {
-  const [shiftStarted, setShiftStarted] = useState(false);
-  const [timer, setTimer] = useState(0);
-  // const [totalTime, setTotalTime] = useState({});
+  const navigate = useNavigate();
+  const [shiftStarted, setShiftStarted] = useState("checkin");
+  const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [message, setMessage] = useState("");
-  const [intervalId, setIntervalId] = useState(null);
-  let email = "umar@gmail.com";
+  const [user, setUser] = useState({
+    username: sessionStorage.getItem("username"),
+    email: sessionStorage.getItem("email"),
+    ezi_id: sessionStorage.getItem("eziId"),
+    status: sessionStorage.getItem("internStatus"),
+    tech: sessionStorage.getItem("technology"),
+  });
 
   useEffect(() => {
-    axios.get(`http://localhost:8800/current-shift/:${email}`).then((res) => {
-      if (res.data.shiftActive) {
-        const startTime = new Date(res.data.shiftTime);
-        const now = new Date();
-        const elapsedSeconds = Math.floor((now - startTime) / 1000);
-        setTimer(elapsedSeconds);
-        shiftStarted(true);
-        StartTimer();
-      } else if (res.data.hasMarked) {
-        setMessage("Attendance Marked");
-      }
-    });
+    axios
+      .get(`http://localhost:8800/current-shift/${user.email}`, {
+        headers: { "x-access-token": token },
+      })
+      .then((res) => {
+        if (res.data.shiftActive) {
+          setShiftStarted("checkout");
+        } else if (res.data.hasMarked) {
+          setShiftStarted("marked");
+          setMessage("Attendance Marked");
+        }
+      });
   }, []);
 
   const StartShift = () => {
     axios
-      .post("http://localhost:8800/start-shift", { email: "umar@gmail.com" })
+      .post(
+        "http://localhost:8800/start-shift",
+        { email: user.email },
+        { headers: { "x-access-token": token } }
+      )
       .then((res) => {
-        if (res.data.status === "success") {
-          alert(res.data.status);
-          const startTime = new Date(res.data.shiftTime);
-          const now = new Date();
-          const elapsedSeconds = Math.floor((now - startTime) / 1000);
-          setTimer(elapsedSeconds);
-          shiftStarted(true);
-          StartTimer();
-          // alert("Attendanced Marked");
+        if (res.data.startShiftStatus) {
+          setShiftStarted("checkout");
+          alert("Shift Start");
+          window.location.reload();
         } else {
-         setMessage("You have already marked your attendance today.")
+          setMessage("Today Attendance Marked");
         }
       })
       .catch((err) => {
@@ -49,23 +54,27 @@ export const InternTopbar = () => {
 
   const EndShift = () => {
     axios
-      .post("http://localhost:8800/end-shift", { email: "umar@gmail.com" })
+      .post(
+        "http://localhost:8800/end-shift",
+        { email: user.email },
+        { headers: { "x-access-token": token } }
+      )
       .then((res) => {
-        alert(res.data.status);
-        setShiftStarted(false);
-        clearInterval(intervalId);
-        setTimer(0);
+        if (res.data.endShiftStatus) {
+          setShiftStarted("checkin");
+          alert("Shift End");
+          window.location.reload();
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const StartTimer = () => {
-    const id = setInterval(() => {
-      setTimer((prevTimer) => prevTimer + 1);
-    }, 1000);
-    setIntervalId(id);
+  const Logout = () => {
+    sessionStorage.clear();
+    alert("Logged Out");
+    navigate("/");
   };
 
   return (
@@ -82,7 +91,7 @@ export const InternTopbar = () => {
               </li>
             </ul>
           </div>
-          <ul className="nav navbar-nav align-items-center ml-auto">
+          {/* <ul className="nav navbar-nav align-items-center ml-auto">
             <li className="nav-item mr-25 timer">
               <a
                 className="nav-link"
@@ -92,26 +101,11 @@ export const InternTopbar = () => {
                 <button className="btn btn-light" disabled>
                   <i className="clock" data-feather="clock"></i>
                   &nbsp;
-                  <span className="timer-text">
-                    {Number(timer)}
-                    {/* <p> */}
-                    {/* {Math.floor(timer / 3600) < 10
-                      ? "0" + Math.floor(timer / 3600)
-                      : Math.floor(timer / 3600)}
-                    :
-                    {Math.floor((timer % 3600) / 60) < 10
-                      ? "0" + Math.floor((timer % 3600) / 60)
-                      : Math.floor((timer % 3600) / 60)}
-                    :{timer % 60 < 10 ? "0" + (timer % 60) : timer % 60} */}
-                    {/* </p> */}
-                    {/* {hours < 10 ? "0" + hours : hours} :{" "}
-                    {minutes < 10 ? "0" + minutes : minutes} :{" "}
-                    {seconds < 10 ? "0" + seconds : seconds} */}
-                  </span>
+                  <span className="timer-text">{Number(timer)}</span>
                 </button>
               </a>
             </li>
-          </ul>
+          </ul> */}
           <ul className="nav navbar-nav align-items-center ml-auto">
             {/* <div className="timer"> */}
 
@@ -124,15 +118,34 @@ export const InternTopbar = () => {
                 data-toggle="dropdown"
               >
                 {/* <i className="ficon" data-feather="bell"></i> */}
-                {/* {shiftStarted ? ( */}
-                <button className="btn btn-danger" onClick={EndShift}>
-                  Check Out
-                </button>
-                {/* ) : ( */}
-                <button className="btn btn-success" onClick={StartShift}>
-                  Check In
-                </button>
-                {/* )} */}
+                {/* {shiftStarted ? (
+                  <button className="btn btn-danger" onClick={EndShift}>
+                    Check Out
+                  </button>
+                ) : (
+                  <button className="btn btn-success" onClick={StartShift}>
+                    Check In
+                  </button>
+                )} */}
+                {user.status === "Test" ? (
+                  <button className="btn btn-warning">{user.status}</button>
+                ) : (
+                  <>
+                    {shiftStarted === "checkin" && (
+                      <button className="btn btn-success" onClick={StartShift}>
+                        Check In
+                      </button>
+                    )}
+                    {shiftStarted === "checkout" && (
+                      <button className="btn btn-danger" onClick={EndShift}>
+                        Check Out
+                      </button>
+                    )}
+                    {shiftStarted === "marked" && (
+                      <button className="btn btn-danger">{message}</button>
+                    )}
+                  </>
+                )}
               </a>
             </li>
             <li className="nav-item dropdown dropdown-notification mr-25 show-profile">
@@ -178,7 +191,9 @@ export const InternTopbar = () => {
                 aria-expanded="false"
               >
                 <div className="user-nav d-sm-flex d-none show-profile">
-                  <span className="user-name font-weight-bolder">John Doe</span>
+                  <span className="user-name font-weight-bolder">
+                    {user.username}
+                  </span>
                   <span className="user-status">Intern</span>
                 </div>
                 <span className="avatar">
@@ -218,7 +233,24 @@ export const InternTopbar = () => {
                 <a className="dropdown-item" href="page-faq.html">
                   <i className="mr-50" data-feather="help-circle"></i> FAQ
                 </a> */}
-                <a className="dropdown-item" href="page-auth-login-v2.html">
+                <small>
+                  {user.status === "Test" ? (
+                    ""
+                  ) : (
+                    <a className="dropdown-item">
+                      <i className="mr-0"></i>ID : {user.ezi_id}
+                    </a>
+                  )}
+
+                  <a className="dropdown-item">
+                    <i className="mr-0"></i>Tech : {user.tech}
+                  </a>
+                  <a className="dropdown-item">
+                    <i className="mr-0"></i>Status : {user.status}
+                  </a>
+                </small>
+
+                <a className="dropdown-item" type="button" onClick={Logout}>
                   <i className="mr-50" data-feather="power"></i> Logout
                 </a>
               </div>

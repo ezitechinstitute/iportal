@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export const InternSidebar = () => {
+  const [user, setUser] = useState({
+    username: sessionStorage.getItem("username"),
+    email: sessionStorage.getItem("email"),
+    status: sessionStorage.getItem("internStatus"),
+    tech: sessionStorage.getItem("technology"),
+  });
   return (
     <>
       {/* BEGIN: Main Menu */}
@@ -53,7 +59,52 @@ export const InternSidebar = () => {
             id="main-menu-navigation"
             data-menu="menu-navigation"
           >
-            <li className="nav-item">
+            {user.status === "Test" ? (
+              <li className="nav-item">
+                <a className="d-flex align-items-center" href="index.html">
+                  <Link to={"/intern-test"}>
+                    <i data-feather="clipboard"></i>
+                    <span
+                      className="menu-title text-truncate"
+                      data-i18n="Dashboards"
+                    >
+                      Test
+                    </span>
+                  </Link>
+                </a>
+              </li>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <a className="d-flex align-items-center" href="index.html">
+                    <Link to={"/internDashboard"}>
+                      <i data-feather="home"></i>
+                      <span
+                        className="menu-title text-truncate"
+                        data-i18n="Dashboards"
+                      >
+                        Dashboards
+                      </span>
+                    </Link>
+                  </a>
+                </li>
+
+                <li className="nav-item" style={{ marginTop: "-10px" }}>
+                  <a
+                    className="d-flex align-items-center"
+                    href="dashboard-ecommerce.html"
+                  >
+                    <Link to={"/internAttendence"}>
+                      <i data-feather="check-square"></i>
+                      <span className="menu-item" data-i18n="eCommerce">
+                        Attendance
+                      </span>
+                    </Link>
+                  </a>
+                </li>
+              </>
+            )}
+            {/* <li className="nav-item">
               <a className="d-flex align-items-center" href="index.html">
                 <Link to={"/internDashboard"}>
                   <i data-feather="home"></i>
@@ -65,7 +116,7 @@ export const InternSidebar = () => {
                   </span>
                 </Link>
               </a>
-            </li>
+            </li> */}
 
             {/* <li className="nav-item active">
               <a
@@ -110,7 +161,7 @@ export const InternSidebar = () => {
               </ul>
             </li> */}
 
-            <li className="nav-item" style={{ marginTop: "-10px" }}>
+            {/* <li className="nav-item" style={{ marginTop: "-10px" }}>
               <a
                 className="d-flex align-items-center"
                 href="dashboard-ecommerce.html"
@@ -122,7 +173,7 @@ export const InternSidebar = () => {
                   </span>
                 </Link>
               </a>
-            </li>
+            </li> */}
 
             {/* <li className=" nav-item" style={{marginTop:"-10px"}}>
               <a className="d-flex align-items-center" href="app-calendar.html">
@@ -209,8 +260,6 @@ export const InternSidebar = () => {
                 </Link>
               </a>
             </li> */}
-
-            
           </ul>
         </div>
       </div>

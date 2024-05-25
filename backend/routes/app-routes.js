@@ -33,8 +33,33 @@ const {
   StartShift,
   EndShift,
   CurrentShift,
+  GetInternAttendance,
 } = require("../controller/intern/internAttendance-controller");
+const { InternAuth } = require("../controller/intern/internAuth-controller");
+const jwt = require("jsonwebtoken");
+const { GetTask } = require("../controller/intern/internTest-controller");
+const dotenv = require("dotenv").config();
 const router = express.Router();
+const secretKey = process.env.SECRETKEY;
+
+/* Middleware to verify token */
+function verifyToken(req, res, next) {
+  const token = req.headers["x-access-token"];
+
+  if (!token) {
+    return res.json({ tokenMessage: "Token not provided" });
+  }
+
+  jwt.verify(token, secretKey, (err, decoded) => {
+    if (err) {
+      console.log(err);
+      return res.json({ authMessage: "Failed to authenticate token" });
+    }
+
+    req.internEmail = decoded.email;
+    next();
+  });
+}
 
 router.get("/", (req, res) => {
   res.send("Hello from NodeJs Server");
@@ -42,9 +67,12 @@ router.get("/", (req, res) => {
 
 /* Interns Endpoints */
 router.post("/register-inters", RegisterInterns);
-router.post("/start-shift", StartShift);
-router.post("/end-shift", EndShift);
-router.get("/current-shift/:email", CurrentShift);
+router.post("/intern-auth", InternAuth);
+router.post("/start-shift", verifyToken, StartShift);
+router.post("/end-shift", verifyToken, EndShift);
+router.get("/current-shift/:email", verifyToken, CurrentShift);
+router.post("/intern-test", verifyToken, GetTask);
+router.get("/get-intern-attendance", verifyToken, GetInternAttendance);
 
 /* Manager Auth Endpoints */
 router.post("/manager-auth", HrAuth);

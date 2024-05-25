@@ -16,13 +16,11 @@ function checkAttendanceMarked(email, callback) {
 const StartShift = (req, res) => {
   const { email } = req.body;
 
-  //   console.log(startTime);
-
   checkAttendanceMarked(email, (err, haMarked) => {
     if (err) throw err;
 
     if (haMarked) {
-      return res.json({ message: true });
+      return res.json({ hasMarkedStatus: true });
     } else {
       const startTime = new Date();
       const sql =
@@ -31,7 +29,7 @@ const StartShift = (req, res) => {
         if (err) {
           return res.json(err);
         } else {
-          return res.json({ status: "success", startTime });
+          return res.json({ startShiftStatus: true });
         }
       });
     }
@@ -49,18 +47,13 @@ const EndShift = (req, res) => {
       return res.json(err);
     } else {
       if (data.length > 0) {
-        const startTime = new Date();
-        const duration = Math.floor(endTime - startTime / 1000);
-
-        console.log(duration);
-
         const sql =
-          "UPDATE `intern_attendance` SET `end_shift`= (?), `duration` = (?) WHERE `email` = (?) AND `end_shift` IS NULL ORDER BY `id` DESC LIMIT 1";
-        connection.query(sql, [endTime, duration, email], (err, data) => {
+          "UPDATE `intern_attendance` SET `end_shift`= (?) WHERE `email` = (?) AND `end_shift` IS NULL ORDER BY `id` DESC LIMIT 1";
+        connection.query(sql, [endTime, email], (err, data) => {
           if (err) {
             return res.json(err);
           } else {
-            return res.json({ status: "Shift Ended", endTime, duration });
+            return res.json({ endShiftStatus: true });
           }
         });
       }
@@ -70,17 +63,16 @@ const EndShift = (req, res) => {
 
 const CurrentShift = (req, res) => {
   const { email } = req.params;
-  console.log(email);
 
   const sql =
-    "SELECT start_shift FROM attendance WHERE email = ? AND end_shift IS NULL ORDER BY `id DESC LIMIT 1'";
+    "SELECT `start_shift` FROM `intern_attendance` WHERE `email` = ? AND `end_shift` IS NULL ORDER BY `id` DESC LIMIT 1";
 
   connection.query(sql, [email], (err, data) => {
     if (err) {
       return res.json(err);
     } else {
       if (data.length > 0) {
-        return res.json({ shiftActive: true, shiftTime: data[0].start_shift });
+        return res.json({ shiftActive: true });
       } else {
         checkAttendanceMarked(email, (err, hasMarked) => {
           if (err) throw err;
@@ -91,8 +83,17 @@ const CurrentShift = (req, res) => {
   });
 };
 
+const GetInternAttendance = (req, res) => {
+  const sql = "SELECT * FROM `intern_attendance` WHERE `email` = ?";
+  connection.query(sql, [req.internEmail], (err, data) => {
+    if (err) throw err;
+    return res.json(data);
+  });
+};
+
 module.exports = {
   StartShift,
   EndShift,
   CurrentShift,
+  GetInternAttendance,
 };
