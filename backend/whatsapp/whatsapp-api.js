@@ -1,5 +1,5 @@
-const axios = require("axios");
-// const axios = require('axios/dist/node/axios.cjs');
+// const axios = require("axios");
+const axios = require('axios/dist/node/axios.cjs');
 
 async function SendMessageRemote(phone) {
   try {
