@@ -17,7 +17,7 @@ export const CompletedTest = () => {
 
   const getTestComplete = async () => {
     try {
-      const res = await axios.get("http://localhost:8800/get-test-complete");
+      const res = await axios.get("https://api.ezitech.org/get-test-complete");
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -53,23 +53,27 @@ export const CompletedTest = () => {
   }
 
   const RemoveTestIntern = (email) => {
-    axios.post("http://localhost:8800/remove-intern", { email }).then((res) => {
-      if (res.data === 1) {
-        alert("Removed Successfully");
-      } else {
-        alert("Something Went Wrong!!!");
-      }
-    });
+    axios
+      .post("https://api.ezitech.org/remove-intern", { email })
+      .then((res) => {
+        if (res.data === 1) {
+          alert("Removed Successfully");
+        } else {
+          alert("Something Went Wrong!!!");
+        }
+      });
   };
 
   const ActivePortal = (email) => {
-    axios.post("http://localhost:8800/active-portal", { email }).then((res) => {
-      if (res.data === 1) {
-        alert("Portal Activated");
-      } else {
-        alert("Something Went Wrong!!!");
-      }
-    });
+    axios
+      .post("https://api.ezitech.org/active-portal", { email })
+      .then((res) => {
+        if (res.data === 1) {
+          alert("Portal Activated");
+        } else {
+          alert("Something Went Wrong!!!");
+        }
+      });
   };
 
   return (

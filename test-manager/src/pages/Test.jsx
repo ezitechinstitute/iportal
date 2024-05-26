@@ -17,7 +17,7 @@ export const Test = () => {
 
   const getTestIntern = async () => {
     try {
-      const res = await axios.get("http://localhost:8800/get-test-interns");
+      const res = await axios.get("https://api.ezitech.org/get-test-interns");
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -53,7 +53,7 @@ export const Test = () => {
   }
 
   const RemoveTestIntern = (email) => {
-    axios.post("http://localhost:8800/remove-intern", { email }).then((res) => {
+    axios.post("https://api.ezitech.org/remove-intern", { email }).then((res) => {
       if (res.data === 1) {
         alert("Removed Successfully");
       } else {
@@ -61,10 +61,6 @@ export const Test = () => {
       }
     });
   };
-
-  // const ActivePortal = (email) => {
-  //   axios.post("http://localhost:8800/active-portal", {})
-  // }
 
  
 
