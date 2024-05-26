@@ -20,7 +20,7 @@ const InternAuth = (req, res) => {
     if (!isPasswordValid) {
       return res.json({ passwordStatus: false });
     }
-
+    
     const token = jwt.sign({ email: intern.email }, secretKey, { expiresIn: 86400 });
     return res.json({ loginStatus: true, token, intern });
   });
