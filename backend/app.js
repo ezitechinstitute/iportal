@@ -7,14 +7,16 @@ const dotenv = require("dotenv").config();
 const PORT = process.env.PORT;
 
 const app = express();
-app.use(bodyParser.json({ limit: '35mb' })); // Adjust the limit as needed
-app.use(bodyParser.urlencoded({ limit: '35mb', extended: true }));
+app.use(bodyParser.json({ limit: "35mb" })); // Adjust the limit as needed
+app.use(bodyParser.urlencoded({ limit: "35mb", extended: true }));
 app.use(express.json());
-app.use(cors({
+app.use(
+  cors({
     origin: "*",
     allowedHeaders: "*",
     allowMethods: "*",
-}));
+  })
+);
 app.use(router);
 DataBase();
 
