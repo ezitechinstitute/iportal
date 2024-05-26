@@ -54,27 +54,63 @@ export const Onsite = () => {
     }
   }
 
-  const UpdateOnsiteStaus = (email) => {
-    axios
-      .post("http://localhost:8800/update-intern-status", { email })
-      .then((res) => {
-        if (res.data === 1) {
-          alert("Status Updated");
-        } else {
-          alert("Something Went Wrong!!!");
-        }
-      });
-  };
+  // const UpdateOnsiteStaus = (email) => {
+  //   axios
+  //     .post("http://localhost:8800/update-intern-status", { email })
+  //     .then((res) => {
+  //       if (res.data === 1) {
+  //         alert("Status Updated");
+  //       } else {
+  //         alert("Something Went Wrong!!!");
+  //       }
+  //     });
+  // };
 
   const RemoveOnsite = (email) => {
+    axios.post("http://localhost:8800/remove-intern", { email }).then((res) => {
+      if (res.data === 1) {
+        alert("Removed Successfully");
+      } else {
+        alert("Something Went Wrong!!!");
+      }
+    });
+  };
+
+  const AssignPortal = (name, email, phone, technology) => {
+    const charset =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+<>?";
+    const length = 8;
+    let password = "";
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      password += charset[randomIndex];
+    }
+
+    const day = new Date().getDate();
+    const month = new Date().getMonth() + 1;
+    const year = new Date().getFullYear().toLocaleString();
+    const id = Math.floor(1000 + Math.random() * 9000);
+
+    let EZI_ID = "EZI-" + day + "-" + month + "-" + year.slice(3, 5) + "/" + id;
+
     axios
-      .post("http://localhost:8800/remove-intern", { email })
+      .post("http://localhost:8800/assign-portal", {
+        EZI_ID,
+        name,
+        email,
+        password,
+        phone,
+        technology,
+      })
       .then((res) => {
         if (res.data === 1) {
-          alert("Removed Successfully");
+          alert("Assign Portal Successfully");
         } else {
           alert("Something Went Wrong!!!");
         }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -208,10 +244,15 @@ export const Onsite = () => {
                                               href="#"
                                               type="button"
                                               onClick={() =>
-                                                UpdateOnsiteStaus(email)
+                                                AssignPortal(
+                                                  name,
+                                                  email,
+                                                  phone,
+                                                  technology
+                                                )
                                               }
                                             >
-                                              Update Status
+                                              Assign Portal
                                             </a>
                                           </li>
                                           <li>

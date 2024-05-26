@@ -47,6 +47,12 @@ export const Sidebar = () => {
                     <i class="fa-solid fa-users pe-2"></i>Test
                   </Link>
                 </li>
+
+                <li class="sidebar-item">
+                  <Link to="/test-complete" class="sidebar-link">
+                    <i class="fa-solid fa-users pe-2"></i>Completed Test
+                  </Link>
+                </li>
                 {/* <li class="sidebar-item">
                   <a href="#" class="sidebar-link">
                     <i class="fa-solid fa-eye pe-2"></i>View Attendance

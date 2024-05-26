@@ -5,6 +5,7 @@ import { Onsite } from "./pages/Onsite";
 import { Remote } from "./pages/Remote";
 import { Login } from "./pages/Login";
 import { Test } from "./pages/Test";
+import { CompletedTest } from "./pages/CompletedTest";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/onsite-interns" element={<Onsite />} />
           <Route path="/remote-interns" element={<Remote />} />
           <Route path="/test-interns" element={<Test />} />
+          <Route path="/test-complete" element={<CompletedTest />} />
         </Routes>
       </BrowserRouter>
     </>

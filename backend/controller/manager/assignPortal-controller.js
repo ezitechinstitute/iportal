@@ -6,8 +6,7 @@ const AssignPortal = (req, res) => {
   const { EZI_ID, name, email, password, phone, technology } = req.body;
   //   console.log(req.body);
 
-  const sql0 =
-    "UPDATE `intern_table` SET `status`='Active' WHERE `email` = (?)";
+  const sql0 = "UPDATE `intern_table` SET `status`='Test' WHERE `email` = (?)";
   connection.query(sql0, [email], async (err, data) => {
     if (err) {
       return res.json(err);
@@ -44,6 +43,37 @@ const AssignPortal = (req, res) => {
             }, 30000);
           }
           return res.json(resolve.affectedRows);
+        });
+      }
+    }
+  });
+};
+
+const ActivePortal = (req, res) => {
+  const { email } = req.body;
+
+  const sql0 =
+    "UPDATE `intern_table` SET `status`='Active' WHERE `email` = (?)";
+  connection.query(sql0, [email], (err, data) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      if (data.affectedRows === 1) {
+        const sql1 =
+          "UPDATE `intern_accounts` SET `status`='Active' WHERE `email` = (?)";
+        connection.query(sql1, [email], (reject, resolve) => {
+          if (reject) {
+            return res.json(reject);
+          } else {
+            if (resolve.affectedRows === 1) {
+              const sql2 =
+                "UPDATE `complete_test` SET `status`='Active' WHERE `email` = (?)";
+              connection.query(sql2, [email], (rej, rev) => {
+                if (rej) throw rej;
+                return res.json(rev.affectedRows);
+              });
+            }
+          }
         });
       }
     }
@@ -87,4 +117,4 @@ function getPasswordQueue() {
   return portalPasswordQueue.pop();
 }
 
-module.exports = { AssignPortal };
+module.exports = { AssignPortal, ActivePortal };

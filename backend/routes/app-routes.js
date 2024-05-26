@@ -8,6 +8,7 @@ const {
 const {
   AssignTest,
   RemoveIntern,
+  GetTestComplete,
 } = require("../controller/hr/hr-interview-controller");
 const {
   GetLatestRegister,
@@ -28,6 +29,7 @@ const {
 } = require("../controller/manager/assignproject-controller");
 const {
   AssignPortal,
+  ActivePortal,
 } = require("../controller/manager/assignPortal-controller");
 const {
   StartShift,
@@ -37,7 +39,10 @@ const {
 } = require("../controller/intern/internAttendance-controller");
 const { InternAuth } = require("../controller/intern/internAuth-controller");
 const jwt = require("jsonwebtoken");
-const { GetTask } = require("../controller/intern/internTest-controller");
+const {
+  GetTask,
+  MarkTaskComplete,
+} = require("../controller/intern/internTest-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -73,6 +78,7 @@ router.post("/end-shift", verifyToken, EndShift);
 router.get("/current-shift/:email", verifyToken, CurrentShift);
 router.post("/intern-test", verifyToken, GetTask);
 router.get("/get-intern-attendance", verifyToken, GetInternAttendance);
+router.post("/mark-test-complete", verifyToken, MarkTaskComplete);
 
 /* Manager Auth Endpoints */
 router.post("/manager-auth", HrAuth);
@@ -86,6 +92,8 @@ router.post("/update-intern-status", AssignTest);
 router.post("/remove-intern", RemoveIntern);
 router.get("/get-remote-interns", GetRemoteInterview);
 router.get("/get-test-interns", GetTestIntern);
+router.post("/active-portal", ActivePortal);
+router.get("/get-test-complete", GetTestComplete);
 
 /* Manager Endpoints */
 router.get("/get-manager-onsite", GetManagerOnsite);

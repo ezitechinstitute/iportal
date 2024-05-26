@@ -10,4 +10,17 @@ const GetTask = (req, res) => {
   });
 };
 
-module.exports = { GetTask };
+const MarkTaskComplete = (req, res) => {
+  const { name, email, technology } = req.body;
+
+  const taskData = [name, email, technology];
+
+  const sql =
+    "INSERT INTO `complete_test`(`name`, `email`, `technology`) VALUES (?)";
+  connection.query(sql, [taskData], (err, data) => {
+    if (err) throw err;
+    return res.json(data.affectedRows);
+  });
+};
+
+module.exports = { GetTask, MarkTaskComplete };

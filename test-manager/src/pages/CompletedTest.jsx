@@ -1,10 +1,10 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Sidebar } from "../components/Sidebar";
 import { TopHeader } from "../components/TopHeader";
+import axios from "axios";
 
-export const Test = () => {
+export const CompletedTest = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
@@ -15,9 +15,9 @@ export const Test = () => {
     }
   });
 
-  const getTestIntern = async () => {
+  const getTestComplete = async () => {
     try {
-      const res = await axios.get("http://localhost:8800/get-test-interns");
+      const res = await axios.get("http://localhost:8800/get-test-complete");
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -25,8 +25,8 @@ export const Test = () => {
   };
 
   useEffect(() => {
-    getTestIntern();
-  });
+    getTestComplete();
+  }, [getTestComplete]);
 
   const [currentPage, settCurrentPage] = useState(1);
   const recordPerPage = 15;
@@ -62,11 +62,15 @@ export const Test = () => {
     });
   };
 
-  // const ActivePortal = (email) => {
-  //   axios.post("http://localhost:8800/active-portal", {})
-  // }
-
- 
+  const ActivePortal = (email) => {
+    axios.post("http://localhost:8800/active-portal", { email }).then((res) => {
+      if (res.data === 1) {
+        alert("Portal Activated");
+      } else {
+        alert("Something Went Wrong!!!");
+      }
+    });
+  };
 
   return (
     <>
@@ -120,10 +124,7 @@ export const Test = () => {
                           <th scope="col">#</th>
                           <th scope="col">Full Name</th>
                           <th scope="col">Email</th>
-                          <th scope="col">Contact</th>
                           <th scope="col">Technology</th>
-                          <th scope="col">Interview</th>
-                          <th scope="col">Status</th>
                           <th scope="col">Action</th>
                         </tr>
                       </thead>
@@ -145,10 +146,7 @@ export const Test = () => {
                                 <th scope="row">{id}</th>
                                 <td>{name}</td>
                                 <td>{email}</td>
-                                <td>{phone}</td>
                                 <td>{technology}</td>
-                                <td>{interview_type}</td>
-                                <td>{status}</td>
                                 <td>
                                   <div class="btn-group">
                                     <button
@@ -160,7 +158,7 @@ export const Test = () => {
                                       Action
                                     </button>
                                     <ul class="dropdown-menu">
-                                      {/* <li>
+                                      <li>
                                         <a class="dropdown-item" href="#">
                                           Send Mail
                                         </a>
@@ -170,24 +168,19 @@ export const Test = () => {
                                           class="dropdown-item"
                                           href="#"
                                           type="button"
-                                          onClick={() =>
-                                            AssignPortal(
-                                              name,
-                                              email,
-                                              phone,
-                                              technology
-                                            )
-                                          }
+                                          onClick={() => ActivePortal(email)}
                                         >
                                           Active Portal
                                         </a>
-                                      </li> */}
+                                      </li>
                                       <li>
                                         <a
                                           class="dropdown-item"
                                           href="#"
                                           type="button"
-                                            onClick={() => RemoveTestIntern(email)}
+                                          onClick={() =>
+                                            RemoveTestIntern(email)
+                                          }
                                         >
                                           Remove
                                         </a>
@@ -211,21 +204,21 @@ export const Test = () => {
                           </a>
                         </li>
                         {/* {numbers.map((n, i) => (
-                          <li
-                            className={`page-item ${
-                              currentPage === n ? "active" : "   "
-                            }`}
-                            key={i}
-                          >
-                            <a
-                              href="#"
-                              className="page-link"
-                              onClick={changeCurrentPage}
+                            <li
+                              className={`page-item ${
+                                currentPage === n ? "active" : "   "
+                              }`}
+                              key={i}
                             >
-                              {n}
-                            </a>
-                          </li>
-                        ))} */}
+                              <a
+                                href="#"
+                                className="page-link"
+                                onClick={changeCurrentPage}
+                              >
+                                {n}
+                              </a>
+                            </li>
+                          ))} */}
                         <li className="page-item">
                           <a href="#" className="page-link" onClick={nextPage}>
                             Next

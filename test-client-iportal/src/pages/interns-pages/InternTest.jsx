@@ -37,7 +37,23 @@ export const InternTest = () => {
   }, [GetTask]);
 
   const MarkTaskComleted = () => {
-    setTestStatus(true);
+    axios
+      .post(
+        "http://localhost:8800/mark-test-complete",
+        { name: user.username, email: user.email, technology: user.tech },
+        { headers: { "x-access-token": token } }
+      )
+      .then((res) => {
+        if (res.data === 1) {
+          setTestStatus(true);
+          alert("Task Completed");
+        } else {
+          alert("Something Went Wrong!!!");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <>

@@ -78,13 +78,15 @@ Portal URL: https://interns.ezitech.org
 Email: ${email}
 Password:${password}
 
+Internship Status : TEST
+
 Please follow these steps to log in:
 
 1. Click on the portal link above or copy and paste it into your browser.
 2. Enter your email address and temporary password.
 3. Please update your password.
 
-If you encounter any issues while logging in or have any questions, feel free to reach out at +1 (737) 235-7111.
+If you encounter any issues while logging in or have any questions, feel free to reach out at help@ezietch.org
 
 Best regards`,
       instance_id: "6640DB980CC35",
