@@ -18,7 +18,7 @@ export const InternTopbar = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8800/current-shift/${user.email}`, {
+      .get(`https://api.ezitech.org/current-shift/${user.email}`, {
         headers: { "x-access-token": token },
       })
       .then((res) => {
@@ -34,7 +34,7 @@ export const InternTopbar = () => {
   const StartShift = () => {
     axios
       .post(
-        "http://localhost:8800/start-shift",
+        "https://api.ezitech.org/start-shift",
         { email: user.email },
         { headers: { "x-access-token": token } }
       )
@@ -55,7 +55,7 @@ export const InternTopbar = () => {
   const EndShift = () => {
     axios
       .post(
-        "http://localhost:8800/end-shift",
+        "https://api.ezitech.org/end-shift",
         { email: user.email },
         { headers: { "x-access-token": token } }
       )

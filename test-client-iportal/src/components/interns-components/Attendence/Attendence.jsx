@@ -14,7 +14,7 @@ export const Attendence = () => {
   const GetAttendance = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8800/get-intern-attendance",
+        "https://api.ezitech.org/get-intern-attendance",
         { headers: { "x-access-token": token } }
       );
       setAttendance(res.data);

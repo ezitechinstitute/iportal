@@ -119,7 +119,7 @@ export const CompletedTest = () => {
               </div>
               <div class="card border-0 shadow">
                 <div class="card-header">
-                  <div class="card-title">Test Assign</div>
+                  <div class="card-title">Completed Tasks</div>
 
                   <div class="card-body overflow-x-scroll">
                     <table class="table">

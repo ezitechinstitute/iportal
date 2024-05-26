@@ -23,7 +23,7 @@ export const InternTest = () => {
 
   const GetTask = async () => {
     const res = await axios.post(
-      "http://localhost:8800/intern-test",
+      "https://api.ezitech.org/intern-test",
       {
         technology: user.tech,
       },
@@ -39,7 +39,7 @@ export const InternTest = () => {
   const MarkTaskComleted = () => {
     axios
       .post(
-        "http://localhost:8800/mark-test-complete",
+        "https://api.ezitech.org/mark-test-complete",
         { name: user.username, email: user.email, technology: user.tech },
         { headers: { "x-access-token": token } }
       )
