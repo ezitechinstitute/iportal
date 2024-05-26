@@ -17,7 +17,7 @@ export const ManagerDashboard = () => {
 
   const getLatestRegister = async () => {
     try {
-      const res = await axios.get("http://localhost:8800/get-latest-interns");
+      const res = await axios.get("https://api.ezitech.org/get-latest-interns");
       setData(res.data);
     } catch (error) {
       console.log(error);
