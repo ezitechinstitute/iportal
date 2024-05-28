@@ -94,7 +94,6 @@ export const Remote = () => {
     const id = Math.floor(1000 + Math.random() * 9000);
 
     let EZI_ID = "EZI-" + day + "-" + month + "-" + year.slice(3, 5) + "/" + id;
-
     axios
       .post("https://api.ezitech.org/assign-portal", {
         EZI_ID,
