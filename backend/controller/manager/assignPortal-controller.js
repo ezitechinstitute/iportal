@@ -3,7 +3,7 @@ const { SendMessageAssignPortal } = require("../../whatsapp/whatsapp-api");
 const bcrypt = require("bcryptjs");
 
 const AssignPortal = (req, res) => {
-  const { EZI_ID, name, email, password, phone, technology } = req.body;
+  const { EZI_ID, name, email, phone, password, technology } = req.body;
   //   console.log(req.body);
 
   const sql0 = "UPDATE `intern_table` SET `status`='Test' WHERE `email` = (?)";

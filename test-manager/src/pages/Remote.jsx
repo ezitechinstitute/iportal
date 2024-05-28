@@ -67,13 +67,15 @@ export const Remote = () => {
   // };
 
   const RemoveRemote = (email) => {
-    axios.post("https://api.ezitech.org/remove-intern", { email }).then((res) => {
-      if (res.data === 1) {
-        alert("Removed Successfully");
-      } else {
-        alert("Something Went Wrong!!!");
-      }
-    });
+    axios
+      .post("https://api.ezitech.org/remove-intern", { email })
+      .then((res) => {
+        if (res.data === 1) {
+          alert("Removed Successfully");
+        } else {
+          alert("Something Went Wrong!!!");
+        }
+      });
   };
 
   const AssignPortal = (name, email, phone, technology) => {
@@ -98,8 +100,8 @@ export const Remote = () => {
         EZI_ID,
         name,
         email,
-        password,
         phone,
+        password,
         technology,
       })
       .then((res) => {
