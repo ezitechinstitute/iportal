@@ -126,8 +126,9 @@ export const CompletedTest = () => {
                       <thead>
                         <tr>
                           <th scope="col">#</th>
-                          <th scope="col">Full Name</th>
+                          <th scope="col">Name</th>
                           <th scope="col">Email</th>
+                          <th scope="col">Contact</th>
                           <th scope="col">Technology</th>
                           <th scope="col">Action</th>
                         </tr>
@@ -150,6 +151,7 @@ export const CompletedTest = () => {
                                 <th scope="row">{id}</th>
                                 <td>{name}</td>
                                 <td>{email}</td>
+                                <td>{phone}</td>
                                 <td>{technology}</td>
                                 <td>
                                   <div class="btn-group">

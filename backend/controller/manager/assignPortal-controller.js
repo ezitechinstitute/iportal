@@ -13,10 +13,17 @@ const AssignPortal = (req, res) => {
     } else {
       if (data.affectedRows === 1) {
         let hashPassword = await bcrypt.hash(password, 8);
-        const internData = [EZI_ID, name, email, hashPassword, technology];
+        const internData = [
+          EZI_ID,
+          name,
+          email,
+          phone,
+          hashPassword,
+          technology,
+        ];
 
         const sql1 =
-          "INSERT INTO `intern_accounts`(`ezi_id`, `name`, `email`, `password`, `technology`) VALUES (?)";
+          "INSERT INTO `intern_accounts`(`ezi_id`, `name`, `email`, `phone`, `password`, `technology`) VALUES (?)";
 
         connection.query(sql1, [internData], (reject, resolve) => {
           if (reject) {

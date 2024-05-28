@@ -11,12 +11,12 @@ const GetTask = (req, res) => {
 };
 
 const MarkTaskComplete = (req, res) => {
-  const { name, email, technology } = req.body;
+  const { name, email, phone, technology } = req.body;
 
-  const taskData = [name, email, technology];
+  const taskData = [name, email, phone, technology];
 
   const sql =
-    "INSERT INTO `complete_test`(`name`, `email`, `technology`) VALUES (?)";
+    "INSERT INTO `complete_test`(`name`, `email`, `phone`, `technology`) VALUES (?)";
   connection.query(sql, [taskData], (err, data) => {
     if (err) throw err;
     return res.json(data.affectedRows);

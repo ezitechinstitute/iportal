@@ -10,6 +10,7 @@ export const InternLogin = () => {
   const [user, setUser] = useState({
     username: sessionStorage.getItem("username"),
     email: sessionStorage.getItem("email"),
+    phone: sessionStorage.getItem("phone"),
     ezi_id: sessionStorage.getItem("eziId"),
     status: sessionStorage.getItem("internStatus"),
     tech: sessionStorage.getItem("technology"),
@@ -35,6 +36,7 @@ export const InternLogin = () => {
             setUser({
               username: res.data.intern.name,
               email: res.data.intern.email,
+              phone: res.data.intern.phone,
               status: res.data.intern.status,
               tech: res.data.intern.technology,
             });
@@ -42,6 +44,7 @@ export const InternLogin = () => {
             sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("username", res.data.intern.name);
             sessionStorage.setItem("email", res.data.intern.email);
+            sessionStorage.setItem("phone", res.data.intern.phone);
             sessionStorage.setItem("internStatus", res.data.intern.status);
             sessionStorage.setItem("technology", res.data.intern.technology);
             alert("Login Successfully");
@@ -53,6 +56,7 @@ export const InternLogin = () => {
             setUser({
               username: res.data.intern.name,
               email: res.data.intern.email,
+              phone: res.data.intern.phone,
               ezi_id: res.data.intern.ezi_id,
               status: res.data.intern.status,
               tech: res.data.intern.technology,

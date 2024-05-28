@@ -12,6 +12,8 @@ export const InternTest = () => {
   const [user, setUser] = useState({
     username: sessionStorage.getItem("username"),
     email: sessionStorage.getItem("email"),
+    phone: sessionStorage.getItem("phone"),
+    ezi_id: sessionStorage.getItem("eziId"),
     status: sessionStorage.getItem("internStatus"),
     tech: sessionStorage.getItem("technology"),
   });
@@ -40,7 +42,12 @@ export const InternTest = () => {
     axios
       .post(
         "https://api.ezitech.org/mark-test-complete",
-        { name: user.username, email: user.email, technology: user.tech },
+        {
+          name: user.username,
+          email: user.email,
+          phone: user.phone,
+          technology: user.tech,
+        },
         { headers: { "x-access-token": token } }
       )
       .then((res) => {
