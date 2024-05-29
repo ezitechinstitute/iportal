@@ -94,7 +94,7 @@ export const InternTest = () => {
 
                           <br />
                           {testStatus ? (
-                            <button className="btn btn-success">
+                            <button className="btn btn-success" disabled>
                               Completed
                             </button>
                           ) : (
