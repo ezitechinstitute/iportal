@@ -29,7 +29,7 @@ export const Test = () => {
   });
 
   const [currentPage, settCurrentPage] = useState(1);
-  const recordPerPage = 15;
+  const recordPerPage = 50;
   const lastIndex = currentPage * recordPerPage;
   const firstIndex = lastIndex - recordPerPage;
   const records = data.slice(firstIndex, lastIndex);
@@ -53,16 +53,16 @@ export const Test = () => {
   }
 
   const RemoveTestIntern = (email) => {
-    axios.post("https://api.ezitech.org/remove-intern", { email }).then((res) => {
-      if (res.data === 1) {
-        alert("Removed Successfully");
-      } else {
-        alert("Something Went Wrong!!!");
-      }
-    });
+    axios
+      .post("https://api.ezitech.org/remove-intern", { email })
+      .then((res) => {
+        if (res.data === 1) {
+          alert("Removed Successfully");
+        } else {
+          alert("Something Went Wrong!!!");
+        }
+      });
   };
-
- 
 
   return (
     <>
@@ -124,39 +124,40 @@ export const Test = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {records.map((rs) => {
-                          const {
-                            id,
-                            name,
-                            email,
-                            phone,
-                            technology,
-                            interview_type,
-                            status,
-                          } = rs;
+                        {Array.isArray(data)
+                          ? data.map((rs) => {
+                              const {
+                                id,
+                                name,
+                                email,
+                                phone,
+                                technology,
+                                interview_type,
+                                status,
+                              } = rs;
 
-                          return (
-                            <>
-                              <tr>
-                                <th scope="row">{id}</th>
-                                <td>{name}</td>
-                                <td>{email}</td>
-                                <td>{phone}</td>
-                                <td>{technology}</td>
-                                <td>{interview_type}</td>
-                                <td>{status}</td>
-                                <td>
-                                  <div class="btn-group">
-                                    <button
-                                      type="button"
-                                      class="btn btn-primary dropdown-toggle"
-                                      data-bs-toggle="dropdown"
-                                      aria-expanded="false"
-                                    >
-                                      Action
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                      {/* <li>
+                              return (
+                                <>
+                                  <tr>
+                                    <th scope="row">{id}</th>
+                                    <td>{name}</td>
+                                    <td>{email}</td>
+                                    <td>{phone}</td>
+                                    <td>{technology}</td>
+                                    <td>{interview_type}</td>
+                                    <td>{status}</td>
+                                    <td>
+                                      <div class="btn-group">
+                                        <button
+                                          type="button"
+                                          class="btn btn-primary dropdown-toggle"
+                                          data-bs-toggle="dropdown"
+                                          aria-expanded="false"
+                                        >
+                                          Action
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                          {/* <li>
                                         <a class="dropdown-item" href="#">
                                           Send Mail
                                         </a>
@@ -178,23 +179,26 @@ export const Test = () => {
                                           Active Portal
                                         </a>
                                       </li> */}
-                                      <li>
-                                        <a
-                                          class="dropdown-item"
-                                          href="#"
-                                          type="button"
-                                            onClick={() => RemoveTestIntern(email)}
-                                        >
-                                          Remove
-                                        </a>
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </td>
-                              </tr>
-                            </>
-                          );
-                        })}
+                                          <li>
+                                            <a
+                                              class="dropdown-item"
+                                              href="#"
+                                              type="button"
+                                              onClick={() =>
+                                                RemoveTestIntern(email)
+                                              }
+                                            >
+                                              Remove
+                                            </a>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </>
+                              );
+                            })
+                          : " "}
                       </tbody>
                     </table>
                     {/* Pagination */}
