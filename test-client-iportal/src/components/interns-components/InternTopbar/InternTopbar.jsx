@@ -27,6 +27,8 @@ export const InternTopbar = () => {
         } else if (res.data.hasMarked) {
           setShiftStarted("marked");
           setMessage("Attendance Marked");
+        }else if(res.data.notMarked){
+          setShiftStarted("checkin")
         }
       });
   }, []);
