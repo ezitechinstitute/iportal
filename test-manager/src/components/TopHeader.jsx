@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export const TopHeader = () => {
+export const TopHeader = ({role}) => {
   const navigate = useNavigate();
 
   const Logout = () => {
@@ -21,7 +21,7 @@ export const TopHeader = () => {
               <p class="marquee">
                 <span>
                   {" "}
-                  <strong>Manager</strong> &nbsp;&nbsp;&nbsp;{" "}
+                  <strong>{role}</strong> &nbsp;&nbsp;&nbsp;{" "}
                 </span>
               </p>
             </li>

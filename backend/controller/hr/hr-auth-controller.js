@@ -1,19 +1,21 @@
 const { connection } = require("../../config/connection");
 
 const HrAuth = (req, res) => {
-  const { email, password } = req.body.value;
+  const { email, password, loginAs } = req.body.value;
 
   const sql =
-    "SELECT `image`, `name`, `email`, `password` FROM `manager_accounts` WHERE `email` = ? AND `password`= ?";
+    "SELECT `image`, `name`, `email`, `password`, `loginas`  FROM `manager_accounts` WHERE `email` = ? AND `password`= ? AND `loginas` = ?";
 
-  connection.query(sql, [email, password], (err, data) => {
+  connection.query(sql, [email, password, loginAs], (err, data) => {
     if (err) {
+      console.log(err)
       return res.json(err);
     } else {
-        if(data.length > 0){
-           return res.json({isLoggedIn: true, data});
-        }
-      
+      if (data.length > 0) {
+        return res.json({ isLoggedIn: true, user: data });
+      }else{
+        return res.json({isLoggedIn: false})
+      }
     }
   });
 };

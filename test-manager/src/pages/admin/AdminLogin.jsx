@@ -2,41 +2,27 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+export const AdminLogin = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState({});
 
   const handleInput = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });
   };
-
+  // https://api.ezitech.org/manager-auth
   const Login = () => {
-    if (
-      value.email !== undefined &&
-      value.password !== undefined &&
-      value.loginAs !== undefined
-    ) {
+    if (value.email !== undefined && value.password !== undefined) {
       axios
-        .post("http://localhost:8800/manager-auth", { value })
+        .post("http://localhost:8800/admin-auth", { value })
         .then((res) => {
-          if (
-            res.data.isLoggedIn === true &&
-            res.data.user[0].loginas === "Manager"
-          ) {
+          if (res.data.isLoggedIn === true) {
             // sessionStorage.setItem("username", res.data[0].name);
             // sessionStorage.setItem("email", res.data[0].email);
-            sessionStorage.setItem("isLoggedIn", true);
+            sessionStorage.setItem("isAdminLoggedIn", true);
             alert("Login Successfully");
-            navigate("/manager-dashboard");
-          } else if (
-            res.data.isLoggedIn === true &&
-            res.data.user[0].loginas === "Instructor"
-          ) {
-            sessionStorage.setItem("isInstructorLoggedIn", true);
-            alert("Login Successfully");
-            navigate("/instructor-dashboard");
-
-            // alert("Invalid User!!!");
+            navigate("/admin-dashboard");
+          } else {
+            alert("Invalid User!!!");
           }
         });
     } else {
@@ -75,21 +61,8 @@ export const Login = () => {
                     onChange={handleInput}
                   />
                 </div>
-
-                <div className="form-group mt-4">
-                  <label for="LoginAs">Login As</label>
-                  <select
-                    name="loginAs"
-                    id=""
-                    className="form-control"
-                    onChange={handleInput}
-                  >
-                    <option selected disabled>
-                      --Select--
-                    </option>
-                    <option value="Manager">Manager</option>
-                    <option value="Instructor">Instructor</option>
-                  </select>
+                <div className="forget-pass mt-2">
+                  <a href="">Forget Password?</a>
                 </div>
               </div>
               <div className="container">
@@ -103,10 +76,6 @@ export const Login = () => {
                     SignIn{" "}
                   </button>
                 </div>
-              </div>
-
-              <div className="forget-pass mt-2 text-center">
-                <a href="">Forget Password?</a>
               </div>
               {/* <div className="row mt-4">
                 <div className="col">

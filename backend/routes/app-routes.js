@@ -43,6 +43,11 @@ const {
   GetTask,
   MarkTaskComplete,
 } = require("../controller/intern/internTest-controller");
+const {
+  GetInstructorEmail,
+  GetManagerEmail,
+} = require("../controller/hr/get-instructorMail-controller");
+const { AddAmount } = require("../controller/hr/add-amount-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -94,6 +99,9 @@ router.get("/get-remote-interns", GetRemoteInterview);
 router.get("/get-test-interns", GetTestIntern);
 router.post("/active-portal", ActivePortal);
 router.get("/get-test-complete", GetTestComplete);
+router.get("/get-instructor-emails", GetInstructorEmail);
+router.get("/get-manager-emails", GetManagerEmail);
+router.post("/add-amount", AddAmount);
 
 /* Manager Endpoints */
 router.get("/get-manager-onsite", GetManagerOnsite);

@@ -34,7 +34,7 @@ export const ManagerDashboard = () => {
       <div class="wrapper">
         <Sidebar />
         <div class="main">
-          <TopHeader />
+          <TopHeader role={"Manager"}/>
 
           <main class="content px-3 py-2">
             <div class="container-fluid">

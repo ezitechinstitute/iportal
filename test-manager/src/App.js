@@ -6,6 +6,10 @@ import { Remote } from "./pages/Remote";
 import { Login } from "./pages/Login";
 import { Test } from "./pages/Test";
 import { CompletedTest } from "./pages/CompletedTest";
+import { AdminLogin } from "./pages/admin/AdminLogin";
+import { AdminDashboard } from "./pages/admin/AdminDashboard";
+import { InstructorDashboard } from "./pages/instructor/InstructorDashboard";
+import { AddAmount } from "./pages/AddAmount";
 
 function App() {
   return (
@@ -14,10 +18,22 @@ function App() {
         <Routes>
           <Route index path="/" element={<Login />} />
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
+          <Route path="/add-amount" element={<AddAmount />} />
           <Route path="/onsite-interns" element={<Onsite />} />
           <Route path="/remote-interns" element={<Remote />} />
           <Route path="/test-interns" element={<Test />} />
           <Route path="/test-complete" element={<CompletedTest />} />
+
+          {/* ----------------- Admin ------------------- */}
+          <Route index path="/admin" element={<AdminLogin />} />
+          <Route index path="/admin-dashboard" element={<AdminDashboard />} />
+
+          {/* ----------------- Instructor -------------- */}
+          <Route
+            index
+            path="/instructor-dashboard"
+            element={<InstructorDashboard />}
+          />
         </Routes>
       </BrowserRouter>
     </>
