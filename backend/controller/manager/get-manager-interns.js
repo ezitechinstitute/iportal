@@ -56,7 +56,7 @@ const GetInternsEmail = (req, res) => {
 
   // console.log(req.body);
 
-  const sql = "SELECT email FROM intern_table WHERE email LIKE (?)";
+  const sql = "SELECT email FROM intern_accounts WHERE email LIKE (?)";
   connection.query(sql, [checkFinal], (err, data) => {
     if (err) {
       console.log(err);

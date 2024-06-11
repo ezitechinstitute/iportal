@@ -10,6 +10,10 @@ export const AddAmount = () => {
   const [managerMail, setManagerMail] = useState([]);
   const [data, setData] = useState({});
 
+  const [query, setQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [selected, setSelected] = useState(false);
+
   const check = sessionStorage.getItem("isLoggedIn");
 
   useEffect(() => {
@@ -47,17 +51,46 @@ export const AddAmount = () => {
     GetManagerEmails();
   }, [GetInstructorEmails, GetManagerEmails]);
 
+  const handleQuery = async (e) => {
+    const value = e.target.value;
+    setQuery(value);
+    if (value.length > 2) {
+      fetchSuggestions(value);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const fetchSuggestions = async (queryFinal) => {
+    try {
+      const res = await axios.post("http://localhost:8800/get-intern-emails", {
+        queryFinal,
+      });
+      //   const data = await res.json();
+      setSuggestions(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const selectEmail = (e) => {
+    setQuery(e);
+    setData({ ...data, internEmail: e });
+    setSelected(true);
+  };
+
   const SubmitAmount = () => {
     if (
       data.amount !== undefined &&
       data.instructorEmail !== undefined &&
-      data.managerEmail !== undefined
+      data.managerEmail !== undefined &&
+      data.internEmail !== undefined
     ) {
       axios
         .post("http://localhost:8800/add-amount", { data })
         .then((res) => {
           console.log(res.data);
-          alert(res.data)
+          alert(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -95,7 +128,7 @@ export const AddAmount = () => {
                   <h3 class="card-title">Add Amount</h3>
                   <form>
                     <div className="row mt-5">
-                      <div className="col-sm-4">
+                      <div className="col-sm-3">
                         <label htmlFor="">Enter Amount</label>
                         <input
                           type="number"
@@ -106,7 +139,7 @@ export const AddAmount = () => {
                         />
                       </div>
 
-                      <div className="col-sm-4">
+                      <div className="col-sm-3">
                         <label htmlFor="">Instructor Email</label>
                         <select
                           name="instructorEmail"
@@ -125,7 +158,7 @@ export const AddAmount = () => {
                         </select>
                       </div>
 
-                      <div className="col-sm-4">
+                      <div className="col-sm-3">
                         <label htmlFor="">Manager Email</label>
                         <select
                           name="managerEmail"
@@ -142,6 +175,36 @@ export const AddAmount = () => {
                               ))
                             : " "}
                         </select>
+                      </div>
+
+                      <div className="col-sm-3">
+                        <label for="email-id-column">Intern Email</label>
+                        <input
+                          type="text"
+                          id="email-id-column"
+                          value={query}
+                          onChange={handleQuery}
+                          className="form-control"
+                          name="email"
+                          placeholder="Search Intern Email"
+                        />
+
+                        <ul style={{ listStyle: "none" }}>
+                          {!selected
+                            ? suggestions.map((email, index) => (
+                                <>
+                                  <li
+                                    className="border shadow rounded p-1"
+                                    key={index}
+                                    onClick={() => selectEmail(email.email)}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    {email.email}
+                                  </li>
+                                </>
+                              ))
+                            : " "}
+                        </ul>
                       </div>
 
                       <div className="text-center mt-5">

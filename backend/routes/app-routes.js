@@ -102,6 +102,7 @@ router.get("/get-test-complete", GetTestComplete);
 router.get("/get-instructor-emails", GetInstructorEmail);
 router.get("/get-manager-emails", GetManagerEmail);
 router.post("/add-amount", AddAmount);
+router.post("/get-intern-emails", GetInternsEmail);
 
 /* Manager Endpoints */
 router.get("/get-manager-onsite", GetManagerOnsite);
