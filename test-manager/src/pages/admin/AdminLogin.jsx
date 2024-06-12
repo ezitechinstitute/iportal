@@ -12,19 +12,17 @@ export const AdminLogin = () => {
   // https://api.ezitech.org/manager-auth
   const Login = () => {
     if (value.email !== undefined && value.password !== undefined) {
-      axios
-        .post("http://localhost:8800/admin-auth", { value })
-        .then((res) => {
-          if (res.data.isLoggedIn === true) {
-            // sessionStorage.setItem("username", res.data[0].name);
-            // sessionStorage.setItem("email", res.data[0].email);
-            sessionStorage.setItem("isAdminLoggedIn", true);
-            alert("Login Successfully");
-            navigate("/admin-dashboard");
-          } else {
-            alert("Invalid User!!!");
-          }
-        });
+      axios.post("http://localhost:8800/admin-auth", { value }).then((res) => {
+        if (res.data.isLoggedIn === true) {
+          sessionStorage.setItem("username", res.data.user[0].name);
+          sessionStorage.setItem("email", res.data.user[0].email);
+          sessionStorage.setItem("isAdminLoggedIn", true);
+          alert("Login Successfully");
+          navigate("/admin-dashboard");
+        } else {
+          alert("Invalid User!!!");
+        }
+      });
     } else {
       alert("Please empty fields first!!!");
     }

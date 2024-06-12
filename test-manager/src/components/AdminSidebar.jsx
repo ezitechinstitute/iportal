@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export const Sidebar = () => {
+export const AdminSidebar = () => {
   return (
     <>
       <div id="sidebar">
@@ -12,21 +12,11 @@ export const Sidebar = () => {
           <ul class="sidebar-nav">
             <li class="sidebar-header">Manager Elements</li>
             <li class="sidebar-item">
-              <Link to="/manager-dashboard" class="sidebar-link">
+              <Link to="/admin-dashboard" class="sidebar-link">
                 <i class="fa-solid fa-house pe-2"></i>Dashboard
               </Link>
             </li>
-            <li class="sidebar-item">
-              <Link to="/add-amount" class="sidebar-link">
-                <i class="fa-solid fa-add pe-2"></i>Add Amount
-              </Link>
-            </li>
-            <li class="sidebar-item">
-              <Link to="/manager-balance" class="sidebar-link">
-                <i class="fa-solid fa-dollar pe-2"></i>Your Balance
-              </Link>
-            </li>
-            <li class="sidebar-item">
+            {/* <li class="sidebar-item">
               <a
                 href="#"
                 class="sidebar-link collapsed"
@@ -68,8 +58,8 @@ export const Sidebar = () => {
                     <i class="fa-solid fa-eye pe-2"></i>View Attendance
                   </a>
                 </li> */}
-              </ul>
-            </li>
+              {/* </ul> */}
+            {/* </li> */} 
           </ul>
         </div>
       </div>

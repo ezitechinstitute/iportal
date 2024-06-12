@@ -48,6 +48,13 @@ const {
   GetManagerEmail,
 } = require("../controller/hr/get-instructorMail-controller");
 const { AddAmount } = require("../controller/hr/add-amount-controller");
+const {
+  GetManagerBalance,
+} = require("../controller/hr/get-balance-controller");
+const {
+  GetAdminBalance,
+} = require("../controller/admin/admin-balance-controller");
+const { AdminAuth } = require("../controller/admin/admin-auth-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -103,6 +110,8 @@ router.get("/get-instructor-emails", GetInstructorEmail);
 router.get("/get-manager-emails", GetManagerEmail);
 router.post("/add-amount", AddAmount);
 router.post("/get-intern-emails", GetInternsEmail);
+router.get("/get-manager-amount/:email", GetManagerBalance);
+router.get("/get-instructor-amount/:email", GetManagerBalance);
 
 /* Manager Endpoints */
 router.get("/get-manager-onsite", GetManagerOnsite);
@@ -116,6 +125,10 @@ router.post("/assign-portal", AssignPortal);
 
 /* Assign Project Endpoints */
 router.post("/assign-project", AssignProject);
+
+/* Admin Endpoint */
+router.post("/admin-auth", AdminAuth);
+router.get("/get-admin-balance", GetAdminBalance);
 
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);

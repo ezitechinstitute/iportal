@@ -10,6 +10,7 @@ import { AdminLogin } from "./pages/admin/AdminLogin";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { InstructorDashboard } from "./pages/instructor/InstructorDashboard";
 import { AddAmount } from "./pages/AddAmount";
+import { ManagerBalance } from "./pages/ManagerBalance";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route index path="/" element={<Login />} />
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
           <Route path="/add-amount" element={<AddAmount />} />
+          <Route path="/manager-balance" element={<ManagerBalance />} />
           <Route path="/onsite-interns" element={<Onsite />} />
           <Route path="/remote-interns" element={<Remote />} />
           <Route path="/test-interns" element={<Test />} />

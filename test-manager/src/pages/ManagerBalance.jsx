@@ -1,21 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { TopHeader } from "../components/TopHeader";
+import { Sidebar } from "../components/Sidebar";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { TopHeader } from "../../components/TopHeader";
-import { InstructorSidebar } from "../../components/InstructorSidebar";
+import { useParams } from "react-router-dom";
 
-export const InstructorDashboard = () => {
-  const navigate = useNavigate();
+export const ManagerBalance = () => {
   const [amount, setAmount] = useState(0);
-
-  const check = sessionStorage.getItem("isInstructorLoggedIn");
-
-  // useEffect(() => {
-  //   if (!check) {
-  //     navigate("/");
-  //   }
-  // });
-
   const localDate = new Date();
   const months = [
     "January",
@@ -34,10 +24,10 @@ export const InstructorDashboard = () => {
 
   const managerEmail = sessionStorage.getItem("email");
 
-  const GetnstructorAmount = async () => {
+  const GetManagerAmount = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8800/get-instructor-amount/${managerEmail}`
+        `http://localhost:8800/get-manager-amount/${managerEmail}`
       );
       console.log(res.data[0].balance);
       setAmount(res.data[0].balance);
@@ -47,14 +37,15 @@ export const InstructorDashboard = () => {
   };
 
   useEffect(() => {
-    GetnstructorAmount();
-  }, [GetnstructorAmount]);
+    GetManagerAmount();
+  }, [GetManagerAmount]);
+
   return (
     <>
       <div class="wrapper">
-        <InstructorSidebar />
+        <Sidebar />
         <div class="main">
-          <TopHeader role={"Instructor"} />
+          <TopHeader role={"Manager"} />
 
           <main class="content px-3 py-2">
             <div class="container-fluid">
@@ -71,29 +62,6 @@ export const InstructorDashboard = () => {
                     Home
                   </li>
                 </ol>
-              </div>
-              <div class="row">
-                <div class="col-12 d-flex">
-                  <div class="card flex-fill border-0 illustration shadow">
-                    <div class="card-body p-0 d-flex flex-fill">
-                      <div class="row g-0 w-100">
-                        <div class="col-6">
-                          <div class="p-3 m-1">
-                            <h4>Welcome, Instructor</h4>
-                            <p class="mb-0">Instructor Dashboard</p>
-                          </div>
-                        </div>
-                        <div class="col-6 align-self-end text-end">
-                          <img
-                            src="assets/images/customer-support.jpg"
-                            class="img-fluid illustration-img"
-                            alt=""
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
               <div class="card border-0 shadow">
                 <div class="card-header">
@@ -114,20 +82,6 @@ export const InstructorDashboard = () => {
               </div>
             </div>
           </main>
-
-          <footer class="footer border-top">
-            <div class="container-fluid">
-              <div class="row text-muted">
-                <div class="col-6 text-start p-3">
-                  <p class="mb-0">
-                    <a href="" class="text-muted">
-                      <strong>Manager Dashboard</strong>
-                    </a>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </footer>
         </div>
       </div>
     </>

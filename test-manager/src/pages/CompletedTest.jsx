@@ -8,6 +8,7 @@ export const CompletedTest = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
+  
 
   useEffect(() => {
     if (!check) {

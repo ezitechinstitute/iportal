@@ -3,32 +3,18 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { TopHeader } from "../../components/TopHeader";
 import { Sidebar } from "../../components/Sidebar";
+import { AdminSidebar } from "../../components/AdminSidebar";
 
 export const AdminDashboard = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState([]);
+  const [amount, setAmount] = useState(0);
   const check = sessionStorage.getItem("isAdminLoggedIn");
 
-  // useEffect(() => {
-  //   if (!check) {
-  //     navigate("/");
-  //   }
-  // });
-
-  // const getLatestRegister = async () => {
-  //   try {
-  //     const res = await axios.get("https://api.ezitech.org/get-latest-interns");
-  //     setData(res.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     getLatestRegister();
-  //   }, 2000);
-  // }, []);
+  useEffect(() => {
+    if (!check) {
+      navigate("/");
+    }
+  });
 
   const localDate = new Date();
   const months = [
@@ -45,10 +31,23 @@ export const AdminDashboard = () => {
     "November",
     "December",
   ];
+
+  const GetAdminAmout = async () => {
+    try {
+      const res = await axios.get("http://localhost:8800/get-admin-balance");
+      setAmount(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    GetAdminAmout();
+  }, [GetAdminAmout]);
   return (
     <>
       <div class="wrapper">
-        <Sidebar />
+        <AdminSidebar />
         <div class="main">
           <TopHeader role={"Admin"} />
 
@@ -100,14 +99,14 @@ export const AdminDashboard = () => {
                   <div class="card-body">
                     <div className="row">
                       <div className="col-sm-6 shadow rounded p-3">
-                        <h5>Ezitech Amount</h5>
+                        <h5>Ezitech Amount {months[localDate.getMonth()]}</h5>
                         <br />
-                        <h3>PKR-15000</h3>
+                        <h3>PKR-{amount.toLocaleString()}</h3>
                       </div>
                       <div className="col-sm-6 shadow rounded p-3">
                         <h5>Ezidonate</h5>
                         <br />
-                        <h3>PKR-1500</h3>
+                        <h3>PKR-0</h3>
                       </div>
                     </div>
                   </div>

@@ -9,6 +9,7 @@ export const Onsite = () => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
 
+
   useEffect(() => {
     if (!check) {
       navigate("/");
@@ -67,13 +68,15 @@ export const Onsite = () => {
   // };
 
   const RemoveOnsite = (email) => {
-    axios.post("https://api.ezitech.org/remove-intern", { email }).then((res) => {
-      if (res.data === 1) {
-        alert("Removed Successfully");
-      } else {
-        alert("Something Went Wrong!!!");
-      }
-    });
+    axios
+      .post("https://api.ezitech.org/remove-intern", { email })
+      .then((res) => {
+        if (res.data === 1) {
+          alert("Removed Successfully");
+        } else {
+          alert("Something Went Wrong!!!");
+        }
+      });
   };
 
   const AssignPortal = (name, email, phone, technology) => {

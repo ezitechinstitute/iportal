@@ -23,8 +23,8 @@ export const Login = () => {
             res.data.isLoggedIn === true &&
             res.data.user[0].loginas === "Manager"
           ) {
-            // sessionStorage.setItem("username", res.data[0].name);
-            // sessionStorage.setItem("email", res.data[0].email);
+            sessionStorage.setItem("username", res.data.user[0].name);
+            sessionStorage.setItem("email", res.data.user[0].email);
             sessionStorage.setItem("isLoggedIn", true);
             alert("Login Successfully");
             navigate("/manager-dashboard");
@@ -32,11 +32,13 @@ export const Login = () => {
             res.data.isLoggedIn === true &&
             res.data.user[0].loginas === "Instructor"
           ) {
+            sessionStorage.setItem("username", res.data.user[0].name);
+            sessionStorage.setItem("email", res.data.user[0].email);
             sessionStorage.setItem("isInstructorLoggedIn", true);
             alert("Login Successfully");
             navigate("/instructor-dashboard");
-
-            // alert("Invalid User!!!");
+          } else {
+            alert("Invalid User!!!");
           }
         });
     } else {
