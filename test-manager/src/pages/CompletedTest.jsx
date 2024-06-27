@@ -8,7 +8,6 @@ export const CompletedTest = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
-  
 
   useEffect(() => {
     if (!check) {
@@ -53,12 +52,12 @@ export const CompletedTest = () => {
     }
   }
 
-  const RemoveTestIntern = (email) => {
+  const RemoveCompletedIntern = (email) => {
     axios
-      .post("https://api.ezitech.org/remove-intern", { email })
+      .post("https://api.ezitech.org//remove-completed", { email })
       .then((res) => {
-        if (res.data === 1) {
-          alert("Removed Successfully");
+        if (res.data.status) {
+          alert(res.data.msg);
         } else {
           alert("Something Went Wrong!!!");
         }
@@ -135,7 +134,7 @@ export const CompletedTest = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {records.map((rs) => {
+                        {data.map((rs) => {
                           const {
                             id,
                             name,
@@ -186,7 +185,7 @@ export const CompletedTest = () => {
                                           href="#"
                                           type="button"
                                           onClick={() =>
-                                            RemoveTestIntern(email)
+                                            RemoveCompletedIntern(email)
                                           }
                                         >
                                           Remove

@@ -50,9 +50,22 @@ const GetTestComplete = (req, res) => {
   });
 };
 
+const RemoveCompletedInterns = (req, res) => {
+  const { email } = req.body;
+  const sql = "DELETE FROM `complete_test` WHERE `email` = ?";
+  connection.query(sql, [email], (err, data) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      return res.json({ status: true, msg: "Removed Successfully" });
+    }
+  });
+};
+
 module.exports = {
   AssignTest,
   RemoveIntern,
   GetInterview,
   GetTestComplete,
+  RemoveCompletedInterns,
 };

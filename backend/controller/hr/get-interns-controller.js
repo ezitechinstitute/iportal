@@ -48,6 +48,7 @@ const GetTestIntern = (req, res) => {
 
 
 
+
 module.exports = {
     GetLatestRegister,
     GetOnsiteInterview,

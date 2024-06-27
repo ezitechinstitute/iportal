@@ -9,6 +9,7 @@ const {
   AssignTest,
   RemoveIntern,
   GetTestComplete,
+  RemoveCompletedInterns,
 } = require("../controller/hr/hr-interview-controller");
 const {
   GetLatestRegister,
@@ -102,6 +103,7 @@ router.get("/get-latest-interns", GetLatestRegister);
 router.get("/get-onsite-interns", GetOnsiteInterview);
 router.post("/update-intern-status", AssignTest);
 router.post("/remove-intern", RemoveIntern);
+router.post("/remove-completed", RemoveCompletedInterns);
 router.get("/get-remote-interns", GetRemoteInterview);
 router.get("/get-test-interns", GetTestIntern);
 router.post("/active-portal", ActivePortal);
