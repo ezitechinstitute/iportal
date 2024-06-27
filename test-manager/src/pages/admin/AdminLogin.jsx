@@ -12,7 +12,7 @@ export const AdminLogin = () => {
   // https://api.ezitech.org/manager-auth
   const Login = () => {
     if (value.email !== undefined && value.password !== undefined) {
-      axios.post("http://localhost:8800/admin-auth", { value }).then((res) => {
+      axios.post("https://api.ezitech.org/admin-auth", { value }).then((res) => {
         if (res.data.isLoggedIn === true) {
           sessionStorage.setItem("username", res.data.user[0].name);
           sessionStorage.setItem("email", res.data.user[0].email);
