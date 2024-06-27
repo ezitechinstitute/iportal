@@ -27,7 +27,7 @@ export const ManagerBalance = () => {
   const GetManagerAmount = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8800/get-manager-amount/${managerEmail}`
+        `https://api.ezitech.org/get-manager-amount/${managerEmail}`
       );
       console.log(res.data[0].balance);
       setAmount(res.data[0].balance);
