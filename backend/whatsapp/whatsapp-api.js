@@ -43,17 +43,16 @@ We are delighted to inform you that your registration was successful. Welcome to
 
 Interview Process Details:
 
-Onsite Interview:
+Our team contact with you as soon as possible.
 
-Days: Monday to Friday
-Time: 11:00Am to 3:00Pm
-Location: https://maps.app.goo.gl/Q78i6r1DifnBWJtA8
+Meeting Platform: WhatsApp
 
 If you have any questions or need further assistance, feel free to reach out to us at +1 (737) 235-7111.
 
 We look forward to meeting you during the interview process!
 
-Best regards`,
+Best regards
+  `,
       instance_id: "6640DB6188172",
       access_token: "6635ec7382039",
     });
