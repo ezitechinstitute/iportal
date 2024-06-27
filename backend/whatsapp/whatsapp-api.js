@@ -1,5 +1,5 @@
 // const axios = require("axios");
-const axios = require('axios/dist/node/axios.cjs');
+const axios = require("axios/dist/node/axios.cjs");
 
 async function SendMessageRemote(phone) {
   try {
@@ -83,9 +83,8 @@ Please follow these steps to log in:
 
 1. Click on the portal link above or copy and paste it into your browser.
 2. Enter your email address and temporary password.
-3. Please update your password.
 
-If you encounter any issues while logging in or have any questions, feel free to reach out at help@ezietch.org
+If you encounter any issues while logging in or have any questions, feel free to reach out at help@ezitech.org
 
 Best regards`,
       instance_id: "6640DB980CC35",
