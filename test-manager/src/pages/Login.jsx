@@ -17,7 +17,7 @@ export const Login = () => {
       value.loginAs !== undefined
     ) {
       axios
-        .post("http://localhost:8800/manager-auth", { value })
+        .post("https://api.ezitech.org/manager-auth", { value })
         .then((res) => {
           if (
             res.data.isLoggedIn === true &&

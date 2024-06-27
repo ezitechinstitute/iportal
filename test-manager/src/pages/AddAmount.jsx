@@ -29,7 +29,7 @@ export const AddAmount = () => {
   const GetInstructorEmails = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8800/get-instructor-emails"
+        "https://api.ezitech.org/get-instructor-emails"
       );
       setInstructorMail(res.data);
     } catch (error) {
@@ -39,7 +39,7 @@ export const AddAmount = () => {
 
   const GetManagerEmails = async () => {
     try {
-      const res = await axios.get("http://localhost:8800/get-manager-emails");
+      const res = await axios.get("https://api.ezitech.org/get-manager-emails");
       setManagerMail(res.data);
     } catch (error) {
       console.log(error);
@@ -63,9 +63,12 @@ export const AddAmount = () => {
 
   const fetchSuggestions = async (queryFinal) => {
     try {
-      const res = await axios.post("http://localhost:8800/get-intern-emails", {
-        queryFinal,
-      });
+      const res = await axios.post(
+        "https://api.ezitech.org/get-intern-emails",
+        {
+          queryFinal,
+        }
+      );
       //   const data = await res.json();
       setSuggestions(res.data);
     } catch (error) {
@@ -87,7 +90,7 @@ export const AddAmount = () => {
       data.internEmail !== undefined
     ) {
       axios
-        .post("http://localhost:8800/add-amount", { data })
+        .post("https://api.ezitech.org/add-amount", { data })
         .then((res) => {
           console.log(res.data);
           alert(res.data);

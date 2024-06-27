@@ -37,7 +37,7 @@ export const InstructorDashboard = () => {
   const GetnstructorAmount = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8800/get-instructor-amount/${managerEmail}`
+        `https://api.ezitech.org/get-instructor-amount/${managerEmail}`
       );
       console.log(res.data[0].balance);
       setAmount(res.data[0].balance);
