@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./InternTopbar.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const InternTopbar = () => {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export const InternTopbar = () => {
           setMessage("Attendance Marked");
         }
         // else if(res.data.notMarked){
-          // setShiftStarted("checkin")
+        // setShiftStarted("checkin")
         // }
       });
   }, []);
@@ -131,7 +131,9 @@ export const InternTopbar = () => {
                   </button>
                 )} */}
                 {user.status === "Test" ? (
-                  <button className="btn btn-warning">{user.status}</button>
+                  <Link to={"/intern-test"}>
+                    <button className="btn btn-warning">{user.status}</button>
+                  </Link>
                 ) : (
                   <>
                     {shiftStarted === "checkin" && (
