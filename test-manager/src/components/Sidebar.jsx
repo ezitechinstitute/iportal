@@ -2,13 +2,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 export const Sidebar = () => {
-  const [check, setCheck] = useState(false);
-  const userEmail = sessionStorage.getItem("email");
-
-  if (userEmail === "kashif@ezitech.org") {
-    setCheck(true);
-  }
-
   return (
     <>
       <div id="sidebar">
@@ -48,16 +41,12 @@ export const Sidebar = () => {
                 class="sidebar-dropdown list-unstyled collapse"
                 data-bs-parent="#sidebar"
               >
-                {check ? (
-                  " "
-                ) : (
-                  <li class="sidebar-item">
-                    <Link to="/onsite-interns" class="sidebar-link">
-                      <i class="fa-solid fa-users pe-2"></i>
-                      Onsite
-                    </Link>
-                  </li>
-                )}
+                <li class="sidebar-item">
+                  <Link to="/onsite-interns" class="sidebar-link">
+                    <i class="fa-solid fa-users pe-2"></i>
+                    Onsite
+                  </Link>
+                </li>
 
                 <li class="sidebar-item">
                   <Link to="/remote-interns" class="sidebar-link">

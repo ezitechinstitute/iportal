@@ -13,9 +13,19 @@ const GetLatestRegister = (req, res) => {
         return res.json(data);
       }
     });
-  } else {
+  } else if (email === "kashif@ezitech.org") {
     const sql =
-      "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') ORDER BY `id` DESC LIMIT 5";
+      "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' ORDER BY `id` DESC LIMIT 5";
+    connection.query(sql, (err, data) => {
+      if (err) {
+        return res.json(err);
+      } else {
+        return res.json(data);
+      }
+    });
+  } else if (email === "muzammil@ezitech.org") {
+    const sql =
+      "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' ORDER BY `id` DESC LIMIT 5";
     connection.query(sql, (err, data) => {
       if (err) {
         return res.json(err);
@@ -39,7 +49,7 @@ const GetOnsiteInterview = (req, res) => {
         return res.json(data);
       }
     });
-  } else {
+  } else if (email === "muzammil@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview' ORDER BY `id` DESC";
     connection.query(sql, (err, data) => {
@@ -66,7 +76,7 @@ const GetRemoteInterview = (req, res) => {
         return res.json(data);
       }
     });
-  } else {
+  } else if (email === "kashif@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' AND `status` = 'Interview' ORDER BY `id` DESC";
 
@@ -93,9 +103,19 @@ const GetTestIntern = (req, res) => {
         return res.json(data);
       }
     });
-  } else {
+  } else if (email === "kashif@ezitech.org") {
     const sql =
-      "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `status` = 'Test'";
+      "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' AND `status` = 'Test'";
+    connection.query(sql, (err, data) => {
+      if (err) {
+        return res.json(err);
+      } else {
+        return res.json(data);
+      }
+    });
+  } else if (email === "muzammil@ezitech.org") {
+    const sql =
+      "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Test'";
     connection.query(sql, (err, data) => {
       if (err) {
         return res.json(err);
