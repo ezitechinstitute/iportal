@@ -8,6 +8,7 @@ export const Onsite = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
+  const userEmail = sessionStorage.getItem("email");
 
 
   useEffect(() => {
@@ -18,7 +19,7 @@ export const Onsite = () => {
 
   const getOnsiteRegister = async () => {
     try {
-      const res = await axios.get("https://api.ezitech.org/get-onsite-interns");
+      const res = await axios.get(`https://api.ezitech.org/get-onsite-interns/${userEmail}`);
       setData(res.data);
     } catch (error) {
       console.log(error);

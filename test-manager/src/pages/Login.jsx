@@ -9,7 +9,7 @@ export const Login = () => {
   const handleInput = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });
   };
-
+  // https://api.ezitech.org
   const Login = () => {
     if (
       value.email !== undefined &&

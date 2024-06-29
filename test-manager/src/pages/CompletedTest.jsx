@@ -8,6 +8,7 @@ export const CompletedTest = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
+  const userEmail = sessionStorage.getItem("email");
 
   useEffect(() => {
     if (!check) {
@@ -17,7 +18,9 @@ export const CompletedTest = () => {
 
   const getTestComplete = async () => {
     try {
-      const res = await axios.get("https://api.ezitech.org/get-test-complete");
+      const res = await axios.get(
+        `https://api.ezitech.org/get-test-complete/${userEmail}`
+      );
       setData(res.data);
     } catch (error) {
       console.log(error);

@@ -8,6 +8,8 @@ export const Remote = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
+  const userEmail = sessionStorage.getItem("email");
+
 
   useEffect(() => {
     if (!check) {
@@ -17,7 +19,7 @@ export const Remote = () => {
 
   const getRemoteRegister = async () => {
     try {
-      const res = await axios.get("https://api.ezitech.org/get-remote-interns");
+      const res = await axios.get(`https://api.ezitech.org/get-remote-interns/${userEmail}`);
       setData(res.data);
     } catch (error) {
       console.log(error);

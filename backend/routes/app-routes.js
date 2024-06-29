@@ -16,6 +16,8 @@ const {
   GetOnsiteInterview,
   GetRemoteInterview,
   GetTestIntern,
+  GetUmairInternsOnsite,
+  GetUmairInternsRemote,
 } = require("../controller/hr/get-interns-controller");
 const {
   GetManagerOnsite,
@@ -98,16 +100,16 @@ router.post("/manager-auth", HrAuth);
 // router.post("/manager-avatar", ManagerAvatar);
 // router.post("/manager-forgot-password", ManagerForgotPassword);
 
-/* HR Endpoints */
-router.get("/get-latest-interns", GetLatestRegister);
-router.get("/get-onsite-interns", GetOnsiteInterview);
+/* HR All Endpoints */
+router.get("/get-latest-interns/:email", GetLatestRegister);
+router.get("/get-onsite-interns/:email", GetOnsiteInterview);
 router.post("/update-intern-status", AssignTest);
 router.post("/remove-intern", RemoveIntern);
 router.post("/remove-completed", RemoveCompletedInterns);
-router.get("/get-remote-interns", GetRemoteInterview);
-router.get("/get-test-interns", GetTestIntern);
+router.get("/get-remote-interns/:email", GetRemoteInterview);
+router.get("/get-test-interns/:email", GetTestIntern);
 router.post("/active-portal", ActivePortal);
-router.get("/get-test-complete", GetTestComplete);
+router.get("/get-test-complete/:email", GetTestComplete);
 router.get("/get-instructor-emails", GetInstructorEmail);
 router.get("/get-manager-emails", GetManagerEmail);
 router.post("/add-amount", AddAmount);
