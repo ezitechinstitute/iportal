@@ -8,6 +8,8 @@ export const ManagerDashboard = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const check = sessionStorage.getItem("isLoggedIn");
+  const userEmail = sessionStorage.getItem("email");
+
 
   useEffect(() => {
     if (!check) {
@@ -17,7 +19,7 @@ export const ManagerDashboard = () => {
 
   const getLatestRegister = async () => {
     try {
-      const res = await axios.get("https://api.ezitech.org/get-latest-interns");
+      const res = await axios.get(`https://api.ezitech.org/get-latest-interns/${userEmail}`);
       setData(res.data);
     } catch (error) {
       console.log(error);

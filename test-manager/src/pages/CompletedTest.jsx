@@ -57,7 +57,7 @@ export const CompletedTest = () => {
 
   const RemoveCompletedIntern = (email) => {
     axios
-      .post("https://api.ezitech.org//remove-completed", { email })
+      .post("https://api.ezitech.org/remove-completed", { email })
       .then((res) => {
         if (res.data.status) {
           alert(res.data.msg);
