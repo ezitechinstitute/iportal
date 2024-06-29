@@ -13,7 +13,9 @@ const GetLatestRegister = (req, res) => {
         return res.json(data);
       }
     });
-  } else if (email === "kashif@ezitech.org") {
+  }
+
+  if (email === "kashif@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' ORDER BY `id` DESC LIMIT 5";
     connection.query(sql, (err, data) => {
@@ -23,7 +25,9 @@ const GetLatestRegister = (req, res) => {
         return res.json(data);
       }
     });
-  } else if (email === "muzammil@ezitech.org") {
+  }
+
+  if (email === "muzammil@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' ORDER BY `id` DESC LIMIT 5";
     connection.query(sql, (err, data) => {
