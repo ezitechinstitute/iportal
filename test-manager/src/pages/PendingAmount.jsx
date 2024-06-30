@@ -37,7 +37,7 @@ export const PendingAmount = () => {
                     <a href="#">Dashboard</a>
                   </li>
                   <li class="breadcrumb-item active" aria-current="page">
-                    Onsite
+                    Pending Amount
                   </li>
                 </ol>
               </div>
@@ -87,7 +87,7 @@ export const PendingAmount = () => {
               </div>
               <div class="card border-0 shadow">
                 <div class="card-header">
-                  <div class="card-title">Onsite Registrations</div>
+                  <div class="card-title">Pending Amount</div>
 
                   <div class="card-body overflow-x-scroll">
                     <table class="table">
@@ -101,7 +101,7 @@ export const PendingAmount = () => {
                       <tbody>
                         {Array.isArray(data)
                           ? data.map((rs) => {
-                              const { id, name, email, remaining_amount } = rs;
+                              const { id, email, remaining_amount } = rs;
 
                               return (
                                 <>
