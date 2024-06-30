@@ -22,6 +22,11 @@ export const Sidebar = () => {
               </Link>
             </li>
             <li class="sidebar-item">
+              <Link to="/pending-amount" class="sidebar-link">
+                <i class="fa-solid fa-dollar pe-2"></i>Pending Amount
+              </Link>
+            </li>
+            <li class="sidebar-item">
               <Link to="/manager-balance" class="sidebar-link">
                 <i class="fa-solid fa-dollar pe-2"></i>Your Balance
               </Link>

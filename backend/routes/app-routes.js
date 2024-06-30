@@ -58,6 +58,7 @@ const {
   GetAdminBalance,
 } = require("../controller/admin/admin-balance-controller");
 const { AdminAuth } = require("../controller/admin/admin-auth-controller");
+const { GetPendingAmount } = require("../controller/hr/get-pending-amount");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -116,6 +117,7 @@ router.post("/add-amount", AddAmount);
 router.post("/get-intern-emails", GetInternsEmail);
 router.get("/get-manager-amount/:email", GetManagerBalance);
 router.get("/get-instructor-amount/:email", GetManagerBalance);
+router.get("/pending-amount", GetPendingAmount);
 
 /* Manager Endpoints */
 router.get("/get-manager-onsite", GetManagerOnsite);
