@@ -8,7 +8,7 @@ export const PendingAmount = () => {
 
   const GetPendingAmount = async () => {
     try {
-      const res = await axios.get("http://api.ezitech.org/pending-amount");
+      const res = await axios.get("https://api.ezitech.org/pending-amount");
       setData(res.data);
     } catch (error) {
       console.log(error);
