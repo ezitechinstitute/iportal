@@ -152,7 +152,14 @@ export const Register = () => {
     <>
       {/* <!-- BEGIN: Content--> */}
 
-      <div className="content-wrapper" style={{backgroundImage: "url(images/bg.jpg)", backgroundSize: 'cover', backgroundRepeat: 'no-repeat'}}>
+      <div
+        className="content-wrapper"
+        style={{
+          backgroundImage: "url(images/bg.jpg)",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <div className="content-header row"></div>
         <div className="content-body">
           <div className="auth-wrapper auth-v1 px-2">
@@ -679,6 +686,10 @@ export const Register = () => {
                                 <option value="University of Sialkot">
                                   University of Sialkot
                                 </option>
+
+                                <option value="Gomal University">
+                                  Gomal University
+                                </option>
                               </select>
                             </div>
                           </div>
@@ -767,13 +778,16 @@ export const Register = () => {
                                 <option value="PHP Development">
                                   PHP Development
                                 </option>
+                                <option value="WordPress Development">
+                                  WordPress Development
+                                </option>
                                 <option value="Java Development">
                                   Java Development
                                 </option>
                                 <option value="Python Development">
                                   Python Development
                                 </option>
-                                <option value="Ruby on Rails">
+                                <option disabled value="Ruby on Rails">
                                   Ruby on Rails
                                 </option>
                                 <option value="Mobile Development">
@@ -782,17 +796,17 @@ export const Register = () => {
                                 <option value="Data Science">
                                   Data Science
                                 </option>
-                                <option value="Cloud Computing">
+                                <option disabled value="Cloud Computing">
                                   Cloud Computing
                                 </option>
                                 <option value="Machine Learning">
                                   Machine Learning
                                 </option>
-                                <option value="Blockchain Development">
+                                <option disabled value="Blockchain Development">
                                   Blockchain Development
                                 </option>
-                                <option value="DevOps">DevOps</option>
-                                <option value="Cybersecurity">
+                                <option disabled value="DevOps">DevOps</option>
+                                <option disabled value="Cybersecurity">
                                   Cybersecurity
                                 </option>
                                 <option value="Graphic Design">
@@ -804,7 +818,7 @@ export const Register = () => {
                                 <option value="Digital Marketing">
                                   Digital Marketing
                                 </option>
-                                <option value="UI/UX Design">
+                                <option disabled value="UI/UX Design">
                                   UI/UX Design
                                 </option>
                                 <option value="Content Writing">
