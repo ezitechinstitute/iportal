@@ -17,7 +17,7 @@ Our team contact with you as soon as possible.
 
 Meeting Platform: WhatsApp
 
-If you have any questions or need further assistance, feel free to reach out to us at +1 (737) 235-7111.
+If you have any questions or need further assistance, feel free to reach out to us at help@ezitech.org
 
 We look forward to meeting you during the interview process!
 
@@ -47,7 +47,7 @@ Our team contact with you as soon as possible.
 
 Meeting Platform: WhatsApp
 
-If you have any questions or need further assistance, feel free to reach out to us at +1 (737) 235-7111.
+If you have any questions or need further assistance, feel free to reach out to us at help@ezitech.org
 
 We look forward to meeting you during the interview process!
 
