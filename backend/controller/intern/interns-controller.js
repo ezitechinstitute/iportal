@@ -79,18 +79,19 @@ const RegisterInterns = (req, res) => {
           } else {
             if (data.affectedRows === 1) {
               if (interviewType === "Remote") {
-                createQueueRemote(internPhone);
                 if (
                   internTechnology === "Digital Marketing" ||
                   internTechnology === "Search Engine Optimization (SEO)" ||
                   internTechnology === "WordPress Development"
                 ) {
+                  createOtherQueue(internPhone);
                   setInterval(() => {
-                    if (dataRemote.length > 0) {
-                      SendMessageOther(getRemoteQueue().slice(1, 13));
+                    if (dataOther.length > 0) {
+                      SendMessageOther(getOtherQueue().slice(1, 13));
                     }
                   }, 60000);
                 } else {
+                  createQueueRemote(internPhone);
                   setInterval(() => {
                     if (dataRemote.length > 0) {
                       SendMessageRemote(getRemoteQueue().slice(1, 13));
@@ -105,18 +106,19 @@ const RegisterInterns = (req, res) => {
                 //   interviewTime
                 // );
               } else {
-                createQueueOnsite(internPhone);
                 if (
                   internTechnology === "Digital Marketing" ||
                   internTechnology === "Search Engine Optimization (SEO)" ||
                   internTechnology === "WordPress Development"
                 ) {
+                  createOtherQueue(internPhone);
                   setInterval(() => {
-                    if (dataRemote.length > 0) {
+                    if (dataOther.length > 0) {
                       SendMessageOther(getRemoteQueue().slice(1, 13));
                     }
                   }, 60000);
                 } else {
+                  createQueueOnsite(internPhone);
                   setInterval(() => {
                     if (dataOnsite.length > 0) {
                       SendMessageOnsite(getOnisteQueue().slice(1, 13));
@@ -142,6 +144,7 @@ const RegisterInterns = (req, res) => {
 
 let dataOnsite = [];
 let dataRemote = [];
+let dataOther = [];
 
 function createQueueOnsite(number) {
   dataOnsite.push(number);
@@ -157,6 +160,14 @@ function createQueueRemote(number) {
 
 function getRemoteQueue() {
   return dataRemote.pop();
+}
+
+function createOtherQueue(number) {
+  dataOther.push(number);
+}
+
+function getOtherQueue() {
+  return dataOther.pop();
 }
 
 module.exports = { RegisterInterns };
