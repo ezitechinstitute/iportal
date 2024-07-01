@@ -13,7 +13,11 @@ const GetAdminBalance = (req, res) => {
       return res.json(err);
     } else {
       //   console.log(data);
-      return res.json(data[0].total_amount);
+      if (data[0].total_amount === null) {
+        console.log("Null");
+      } else {
+        return res.json(data[0].total_amount);
+      }
     }
   });
 };
