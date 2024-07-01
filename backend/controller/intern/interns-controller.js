@@ -7,6 +7,7 @@ const {
 const {
   SendMessageRemote,
   SendMessageOnsite,
+  SendMessageOther,
 } = require("../../whatsapp/whatsapp-api.js");
 const dotenv = require("dotenv").config();
 
@@ -79,6 +80,23 @@ const RegisterInterns = (req, res) => {
             if (data.affectedRows === 1) {
               if (interviewType === "Remote") {
                 createQueueRemote(internPhone);
+                if (
+                  internTechnology === "Digital Marketing" ||
+                  internTechnology === "Search Engine Optimization (SEO)" ||
+                  internTechnology === "WordPress Development"
+                ) {
+                  setInterval(() => {
+                    if (dataRemote.length > 0) {
+                      SendMessageOther(getRemoteQueue().slice(1, 13));
+                    }
+                  }, 60000);
+                } else {
+                  setInterval(() => {
+                    if (dataRemote.length > 0) {
+                      SendMessageRemote(getRemoteQueue().slice(1, 13));
+                    }
+                  }, 60000);
+                }
 
                 // SendMailRemote(
                 //   internUsername,
@@ -86,20 +104,27 @@ const RegisterInterns = (req, res) => {
                 //   interviewDate,
                 //   interviewTime
                 // );
-                setInterval(() => {
-                  if (dataRemote.length > 0) {
-                    SendMessageRemote(getRemoteQueue().slice(1, 13));
-                  }
-                }, 60000);
               } else {
                 createQueueOnsite(internPhone);
+                if (
+                  internTechnology === "Digital Marketing" ||
+                  internTechnology === "Search Engine Optimization (SEO)" ||
+                  internTechnology === "WordPress Development"
+                ) {
+                  setInterval(() => {
+                    if (dataRemote.length > 0) {
+                      SendMessageOther(getRemoteQueue().slice(1, 13));
+                    }
+                  }, 60000);
+                } else {
+                  setInterval(() => {
+                    if (dataOnsite.length > 0) {
+                      SendMessageOnsite(getOnisteQueue().slice(1, 13));
+                    }
+                  }, 60000);
+                }
                 // getOnisteQueue();
 
-                setInterval(() => {
-                  if (dataOnsite.length > 0) {
-                    SendMessageOnsite(getOnisteQueue().slice(1, 13));
-                  }
-                }, 60000);
                 // SendMailOnsite(internUsername, internemail);
               }
 

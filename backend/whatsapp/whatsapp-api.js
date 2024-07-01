@@ -61,6 +61,36 @@ Best regards
   }
 }
 
+async function SendMessageOther(phone) {
+  try {
+    const response = await axios.post("https://mkt.eziline.com/api/send", {
+      number: phone,
+      type: "text",
+      message: `
+Registration Successful! Interview Process Details
+
+We are delighted to inform you that your registration was successful. Welcome to Ezitech's platform/community!🎉
+
+Interview Process Details:
+
+Our team contact with you as soon as possible.
+
+Meeting Platform: WhatsApp
+
+If you have any questions or need further assistance, feel free to reach out to us at help@ezitech.org
+
+We look forward to meeting you during the interview process!
+
+Best regards
+  `,
+      instance_id: "6682624207C62",
+      access_token: "6635ec7382039",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 async function SendMessageAssignPortal(phone, name, email, password) {
   try {
     const response = await axios.post("https://mkt.eziline.com/api/send", {
@@ -98,5 +128,6 @@ Best regards`,
 module.exports = {
   SendMessageRemote,
   SendMessageOnsite,
+  SendMessageOther,
   SendMessageAssignPortal,
 };
