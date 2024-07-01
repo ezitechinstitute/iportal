@@ -35,7 +35,11 @@ export const AdminDashboard = () => {
   const GetAdminAmout = async () => {
     try {
       const res = await axios.get("https://api.ezitech.org/get-admin-balance");
-      setAmount(res.data);
+      if (res.data === null) {
+        setAmount(0);
+      } else {
+        setAmount(res.data);
+      }
     } catch (error) {
       console.log(error);
     }
