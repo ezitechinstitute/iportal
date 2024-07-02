@@ -1,7 +1,7 @@
 const { connection } = require("../../config/connection");
 
 const GetPendingAmount = (req, res) => {
-  const sql = "SELECT * FROM `intern_remaining_amounts` WHERE `remaining_amount` = 2000.00";
+  const sql = "SELECT * FROM `intern_remaining_amounts`";
   connection.query(sql, (err, data) => {
     if (err) {
       return res.json(err);

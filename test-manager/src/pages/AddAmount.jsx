@@ -7,14 +7,19 @@ import { useNavigate } from "react-router-dom";
 export const AddAmount = () => {
   const navigate = useNavigate();
   const [instructorMail, setInstructorMail] = useState([]);
-  const [managerMail, setManagerMail] = useState([]);
+  // const [managerMail, setManagerMail] = useState([]);
   const [data, setData] = useState({});
 
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [selected, setSelected] = useState(false);
 
+  const [phoneQuery, setPhoneQuery] = useState("");
+  const [phoneSuggestions, setPhoneSuggestions] = useState([]);
+  const [selectedPhone, setSelectedPhone] = useState(false);
+
   const check = sessionStorage.getItem("isLoggedIn");
+  const managerEmail = sessionStorage.getItem("email");
 
   useEffect(() => {
     if (!check) {
@@ -37,19 +42,10 @@ export const AddAmount = () => {
     }
   };
 
-  const GetManagerEmails = async () => {
-    try {
-      const res = await axios.get("https://api.ezitech.org/get-manager-emails");
-      setManagerMail(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     GetInstructorEmails();
-    GetManagerEmails();
-  }, [GetInstructorEmails, GetManagerEmails]);
+    // GetManagerEmails();
+  }, [GetInstructorEmails]);
 
   const handleQuery = async (e) => {
     const value = e.target.value;
@@ -58,6 +54,16 @@ export const AddAmount = () => {
       fetchSuggestions(value);
     } else {
       setSuggestions([]);
+    }
+  };
+
+  const handlePhoneQuery = async (e) => {
+    const value = e.target.value;
+    setPhoneQuery(value);
+    if (value.length > 2) {
+      fetchPhone(value);
+    } else {
+      setPhoneSuggestions([]);
     }
   };
 
@@ -76,32 +82,58 @@ export const AddAmount = () => {
     }
   };
 
+  const fetchPhone = async (finalPhone) => {
+    try {
+      const res = await axios.post("http://localhost:8800/get-intern-phone", {
+        finalPhone,
+      });
+      console.log(res.data);
+      setPhoneSuggestions(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const selectEmail = (e) => {
     setQuery(e);
     setData({ ...data, internEmail: e });
     setSelected(true);
   };
 
-  const SubmitAmount = () => {
+  const selectPhone = (e) => {
+    setPhoneQuery(e);
+    setData({ ...data, internPhone: e });
+    setSelectedPhone(true);
+  };
+  // https://api.ezitech.org/add-amount
+  const SubmitAmount = (e) => {
+    e.preventDefault();
+    setData({ ...data, managerMail: managerEmail });
+    // console.log(data);
+
     if (
       data.amount !== undefined &&
       data.instructorEmail !== undefined &&
-      data.managerEmail !== undefined &&
       data.internEmail !== undefined
     ) {
-      axios
-        .post("https://api.ezitech.org/add-amount", { data })
-        .then((res) => {
-          console.log(res.data);
-          alert(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (data.managerMail !== undefined) {
+        axios
+          .post("https://api.ezitech.org/add-amount", { data })
+          .then((res) => {
+            alert(res.data);
+            window.location.reload();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        alert("Are you sure?");
+      }
     } else {
       alert("Fill Empty Fields First!!!");
     }
   };
+
   return (
     <>
       <div className="wrapper">
@@ -161,7 +193,7 @@ export const AddAmount = () => {
                         </select>
                       </div>
 
-                      <div className="col-sm-3">
+                      {/* <div className="col-sm-3">
                         <label htmlFor="">Manager Email</label>
                         <select
                           name="managerEmail"
@@ -178,7 +210,7 @@ export const AddAmount = () => {
                               ))
                             : " "}
                         </select>
-                      </div>
+                      </div> */}
 
                       <div className="col-sm-3">
                         <label for="email-id-column">Intern Email</label>
@@ -203,6 +235,36 @@ export const AddAmount = () => {
                                     style={{ cursor: "pointer" }}
                                   >
                                     {email.email}
+                                  </li>
+                                </>
+                              ))
+                            : " "}
+                        </ul>
+                      </div>
+
+                      <div className="col-sm-3">
+                        <label for="email-id-column">Intern Phone</label>
+                        <input
+                          type="text"
+                          id="email-id-column"
+                          value={phoneQuery}
+                          onChange={handlePhoneQuery}
+                          className="form-control"
+                          name="phone"
+                          placeholder="Search Intern Phone"
+                        />
+
+                        <ul style={{ listStyle: "none" }}>
+                          {!selectedPhone
+                            ? phoneSuggestions.map((phone, index) => (
+                                <>
+                                  <li
+                                    className="border shadow rounded p-1"
+                                    key={index}
+                                    onClick={() => selectPhone(phone.phone)}
+                                    style={{ cursor: "pointer" }}
+                                  >
+                                    {phone.phone}
                                   </li>
                                 </>
                               ))

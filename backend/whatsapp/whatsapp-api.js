@@ -125,9 +125,138 @@ Best regards`,
   }
 }
 
+async function SendInvoiceTotal(
+  phone,
+  i_mail,
+  i_id,
+  i_date,
+  t_amount,
+  rec_amount,
+  m_mail
+) {
+  try {
+    const response = await axios.post("https://mkt.eziline.com/api/send", {
+      number: phone,
+      type: "text",
+      message: `
+💵 Payment Invoice 💵
+
+Dear ${i_mail},
+
+You have successfully completed your payment.
+
+Invoice ID: ${i_id}
+Created Date: ${i_date}
+
+Payment Details:
+
+Total Amount Rs: ${t_amount}
+Received Amount Rs: ${rec_amount}
+
+Received By: ${m_mail}
+
+Regards :
+Ezitech Institute`,
+      instance_id: "6640DB980CC35",
+      access_token: "6635ec7382039",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function SendInvoiceRemaining(
+  phone,
+  i_mail,
+  i_id,
+  i_date,
+  t_amount,
+  rec_amount,
+  rem_amount,
+  d_date,
+  m_mail
+) {
+  try {
+    const response = await axios.post("https://mkt.eziline.com/api/send", {
+      number: phone,
+      type: "text",
+      message: `
+💵 Payment Invoice 💵
+
+Dear ${i_mail},
+
+You have successfully completed your payment.
+
+Invoice ID: ${i_id}
+Created Date: ${i_date}
+
+Payment Details:
+
+Total Amount Rs: ${t_amount}
+Received Amount Rs: ${rec_amount}
+Remaining Amount Rs: ${rem_amount}
+Due Date: ${d_date};
+
+NOTE: We kindly request you to clear the remaining amount of Rs: ${rem_amount} before the due date of ${d_date}. Otherwise, your iportal deactivate. 
+
+Received By: ${m_mail}
+
+Regards :
+Ezitech Institute`,
+      instance_id: "6640DB980CC35",
+      access_token: "6635ec7382039",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function SendInvoiceOther(
+  phone,
+  i_mail,
+  i_id,
+  i_date,
+  t_amount,
+  rec_amount,
+  m_mail
+) {
+  try {
+    const response = await axios.post("https://mkt.eziline.com/api/send", {
+      number: phone,
+      type: "text",
+      message: `
+💵 Payment Invoice 💵
+
+Dear ${i_mail},
+
+You have successfully completed your payment.
+
+Invoice ID: ${i_id}
+Created Date: ${i_date}
+
+Payment Details:
+
+Total Amount Rs: ${t_amount}
+Received Amount Rs: ${rec_amount}
+
+Received By: ${m_mail}
+
+Regards :
+Ezitech Institute`,
+      instance_id: "6640DB980CC35",
+      access_token: "6635ec7382039",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   SendMessageRemote,
   SendMessageOnsite,
   SendMessageOther,
   SendMessageAssignPortal,
+  SendInvoiceTotal,
+  SendInvoiceRemaining,
+  SendInvoiceOther,
 };

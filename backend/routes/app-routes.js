@@ -26,6 +26,7 @@ const {
   RemoteSingle,
   CountOnsite,
   GetInternsEmail,
+  GetInternsPhone,
 } = require("../controller/manager/get-manager-interns");
 const {
   AssignProject,
@@ -115,6 +116,7 @@ router.get("/get-instructor-emails", GetInstructorEmail);
 router.get("/get-manager-emails", GetManagerEmail);
 router.post("/add-amount", AddAmount);
 router.post("/get-intern-emails", GetInternsEmail);
+router.post("/get-intern-phone", GetInternsPhone);
 router.get("/get-manager-amount/:email", GetManagerBalance);
 router.get("/get-instructor-amount/:email", GetManagerBalance);
 router.get("/pending-amount", GetPendingAmount);

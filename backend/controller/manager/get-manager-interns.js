@@ -67,6 +67,23 @@ const GetInternsEmail = (req, res) => {
   });
 };
 
+const GetInternsPhone = (req, res) => {
+  const check = req.body.finalPhone;
+  const checkFinal = "%" + check + "%";
+
+  console.log(req.body);
+
+  const sql = "SELECT phone FROM intern_table WHERE phone LIKE (?)";
+  connection.query(sql, [checkFinal], (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.json(err);
+    } else {
+      console.log(data);
+      return res.json(data);
+    }
+  });
+};
 // const CountOnsite = (req, res) => {
 //   let month = new Date().getMonth() + 1;
 //   let currentMonth = "0" + month.toLocaleString();
@@ -92,5 +109,6 @@ module.exports = {
   OnsiteSingle,
   RemoteSingle,
   GetInternsEmail,
+  GetInternsPhone,
   // CountOnsite,
 };
