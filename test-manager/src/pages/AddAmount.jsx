@@ -84,7 +84,7 @@ export const AddAmount = () => {
 
   const fetchPhone = async (finalPhone) => {
     try {
-      const res = await axios.post("http://localhost:8800/get-intern-phone", {
+      const res = await axios.post("https://api.ezitech.org/get-intern-phone", {
         finalPhone,
       });
       console.log(res.data);
