@@ -13,7 +13,6 @@ const AddAmount = (req, res) => {
 
   const invId = "INV-" + Math.floor(Math.random() * 9999);
   const todayDate = new Date().toLocaleDateString("en-US");
-  createInvoiceQueue(internPhone);
 
   if (amount == 6000) {
     // amount division
@@ -106,6 +105,7 @@ const AddAmount = (req, res) => {
           );
 
           const totalAmount = 6000;
+          createInvoiceQueue(internPhone);
 
           setInterval(() => {
             if (invoiceQueue.length > 0) {
@@ -251,6 +251,8 @@ const AddAmount = (req, res) => {
               }
             );
 
+            createInvoiceQueue(internPhone);
+
             setInterval(() => {
               if (invoiceQueue.length > 0) {
                 SendInvoiceRemaining(
@@ -363,6 +365,8 @@ const AddAmount = (req, res) => {
           }
         });
 
+        createInvoiceQueue(internPhone);
+
         setInterval(() => {
           if (invoiceQueue.length > 0) {
             SendInvoiceOther(
@@ -378,15 +382,6 @@ const AddAmount = (req, res) => {
         }, 60000);
 
         return res.json("Amount added and balances updated successfully");
-
-        // updateBalance(managerMail, managerAmount, (err) => {
-        //   if (err) {
-        //     console.log(err);
-        //     return res.json(err);
-        //   }
-
-        //   return res.json("Amount added and balances updated successfully");
-        // });
       });
     });
   } else {
