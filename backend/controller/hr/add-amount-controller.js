@@ -108,7 +108,7 @@ const AddAmount = (req, res) => {
           createInvoiceQueueTotal(internPhone);
 
           setInterval(() => {
-            if (invoiceQueue.length > 0) {
+            if (invoiceQueueTotal.length > 0) {
               SendInvoiceTotal(
                 getInvoiceQueueTotal().slice(1, 13),
                 internEmail,
@@ -254,7 +254,7 @@ const AddAmount = (req, res) => {
             createInvoiceQueueRemaining(internPhone);
 
             setInterval(() => {
-              if (invoiceQueue.length > 0) {
+              if (invoiceQueueRemaining.length > 0) {
                 SendInvoiceRemaining(
                   getInvoiceQueueRemaining().slice(1, 13),
                   internEmail,
@@ -365,10 +365,10 @@ const AddAmount = (req, res) => {
           }
         });
 
-        createInvoiceQueueTotal(internPhone);
+        createInvoiceQueueOther(internPhone);
 
         setInterval(() => {
-          if (invoiceQueue.length > 0) {
+          if (invoiceQueueOther.length > 0) {
             SendInvoiceOther(
               getInvoiceQueueOther().slice(1, 13),
               internEmail,
@@ -422,7 +422,7 @@ function getInvoiceQueueRemaining() {
   return invoiceQueueRemaining.pop();
 }
 
-function createInvoiceOther(phone) {
+function createInvoiceQueueOther(phone) {
   invoiceQueueOther.push(phone);
 }
 
