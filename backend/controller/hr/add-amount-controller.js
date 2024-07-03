@@ -7,7 +7,7 @@ const {
 } = require("../../whatsapp/whatsapp-api");
 
 const AddAmount = (req, res) => {
-  const { amount, instructorEmail, managerMail, internEmail, internPhone } =
+  const { amount, instructorEmail, managerMail, internEmail, internPhone, invoiceId } =
     req.body.data;
   console.log(req.body);
 
@@ -21,7 +21,7 @@ const AddAmount = (req, res) => {
 
     // invoice data
     const receivedAmount = 6000;
-    const invId = "INV-" + Math.floor(Math.random() * 9999);
+   
 
     // transaction query
     const sql =
@@ -92,7 +92,7 @@ const AddAmount = (req, res) => {
           // here whatsapp
 
           createInvoice(
-            invId,
+            invoiceId,
             internEmail,
             receivedAmount,
             managerMail,
@@ -112,7 +112,7 @@ const AddAmount = (req, res) => {
               SendInvoiceTotal(
                 getInvoiceQueueTotal().slice(1, 13),
                 internEmail,
-                invId,
+                invoiceId,
                 todayDate,
                 totalAmount,
                 receivedAmount,
@@ -129,8 +129,6 @@ const AddAmount = (req, res) => {
     const totalAmount = 6000;
     const remainingAmount = totalAmount - amount;
     const receivedAmount = 4000;
-
-    const invId = "INV-" + Math.floor(Math.random() * 9999);
 
     const today = new Date();
 
@@ -239,7 +237,7 @@ const AddAmount = (req, res) => {
 
             // call create invoice message and function
             createInvoice(
-              invId,
+              invoiceId,
               internEmail,
               receivedAmount,
               remainingAmount,
@@ -260,7 +258,7 @@ const AddAmount = (req, res) => {
                 SendInvoiceRemaining(
                   getInvoiceQueueRemaining().slice(1, 13),
                   internEmail,
-                  invId,
+                  invoiceId,
                   todayDate,
                   totalAmount,
                   receivedAmount,
@@ -277,7 +275,6 @@ const AddAmount = (req, res) => {
       });
     });
   } else if (amount == 2000) {
-    const invId = "INV-" + Math.floor(Math.random() * 9999);
 
     // amount division
     const companyAmount = 1000;
@@ -350,7 +347,7 @@ const AddAmount = (req, res) => {
         // here whatsapp
 
         createInvoice(
-          invId,
+          invoiceId,
           internEmail,
           receivedAmount,
           managerMail,
@@ -376,7 +373,7 @@ const AddAmount = (req, res) => {
             SendInvoiceOther(
               getInvoiceQueueOther().slice(1, 13),
               internEmail,
-              invId,
+              invoiceId,
               todayDate,
               totalAmount,
               receivedAmount,

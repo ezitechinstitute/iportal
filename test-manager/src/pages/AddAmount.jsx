@@ -107,8 +107,9 @@ export const AddAmount = () => {
   };
   // https://api.ezitech.org/add-amount
   const SubmitAmount = (e) => {
+    const invId = Math.floor(Math.random() * 9999);
     e.preventDefault();
-    setData({ ...data, managerMail: managerEmail });
+    setData({ ...data, managerMail: managerEmail, invoiceId: invId });
     // console.log(data);
 
     if (
