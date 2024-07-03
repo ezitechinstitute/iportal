@@ -41,7 +41,10 @@ const {
   CurrentShift,
   GetInternAttendance,
 } = require("../controller/intern/internAttendance-controller");
-const { InternAuth } = require("../controller/intern/internAuth-controller");
+const {
+  InternAuth,
+  ForgotInternPassword,
+} = require("../controller/intern/internAuth-controller");
 const jwt = require("jsonwebtoken");
 const {
   GetTask,
@@ -96,6 +99,7 @@ router.get("/current-shift/:email", verifyToken, CurrentShift);
 router.post("/intern-test", verifyToken, GetTask);
 router.get("/get-intern-attendance", verifyToken, GetInternAttendance);
 router.post("/mark-test-complete", verifyToken, MarkTaskComplete);
+router.post("/update-intern-password", ForgotInternPassword);
 
 /* Manager Auth Endpoints */
 router.post("/manager-auth", HrAuth);

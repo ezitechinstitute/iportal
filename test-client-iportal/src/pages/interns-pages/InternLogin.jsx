@@ -16,6 +16,8 @@ export const InternLogin = () => {
     tech: sessionStorage.getItem("technology"),
   });
 
+  const [updatePasswordData, setUpdatePasswordData] = useState({});
+
   const handleInput = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
@@ -79,6 +81,27 @@ export const InternLogin = () => {
         console.log(err);
       });
   };
+
+  const handlePassword = (e) => {
+    setUpdatePasswordData({
+      ...updatePasswordData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  console.log(updatePasswordData);
+
+  const handlePasswordUpdate = async () => {
+    try {
+      const res = await axios.post(
+        "https://api.ezitech.org/update-intern-password",
+        { updatePasswordData }
+      );
+      alert(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       {/* <div class="app-content content ">
@@ -135,7 +158,11 @@ export const InternLogin = () => {
                 <div class="form-group">
                   <div class="d-flex justify-content-between">
                     <label for="login-password">Password</label>
-                    <a href="page-auth-forgot-password-v2.html">
+                    <a
+                      href=""
+                      data-toggle="modal"
+                      data-target="#exampleModalCenter"
+                    >
                       <small>Forgot Password?</small>
                     </a>
                   </div>
@@ -206,6 +233,62 @@ export const InternLogin = () => {
             </div>
           </div>
           {/* <!-- /Login--> */}
+        </div>
+      </div>
+
+      {/* <!-- Modal --> */}
+      <div
+        class="modal fade"
+        id="exampleModalCenter"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalCenterTitle">
+                Forgot Password
+              </h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <input
+                className="form-control"
+                type="email"
+                name="email"
+                placeholder="Email"
+                onChange={handlePassword}
+              />
+
+              <br />
+              <input
+                className="form-control"
+                type="password"
+                name="password"
+                onChange={handlePassword}
+                placeholder="New Password"
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-dismiss="modal"
+                onClick={handlePasswordUpdate}
+              >
+                Update
+              </button>
+            </div>
+          </div>
         </div>
       </div>
       {/* </div>
