@@ -105,12 +105,12 @@ const AddAmount = (req, res) => {
           );
 
           const totalAmount = 6000;
-          createInvoiceQueue(internPhone);
+          createInvoiceQueueTotal(internPhone);
 
           setInterval(() => {
             if (invoiceQueue.length > 0) {
               SendInvoiceTotal(
-                getInvoiceQueue().slice(1, 13),
+                getInvoiceQueueTotal().slice(1, 13),
                 internEmail,
                 invId,
                 todayDate,
@@ -251,12 +251,12 @@ const AddAmount = (req, res) => {
               }
             );
 
-            createInvoiceQueue(internPhone);
+            createInvoiceQueueRemaining(internPhone);
 
             setInterval(() => {
               if (invoiceQueue.length > 0) {
                 SendInvoiceRemaining(
-                  getInvoiceQueue().slice(1, 13),
+                  getInvoiceQueueRemaining().slice(1, 13),
                   internEmail,
                   invId,
                   todayDate,
@@ -365,12 +365,12 @@ const AddAmount = (req, res) => {
           }
         });
 
-        createInvoiceQueue(internPhone);
+        createInvoiceQueueTotal(internPhone);
 
         setInterval(() => {
           if (invoiceQueue.length > 0) {
             SendInvoiceOther(
-              getInvoiceQueue().slice(1, 13),
+              getInvoiceQueueOther().slice(1, 13),
               internEmail,
               invId,
               todayDate,
@@ -402,14 +402,31 @@ cron.schedule("0 0 1 * *", () => {
   });
 });
 
-let invoiceQueue = [];
+let invoiceQueueTotal = [];
+let invoiceQueueRemaining = [];
+let invoiceQueueOther = [];
 
-function createInvoiceQueue(phone) {
-  invoiceQueue.push(phone);
+function createInvoiceQueueTotal(phone) {
+  invoiceQueueTotal.push(phone);
 }
 
-function getInvoiceQueue() {
-  return invoiceQueue.pop();
+function getInvoiceQueueTotal() {
+  return invoiceQueueTotal.pop();
 }
 
+function createInvoiceQueueRemaining(phone) {
+  invoiceQueueRemaining.push(phone);
+}
+
+function getInvoiceQueueRemaining() {
+  return invoiceQueueRemaining.pop();
+}
+
+function createInvoiceOther(phone) {
+  invoiceQueueOther.push(phone);
+}
+
+function getInvoiceQueueOther() {
+  return invoiceQueueOther.pop();
+}
 module.exports = { AddAmount };
