@@ -11,7 +11,6 @@ const AddAmount = (req, res) => {
     req.body.data;
   console.log(req.body);
 
-  const invId = "INV-" + Math.floor(Math.random() * 9999);
   const todayDate = new Date().toLocaleDateString("en-US");
 
   if (amount == 6000) {
@@ -22,6 +21,7 @@ const AddAmount = (req, res) => {
 
     // invoice data
     const receivedAmount = 6000;
+    const invId = "INV-" + Math.floor(Math.random() * 9999);
 
     // transaction query
     const sql =
@@ -129,6 +129,8 @@ const AddAmount = (req, res) => {
     const totalAmount = 6000;
     const remainingAmount = totalAmount - amount;
     const receivedAmount = 4000;
+
+    const invId = "INV-" + Math.floor(Math.random() * 9999);
 
     const today = new Date();
 
@@ -275,6 +277,8 @@ const AddAmount = (req, res) => {
       });
     });
   } else if (amount == 2000) {
+    const invId = "INV-" + Math.floor(Math.random() * 9999);
+
     // amount division
     const companyAmount = 1000;
     const instructorAmount = 500;
