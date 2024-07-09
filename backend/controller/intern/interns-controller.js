@@ -114,7 +114,7 @@ const RegisterInterns = (req, res) => {
                   createOtherQueue(internPhone);
                   setInterval(() => {
                     if (dataOther.length > 0) {
-                      SendMessageOther(getRemoteQueue().slice(1, 13));
+                      SendMessageOther(getOtherQueue().slice(1, 13));
                     }
                   }, 60000);
                 } else {
