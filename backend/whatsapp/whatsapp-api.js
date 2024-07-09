@@ -117,7 +117,7 @@ Please follow these steps to log in:
 If you encounter any issues while logging in or have any questions, feel free to reach out at help@ezitech.org
 
 Best regards`,
-      instance_id: "6640DB980CC35",
+      instance_id: "668CF6A5AB89E",
       access_token: "6635ec7382039",
     });
   } catch (error) {
@@ -157,7 +157,7 @@ Received By: ${m_mail}
 
 Regards :
 Ezitech Institute`,
-      instance_id: "6640DB980CC35",
+      instance_id: "668CF6A5AB89E",
       access_token: "6635ec7382039",
     });
   } catch (error) {
