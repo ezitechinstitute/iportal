@@ -153,6 +153,8 @@ Payment Details:
 Total Amount Rs: ${t_amount}
 Received Amount Rs: ${rec_amount}
 
+IMPORTANT: THIS FEE WILL NOT BE REFUNDABLE AFTER 24 HOURS.
+
 Received By: ${m_mail}
 
 Regards :
@@ -197,6 +199,8 @@ Received Amount Rs: ${rec_amount}
 Remaining Amount Rs: ${rem_amount}
 Due Date: ${d_date};
 
+IMPORTANT: THIS FEE WILL NOT BE REFUNDABLE AFTER 24 HOURS.
+
 NOTE: We kindly request you to clear the remaining amount of Rs: ${rem_amount} before the due date of ${d_date}. Otherwise, your iportal deactivate. 
 
 Received By: ${m_mail}
@@ -238,6 +242,8 @@ Payment Details:
 
 Total Amount Rs: ${t_amount}
 Received Amount Rs: ${rec_amount}
+
+IMPORTANT: THIS FEE WILL NOT BE REFUNDABLE AFTER 24 HOURS.
 
 Received By: ${m_mail}
 

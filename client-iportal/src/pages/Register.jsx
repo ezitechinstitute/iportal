@@ -4,7 +4,7 @@ import "react-phone-number-input/style.css";
 import Calendar from "react-calendar";
 import axios from "axios";
 import "../styles/custom.css";
-import logo from "../assets/AdminAssets/logo.png";
+import logo from "../assets/AdminAssets/logo-1.png";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../components/Spinner";
 
@@ -119,12 +119,10 @@ export const Register = () => {
             console.log(res.data);
 
             if (res.data === 1) {
-              setRegisterMsg(
-                "Successfully Register, Kindly Check Your WhatsApp"
-              );
+              setRegisterMsg("Register Successfully");
               setTimeout(() => {
                 setLoader(false);
-                window.location.reload();
+                navigate("/information");
               }, 2000);
               // window.location.reload();
             }
@@ -134,6 +132,8 @@ export const Register = () => {
                 setLoader(false);
               }, 2000);
             }
+
+            // Message Info
           })
           .catch((err) => {
             console.log(err);
@@ -158,6 +158,7 @@ export const Register = () => {
           backgroundImage: "url(images/bg.jpg)",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
+          objectFit: "cover",
         }}
       >
         <div className="content-header row"></div>
@@ -172,12 +173,12 @@ export const Register = () => {
                     <div className="card-body">
                       <a href="javascript:void(0);" className="brand-logo">
                         <h2 className="brand-text text-primary ml-1 text-center">
-                          <img src={logo} alt="" width={100} />
+                          <img src={logo} alt="" width={150} />
                         </h2>
                       </a>
 
                       <h4 className="card-title mb-1 text-center">
-                        Welcome to Ezitech Institute Registration Form
+                        Welcome to Internship Registration Form
                       </h4>
 
                       <form
@@ -781,11 +782,11 @@ export const Register = () => {
                                 <option value="WordPress Development">
                                   WordPress Development
                                 </option>
-                                <option value="Java Development">
+                                <option disabled value="Java Development">
                                   Java Development
                                 </option>
                                 <option value="Python Development">
-                                  Python Development
+                                  Python Development (Django)
                                 </option>
                                 <option disabled value="Ruby on Rails">
                                   Ruby on Rails
@@ -805,7 +806,9 @@ export const Register = () => {
                                 <option disabled value="Blockchain Development">
                                   Blockchain Development
                                 </option>
-                                <option disabled value="DevOps">DevOps</option>
+                                <option disabled value="DevOps">
+                                  DevOps
+                                </option>
                                 <option disabled value="Cybersecurity">
                                   Cybersecurity
                                 </option>
@@ -818,14 +821,17 @@ export const Register = () => {
                                 <option value="Digital Marketing">
                                   Digital Marketing
                                 </option>
-                                <option disabled value="UI/UX Design">
+                                <option  value="UI/UX Design">
                                   UI/UX Design
                                 </option>
-                                <option value="Content Writing">
+                                <option disabled value="Content Writing">
                                   Content Writing
                                 </option>
-                                <option value="Video Production">
-                                  Video Production
+                                <option value="Video Editing">
+                                  Video Editing
+                                </option>
+                                <option value="Video Editing">
+                                  Animation Designing
                                 </option>
                               </select>
                             </div>
@@ -850,6 +856,7 @@ export const Register = () => {
                                 <option selected disabled>
                                   --Select--
                                 </option>
+                                <option value="2 Month">1 Month</option>
                                 <option value="2 Month">2 Month</option>
                                 <option value="3 Month">3 Month</option>
                                 <option value="6 Month">6 Month</option>

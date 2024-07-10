@@ -1,9 +1,7 @@
 import "react-calendar/dist/Calendar.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import { InternHome } from "./pages/InternHome";
 import { Register } from "./pages/Register";
-// import { MailPopup } from "./pages/MailPopup";
-// import AdminTestPage from "./pages/admin-pages/AdminTestPage";
+import { Information } from "./pages/Information";
 
 function App() {
   return (
@@ -11,7 +9,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route index path="/" element={<Register />} />
-          {/* <Route path="/popup" element={<MailPopup />} /> */}
+          <Route path="/information" element={<Information />} />
 
           {/* Index Routes */}
           {/* <Route exact path="/intern-dashboard" element={<InternHome />} /> */}
