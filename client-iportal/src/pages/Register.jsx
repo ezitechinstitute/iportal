@@ -53,7 +53,7 @@ export const Register = () => {
   };
 
   const isValidCNIC = (id) => {
-    const cnicPattern = /^[0-9]{5}-[0-9]{7}-[0-9]$/;
+    const cnicPattern = /^[0-9]{5}-[0-9]{7}-[0-9]{1}$/;
 
     return cnicPattern.test(id);
   };
