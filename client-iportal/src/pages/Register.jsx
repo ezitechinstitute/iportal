@@ -330,6 +330,7 @@ export const Register = () => {
                                 className="form-control"
                                 onChange={handleImage}
                                 name="internImg"
+                                accept=".jpg, .jpeg, .png"
                                 id=""
                                 required
                               />
