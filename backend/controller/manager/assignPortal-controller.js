@@ -76,8 +76,21 @@ const ActivePortal = (req, res) => {
               const sql2 =
                 "UPDATE `complete_test` SET `status`='Active' WHERE `email` = (?)";
               connection.query(sql2, [email], (rej, rev) => {
-                if (rej) throw rej;
-                return res.json(rev.affectedRows);
+                if (rej) {
+                  return res.json(rej);
+                } else {
+                  if (rev.affectedRows === 1) {
+                    const sql_delete =
+                      "DELETE FROM `complete_test` WHERE `email` = ?";
+                    connection.query(sql_delete, [email], (reje, reso) => {
+                      if (reje) {
+                        return res.json(reje);
+                      } else {
+                        return res.json(reso.affectedRows);
+                      }
+                    });
+                  }
+                }
               });
             }
           }

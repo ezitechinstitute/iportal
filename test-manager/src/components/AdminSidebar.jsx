@@ -16,50 +16,18 @@ export const AdminSidebar = () => {
                 <i class="fa-solid fa-house pe-2"></i>Dashboard
               </Link>
             </li>
-            {/* <li class="sidebar-item">
-              <a
-                href="#"
-                class="sidebar-link collapsed"
-                data-bs-target="#pages"
-                data-bs-toggle="collapse"
-                arua-expended="false"
-              >
-                Interns
-              </a>
-              <ul
-                id="pages"
-                class="sidebar-dropdown list-unstyled collapse"
-                data-bs-parent="#sidebar"
-              >
-                <li class="sidebar-item">
-                  <Link to="/onsite-interns" class="sidebar-link">
-                    <i class="fa-solid fa-users pe-2"></i>
-                    Onsite
-                  </Link>
-                </li>
-                <li class="sidebar-item">
-                  <Link to="/remote-interns" class="sidebar-link">
-                    <i class="fa-solid fa-users pe-2"></i>Remote
-                  </Link>
-                </li>
-                <li class="sidebar-item">
-                  <Link to="/test-interns" class="sidebar-link">
-                    <i class="fa-solid fa-users pe-2"></i>Test
-                  </Link>
-                </li>
 
-                <li class="sidebar-item">
-                  <Link to="/test-complete" class="sidebar-link">
-                    <i class="fa-solid fa-users pe-2"></i>Completed Test
-                  </Link>
-                </li>
-                {/* <li class="sidebar-item">
-                  <a href="#" class="sidebar-link">
-                    <i class="fa-solid fa-eye pe-2"></i>View Attendance
-                  </a>
-                </li> */}
-              {/* </ul> */}
-            {/* </li> */} 
+            <li class="sidebar-item">
+              <Link to="/transactions" class="sidebar-link">
+                <i class="fa-solid fa-money-bill-transfer pe-2"></i>Transactions
+              </Link>
+            </li>
+
+            <li class="sidebar-item">
+              <Link to="/invoices" class="sidebar-link">
+                <i class="fa-solid fa-receipt pe-2"></i>Invoices
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

@@ -63,6 +63,11 @@ const {
 } = require("../controller/admin/admin-balance-controller");
 const { AdminAuth } = require("../controller/admin/admin-auth-controller");
 const { GetPendingAmount } = require("../controller/hr/get-pending-amount");
+const {
+  Transactions,
+  Invoices,
+  ApproveInvoice,
+} = require("../controller/admin/transaction-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -141,6 +146,9 @@ router.post("/assign-project", AssignProject);
 /* Admin Endpoint */
 router.post("/admin-auth", AdminAuth);
 router.get("/get-admin-balance", GetAdminBalance);
+router.get("/get-transactions/:month", Transactions);
+router.get("/get-invoices/:month", Invoices);
+router.post("/approve-invoice", ApproveInvoice);
 
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);

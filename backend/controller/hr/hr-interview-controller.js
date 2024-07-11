@@ -47,14 +47,14 @@ const GetTestComplete = (req, res) => {
 
   if (email === "umair1@ezitech.org") {
     const sql =
-      "SELECT * FROM `complete_test` WHERE (`technology` = 'WordPress' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `status` = 'Completed'";
+      "SELECT * FROM `complete_test` WHERE (`technology` = 'WordPress' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `status` = 'Completed' AND `payment_status` = 1";
     connection.query(sql, (err, data) => {
       if (err) throw err;
       return res.json(data);
     });
   }
   const sql =
-    "SELECT * FROM `complete_test` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `status` = 'Completed'";
+    "SELECT * FROM `complete_test` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `status` = 'Completed' AND `payment_status` = 1";
   connection.query(sql, (err, data) => {
     if (err) throw err;
     return res.json(data);

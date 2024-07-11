@@ -12,6 +12,8 @@ import { InstructorDashboard } from "./pages/instructor/InstructorDashboard";
 import { AddAmount } from "./pages/AddAmount";
 import { ManagerBalance } from "./pages/ManagerBalance";
 import { PendingAmount } from "./pages/PendingAmount";
+import { Transactions } from "./pages/admin/Transactions";
+import { Invoices } from "./pages/admin/Invoices";
 
 function App() {
   return (
@@ -31,6 +33,9 @@ function App() {
           {/* ----------------- Admin ------------------- */}
           <Route index path="/admin" element={<AdminLogin />} />
           <Route index path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route index path="/transactions" element={<Transactions />} />
+          <Route index path="/invoices" element={<Invoices />} />
+
 
           {/* ----------------- Instructor -------------- */}
           <Route
