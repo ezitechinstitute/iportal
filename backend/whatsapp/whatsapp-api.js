@@ -43,9 +43,11 @@ We are delighted to inform you that your registration was successful. Welcome to
 
 Interview Process Details:
 
-Our team contact with you as soon as possible.
+Onsite Interview:
 
-Meeting Platform: WhatsApp
+Days: Monday to Friday
+Time: 11:00Am to 3:00Pm
+Location: https://maps.app.goo.gl/Q78i6r1DifnBWJtA8
 
 If you have any questions or need further assistance, feel free to reach out to us at help@ezitech.org
 
