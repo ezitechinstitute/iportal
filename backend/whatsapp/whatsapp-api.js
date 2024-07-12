@@ -143,7 +143,7 @@ async function SendInvoiceTotal(
       message: `
 💵 Payment Invoice 💵
 
-Dear ${i_mail},
+Dear,
 
 You have successfully completed your payment.
 
@@ -187,7 +187,7 @@ async function SendInvoiceRemaining(
       message: `
 💵 Payment Invoice 💵
 
-Dear ${i_mail},
+Dear,
 
 You have successfully completed your payment.
 
@@ -233,7 +233,7 @@ async function SendInvoiceOther(
       message: `
 💵 Payment Invoice 💵
 
-Dear ${i_mail},
+Dear,
 
 You have successfully completed your payment.
 
