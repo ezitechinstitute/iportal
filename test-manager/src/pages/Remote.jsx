@@ -16,6 +16,17 @@ export const Remote = () => {
     }
   });
 
+  let managerContact = "";
+
+
+  if (userEmail === "muzammil@ezitech.org") {
+    managerContact = "+92 337 7777860";
+  } else if (userEmail === "kashif@ezitech.org") {
+    managerContact = "+92 334 4444722";
+  } else if (userEmail === "umair1@ezitech.org") {
+    managerContact = "+92 336 6666559";
+  }
+
   const getRemoteRegister = async () => {
     try {
       const res = await axios.get(
@@ -82,11 +93,11 @@ export const Remote = () => {
   };
 
   const AssignPortal = (name, email, phone, technology) => {
+
     const charset =
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+<>?";
     const length = 8;
     let password = "";
-    let managerContact = "";
     for (let i = 0; i < length; i++) {
       const randomIndex = Math.floor(Math.random() * charset.length);
       password += charset[randomIndex];
@@ -99,17 +110,7 @@ export const Remote = () => {
 
     let EZI_ID = "ETI-" + day + "-" + month + "-" + year.slice(3, 5) + "/" + id;
 
-    if (userEmail === "muzammil@ezitech.org") {
-      managerContact = "+92 337 7777860";
-    }
-
-    if (userEmail === "kashif@ezitech.org") {
-      managerContact = "+92 334 4444722";
-    }
-
-    if (userEmail === "umair1@ezitech.org") {
-      managerContact = "+92 336 6666559";
-    }
+    // https://api.ezitech.org
 
     axios
       .post("https://api.ezitech.org/assign-portal", {
@@ -119,7 +120,7 @@ export const Remote = () => {
         phone,
         password,
         technology,
-        managerContact,
+        managerContact
       })
       .then((res) => {
         if (res.data === 1) {

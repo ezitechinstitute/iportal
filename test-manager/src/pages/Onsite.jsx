@@ -10,16 +10,27 @@ export const Onsite = () => {
   const check = sessionStorage.getItem("isLoggedIn");
   const userEmail = sessionStorage.getItem("email");
 
-
   useEffect(() => {
     if (!check) {
       navigate("/");
     }
   });
 
+  let managerContact = "";
+
+  if (userEmail === "muzammil@ezitech.org") {
+    managerContact = "+92 337 7777860";
+  } else if (userEmail === "kashif@ezitech.org") {
+    managerContact = "+92 334 4444722";
+  } else if (userEmail === "umair1@ezitech.org") {
+    managerContact = "+92 336 6666559";
+  }
+
   const getOnsiteRegister = async () => {
     try {
-      const res = await axios.get(`https://api.ezitech.org/get-onsite-interns/${userEmail}`);
+      const res = await axios.get(
+        `https://api.ezitech.org/get-onsite-interns/${userEmail}`
+      );
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -105,6 +116,7 @@ export const Onsite = () => {
         password,
         phone,
         technology,
+        managerContact,
       })
       .then((res) => {
         if (res.data === 1) {

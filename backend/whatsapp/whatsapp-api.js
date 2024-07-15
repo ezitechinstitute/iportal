@@ -93,13 +93,7 @@ Best regards
   }
 }
 
-async function SendMessageAssignPortal(
-  phone,
-  name,
-  email,
-  password,
-  managerContact
-) {
+async function SendMessageAssignPortal(phone, name, email, password, contact) {
   try {
     const response = await axios.post("https://mkt.eziline.com/api/send", {
       number: phone,
@@ -124,8 +118,7 @@ Please follow these steps to log in:
 
 If you encounter any issues while logging in or have any questions, feel free to reach out at help@ezitech.org
 
-Please contact your assign manager for queries & test submisson: ${managerContact} 
-
+Please contact your assign manager for queries & test submisson: ${contact}
 
 Best regards`,
       instance_id: "668CF6A5AB89E",
