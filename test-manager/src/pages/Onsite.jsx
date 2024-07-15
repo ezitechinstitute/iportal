@@ -9,22 +9,13 @@ export const Onsite = () => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const userEmail = sessionStorage.getItem("email");
+  const managerContact = sessionStorage.getItem("contact");
 
   useEffect(() => {
     if (!check) {
       navigate("/");
     }
   });
-
-  let managerContact = "";
-
-  if (userEmail === "muzammil@ezitech.org") {
-    managerContact = "+92 337 7777860";
-  } else if (userEmail === "kashif@ezitech.org") {
-    managerContact = "+92 334 4444722";
-  } else if (userEmail === "umair1@ezitech.org") {
-    managerContact = "+92 336 6666559";
-  }
 
   const getOnsiteRegister = async () => {
     try {

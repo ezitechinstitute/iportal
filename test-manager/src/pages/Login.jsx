@@ -25,6 +25,7 @@ export const Login = () => {
           ) {
             sessionStorage.setItem("username", res.data.user[0].name);
             sessionStorage.setItem("email", res.data.user[0].email);
+            sessionStorage.setItem("contact", res.data.user[0].contact);
             sessionStorage.setItem("isLoggedIn", true);
             alert("Login Successfully");
             navigate("/manager-dashboard");
