@@ -4,7 +4,7 @@ const HrAuth = (req, res) => {
   const { email, password, loginAs } = req.body.value;
 
   const sql =
-    "SELECT `image`, `name`, `email`, `password`, `loginas`  FROM `manager_accounts` WHERE `email` = ? AND `password`= ? AND `loginas` = ?";
+    "SELECT `image`, `name`, `email`, `contact`, `password`, `loginas`  FROM `manager_accounts` WHERE `email` = ? AND `password`= ? AND `loginas` = ?";
 
   connection.query(sql, [email, password, loginAs], (err, data) => {
     if (err) {
