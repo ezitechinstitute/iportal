@@ -10,7 +10,6 @@ export const Remote = () => {
   const check = sessionStorage.getItem("isLoggedIn");
   const userEmail = sessionStorage.getItem("email");
 
-
   useEffect(() => {
     if (!check) {
       navigate("/");
@@ -19,7 +18,9 @@ export const Remote = () => {
 
   const getRemoteRegister = async () => {
     try {
-      const res = await axios.get(`https://api.ezitech.org/get-remote-interns/${userEmail}`);
+      const res = await axios.get(
+        `https://api.ezitech.org/get-remote-interns/${userEmail}`
+      );
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -85,6 +86,7 @@ export const Remote = () => {
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+<>?";
     const length = 8;
     let password = "";
+    let managerContact = "";
     for (let i = 0; i < length; i++) {
       const randomIndex = Math.floor(Math.random() * charset.length);
       password += charset[randomIndex];
@@ -95,7 +97,20 @@ export const Remote = () => {
     const year = new Date().getFullYear().toLocaleString();
     const id = Math.floor(1000 + Math.random() * 9000);
 
-    let EZI_ID = "EZI-" + day + "-" + month + "-" + year.slice(3, 5) + "/" + id;
+    let EZI_ID = "ETI-" + day + "-" + month + "-" + year.slice(3, 5) + "/" + id;
+
+    if (userEmail === "muzammil@ezitech.org") {
+      managerContact = "+92 337 7777860";
+    }
+
+    if (userEmail === "kashif@ezitech.org") {
+      managerContact = "+92 334 4444722";
+    }
+
+    if (userEmail === "umair1@ezitech.org") {
+      managerContact = "+92 336 6666559";
+    }
+
     axios
       .post("https://api.ezitech.org/assign-portal", {
         EZI_ID,
@@ -104,6 +119,7 @@ export const Remote = () => {
         phone,
         password,
         technology,
+        managerContact,
       })
       .then((res) => {
         if (res.data === 1) {

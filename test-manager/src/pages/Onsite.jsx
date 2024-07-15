@@ -95,7 +95,7 @@ export const Onsite = () => {
     const year = new Date().getFullYear().toLocaleString();
     const id = Math.floor(1000 + Math.random() * 9000);
 
-    let EZI_ID = "EZI-" + day + "-" + month + "-" + year.slice(3, 5) + "/" + id;
+    let EZI_ID = "ETI-" + day + "-" + month + "-" + year.slice(3, 5) + "/" + id;
 
     axios
       .post("https://api.ezitech.org/assign-portal", {
