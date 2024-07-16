@@ -130,9 +130,21 @@ const GetTestIntern = (req, res) => {
   }
 };
 
+const GetActiveInterns = (req, res) => {
+  const sql = "SELECT * FROM `intern_accounts` WHERE `status` = 'Active'";
+  connection.query(sql, (err, data) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      return res.json(data);
+    }
+  });
+};
+
 module.exports = {
   GetLatestRegister,
   GetOnsiteInterview,
   GetRemoteInterview,
   GetTestIntern,
+  GetActiveInterns,
 };

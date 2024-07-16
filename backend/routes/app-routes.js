@@ -18,6 +18,7 @@ const {
   GetTestIntern,
   GetUmairInternsOnsite,
   GetUmairInternsRemote,
+  GetActiveInterns,
 } = require("../controller/hr/get-interns-controller");
 const {
   GetManagerOnsite,
@@ -120,6 +121,7 @@ router.post("/remove-intern", RemoveIntern);
 router.post("/remove-completed", RemoveCompletedInterns);
 router.get("/get-remote-interns/:email", GetRemoteInterview);
 router.get("/get-test-interns/:email", GetTestIntern);
+router.get("/active-interns", GetActiveInterns);
 router.post("/active-portal", ActivePortal);
 router.get("/get-test-complete/:email", GetTestComplete);
 router.get("/get-instructor-emails", GetInstructorEmail);
