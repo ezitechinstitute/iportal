@@ -3,8 +3,10 @@ import { ManagerTopbar } from "../components/ManagerTopbar";
 import { ManagerSidebar } from "../components/ManagerSidebar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { InvoiceModal } from "../components/InvoiceModal";
 
 export const OnsiteInterns = () => {
+  const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [singleIntern, setSingleIntern] = useState([]);
   const [data, setData] = useState([]);
   const navigate = useNavigate();
@@ -21,7 +23,8 @@ export const OnsiteInterns = () => {
   const getOnsiteRegister = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8800/get-onsite-interns/${userEmail}`
+        `https://api.ezitech.org/get-onsite-interns/${userEmail}`,
+        { headers: { "x-access-token": token } }
       );
       setData(res.data);
     } catch (error) {
@@ -71,13 +74,19 @@ export const OnsiteInterns = () => {
   // };
 
   const RemoveOnsite = (email) => {
-    axios.post("http://localhost:8800/remove-intern", { email }).then((res) => {
-      if (res.data === 1) {
-        alert("Removed Successfully");
-      } else {
-        alert("Something Went Wrong!!!");
-      }
-    });
+    axios
+      .post(
+        "https://api.ezitech.org/remove-intern",
+        { email },
+        { headers: { "x-access-token": token } }
+      )
+      .then((res) => {
+        if (res.data === 1) {
+          alert("Removed Successfully");
+        } else {
+          alert("Something Went Wrong!!!");
+        }
+      });
   };
 
   const AssignPortal = (name, email, phone, technology) => {
@@ -98,15 +107,19 @@ export const OnsiteInterns = () => {
     let EZI_ID = "ETI-" + day + "-" + month + "-" + year.slice(3, 5) + "/" + id;
 
     axios
-      .post("http://localhost:8800/assign-portal", {
-        EZI_ID,
-        name,
-        email,
-        password,
-        phone,
-        technology,
-        managerContact,
-      })
+      .post(
+        "https://api.ezitech.org/assign-portal",
+        {
+          EZI_ID,
+          name,
+          email,
+          password,
+          phone,
+          technology,
+          managerContact,
+        },
+        { headers: { "x-access-token": token } }
+      )
       .then((res) => {
         if (res.data === 1) {
           alert("Assign Portal Successfully");
@@ -236,8 +249,8 @@ export const OnsiteInterns = () => {
                       </button>
                     </div>
 
-                    <div class="card-body overflow-x-scroll">
-                      <table class="table">
+                    <div className="card-body overflow-x-scroll text-center">
+                      <table className="table">
                         <thead>
                           <tr>
                             <th scope="col">#</th>
@@ -274,25 +287,25 @@ export const OnsiteInterns = () => {
                                       <td>{interview_type}</td>
                                       <td>{status}</td>
                                       <td>
-                                        <div class="dropdown">
+                                        <div className="dropdown">
                                           <button
                                             type="button"
-                                            class="btn btn-warning dropdown-toggle"
+                                            className="btn btn-warning dropdown-toggle"
                                             data-toggle="dropdown"
                                           >
                                             Action
                                             {/* <i data-feather="more-vertical"></i> */}
                                           </button>
                                           <div>
-                                            <ul class="dropdown-menu">
+                                            <ul className="dropdown-menu">
                                               {/* <li>
-                                              <a class="dropdown-item" href="#">
+                                              <a className="dropdown-item" href="#">
                                                 Send Mail
                                               </a>
                                             </li> */}
                                               <li>
                                                 <a
-                                                  class="dropdown-item"
+                                                  className="dropdown-item"
                                                   href="#"
                                                   type="button"
                                                   onClick={() =>
@@ -309,7 +322,7 @@ export const OnsiteInterns = () => {
                                               </li>
                                               <li>
                                                 <a
-                                                  class="dropdown-item"
+                                                  className="dropdown-item"
                                                   href="#"
                                                   type="button"
                                                   onClick={() =>
@@ -369,7 +382,7 @@ export const OnsiteInterns = () => {
                 </div>
               </div>
               <div
-                class="modal fade text-left"
+                className="modal fade text-left"
                 id="large"
                 tabindex="-1"
                 role="dialog"
@@ -377,17 +390,17 @@ export const OnsiteInterns = () => {
                 aria-hidden="true"
               >
                 <div
-                  class="modal-dialog modal-dialog-centered modal-lg"
+                  className="modal-dialog modal-dialog-centered modal-lg"
                   role="document"
                 >
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title" id="myModalLabel17">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h4 className="modal-title" id="myModalLabel17">
                         Intern Details
                       </h4>
                       <button
                         type="button"
-                        class="close"
+                        className="close"
                         data-dismiss="modal"
                         aria-label="Close"
                       >

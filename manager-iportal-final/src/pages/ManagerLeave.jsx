@@ -16,39 +16,39 @@ const ManagerLeave = () => {
           <div className="content-body">
 
 
-                        <div class="col-lg-12 col-md-6">
-                    <div class="card">
-                    <div class="">
-                                <h2 class="modal-title ml-4 mb-4 mt-2" id="myModalLabel17">Leave Application</h2>
+                        <div className="col-lg-12 col-md-6">
+                    <div className="card">
+                    <div className="">
+                                <h2 className="modal-title ml-4 mb-4 mt-2" id="myModalLabel17">Leave Application</h2>
                   </div>
-                    <div class="row ">
-                                        <div class="col-md-5 col-12 ml-4">
-                                            <div class="form-group">
+                    <div className="row ">
+                                        <div className="col-md-5 col-12 ml-4">
+                                            <div className="form-group">
                                                 <label for="first-name-column">TO</label>
-                                                <input type="text" id="last-name-column" class="form-control" placeholder="TO" name="lname-column" />
+                                                <input type="text" id="last-name-column" className="form-control" placeholder="TO" name="lname-column" />
                                   
                                            
                                             </div>
                                         </div>
-                                        <div class="col-md-5 col-12 ml-1">
-                                            <div class="form-group">
+                                        <div className="col-md-5 col-12 ml-1">
+                                            <div className="form-group">
                                                 <label for="last-name-column">FROM</label>
-                                                <input type="text" id="last-name-column" class="form-control" placeholder="FROM" name="lname-column" />
+                                                <input type="text" id="last-name-column" className="form-control" placeholder="FROM" name="lname-column" />
                                             </div>
                                         </div>
 
 
 
-                                        <div class="col-md-10 col-12 ml-4">
-                                            <div class="form-group">
+                                        <div className="col-md-10 col-12 ml-4">
+                                            <div className="form-group">
                                                 <label for="last-name-column">REASON</label>
-                                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="6" placeholder=""></textarea>
+                                                <textarea className="form-control" id="exampleFormControlTextarea1" rows="6" placeholder=""></textarea>
                                             </div>
                                         </div>
                                         
-                                        <div class="col-12 text-center mb-1">
-                                            <button type="reset" class="btn btn-primary mr-1">Submit</button>
-                                            {/* <button type="reset" class="btn btn-outline-secondary">Reset</button> */}
+                                        <div className="col-12 text-center mb-1">
+                                            <button type="reset" className="btn btn-primary mr-1">Submit</button>
+                                            {/* <button type="reset" className="btn btn-outline-secondary">Reset</button> */}
                                         </div>
                                     </div>
                                     </div>

@@ -4,10 +4,12 @@ import { ManagerTopbar } from "../components/ManagerTopbar";
 import { ManagerSidebar } from "../components/ManagerSidebar";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { InvoiceModal } from "../components/InvoiceModal";
 // import { Editor, EditorState } from "draft-js";
 // import "draft-js/dist/Draft.css";
 
 export const InternCompleted = () => {
+  const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
@@ -22,7 +24,8 @@ export const InternCompleted = () => {
   const getTestComplete = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8800/get-test-complete/${userEmail}`
+        `https://api.ezitech.org/get-test-complete/${userEmail}`,
+        { headers: { "x-access-token": token } }
       );
       setData(res.data);
     } catch (error) {
@@ -93,7 +96,11 @@ export const InternCompleted = () => {
 
   const RemoveCompletedIntern = (email) => {
     axios
-      .post("http://localhost:8800/remove-completed", { email })
+      .post(
+        "https://api.ezitech.org/remove-completed",
+        { email },
+        { headers: { "x-access-token": token } }
+      )
       .then((res) => {
         if (res.data.status) {
           alert(res.data.msg);
@@ -104,13 +111,19 @@ export const InternCompleted = () => {
   };
 
   const ActivePortal = (email) => {
-    axios.post("http://localhost:8800/active-portal", { email }).then((res) => {
-      if (res.data === 1) {
-        alert("Portal Activated");
-      } else {
-        alert("Something Went Wrong!!!");
-      }
-    });
+    axios
+      .post(
+        "https://api.ezitech.org/active-portal",
+        { email },
+        { headers: { "x-access-token": token } }
+      )
+      .then((res) => {
+        if (res.data === 1) {
+          alert("Portal Activated");
+        } else {
+          alert("Something Went Wrong!!!");
+        }
+      });
   };
 
   return (
@@ -230,8 +243,8 @@ export const InternCompleted = () => {
                       </button> */}
                     </div>
 
-                    <div class="card-body overflow-x-scroll">
-                      <table class="table">
+                    <div className="card-body overflow-x-scroll text-center">
+                      <table className="table">
                         <thead>
                           <tr>
                             <th scope="col">#</th>
@@ -258,25 +271,26 @@ export const InternCompleted = () => {
                                       <td>{technology}</td>
 
                                       <td>
-                                        <div class="dropdown">
+                                        <div className="dropdown">
                                           <button
                                             type="button"
-                                            class="btn btn-warning dropdown-toggle"
+                                            className="btn btn-warning dropdown-toggle"
                                             data-toggle="dropdown"
                                           >
                                             Action
                                             {/* <i data-feather="more-vertical"></i> */}
                                           </button>
                                           <div>
-                                            <ul class="dropdown-menu">
+                                            <ul className="dropdown-menu">
                                               {/* <li>
-                                              <a class="dropdown-item" href="#">
+                                              <a className="dropdown-item" href="#">
                                                 Send Mail
                                               </a>
                                             </li> */}
+
                                               <li>
                                                 <a
-                                                  class="dropdown-item"
+                                                  className="dropdown-item"
                                                   href="#"
                                                   type="button"
                                                   onClick={() =>
@@ -288,7 +302,18 @@ export const InternCompleted = () => {
                                               </li>
                                               <li>
                                                 <a
-                                                  class="dropdown-item"
+                                                  className="dropdown-item"
+                                                  href="#"
+                                                  type="button"
+                                                  data-toggle="modal"
+                                                  data-target="#default"
+                                                >
+                                                  Invoice
+                                                </a>
+                                              </li>
+                                              <li>
+                                                <a
+                                                  className="dropdown-item"
                                                   href="#"
                                                   type="button"
                                                   onClick={() =>
@@ -347,6 +372,8 @@ export const InternCompleted = () => {
                   </div>
                 </div>
               </div>
+
+              <InvoiceModal />
             </section>
           </div>
         </div>

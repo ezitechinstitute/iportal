@@ -9,7 +9,7 @@ const GetManagerBalance = (req, res) => {
         console.log(err)
       return res.json(err);
     } else {
-        console.log(data)
+        // console.log(data)
       return res.json(data);
     }
   });

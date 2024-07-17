@@ -64,7 +64,7 @@ export const ManagerSidebar = () => {
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("dashboard")}
-                to="/"
+                to="/manager-dashboard"
               >
                 <i data-feather="home"></i>
                 <span
@@ -149,7 +149,7 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={activeLink === "leave" ? "active" : "undefined"}>
+            <li className={activeLink === "leave" ? "active" : "undefined"} hidden>
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("leave")}
@@ -163,7 +163,7 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={activeLink === "balance" ? "active " : "undefined"}>
+            <li className={activeLink === "balance" ? "active " : "undefined"} hidden>
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("balance")}

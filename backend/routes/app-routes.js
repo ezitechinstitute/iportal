@@ -19,6 +19,7 @@ const {
   GetUmairInternsOnsite,
   GetUmairInternsRemote,
   GetActiveInterns,
+  CountInterns,
 } = require("../controller/hr/get-interns-controller");
 const {
   GetManagerOnsite,
@@ -115,23 +116,24 @@ router.post("/manager-auth", HrAuth);
 
 /* HR All Endpoints */
 router.get("/get-latest-interns/:email", GetLatestRegister);
-router.get("/get-onsite-interns/:email", GetOnsiteInterview);
-router.post("/update-intern-status", AssignTest);
-router.post("/remove-intern", RemoveIntern);
-router.post("/remove-completed", RemoveCompletedInterns);
-router.get("/get-remote-interns/:email", GetRemoteInterview);
-router.get("/get-test-interns/:email", GetTestIntern);
-router.get("/active-interns", GetActiveInterns);
-router.post("/active-portal", ActivePortal);
-router.get("/get-test-complete/:email", GetTestComplete);
-router.get("/get-instructor-emails", GetInstructorEmail);
-router.get("/get-manager-emails", GetManagerEmail);
-router.post("/add-amount", AddAmount);
-router.post("/get-intern-emails", GetInternsEmail);
-router.post("/get-intern-phone", GetInternsPhone);
-router.get("/get-manager-amount/:email", GetManagerBalance);
-router.get("/get-instructor-amount/:email", GetManagerBalance);
-router.get("/pending-amount", GetPendingAmount);
+router.get("/get-onsite-interns/:email", verifyToken, GetOnsiteInterview);
+router.post("/update-intern-status", verifyToken, AssignTest);
+router.post("/remove-intern", verifyToken, RemoveIntern);
+router.post("/remove-completed", verifyToken, RemoveCompletedInterns);
+router.get("/get-remote-interns/:email", verifyToken, GetRemoteInterview);
+router.get("/get-test-interns/:email", verifyToken, GetTestIntern);
+router.get("/active-interns", verifyToken, GetActiveInterns);
+router.post("/active-portal", verifyToken, ActivePortal);
+router.get("/get-test-complete/:email", verifyToken, GetTestComplete);
+// router.get("/get-instructor-emails", verifyToken, GetInstructorEmail);
+// router.get("/get-manager-emails", verifyToken, GetManagerEmail);
+// router.post("/add-amount", AddAmount);
+// router.post("/get-intern-emails", GetInternsEmail);
+// router.post("/get-intern-phone", GetInternsPhone);
+router.get("/get-manager-amount/:email", verifyToken, GetManagerBalance);
+// router.get("/get-instructor-amount/:email", GetManagerBalance);
+// router.get("/pending-amount", GetPendingAmount);
+router.get("/get-statics", CountInterns);
 
 /* Manager Endpoints */
 router.get("/get-manager-onsite", GetManagerOnsite);

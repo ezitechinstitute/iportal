@@ -30,8 +30,8 @@ function App() {
           <Route exact path="/intern-projects" element={<InternProjects />} />
           <Route exact path="/test-completed" element={<InternCompleted />} />
           <Route exact path="/active-interns" element={<ActiveInterns />} />
-          <Route exact path="/manager-leave" element={<ManagerLeave />} />
-          <Route exact path="/balance" element={<Balance />} />
+          {/* <Route exact path="/manager-leave" element={<ManagerLeave />} /> */}
+          {/* <Route exact path="/balance" element={<Balance />} /> */}
           {/* <Route exact path="/invoice" element={<Invoice />} /> */}
         </Routes>
       </BrowserRouter>

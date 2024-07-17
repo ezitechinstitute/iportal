@@ -3,8 +3,10 @@ import { ManagerSidebar } from "../components/ManagerSidebar";
 import { ManagerTopbar } from "../components/ManagerTopbar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { InvoiceModal } from "../components/InvoiceModal";
 
 export const ActiveInterns = () => {
+  const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
@@ -19,7 +21,9 @@ export const ActiveInterns = () => {
 
   const GetActiveInterns = async () => {
     try {
-      const res = await axios.get("http://localhost:8800/active-interns");
+      const res = await axios.get("https://api.ezitech.org/active-interns", {
+        headers: { "x-access-token": token },
+      });
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -170,8 +174,8 @@ export const ActiveInterns = () => {
                       </button> */}
                     </div>
 
-                    <div class="card-body overflow-x-scroll">
-                      <table class="table">
+                    <div className="card-body overflow-x-scroll text-center">
+                      <table className="table">
                         <thead>
                           <tr>
                             <th scope="col">ETI-ID</th>
@@ -203,25 +207,36 @@ export const ActiveInterns = () => {
                                       <td>{technology}</td>
 
                                       <td>
-                                        <div class="dropdown">
+                                        <div className="dropdown">
                                           <button
                                             type="button"
-                                            class="btn btn-warning dropdown-toggle"
+                                            className="btn btn-warning dropdown-toggle"
                                             data-toggle="dropdown"
                                           >
                                             Action
                                             {/* <i data-feather="more-vertical"></i> */}
                                           </button>
                                           <div>
-                                            <ul class="dropdown-menu">
+                                            <ul className="dropdown-menu">
+                                              <li>
+                                                <a
+                                                  className="dropdown-item"
+                                                  href="#"
+                                                  type="button"
+                                                  data-toggle="modal"
+                                                  data-target="#default"
+                                                >
+                                                  Invoice
+                                                </a>
+                                              </li>
                                               {/* <li>
-                                              <a class="dropdown-item" href="#">
+                                              <a className="dropdown-item" href="#">
                                                 Send Mail
                                               </a>
                                             </li> */}
                                               {/* <li>
                                                 <a
-                                                  class="dropdown-item"
+                                                  className="dropdown-item"
                                                   href="#"
                                                   type="button"
                                                   onClick={() =>
@@ -233,7 +248,7 @@ export const ActiveInterns = () => {
                                               </li> */}
                                               <li>
                                                 <a
-                                                  class="dropdown-item"
+                                                  className="dropdown-item"
                                                   href="#"
                                                   type="button"
                                                   //   onClick={() =>
@@ -292,6 +307,7 @@ export const ActiveInterns = () => {
                   </div>
                 </div>
               </div>
+              <InvoiceModal />
             </section>
           </div>
         </div>

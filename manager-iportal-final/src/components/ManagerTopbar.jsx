@@ -1,6 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export const ManagerTopbar = () => {
+  const username = sessionStorage.getItem("username");
+  const role = sessionStorage.getItem("role");
+  const navigate = useNavigate();
+
+  const Logout = () => {
+    sessionStorage.clear();
+    alert("Logged Out Successfully ");
+    navigate("/");
+  };
+
   return (
     <>
       {/* BEGIN: Header */}
@@ -39,8 +50,10 @@ export const ManagerTopbar = () => {
                 aria-expanded="false"
               >
                 <div className="user-nav d-sm-flex d-none">
-                  <span className="user-name font-weight-bolder">John Doe</span>
-                  <span className="user-status">Manager</span>
+                  <span className="user-name font-weight-bolder">
+                    {username}
+                  </span>
+                  <span className="user-status">{role}</span>
                 </div>
                 <span className="avatar">
                   <img
@@ -57,7 +70,7 @@ export const ManagerTopbar = () => {
                 className="dropdown-menu dropdown-menu-right"
                 aria-labelledby="dropdown-user"
               >
-                <a className="dropdown-item" href="page-profile.html">
+                <a className="dropdown-item" href="#">
                   <i className="mr-50" data-feather="user"></i> Profile
                 </a>
                 {/* <a className="dropdown-item" href="app-email.html">
@@ -70,8 +83,8 @@ export const ManagerTopbar = () => {
                   <i className="mr-50" data-feather="message-square"></i> Chats
                 </a> */}
                 {/* <div className="dropdown-divider"></div> */}
-                <a className="dropdown-item" href="page-account-settings.html">
-                <i data-feather='code'></i> Technology
+                <a className="dropdown-item" href="#">
+                  <i data-feather="code"></i> Technology
                 </a>
                 {/* <a className="dropdown-item" href="page-pricing.html">
                   <i className="mr-50" data-feather="credit-card"></i> Pricing
@@ -79,7 +92,12 @@ export const ManagerTopbar = () => {
                 <a className="dropdown-item" href="page-faq.html">
                   <i className="mr-50" data-feather="help-circle"></i> FAQ
                 </a> */}
-                <a className="dropdown-item" href="page-auth-login-v2.html">
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  type="button"
+                  onClick={Logout}
+                >
                   <i className="mr-50" data-feather="power"></i> Logout
                 </a>
               </div>

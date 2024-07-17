@@ -141,10 +141,35 @@ const GetActiveInterns = (req, res) => {
   });
 };
 
+const CountInterns = (req, res) => {
+  const sql = `SELECT intern_type, MONTH(created_at) as month, COUNT(*) as count FROM intern_table WHERE YEAR(created_at) = YEAR(CURDATE()) GROUP BY intern_type, MONTH(created_at) ORDER BY MONTH(created_at)`;
+
+  connection.query(sql, (err, results) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      const data = {
+        onsite: Array(12).fill(0),
+        remote: Array(12).fill(0),
+      };
+
+      results.forEach((row) => {
+        if (row.intern_type === "Onsite") {
+          data.onsite[row.month - 1] = row.count;
+        } else if (row.intern_type === "Remote") {
+          data.remote[row.month - 1] = row.count;
+        }
+      });
+      res.json(data);
+    }
+  });
+};
+
 module.exports = {
   GetLatestRegister,
   GetOnsiteInterview,
   GetRemoteInterview,
   GetTestIntern,
   GetActiveInterns,
+  CountInterns,
 };
