@@ -37,29 +37,29 @@ export const InternCompleted = () => {
     getTestComplete();
   }, [getTestComplete]);
 
-  const [currentPage, settCurrentPage] = useState(1);
-  const recordPerPage = 15;
-  const lastIndex = currentPage * recordPerPage;
-  const firstIndex = lastIndex - recordPerPage;
-  const records = data.slice(firstIndex, lastIndex);
-  const nPage = Math.ceil(data.length / recordPerPage);
-  const numbers = [...Array(nPage + 1).keys()].slice(1);
+  // const [currentPage, settCurrentPage] = useState(1);
+  // const recordPerPage = 15;
+  // const lastIndex = currentPage * recordPerPage;
+  // const firstIndex = lastIndex - recordPerPage;
+  // const records = data.slice(firstIndex, lastIndex);
+  // const nPage = Math.ceil(data.length / recordPerPage);
+  // const numbers = [...Array(nPage + 1).keys()].slice(1);
 
-  function prevPage() {
-    if (currentPage !== firstIndex) {
-      settCurrentPage(currentPage - 1);
-    }
-  }
+  // function prevPage() {
+  //   if (currentPage !== firstIndex) {
+  //     settCurrentPage(currentPage - 1);
+  //   }
+  // }
 
-  function changeCurrentPage(id) {
-    settCurrentPage(id);
-  }
+  // function changeCurrentPage(id) {
+  //   settCurrentPage(id);
+  // }
 
-  function nextPage() {
-    if (currentPage !== nPage) {
-      settCurrentPage(currentPage + 1);
-    }
-  }
+  // function nextPage() {
+  //   if (currentPage !== nPage) {
+  //     settCurrentPage(currentPage + 1);
+  //   }
+  // }
 
   // const handleInput = (e) => {
   //   setValues({ ...values, [e.target.name]: e.target.value });
@@ -337,15 +337,15 @@ export const InternCompleted = () => {
                     </div>
                     <br />
                     {/* Pagination */}
-                    <div>
-                      {/* <nav> */}
+                    {/* <div>
+                      <nav>
                       <ul className="pagination">
                         <li className="page-item">
                           <a href="#" className="page-link" onClick={prevPage}>
                             Prev
                           </a>
                         </li>
-                        {/* {numbers.map((n, i) => (
+                        {numbers.map((n, i) => (
                           <li
                             className={`page-item ${
                               currentPage === n ? "active" : "   "
@@ -360,15 +360,15 @@ export const InternCompleted = () => {
                               {n}
                             </a>
                           </li>
-                        ))} */}
+                        ))}
                         <li className="page-item">
                           <a href="#" className="page-link" onClick={nextPage}>
                             Next
                           </a>
                         </li>
                       </ul>
-                      {/* </nav> */}
-                    </div>
+                      </nav>
+                    </div> */}
                   </div>
                 </div>
               </div>

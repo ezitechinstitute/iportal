@@ -33,29 +33,29 @@ export const InterviewTest = () => {
     getTestIntern();
   });
 
-  const [currentPage, settCurrentPage] = useState(1);
-  const recordPerPage = 50;
-  const lastIndex = currentPage * recordPerPage;
-  const firstIndex = lastIndex - recordPerPage;
-  const records = data.slice(firstIndex, lastIndex);
-  const nPage = Math.ceil(data.length / recordPerPage);
-  const numbers = [...Array(nPage + 1).keys()].slice(1);
+  // const [currentPage, settCurrentPage] = useState(1);
+  // const recordPerPage = 50;
+  // const lastIndex = currentPage * recordPerPage;
+  // const firstIndex = lastIndex - recordPerPage;
+  // const records = data.slice(firstIndex, lastIndex);
+  // const nPage = Math.ceil(data.length / recordPerPage);
+  // const numbers = [...Array(nPage + 1).keys()].slice(1);
 
-  function prevPage() {
-    if (currentPage !== firstIndex) {
-      settCurrentPage(currentPage - 1);
-    }
-  }
+  // function prevPage() {
+  //   if (currentPage !== firstIndex) {
+  //     settCurrentPage(currentPage - 1);
+  //   }
+  // }
 
   // function changeCurrentPage(id) {
   //   settCurrentPage(id);
   // }
 
-  function nextPage() {
-    if (currentPage !== nPage) {
-      settCurrentPage(currentPage + 1);
-    }
-  }
+  // function nextPage() {
+  //   if (currentPage !== nPage) {
+  //     settCurrentPage(currentPage + 1);
+  //   }
+  // }
 
   const RemoveTestIntern = (email) => {
     axios
@@ -294,8 +294,8 @@ export const InterviewTest = () => {
                       </div>
                       <br />
                       {/* Pagination */}
-                      <div>
-                        {/* <nav> */}
+                      {/* <div>
+                        <nav>
                         <ul className="pagination">
                           <li className="page-item">
                             <a
@@ -306,7 +306,7 @@ export const InterviewTest = () => {
                               Prev
                             </a>
                           </li>
-                          {/* {numbers.map((n, i) => (
+                          {numbers.map((n, i) => (
                           <li
                             className={`page-item ${
                               currentPage === n ? "active" : "   "
@@ -321,7 +321,7 @@ export const InterviewTest = () => {
                               {n}
                             </a>
                           </li>
-                        ))} */}
+                        ))}
                           <li className="page-item">
                             <a
                               href="#"
@@ -332,8 +332,8 @@ export const InterviewTest = () => {
                             </a>
                           </li>
                         </ul>
-                        {/* </nav> */}
-                      </div>
+                        </nav>
+                      </div> */}
                     </div>
                   </div>
                 </div>
