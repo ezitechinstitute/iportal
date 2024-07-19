@@ -7,19 +7,12 @@ async function SendMessageRemote(phone) {
       number: phone,
       type: "text",
       message: `
-Registration Successful! Interview Process Details
+Registration Successful!
 
-We are delighted to inform you that your registration was successful. Welcome to Ezitech's platform/community!🎉
+We are delighted to inform you that your registration is successful. Welcome to Ezitech's Community!
 
-Interview Process Details:
-
-Our team contact with you as soon as possible.
-
-Meeting Platform: WhatsApp
-
-If you have any questions or need further assistance, feel free to reach out to us at help@ezitech.org
-
-We look forward to meeting you during the interview process!
+Our Manager will contact you as soon as possible.
+If the manager does not respond within 24 hours, you should send a reminder message to this number.
 
 Best regards
   `,
@@ -37,21 +30,12 @@ async function SendMessageOnsite(phone) {
       number: phone,
       type: "text",
       message: `
-Registration Successful! Interview Process Details
+Registration Successful!
 
-We are delighted to inform you that your registration was successful. Welcome to Ezitech's platform/community!🎉
+We are delighted to inform you that your registration is successful. Welcome to Ezitech's Community!
 
-Interview Process Details:
-
-Onsite Interview:
-
-Days: Monday to Friday
-Time: 11:00Am to 3:00Pm
-Location: https://maps.app.goo.gl/Q78i6r1DifnBWJtA8
-
-If you have any questions or need further assistance, feel free to reach out to us at help@ezitech.org
-
-We look forward to meeting you during the interview process!
+Our Manager will contact you as soon as possible.
+If the manager does not respond within 24 hours, you should send a reminder message to this number.
 
 Best regards
   `,
@@ -69,19 +53,12 @@ async function SendMessageOther(phone) {
       number: phone,
       type: "text",
       message: `
-Registration Successful! Interview Process Details
+Registration Successful!
 
-We are delighted to inform you that your registration was successful. Welcome to Ezitech's platform/community!🎉
+We are delighted to inform you that your registration is successful. Welcome to Ezitech's Community!
 
-Interview Process Details:
-
-Our team contact with you as soon as possible.
-
-Meeting Platform: WhatsApp
-
-If you have any questions or need further assistance, feel free to reach out to us at help@ezitech.org
-
-We look forward to meeting you during the interview process!
+Our Manager will contact you as soon as possible.
+If the manager does not respond within 24 hours, you should send a reminder message to this number.
 
 Best regards
   `,
