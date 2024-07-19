@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { DataSet1 } from "../data/manager-data/Data";
 import { ManagerChartOne } from "./ManagerChartOne";
 import { FiRefreshCw } from "react-icons/fi";
 import axios from "axios";
 import { ManagerChartTwo } from "./ManagerChartTwo";
+import { InternStaticsDashboard } from "./InternStaticsDashboard";
+
+
 
 export const ManagerDashboard = () => {
   const [token, setToken] = useState(sessionStorage.getItem("token"));
@@ -63,8 +65,8 @@ export const ManagerDashboard = () => {
       {
         label: "Onsite Interns",
         data: [], // Array of data points
-        backgroundColor: ["#988ff4"],
-        borderColor: "#988ff4",
+        backgroundColor: ["#3275db"],
+        borderColor: "#3275db",
       },
     ],
   });
@@ -88,8 +90,8 @@ export const ManagerDashboard = () => {
       {
         label: "Remote Interns",
         data: [], // Array of data points
-        backgroundColor: ["#988ff4"],
-        borderColor: "#988ff4",
+        backgroundColor: ["#3275db"],
+        borderColor: "#3275db",
       },
     ],
   });
@@ -194,87 +196,7 @@ export const ManagerDashboard = () => {
                 {/* <!--/ Medal Card --> */}
 
                 {/* <!-- Statistics Card --> */}
-                <div className="col-12 col-xl-8 col-md-6">
-                  <div className="card card-statistics">
-                    <div className="card-header">
-                      <h4 className="card-title">Statistics</h4>
-                      <div className="d-flex align-items-center">
-                        <p className="card-text font-small-2 mr-25 mb-0">
-                          Updated 1 month ago
-                        </p>
-                      </div>
-                    </div>
-                    <div className="card-body statistics-body">
-                      <div className="row">
-                        <div className="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                          <div className="media">
-                            <div className="avatar bg-light-primary mr-2">
-                              <div className="avatar-content">
-                                <i data-feather="users" className="avatar-icon"></i>
-                              </div>
-                            </div>
-                            <div className="media-body my-auto">
-                              <h4 className="font-weight-bolder mb-0">230k</h4>
-                              <p className="card-text font-small-3 mb-0">Interns</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                          <div className="media">
-                            <div className="avatar bg-light-info mr-2">
-                              <div className="avatar-content">
-                                <i
-                                  data-feather="clipboard"
-                                  className="avatar-icon"
-                                ></i>
-                              </div>
-                            </div>
-                            <div className="media-body my-auto">
-                              <h4 className="font-weight-bolder mb-0">8.549k</h4>
-                              <p className="card-text font-small-3 mb-0">Test</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-xl-3 col-sm-6 col-12 mb-2 mb-sm-0">
-                          <div className="media">
-                            <div className="avatar bg-light-danger mr-2">
-                              <div className="avatar-content">
-                                <i
-                                  data-feather="loader"
-                                  className="avatar-icon"
-                                ></i>
-                              </div>
-                            </div>
-                            <div className="media-body my-auto">
-                              <h4 className="font-weight-bolder mb-0">1.423k</h4>
-                              <p className="card-text font-small-3 mb-0">
-                                Progress
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-xl-3 col-sm-6 col-12">
-                          <div className="media">
-                            <div className="avatar bg-light-success mr-2">
-                              <div className="avatar-content">
-                                <i
-                                  data-feather="check-square"
-                                  className="avatar-icon"
-                                ></i>
-                              </div>
-                            </div>
-                            <div className="media-body my-auto">
-                              <h4 className="font-weight-bolder mb-0">$9745</h4>
-                              <p className="card-text font-small-3 mb-0">
-                                Completed
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+               <InternStaticsDashboard/>
               </div>
             </section>
 

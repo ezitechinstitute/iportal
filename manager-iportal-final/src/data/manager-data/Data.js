@@ -1,73 +1,49 @@
-export const DataSet1 = [
-  {
-    id: 1,
-    Visitors: 30,
-    Years: "Jan",
-  },
+import axios from "axios";
+const token = sessionStorage.getItem("token");
 
-  {
-    id: 2,
-    Visitors: 40,
-    Years: "Feb",
-  },
+export const CountInterview = async () => {
+  try {
+    const res = await axios.get("https://api.ezitech.org/count-interview", {
+      headers: { "x-access-token": token },
+    });
+    return res.data.count;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-  {
-    id: 3,
-    Visitors: 50,
-    Years: "Mar",
-  },
+export const CountTest = async () => {
+  try {
+    const res = await axios.get("https://api.ezitech.org/count-test", {
+      headers: { "x-access-token": token },
+    });
+    return res.data.count;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-  {
-    id: 4,
-    Visitors: 60,
-    Years: "Apr",
-  },
+export const CountTestCompleted = async () => {
+  try {
+    const res = await axios.get(
+      "https://api.ezitech.org/count-test-completed",
+      {
+        headers: { "x-access-token": token },
+      }
+    );
+    return res.data.count;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-  {
-    id: 5,
-    Visitors: 20,
-    Years: "May",
-  },
-
-  {
-    id: 6,
-    Visitors: 76,
-    Years: "Jun",
-  },
-
-  {
-    id: 7,
-    Visitors: 92,
-    Years: "Jul",
-  },
-
-  {
-    id: 8,
-    Visitors: 92,
-    Years: "Aug",
-  },
-
-  {
-    id: 9,
-    Visitors: 92,
-    Years: "Sep",
-  },
-
-  {
-    id: 10,
-    Visitors: 92,
-    Years: "Oct",
-  },
-
-  {
-    id: 11,
-    Visitors: 92,
-    Years: "Nov",
-  },
-
-  {
-    id: 12,
-    Visitors: 92,
-    Years: "Dec",
-  },
-];
+export const CountActive = async () => {
+  try {
+    const res = await axios.get("https://api.ezitech.org/count-active", {
+      headers: { "x-access-token": token },
+    });
+    return res.data.count;
+  } catch (error) {
+    console.log(error);
+  }
+};

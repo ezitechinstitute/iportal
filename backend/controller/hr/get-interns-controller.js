@@ -165,6 +165,54 @@ const CountInterns = (req, res) => {
   });
 };
 
+const CountInterviewInterns = (req, res) => {
+  const sql =
+    "SELECT COUNT(*) as count FROM intern_table WHERE status = 'Interview'";
+  connection.query(sql, (err, data) => {
+    if (err) {
+      return res, json(err);
+    } else {
+      return res.json(data[0]);
+    }
+  });
+};
+
+const CountTestInterns = (req, res) => {
+  const sql =
+    "SELECT COUNT(*) as count FROM intern_table WHERE status = 'Test'";
+  connection.query(sql, (err, data) => {
+    if (err) {
+      return res, json(err);
+    } else {
+      return res.json(data[0]);
+    }
+  });
+};
+
+const CountTestCompleted = (req, res) => {
+  const sql =
+    "SELECT COUNT(*) as count FROM complete_test WHERE status = 'Completed'";
+  connection.query(sql, (err, data) => {
+    if (err) {
+      return res, json(err);
+    } else {
+      return res.json(data[0]);
+    }
+  });
+};
+
+const CountActive = (req, res) => {
+  const sql =
+    "SELECT COUNT(*) as count FROM intern_accounts WHERE status = 'Active'";
+  connection.query(sql, (err, data) => {
+    if (err) {
+      return res, json(err);
+    } else {
+      return res.json(data[0]);
+    }
+  });
+};
+
 module.exports = {
   GetLatestRegister,
   GetOnsiteInterview,
@@ -172,4 +220,8 @@ module.exports = {
   GetTestIntern,
   GetActiveInterns,
   CountInterns,
+  CountInterviewInterns,
+  CountTestInterns,
+  CountTestCompleted,
+  CountActive,
 };

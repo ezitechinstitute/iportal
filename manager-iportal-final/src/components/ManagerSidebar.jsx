@@ -86,7 +86,7 @@ export const ManagerSidebar = () => {
                 onClick={() => setActive("activeInterns")}
                 to={"/active-interns"}
               >
-                <i data-feather="users"></i>
+                <i data-feather="user-check"></i>
                 <span className="menu-title text-truncate" data-i18n="User">
                   Active Interns
                 </span>

@@ -20,6 +20,10 @@ const {
   GetUmairInternsRemote,
   GetActiveInterns,
   CountInterns,
+  CountInterviewInterns,
+  CountTestInterns,
+  CountTestCompleted,
+  CountActive,
 } = require("../controller/hr/get-interns-controller");
 const {
   GetManagerOnsite,
@@ -125,6 +129,11 @@ router.get("/get-test-interns/:email", verifyToken, GetTestIntern);
 router.get("/active-interns", verifyToken, GetActiveInterns);
 router.post("/active-portal", verifyToken, ActivePortal);
 router.get("/get-test-complete/:email", verifyToken, GetTestComplete);
+router.get("/count-interview", verifyToken, CountInterviewInterns);
+router.get("/count-test", verifyToken, CountTestInterns);
+router.get("/count-test-completed", verifyToken, CountTestCompleted);
+router.get("/count-active", verifyToken, CountActive);
+
 // router.get("/get-instructor-emails", verifyToken, GetInstructorEmail);
 // router.get("/get-manager-emails", verifyToken, GetManagerEmail);
 // router.post("/add-amount", AddAmount);

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ManagerTopbar } from "../components/ManagerTopbar";
 import { ManagerSidebar } from "../components/ManagerSidebar";
+import { InternStatics } from "../components/InternStatics";
 
 export const InterviewTest = () => {
   const [token, setToken] = useState(sessionStorage.getItem("token"));
@@ -86,98 +87,7 @@ export const InterviewTest = () => {
             <div className="content-body">
               <section id="dashboard-ecommerce">
                 {/* <!-- Statistics Card --> */}
-                <div className="col-12">
-                  <div className="card card-statistics">
-                    <div className="card-header">
-                      <h4 className="card-title">Oniste Interns Statistics</h4>
-                      <div className="d-flex align-items-center">
-                        <p className="card-text font-small-2 mr-25 mb-0">
-                          Updated 1 month ago
-                        </p>
-                      </div>
-                    </div>
-                    <div className="card-body statistics-body">
-                      <div className="row">
-                        <div className="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                          <div className="media">
-                            <div className="avatar bg-light-primary mr-2">
-                              <div className="avatar-content">
-                                <i
-                                  data-feather="users"
-                                  className="avatar-icon"
-                                ></i>
-                              </div>
-                            </div>
-                            <div className="media-body my-auto">
-                              <h4 className="font-weight-bolder mb-0">230k</h4>
-                              <p className="card-text font-small-3 mb-0">
-                                Interns
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                          <div className="media">
-                            <div className="avatar bg-light-info mr-2">
-                              <div className="avatar-content">
-                                <i
-                                  data-feather="clipboard"
-                                  className="avatar-icon"
-                                ></i>
-                              </div>
-                            </div>
-                            <div className="media-body my-auto">
-                              <h4 className="font-weight-bolder mb-0">
-                                8.549k
-                              </h4>
-                              <p className="card-text font-small-3 mb-0">
-                                Test
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-xl-3 col-sm-6 col-12 mb-2 mb-sm-0">
-                          <div className="media">
-                            <div className="avatar bg-light-danger mr-2">
-                              <div className="avatar-content">
-                                <i
-                                  data-feather="loader"
-                                  className="avatar-icon"
-                                ></i>
-                              </div>
-                            </div>
-                            <div className="media-body my-auto">
-                              <h4 className="font-weight-bolder mb-0">
-                                1.423k
-                              </h4>
-                              <p className="card-text font-small-3 mb-0">
-                                Progress
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-xl-3 col-sm-6 col-12">
-                          <div className="media">
-                            <div className="avatar bg-light-success mr-2">
-                              <div className="avatar-content">
-                                <i
-                                  data-feather="check-square"
-                                  className="avatar-icon"
-                                ></i>
-                              </div>
-                            </div>
-                            <div className="media-body my-auto">
-                              <h4 className="font-weight-bolder mb-0">$9745</h4>
-                              <p className="card-text font-small-3 mb-0">
-                                Completed
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+             <InternStatics/>
                 {/* <!--/ Statistics Card --> */}
 
                 {/* <!-- Table Hover Animation start --> */}
@@ -227,14 +137,14 @@ export const InterviewTest = () => {
                                   return (
                                     <>
                                       <tr>
-                                        <th scope="row">{id}</th>
-                                        <td>{name}</td>
-                                        <td>{email}</td>
-                                        <td>{phone}</td>
-                                        <td>{technology}</td>
-                                        <td>{interview_type}</td>
-                                        <td>{status}</td>
-                                        <td>
+                                        <th className="border px-1" scope="row">{id}</th>
+                                        <td className="border px-1">{name}</td>
+                                        <td className="border px-1">{email}</td>
+                                        <td className="border px-1">{phone}</td>
+                                        <td className="border px-1">{technology}</td>
+                                        <td className="border px-1">{interview_type}</td>
+                                        <td className="border px-1">{status}</td>
+                                        <td className="border px-1">
                                           <div className="dropdown">
                                             <button
                                               type="button"
