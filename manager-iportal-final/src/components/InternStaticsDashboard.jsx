@@ -82,7 +82,7 @@ export const InternStaticsDashboard = () => {
                     <h4 className="font-weight-bolder mb-0">
                       {interview.toLocaleString()}
                     </h4>
-                    <p className="card-text font-small-3 mb-0">Interns</p>
+                    <p className="card-text font-small-3 mb-0">Interview</p>
                   </div>
                 </div>
               </div>
@@ -128,7 +128,9 @@ export const InternStaticsDashboard = () => {
                   </div>
 
                   <div className="media-body my-auto">
-                    <h4 className="font-weight-bolder mb-0">{active.toLocaleString()}</h4>
+                    <h4 className="font-weight-bolder mb-0">
+                      {active.toLocaleString()}
+                    </h4>
                     <p className="card-text font-small-3 mb-0">Active</p>
                   </div>
                 </div>
