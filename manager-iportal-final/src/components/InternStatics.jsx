@@ -61,7 +61,7 @@ export const InternStatics = () => {
       <div className="col-12">
         <div className="card card-statistics">
           <div className="card-header">
-            <h4 className="card-title">Oniste Interns Statistics</h4>
+            <h4 className="card-title">Statistics</h4>
             <div className="d-flex align-items-center">
               <p className="card-text font-small-2 mr-25 mb-0">
                 Updated 1 Second ago

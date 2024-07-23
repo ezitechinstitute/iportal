@@ -199,12 +199,12 @@ export const RemoteInterns = () => {
                                 return (
                                   <>
                                     <tr>
-                                      <td className="border px-1">{email}</td>
-                                      <td className="border px-1">{phone}</td>
-                                      <td className="border px-1">{name}</td>
                                       <th className="border px-1" scope="row">
                                         {id}
                                       </th>
+                                      <td className="border px-1">{name}</td>
+                                      <td className="border px-1">{email}</td>
+                                      <td className="border px-1">{phone}</td>
                                       <td className="border px-1">
                                         {technology}
                                       </td>
