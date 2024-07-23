@@ -85,7 +85,7 @@ export const InternStatics = () => {
                         <h4 className="font-weight-bolder mb-0">
                           {interview.toLocaleString()}
                         </h4>
-                        <p className="card-text font-small-3 mb-0">Interview</p>
+                        <p className="card-text font-small-3 mb-0" style={{color: "black"}}>Interview</p>
                       </div>
                     </div>
                   </Link>
@@ -101,7 +101,7 @@ export const InternStatics = () => {
                         <h4 className="font-weight-bolder mb-0">
                           {interview.toLocaleString()}
                         </h4>
-                        <p className="card-text font-small-3 mb-0">Interns</p>
+                        <p className="card-text font-small-3 mb-0" style={{color: "black"}}>Interview</p>
                       </div>
                     </div>
                   </Link>
@@ -119,7 +119,7 @@ export const InternStatics = () => {
                       <h4 className="font-weight-bolder mb-0">
                         {test.toLocaleString()}
                       </h4>
-                      <p className="card-text font-small-3 mb-0">Test</p>
+                      <p className="card-text font-small-3 mb-0" style={{color: "black"}}>Test</p>
                     </div>
                   </div>
                 </Link>
@@ -139,7 +139,7 @@ export const InternStatics = () => {
                       <h4 className="font-weight-bolder mb-0">
                         {complete.toLocaleString()}
                       </h4>
-                      <p className="card-text font-small-3 mb-0">Completed</p>
+                      <p className="card-text font-small-3 mb-0" style={{color: "black"}}>Completed</p>
                     </div>
                   </div>
                 </Link>
@@ -160,7 +160,7 @@ export const InternStatics = () => {
                       <h4 className="font-weight-bolder mb-0">
                         {active.toLocaleString()}
                       </h4>
-                      <p className="card-text font-small-3 mb-0">Active</p>
+                      <p className="card-text font-small-3 mb-0" style={{color: "black"}}>Active</p>
                     </div>
                   </div>
                 </Link>
