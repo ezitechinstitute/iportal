@@ -129,8 +129,8 @@ router.get("/get-test-interns/:email", verifyToken, GetTestIntern);
 router.get("/active-interns", verifyToken, GetActiveInterns);
 router.post("/active-portal", verifyToken, ActivePortal);
 router.get("/get-test-complete/:email", verifyToken, GetTestComplete);
-router.get("/count-interview", verifyToken, CountInterviewInterns);
-router.get("/count-test", verifyToken, CountTestInterns);
+router.get("/count-interview/:email", verifyToken, CountInterviewInterns);
+router.get("/count-test/:email", verifyToken, CountTestInterns);
 router.get("/count-test-completed", verifyToken, CountTestCompleted);
 router.get("/count-active", verifyToken, CountActive);
 
