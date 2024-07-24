@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  CountActive,
+  CountContactWith,
   CountInterview,
   CountTest,
   CountTestCompleted,
@@ -39,9 +39,9 @@ export const InternStaticsDashboard = () => {
     }
   };
 
-  const GetActive = async () => {
+  const GetContact = async () => {
     try {
-      const data = await CountActive();
+      const data = await CountContactWith();
       setActive(data);
     } catch (error) {
       console.log(error);
@@ -53,7 +53,7 @@ export const InternStaticsDashboard = () => {
       GetInterview();
       GetTestIntern();
       GetTestComplete();
-      GetActive();
+      GetContact();
     }, 1000);
   }, []);
 
@@ -83,6 +83,22 @@ export const InternStaticsDashboard = () => {
                       {interview.toLocaleString()}
                     </h4>
                     <p className="card-text font-small-3 mb-0">Interview</p>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-3 col-sm-6 col-12">
+                <div className="media">
+                  <div className="avatar bg-light-info mr-2">
+                    <div className="avatar-content">
+                      <i data-feather="phone" className="avatar-icon"></i>
+                    </div>
+                  </div>
+
+                  <div className="media-body my-auto">
+                    <h4 className="font-weight-bolder mb-0">
+                      {active.toLocaleString()}
+                    </h4>
+                    <p className="card-text font-small-3 mb-0">Contact</p>
                   </div>
                 </div>
               </div>
@@ -116,22 +132,6 @@ export const InternStaticsDashboard = () => {
                       {complete.toLocaleString()}
                     </h4>
                     <p className="card-text font-small-3 mb-0">Completed</p>
-                  </div>
-                </div>
-              </div>
-              <div className="col-xl-3 col-sm-6 col-12">
-                <div className="media">
-                  <div className="avatar bg-light-info mr-2">
-                    <div className="avatar-content">
-                      <i data-feather="user-check" className="avatar-icon"></i>
-                    </div>
-                  </div>
-
-                  <div className="media-body my-auto">
-                    <h4 className="font-weight-bolder mb-0">
-                      {active.toLocaleString()}
-                    </h4>
-                    <p className="card-text font-small-3 mb-0">Active</p>
                   </div>
                 </div>
               </div>

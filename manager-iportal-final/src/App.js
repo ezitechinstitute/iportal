@@ -13,6 +13,7 @@ import Invoice from "./pages/Invoice";
 import { Login } from "./pages/Login";
 import { InterviewTest } from "./pages/InterviewTest";
 import { ActiveInterns } from "./pages/ActiveInterns";
+import { ContactWith } from "./pages/ContactWith";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route index path="/manager-dashboard" element={<ManagerHome />} />
           <Route exact path="/onsite-interns" element={<OnsiteInterns />} />
           <Route exact path="/remote-interns" element={<RemoteInterns />} />
+          <Route exact path="/contact-with" element={<ContactWith />} />
           <Route exact path="/interview-test" element={<InterviewTest />} />
           <Route exact path="/intern-projects" element={<InternProjects />} />
           <Route exact path="/test-completed" element={<InternCompleted />} />

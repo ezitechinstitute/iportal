@@ -121,10 +121,24 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={activeLink === "projects" ? "active" : "undefined"}>
+            <li className={activeLink === "contact" ? "active" : "undefined"}>
               <NavLink
                 className="d-flex align-items-center"
-                onClick={() => setActive("projects")}
+                onClick={() => setActive("contact")}
+                id={"3"}
+                to="/contact-with"
+              >
+                <i data-feather="phone"></i>
+                <span className="menu-item" data-i18n="eCommerce">
+                  Contact With
+                </span>
+              </NavLink>
+            </li>
+
+            <li className={activeLink === "test" ? "active" : "undefined"}>
+              <NavLink
+                className="d-flex align-items-center"
+                onClick={() => setActive("test")}
                 id={"3"}
                 to="/interview-test"
               >

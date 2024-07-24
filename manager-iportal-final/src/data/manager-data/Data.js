@@ -39,9 +39,9 @@ export const CountTestCompleted = async () => {
   }
 };
 
-export const CountActive = async () => {
+export const CountContactWith = async () => {
   try {
-    const res = await axios.get("https://api.ezitech.org/count-active", {
+    const res = await axios.get("https://api.ezitech.org/count-contact-with", {
       headers: { "x-access-token": token },
     });
     return res.data.count;

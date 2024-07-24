@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  CountActive,
+  CountContactWith,
   CountInterview,
   CountTest,
   CountTestCompleted,
@@ -41,9 +41,9 @@ export const InternStatics = () => {
     }
   };
 
-  const GetActive = async () => {
+  const GetContactWith = async () => {
     try {
-      const data = await CountActive();
+      const data = await CountContactWith();
       setActive(data);
     } catch (error) {
       console.log(error);
@@ -55,7 +55,7 @@ export const InternStatics = () => {
       GetInterview();
       GetTestIntern();
       GetTestComplete();
-      GetActive();
+      GetContactWith();
     }, 1000);
   }, []);
   return (
@@ -85,7 +85,12 @@ export const InternStatics = () => {
                         <h4 className="font-weight-bolder mb-0">
                           {interview.toLocaleString()}
                         </h4>
-                        <p className="card-text font-small-3 mb-0" style={{color: "black"}}>Interview</p>
+                        <p
+                          className="card-text font-small-3 mb-0"
+                          style={{ color: "black" }}
+                        >
+                          Interview
+                        </p>
                       </div>
                     </div>
                   </Link>
@@ -101,11 +106,39 @@ export const InternStatics = () => {
                         <h4 className="font-weight-bolder mb-0">
                           {interview.toLocaleString()}
                         </h4>
-                        <p className="card-text font-small-3 mb-0" style={{color: "black"}}>Interview</p>
+                        <p
+                          className="card-text font-small-3 mb-0"
+                          style={{ color: "black" }}
+                        >
+                          Interview
+                        </p>
                       </div>
                     </div>
                   </Link>
                 )}
+              </div>
+              <div className="col-xl-3 col-sm-6 col-12">
+                <Link to={"/contact-with"}>
+                  <div className="media">
+                    <div className="avatar bg-light-info mr-2">
+                      <div className="avatar-content">
+                        <i data-feather="phone" className="avatar-icon"></i>
+                      </div>
+                    </div>
+
+                    <div className="media-body my-auto">
+                      <h4 className="font-weight-bolder mb-0">
+                        {active.toLocaleString()}
+                      </h4>
+                      <p
+                        className="card-text font-small-3 mb-0"
+                        style={{ color: "black" }}
+                      >
+                        Contact
+                      </p>
+                    </div>
+                  </div>
+                </Link>
               </div>
               <div className="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
                 <Link to={"/interview-test"}>
@@ -119,7 +152,12 @@ export const InternStatics = () => {
                       <h4 className="font-weight-bolder mb-0">
                         {test.toLocaleString()}
                       </h4>
-                      <p className="card-text font-small-3 mb-0" style={{color: "black"}}>Test</p>
+                      <p
+                        className="card-text font-small-3 mb-0"
+                        style={{ color: "black" }}
+                      >
+                        Test
+                      </p>
                     </div>
                   </div>
                 </Link>
@@ -139,28 +177,12 @@ export const InternStatics = () => {
                       <h4 className="font-weight-bolder mb-0">
                         {complete.toLocaleString()}
                       </h4>
-                      <p className="card-text font-small-3 mb-0" style={{color: "black"}}>Completed</p>
-                    </div>
-                  </div>
-                </Link>
-              </div>
-              <div className="col-xl-3 col-sm-6 col-12">
-                <Link to={"/active-interns"}>
-                  <div className="media">
-                    <div className="avatar bg-light-info mr-2">
-                      <div className="avatar-content">
-                        <i
-                          data-feather="user-check"
-                          className="avatar-icon"
-                        ></i>
-                      </div>
-                    </div>
-
-                    <div className="media-body my-auto">
-                      <h4 className="font-weight-bolder mb-0">
-                        {active.toLocaleString()}
-                      </h4>
-                      <p className="card-text font-small-3 mb-0" style={{color: "black"}}>Active</p>
+                      <p
+                        className="card-text font-small-3 mb-0"
+                        style={{ color: "black" }}
+                      >
+                        Completed
+                      </p>
                     </div>
                   </div>
                 </Link>

@@ -54,48 +54,19 @@ export const RemoteInterns = () => {
       });
   };
 
-  const AssignPortal = (name, email, phone, technology) => {
-    const charset =
-      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+<>?";
-    const length = 8;
-    let password = "";
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      password += charset[randomIndex];
-    }
-
-    const day = new Date().getDate();
-    const month = new Date().getMonth() + 1;
-    const year = new Date().getFullYear().toLocaleString();
-    const id = Math.floor(1000 + Math.random() * 9000);
-
-    let EZI_ID = "ETI-" + day + "-" + month + "-" + year.slice(3, 5) + "/" + id;
-
-    // https://api.ezitech.org
-
+  const ContactWith = (email) => {
     axios
       .post(
-        "https://api.ezitech.org/assign-portal",
-        {
-          EZI_ID,
-          name,
-          email,
-          phone,
-          password,
-          technology,
-          managerContact,
-        },
+        "https://api.ezitech.org/update-contact-status",
+        { email },
         { headers: { "x-access-token": token } }
       )
       .then((res) => {
         if (res.data === 1) {
-          alert("Assign Portal Successfully");
+          alert("Status Updated from Interview to Contact");
         } else {
           alert("Something Went Wrong!!!");
         }
-      })
-      .catch((err) => {
-        console.log(err);
       });
   };
 
@@ -235,15 +206,10 @@ export const RemoteInterns = () => {
                                                   href="#"
                                                   type="button"
                                                   onClick={() =>
-                                                    AssignPortal(
-                                                      name,
-                                                      email,
-                                                      phone,
-                                                      technology
-                                                    )
+                                                    ContactWith(email)
                                                   }
                                                 >
-                                                  Assign Portal
+                                                  Contact With
                                                 </a>
                                               </li>
                                               <li>

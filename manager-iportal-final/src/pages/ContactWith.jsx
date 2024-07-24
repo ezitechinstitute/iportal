@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { InvoiceModal } from "../components/InvoiceModal";
 import { InternStatics } from "../components/InternStatics";
 
-export const OnsiteInterns = () => {
+export const ContactWith = () => {
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [singleIntern, setSingleIntern] = useState([]);
   const [data, setData] = useState([]);
@@ -20,11 +20,12 @@ export const OnsiteInterns = () => {
       navigate("/");
     }
   });
+  //   https://api.ezitech.org/get-contact-with
 
-  const getOnsiteRegister = async () => {
+  const getContactWith = async () => {
     try {
       const res = await axios.get(
-        `https://api.ezitech.org/get-onsite-interns/${userEmail}`,
+        `https://api.ezitech.org/get-contact-with/${userEmail}`,
         { headers: { "x-access-token": token } }
       );
       setData(res.data);
@@ -34,9 +35,8 @@ export const OnsiteInterns = () => {
   };
 
   useEffect(() => {
-    console.log(data)
     // setInterval(() => {
-    getOnsiteRegister();
+    getContactWith();
     // }, 2000);
   });
 
@@ -91,19 +91,46 @@ export const OnsiteInterns = () => {
       });
   };
 
-  const ContactWith = (email) => {
+  const AssignPortal = (name, email, phone, technology) => {
+    const charset =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+<>?";
+    const length = 8;
+    let password = "";
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      password += charset[randomIndex];
+    }
+
+    const day = new Date().getDate();
+    const month = new Date().getMonth() + 1;
+    const year = new Date().getFullYear().toLocaleString();
+    const id = Math.floor(1000 + Math.random() * 9000);
+
+    let EZI_ID = "ETI-" + day + "-" + month + "-" + year.slice(3, 5) + "/" + id;
+
     axios
       .post(
-        "https://api.ezitech.org/update-contact-status",
-        { email },
+        "https://api.ezitech.org/assign-portal",
+        {
+          EZI_ID,
+          name,
+          email,
+          password,
+          phone,
+          technology,
+          managerContact,
+        },
         { headers: { "x-access-token": token } }
       )
       .then((res) => {
         if (res.data === 1) {
-          alert("Status Updated from Interview to Contact");
+          alert("Assign Portal Successfully");
         } else {
           alert("Something Went Wrong!!!");
         }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -127,7 +154,7 @@ export const OnsiteInterns = () => {
                 <div className="col-12">
                   <div className="card">
                     <div className="card-header">
-                      <h4 className="card-title">Onsite Interns</h4>
+                      <h4 className="card-title">Contact With</h4>
                       {/* <!-- Button trigger modal --> */}
                       <button
                         type="button"
@@ -195,20 +222,25 @@ export const OnsiteInterns = () => {
                                           <div>
                                             <ul className="dropdown-menu">
                                               {/* <li>
-                                              <a className="dropdown-item" href="#">
-                                                Send Mail
-                                              </a>
-                                            </li> */}
+                                                <a className="dropdown-item" href="#">
+                                                  Send Mail
+                                                </a>
+                                              </li> */}
                                               <li>
                                                 <a
                                                   className="dropdown-item"
                                                   href="#"
                                                   type="button"
                                                   onClick={() =>
-                                                    ContactWith(email)
+                                                    AssignPortal(
+                                                      name,
+                                                      email,
+                                                      phone,
+                                                      technology
+                                                    )
                                                   }
                                                 >
-                                                  Contact With
+                                                  Assign Portal
                                                 </a>
                                               </li>
                                               <li>
@@ -246,21 +278,21 @@ export const OnsiteInterns = () => {
                           </a>
                         </li>
                         {/* {numbers.map((n, i) => (
-                          <li
-                            className={`page-item ${
-                              currentPage === n ? "active" : "   "
-                            }`}
-                            key={i}
-                          >
-                            <a
-                              href="#"
-                              className="page-link"
-                              onClick={changeCurrentPage}
+                            <li
+                              className={`page-item ${
+                                currentPage === n ? "active" : "   "
+                              }`}
+                              key={i}
                             >
-                              {n}
-                            </a>
-                          </li>
-                        ))} */}
+                              <a
+                                href="#"
+                                className="page-link"
+                                onClick={changeCurrentPage}
+                              >
+                                {n}
+                              </a>
+                            </li>
+                          ))} */}
                         <li className="page-item">
                           <a href="#" className="page-link" onClick={nextPage}>
                             Next
@@ -465,16 +497,16 @@ export const OnsiteInterns = () => {
                                   </div>
 
                                   {/* <div className="col-sm-6">
-                                    <label htmlFor="">To</label>
-                                    <input
-                                      type="text"
-                                      name=""
-                                      id=""
-                                      value={to_address}
-                                      readOnly
-                                      className="form-control border-0"
-                                    />
-                                  </div> */}
+                                      <label htmlFor="">To</label>
+                                      <input
+                                        type="text"
+                                        name=""
+                                        id=""
+                                        value={to_address}
+                                        readOnly
+                                        className="form-control border-0"
+                                      />
+                                    </div> */}
                                 </div>
                               </>
                             );
@@ -482,14 +514,14 @@ export const OnsiteInterns = () => {
                         : " "}
                     </div>
                     {/* <div className="modal-footer">
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        data-dismiss="modal"
-                      >
-                        Accept
-                      </button>
-                    </div> */}
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          data-dismiss="modal"
+                        >
+                          Accept
+                        </button>
+                      </div> */}
                   </div>
                 </div>
               </div>
@@ -498,112 +530,112 @@ export const OnsiteInterns = () => {
 
               {/* <!-- Modal to add new record --> */}
               {/* <div className="modal modal-slide-in fade" id="exampleModal">
-                <div className="modal-dialog sidebar-sm">
-                  <form className="add-new-record modal-content pt-0">
-                    <button
-                      type="button"
-                      className="close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    >
-                      ×
-                    </button>
-                    <div className="modal-header mb-1">
-                      <h5 className="modal-title" id="exampleModalLabel">
-                        New Record
-                      </h5>
-                    </div>
-                    <div className="modal-body flex-grow-1">
-                      <div className="form-group">
-                        <label
-                          className="form-label"
-                          for="basic-icon-default-fullname"
-                        >
-                          Full Name
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control dt-full-name"
-                          id="basic-icon-default-fullname"
-                          placeholder="John Doe"
-                          aria-label="John Doe"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label className="form-label" for="basic-icon-default-post">
-                          Post
-                        </label>
-                        <input
-                          type="text"
-                          id="basic-icon-default-post"
-                          className="form-control dt-post"
-                          placeholder="Web Developer"
-                          aria-label="Web Developer"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label
-                          className="form-label"
-                          for="basic-icon-default-email"
-                        >
-                          Email
-                        </label>
-                        <input
-                          type="text"
-                          id="basic-icon-default-email"
-                          className="form-control dt-email"
-                          placeholder="john.doe@example.com"
-                          aria-label="john.doe@example.com"
-                        />
-                        <small className="form-text text-muted">
-                          {" "}
-                          You can use letters, numbers & periods{" "}
-                        </small>
-                      </div>
-                      <div className="form-group">
-                        <label className="form-label" for="basic-icon-default-date">
-                          Joining Date
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control dt-date"
-                          id="basic-icon-default-date"
-                          placeholder="MM/DD/YYYY"
-                          aria-label="MM/DD/YYYY"
-                        />
-                      </div>
-                      <div className="form-group mb-4">
-                        <label
-                          className="form-label"
-                          for="basic-icon-default-salary"
-                        >
-                          Salary
-                        </label>
-                        <input
-                          type="text"
-                          id="basic-icon-default-salary"
-                          className="form-control dt-salary"
-                          placeholder="$12000"
-                          aria-label="$12000"
-                        />
-                      </div>
+                  <div className="modal-dialog sidebar-sm">
+                    <form className="add-new-record modal-content pt-0">
                       <button
                         type="button"
-                        className="btn btn-primary data-submit mr-1"
-                      >
-                        Submit
-                      </button>
-                      <button
-                        type="reset"
-                        className="btn btn-outline-secondary"
+                        className="close"
                         data-dismiss="modal"
+                        aria-label="Close"
                       >
-                        Cancel
+                        ×
                       </button>
-                    </div>
-                  </form>
-                </div>
-              </div> */}
+                      <div className="modal-header mb-1">
+                        <h5 className="modal-title" id="exampleModalLabel">
+                          New Record
+                        </h5>
+                      </div>
+                      <div className="modal-body flex-grow-1">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            for="basic-icon-default-fullname"
+                          >
+                            Full Name
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control dt-full-name"
+                            id="basic-icon-default-fullname"
+                            placeholder="John Doe"
+                            aria-label="John Doe"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label className="form-label" for="basic-icon-default-post">
+                            Post
+                          </label>
+                          <input
+                            type="text"
+                            id="basic-icon-default-post"
+                            className="form-control dt-post"
+                            placeholder="Web Developer"
+                            aria-label="Web Developer"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            for="basic-icon-default-email"
+                          >
+                            Email
+                          </label>
+                          <input
+                            type="text"
+                            id="basic-icon-default-email"
+                            className="form-control dt-email"
+                            placeholder="john.doe@example.com"
+                            aria-label="john.doe@example.com"
+                          />
+                          <small className="form-text text-muted">
+                            {" "}
+                            You can use letters, numbers & periods{" "}
+                          </small>
+                        </div>
+                        <div className="form-group">
+                          <label className="form-label" for="basic-icon-default-date">
+                            Joining Date
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control dt-date"
+                            id="basic-icon-default-date"
+                            placeholder="MM/DD/YYYY"
+                            aria-label="MM/DD/YYYY"
+                          />
+                        </div>
+                        <div className="form-group mb-4">
+                          <label
+                            className="form-label"
+                            for="basic-icon-default-salary"
+                          >
+                            Salary
+                          </label>
+                          <input
+                            type="text"
+                            id="basic-icon-default-salary"
+                            className="form-control dt-salary"
+                            placeholder="$12000"
+                            aria-label="$12000"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          className="btn btn-primary data-submit mr-1"
+                        >
+                          Submit
+                        </button>
+                        <button
+                          type="reset"
+                          className="btn btn-outline-secondary"
+                          data-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div> */}
             </section>
           </div>
         </div>

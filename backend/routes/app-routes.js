@@ -10,6 +10,7 @@ const {
   RemoveIntern,
   GetTestComplete,
   RemoveCompletedInterns,
+  MarkAsContact,
 } = require("../controller/hr/hr-interview-controller");
 const {
   GetLatestRegister,
@@ -24,6 +25,8 @@ const {
   CountTestInterns,
   CountTestCompleted,
   CountActive,
+  GetContactWith,
+  CountContactWith,
 } = require("../controller/hr/get-interns-controller");
 const {
   GetManagerOnsite,
@@ -121,10 +124,12 @@ router.post("/manager-auth", HrAuth);
 /* HR All Endpoints */
 router.get("/get-latest-interns/:email", GetLatestRegister);
 router.get("/get-onsite-interns/:email", verifyToken, GetOnsiteInterview);
+router.post("/update-contact-status", verifyToken, MarkAsContact);
 router.post("/update-intern-status", verifyToken, AssignTest);
 router.post("/remove-intern", verifyToken, RemoveIntern);
 router.post("/remove-completed", verifyToken, RemoveCompletedInterns);
 router.get("/get-remote-interns/:email", verifyToken, GetRemoteInterview);
+router.get("/get-contact-with/:email", verifyToken, GetContactWith);
 router.get("/get-test-interns/:email", verifyToken, GetTestIntern);
 router.get("/active-interns", verifyToken, GetActiveInterns);
 router.post("/active-portal", verifyToken, ActivePortal);
@@ -132,7 +137,7 @@ router.get("/get-test-complete/:email", verifyToken, GetTestComplete);
 router.get("/count-interview/:email", verifyToken, CountInterviewInterns);
 router.get("/count-test/:email", verifyToken, CountTestInterns);
 router.get("/count-test-completed", verifyToken, CountTestCompleted);
-router.get("/count-active", verifyToken, CountActive);
+router.get("/count-contact-with/:email", verifyToken, CountContactWith);
 
 // router.get("/get-instructor-emails", verifyToken, GetInstructorEmail);
 // router.get("/get-manager-emails", verifyToken, GetManagerEmail);

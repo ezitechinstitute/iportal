@@ -73,10 +73,24 @@ const RemoveCompletedInterns = (req, res) => {
   });
 };
 
+const MarkAsContact = (req, res) => {
+  const { email } = req.body;
+
+  const sql = "UPDATE `intern_table` SET `status`='Contact' WHERE `email` = ?";
+  connection.query(sql, [email], (err, data) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.json(data.affectedRows);
+    }
+  });
+};
+
 module.exports = {
   AssignTest,
   RemoveIntern,
   GetInterview,
   GetTestComplete,
   RemoveCompletedInterns,
+  MarkAsContact,
 };
