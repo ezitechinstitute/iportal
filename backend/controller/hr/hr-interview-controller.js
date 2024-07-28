@@ -45,7 +45,7 @@ const RemoveIntern = (req, res) => {
 const GetTestComplete = (req, res) => {
   const { email } = req.params;
 
-  if (email === "umair1@ezitech.org") {
+  if (email === "marketingmanager@ezitech.org") {
     const sql =
       "SELECT * FROM `complete_test` WHERE (`technology` = 'WordPress' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `status` = 'Completed'";
     connection.query(sql, (err, data) => {

@@ -3,7 +3,7 @@ const { connection } = require("../../config/connection");
 const GetLatestRegister = (req, res) => {
   const { email } = req.params;
 
-  if (email === "umair1@ezitech.org") {
+  if (email === "marketingmanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)' ORDER BY `id` DESC LIMIT 5";
     connection.query(sql, (err, data) => {
@@ -15,7 +15,7 @@ const GetLatestRegister = (req, res) => {
     });
   }
 
-  if (email === "kashif@ezitech.org") {
+  if (email === "remotemanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' ORDER BY `id` DESC LIMIT 5";
     connection.query(sql, (err, data) => {
@@ -27,7 +27,7 @@ const GetLatestRegister = (req, res) => {
     });
   }
 
-  if (email === "muzammil@ezitech.org") {
+  if (email === "onistemanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' ORDER BY `id` DESC LIMIT 5";
     connection.query(sql, (err, data) => {
@@ -43,7 +43,7 @@ const GetLatestRegister = (req, res) => {
 const GetOnsiteInterview = (req, res) => {
   const { email } = req.params;
 
-  if (email === "umair1@ezitech.org") {
+  if (email === "marketingmanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview' ORDER BY `id` DESC";
     connection.query(sql, (err, data) => {
@@ -53,7 +53,7 @@ const GetOnsiteInterview = (req, res) => {
         return res.json(data);
       }
     });
-  } else if (email === "muzammil@ezitech.org") {
+  } else if (email === "onsitemanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview' ORDER BY `id` DESC";
     connection.query(sql, (err, data) => {
@@ -70,7 +70,7 @@ const GetOnsiteInterview = (req, res) => {
 const GetRemoteInterview = (req, res) => {
   const { email } = req.params;
 
-  if (email === "umair1@ezitech.org") {
+  if (email === "marketingmanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' AND `status` = 'Interview' ORDER BY `id` DESC";
 
@@ -81,7 +81,7 @@ const GetRemoteInterview = (req, res) => {
         return res.json(data);
       }
     });
-  } else if (email === "kashif@ezitech.org") {
+  } else if (email === "remotemanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' AND `status` = 'Interview' ORDER BY `id` DESC";
 
@@ -98,7 +98,7 @@ const GetRemoteInterview = (req, res) => {
 const GetContactWith = (req, res) => {
   const { email } = req.params;
 
-  if (email === "umair1@ezitech.org") {
+  if (email === "marketingmanger@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)')  AND `Status` = 'Contact' ORDER BY `id` DESC";
     connection.query(sql, (err, data) => {
@@ -110,7 +110,7 @@ const GetContactWith = (req, res) => {
     });
   }
 
-  if (email === "kashif@ezitech.org") {
+  if (email === "remotemanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' AND `Status` = 'Contact' ORDER BY `id` DESC";
     connection.query(sql, (err, data) => {
@@ -122,7 +122,7 @@ const GetContactWith = (req, res) => {
     });
   }
 
-  if (email === "muzammil@ezitech.org") {
+  if (email === "onsitemanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `Status` = 'Contact' ORDER BY `id` DESC";
     connection.query(sql, (err, data) => {
@@ -138,7 +138,7 @@ const GetContactWith = (req, res) => {
 const GetTestIntern = (req, res) => {
   const { email } = req.params;
 
-  if (email === "umair1@ezitech.org") {
+  if (email === "marketingmanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `status` = 'Test'";
     connection.query(sql, (err, data) => {
@@ -148,7 +148,7 @@ const GetTestIntern = (req, res) => {
         return res.json(data);
       }
     });
-  } else if (email === "kashif@ezitech.org") {
+  } else if (email === "remotemanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' AND `status` = 'Test'";
     connection.query(sql, (err, data) => {
@@ -158,7 +158,7 @@ const GetTestIntern = (req, res) => {
         return res.json(data);
       }
     });
-  } else if (email === "muzammil@ezitech.org") {
+  } else if (email === "onsitemanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Test'";
     connection.query(sql, (err, data) => {
@@ -208,7 +208,7 @@ const CountInterns = (req, res) => {
 
 const CountInterviewInterns = (req, res) => {
   const { email } = req.params;
-  if (email === "muzammil@ezitech.org") {
+  if (email === "onsitemanager@ezitech.org") {
     const sql =
       "SELECT COUNT(*) as count FROM intern_table WHERE  `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview'";
     connection.query(sql, (err, data) => {
@@ -220,7 +220,7 @@ const CountInterviewInterns = (req, res) => {
     });
   }
 
-  if (email === "kashif@ezitech.org") {
+  if (email === "remotemanager@ezitech.org") {
     const sql =
       "SELECT COUNT(*) as count FROM intern_table WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' AND `status` = 'Interview'";
     connection.query(sql, (err, data) => {
@@ -232,7 +232,7 @@ const CountInterviewInterns = (req, res) => {
     });
   }
 
-  if (email === "umair1@ezitech.org") {
+  if (email === "marketingmanger@ezitech.org") {
     const sql =
       "SELECT COUNT(*) as count FROM intern_table WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `status` = 'Interview'";
     connection.query(sql, (err, data) => {
@@ -247,7 +247,7 @@ const CountInterviewInterns = (req, res) => {
 
 const CountTestInterns = (req, res) => {
   const { email } = req.params;
-  if (email === "muzammil@ezitech.org") {
+  if (email === "onsitemanager@ezitech.org") {
     const sql =
       "SELECT COUNT(*) as count FROM intern_table WHERE  `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Test'";
     connection.query(sql, (err, data) => {
@@ -259,7 +259,7 @@ const CountTestInterns = (req, res) => {
     });
   }
 
-  if (email === "kashif@ezitech.org") {
+  if (email === "remotemanager@ezitech.org") {
     const sql =
       "SELECT COUNT(*) as count FROM intern_table WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' AND `status` = 'Test'";
     connection.query(sql, (err, data) => {
@@ -271,7 +271,7 @@ const CountTestInterns = (req, res) => {
     });
   }
 
-  if (email === "umair1@ezitech.org") {
+  if (email === "marketingmanager@ezitech.org") {
     const sql =
       "SELECT COUNT(*) as count FROM intern_table WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `status` = 'Test'";
     connection.query(sql, (err, data) => {
@@ -298,7 +298,7 @@ const CountTestCompleted = (req, res) => {
 
 const CountContactWith = (req, res) => {
   const { email } = req.params;
-  if (email === "muzammil@ezitech.org") {
+  if (email === "onsitemanager@ezitech.org") {
     const sql =
       "SELECT COUNT(*) as count FROM intern_table WHERE  `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Contact'";
     connection.query(sql, (err, data) => {
@@ -310,7 +310,7 @@ const CountContactWith = (req, res) => {
     });
   }
 
-  if (email === "kashif@ezitech.org") {
+  if (email === "remotemanager@ezitech.org") {
     const sql =
       "SELECT COUNT(*) as count FROM intern_table WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' AND `status` = 'Contact'";
     connection.query(sql, (err, data) => {
@@ -322,7 +322,7 @@ const CountContactWith = (req, res) => {
     });
   }
 
-  if (email === "umair1@ezitech.org") {
+  if (email === "marketingmanager@ezitech.org") {
     const sql =
       "SELECT COUNT(*) as count FROM intern_table WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `status` = 'Contact'";
     connection.query(sql, (err, data) => {
