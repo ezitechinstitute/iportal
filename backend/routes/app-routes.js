@@ -78,6 +78,13 @@ const {
   Invoices,
   ApproveInvoice,
 } = require("../controller/admin/transaction-controller");
+const {
+  GetManagers,
+  FreezeManager,
+  ActiveManager,
+  GetSingleManager,
+  UpdateManager,
+} = require("../controller/admin/manager-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -169,6 +176,12 @@ router.get("/get-salaries", GetSalaries);
 router.get("/get-transactions/:month", Transactions);
 router.get("/get-invoices/:month", Invoices);
 router.post("/approve-invoice", ApproveInvoice);
+
+router.get("/get-managers", GetManagers);
+router.put("/freeze-manager/:email", FreezeManager);
+router.put("/active-manager/:email", ActiveManager);
+router.get("/get-single-manager/:id", GetSingleManager);
+router.put("/:id", UpdateManager);
 
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);
