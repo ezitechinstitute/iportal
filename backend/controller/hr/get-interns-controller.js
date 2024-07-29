@@ -98,7 +98,7 @@ const GetRemoteInterview = (req, res) => {
 const GetContactWith = (req, res) => {
   const { email } = req.params;
 
-  if (email === "marketingmanger@ezitech.org") {
+  if (email === "marketingmanager@ezitech.org") {
     const sql =
       "SELECT * FROM `intern_table` WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)')  AND `Status` = 'Contact' ORDER BY `id` DESC";
     connection.query(sql, (err, data) => {
