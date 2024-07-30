@@ -148,7 +148,7 @@ router.get("/count-contact-with/:email", verifyToken, CountContactWith);
 
 // router.get("/get-instructor-emails", verifyToken, GetInstructorEmail);
 // router.get("/get-manager-emails", verifyToken, GetManagerEmail);
-// router.post("/add-amount", AddAmount);
+router.post("/add-amount", AddAmount);
 // router.post("/get-intern-emails", GetInternsEmail);
 // router.post("/get-intern-phone", GetInternsPhone);
 router.get("/get-manager-amount/:email", verifyToken, GetManagerBalance);

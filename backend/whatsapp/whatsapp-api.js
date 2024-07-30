@@ -106,14 +106,16 @@ Best regards`,
   }
 }
 
-async function SendInvoiceTotal(
+async function SendInvoicePartial(
   phone,
-  i_mail,
+  i_name,
   i_id,
   i_date,
   t_amount,
   rec_amount,
-  m_mail
+  rem_amount,
+  d_date,
+  m_name
 ) {
   try {
     const response = await axios.post("https://mkt.eziline.com/api/send", {
@@ -122,7 +124,7 @@ async function SendInvoiceTotal(
       message: `
 💵 Payment Invoice 💵
 
-Dear,
+Dear ${i_name},
 
 You have successfully completed your payment.
 
@@ -132,11 +134,12 @@ Created Date: ${i_date}
 Payment Details:
 
 Total Amount Rs: ${t_amount}
-Received Amount Rs: ${rec_amount}
+Paid Amount Rs: ${rec_amount}
+Remaining Amount Rs: ${rem_amount} 
 
 IMPORTANT: THIS FEE WILL NOT BE REFUNDABLE AFTER 24 HOURS.
 
-Received By: ${m_mail}
+Received By: ${m_name}
 
 Regards :
 Ezitech Institute`,
@@ -148,16 +151,16 @@ Ezitech Institute`,
   }
 }
 
-async function SendInvoiceRemaining(
+async function SendInvoiceInitial(
   phone,
-  i_mail,
+  i_name,
   i_id,
   i_date,
   t_amount,
   rec_amount,
   rem_amount,
   d_date,
-  m_mail
+  m_name
 ) {
   try {
     const response = await axios.post("https://mkt.eziline.com/api/send", {
@@ -166,7 +169,7 @@ async function SendInvoiceRemaining(
       message: `
 💵 Payment Invoice 💵
 
-Dear,
+Dear ${i_name},
 
 You have successfully completed your payment.
 
@@ -176,61 +179,19 @@ Created Date: ${i_date}
 Payment Details:
 
 Total Amount Rs: ${t_amount}
-Received Amount Rs: ${rec_amount}
+Paid Amount Rs: ${rec_amount}
 Remaining Amount Rs: ${rem_amount}
-Due Date: ${d_date};
+Due Date: ${d_date}
 
 IMPORTANT: THIS FEE WILL NOT BE REFUNDABLE AFTER 24 HOURS.
 
 NOTE: We kindly request you to clear the remaining amount of Rs: ${rem_amount} before the due date of ${d_date}. Otherwise, your iportal deactivate. 
 
-Received By: ${m_mail}
+Received By: ${m_name}
 
 Regards :
 Ezitech Institute`,
-      instance_id: "6640DB980CC35",
-      access_token: "6635ec7382039",
-    });
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function SendInvoiceOther(
-  phone,
-  i_mail,
-  i_id,
-  i_date,
-  t_amount,
-  rec_amount,
-  m_mail
-) {
-  try {
-    const response = await axios.post("https://mkt.eziline.com/api/send", {
-      number: phone,
-      type: "text",
-      message: `
-💵 Payment Invoice 💵
-
-Dear,
-
-You have successfully completed your payment.
-
-Invoice ID: ${i_id}
-Created Date: ${i_date}
-
-Payment Details:
-
-Total Amount Rs: ${t_amount}
-Received Amount Rs: ${rec_amount}
-
-IMPORTANT: THIS FEE WILL NOT BE REFUNDABLE AFTER 24 HOURS.
-
-Received By: ${m_mail}
-
-Regards :
-Ezitech Institute`,
-      instance_id: "6640DB980CC35",
+      instance_id: "668CF6A5AB89E",
       access_token: "6635ec7382039",
     });
   } catch (error) {
@@ -243,7 +204,6 @@ module.exports = {
   SendMessageOnsite,
   SendMessageOther,
   SendMessageAssignPortal,
-  SendInvoiceTotal,
-  SendInvoiceRemaining,
-  SendInvoiceOther,
+  SendInvoiceInitial,
+  SendInvoicePartial
 };
