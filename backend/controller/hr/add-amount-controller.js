@@ -1,6 +1,9 @@
 const { connection } = require("../../config/connection");
 const cron = require("node-cron");
-const { SendInvoiceInitial, SendInvoicePartial } = require("../../whatsapp/whatsapp-api");
+const {
+  SendInvoiceInitial,
+  SendInvoicePartial,
+} = require("../../whatsapp/whatsapp-api");
 
 const AddAmount = (req, res) => {
   const {
@@ -15,7 +18,7 @@ const AddAmount = (req, res) => {
     internName,
     internEmail,
     internPhone,
-  } = req.body;
+  } = req.body.invoice;
 
   const sqlManager = "SELECT * FROM `manager_accounts` WHERE `email` = ?";
   connection.query(sqlManager, [managerMail], (err, data) => {
@@ -64,6 +67,8 @@ const AddAmount = (req, res) => {
           // creare invoice
           createInvoice = (
             inv_id,
+            intern_name,
+            intern_contact,
             intern_email,
             received_amount,
             remaining_amount,
@@ -74,9 +79,11 @@ const AddAmount = (req, res) => {
             // const dueDate = new Date().getDay() + 10;
 
             const invoiceSql =
-              "INSERT INTO invoices (inv_id, intern_email, received_amount, remaining_amount, due_date, received_by) VALUES (?,?,?,?,?,?)";
+              "INSERT INTO invoices (inv_id, name, contact, intern_email, received_amount, remaining_amount, due_date, received_by) VALUES (?,?,?,?,?,?,?,?)";
             const invoiceData = [
               inv_id,
+              intern_name,
+              intern_contact,
               intern_email,
               received_amount,
               remaining_amount,
@@ -99,58 +106,79 @@ const AddAmount = (req, res) => {
             }
 
             // store remaining amount
-            const storeRemainingAmount = (internEmail, remAmount, callback) => {
-              const remainingSql = `INSERT INTO intern_remaining_amounts (email, remaining_amount)
-  VALUES (?, ?)
+            const storeRemainingAmount = (
+              internName,
+              internEmail,
+              internContact,
+              remAmount,
+              callback
+            ) => {
+              const remainingSql = `INSERT INTO intern_remaining_amounts (name, email, contact, remaining_amount)
+  VALUES (?, ?, ?, ?)
   ON DUPLICATE KEY UPDATE remaining_amount = VALUES(remaining_amount)`;
 
-              const remainingValue = [internEmail, remAmount];
+              const remainingValue = [
+                internName,
+                internEmail,
+                internContact,
+                remAmount,
+              ];
 
               connection.query(remainingSql, remainingValue, callback);
             };
 
-            storeRemainingAmount(internEmail, remainingAmount, (err) => {
-              if (err) {
-                console.log(err);
-                return res.json(err);
-              }
-
-              // call create invoice message and function
-              createInvoice(
-                invoiceId,
-                internEmail,
-                paidAmount,
-                remainingAmount,
-                invoiceDue,
-                managerMail,
-                (err) => {
-                  if (err) {
-                    console.log(err);
-                    return res.json(err);
-                  }
+            storeRemainingAmount(
+              internName,
+              internEmail,
+              internPhone,
+              remainingAmount,
+              (err) => {
+                if (err) {
+                  console.log(err);
+                  return res.json(err);
                 }
-              );
 
-              // createInvoiceQueueInitial(internPhone);
+                // call create invoice message and function
+                createInvoice(
+                  invoiceId,
+                  internName,
+                  internPhone,
+                  internEmail,
+                  paidAmount,
+                  remainingAmount,
+                  invoiceDue,
+                  managerMail,
+                  (err) => {
+                    if (err) {
+                      console.log(err);
+                      return res.json(err);
+                    }
+                  }
+                );
 
-              // setInterval(() => {
-              //   if (invoiceQueueInitial.length > 0) {
-                  SendInvoiceInitial(
-                    internPhone.slice(1, 13),
-                    internName,
-                    invoiceId,
-                    invoiceDate,
-                    fullAmount,
-                    paidAmount,
-                    remainingAmount,
-                    invoiceDue,
-                    managerName
-                  );
+                // createInvoiceQueueInitial(internPhone);
+
+                // setInterval(() => {
+                //   if (invoiceQueueInitial.length > 0) {
+                SendInvoiceInitial(
+                  internPhone.slice(1, 13),
+                  internName,
+                  invoiceId,
+                  invoiceDate,
+                  fullAmount,
+                  paidAmount,
+                  remainingAmount,
+                  invoiceDue,
+                  managerName
+                );
                 // }
-              // }, 60000);
+                // }, 60000);
 
-              return res.json("Amount added and balances updated successfully");
-            });
+                return res.json(
+                  "Amount added and balances updated successfully"
+                );
+              }
+            );
           });
         });
         // });
@@ -190,6 +218,8 @@ const AddAmount = (req, res) => {
           // create invoice
           createInvoice = (
             inv_id,
+            intern_name,
+            intern_contact,
             intern_email,
             received_amount,
             received_by,
@@ -198,9 +228,11 @@ const AddAmount = (req, res) => {
             // const dueDate = new Date().getDay() + 10;
 
             const invoiceSql =
-              "INSERT INTO invoices (inv_id, intern_email, received_amount, received_by) VALUES (?,?,?,?)";
+              "INSERT INTO invoices (inv_id, name, contact, intern_email, received_amount, received_by) VALUES (?,?,?,?,?,?)";
             const invoiceData = [
               inv_id,
+              intern_name,
+              intern_contact,
               intern_email,
               received_amount,
               received_by,
@@ -225,6 +257,8 @@ const AddAmount = (req, res) => {
 
           createInvoice(
             invoiceId,
+            internName,
+            internPhone,
             internEmail,
             paidAmount,
             managerMail,
@@ -247,17 +281,17 @@ const AddAmount = (req, res) => {
 
           // setInterval(() => {
           //   if (invoiceQueuePartial.length > 0) {
-              SendInvoicePartial(
-                internPhone.slice(1, 13),
-                internName,
-                invoiceId,
-                invoiceDate,
-                fullAmount,
-                paidAmount,
-                0,
-                0,
-                managerName
-              );
+          SendInvoicePartial(
+            internPhone.slice(1, 13),
+            internName,
+            invoiceId,
+            invoiceDate,
+            fullAmount,
+            paidAmount,
+            0,
+            0,
+            managerName
+          );
           //   }
           // }, 60000);
 
@@ -279,6 +313,18 @@ cron.schedule("0 0 1 * *", () => {
     }
   });
 });
+
+// const ShowMessage = () => {
+//   console.log("This Function Run Every 1 Minutes!");
+// };
+
+// cron.schedule("*/15 * * * * *", () => {
+//   ShowMessage();
+// });
+
+// setInterval(() => {
+//   ShowMessage();
+// }, 5000)
 
 // let invoiceQueueInitial = [];
 // let invoiceQueuePartial = [];

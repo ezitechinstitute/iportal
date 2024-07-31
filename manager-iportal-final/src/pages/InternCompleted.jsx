@@ -16,6 +16,8 @@ export const InternCompleted = () => {
   const check = sessionStorage.getItem("isLoggedIn");
   const userEmail = sessionStorage.getItem("email");
 
+  const [invoiceData, setInvoiceData] = useState({});
+
   useEffect(() => {
     if (!check) {
       navigate("/");
@@ -227,6 +229,13 @@ export const InternCompleted = () => {
                                                   type="button"
                                                   data-toggle="modal"
                                                   data-target="#default"
+                                                  onClick={() =>
+                                                    setInvoiceData({
+                                                      name: name,
+                                                      email: email,
+                                                      phone: phone,
+                                                    })
+                                                  }
                                                 >
                                                   Invoice
                                                 </a>
@@ -293,7 +302,7 @@ export const InternCompleted = () => {
                 </div>
               </div>
 
-              <InvoiceModal />
+              <InvoiceModal invoiceData={invoiceData} />
             </section>
           </div>
         </div>

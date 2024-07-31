@@ -11,6 +11,8 @@ export const ActiveInterns = () => {
   const [data, setData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
+  const [invoiceData, setInvoiceData] = useState({});
+
   //   const userEmail = sessionStorage.getItem("email");
   //   const managerContact = sessionStorage.getItem("contact");
 
@@ -143,6 +145,13 @@ export const ActiveInterns = () => {
                                                   type="button"
                                                   data-toggle="modal"
                                                   data-target="#default"
+                                                  onClick={() =>
+                                                    setInvoiceData({
+                                                      name: name,
+                                                      email: email,
+                                                      phone: phone,
+                                                    })
+                                                  }
                                                 >
                                                   Invoice
                                                 </a>
@@ -225,7 +234,7 @@ export const ActiveInterns = () => {
                   </div>
                 </div>
               </div>
-              <InvoiceModal />
+              <InvoiceModal invoiceData={invoiceData}/>
             </section>
           </div>
         </div>
