@@ -163,7 +163,10 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={activeLink === "leave" ? "active" : "undefined"} hidden>
+            <li
+              className={activeLink === "leave" ? "active" : "undefined"}
+              hidden
+            >
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("leave")}
@@ -177,7 +180,10 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={activeLink === "balance" ? "active " : "undefined"} hidden>
+            <li
+              className={activeLink === "balance" ? "active " : "undefined"}
+              hidden
+            >
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("balance")}
@@ -186,6 +192,21 @@ export const ManagerSidebar = () => {
                 <FiDollarSign />
                 <span className="menu-title text-truncate" data-i18n="User">
                   Balance
+                </span>
+              </NavLink>
+            </li>
+
+            <li
+              className={activeLink === "remaining" ? "active " : "undefined"}
+            >
+              <NavLink
+                className="d-flex align-items-center"
+                onClick={() => setActive("remaining")}
+                to={"/remaining-amount"}
+              >
+                <i data-feather='dollar-sign'></i>
+                <span className="menu-title text-truncate" data-i18n="User">
+                  Remaining Amount
                 </span>
               </NavLink>
             </li>

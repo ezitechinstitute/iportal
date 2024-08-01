@@ -153,7 +153,7 @@ router.post("/add-amount", verifyToken, AddAmount);
 // router.post("/get-intern-phone", GetInternsPhone);
 router.get("/get-manager-amount/:email", verifyToken, GetManagerBalance);
 // router.get("/get-instructor-amount/:email", GetManagerBalance);
-// router.get("/pending-amount", GetPendingAmount);
+router.get("/pending-amount", verifyToken, GetPendingAmount);
 router.get("/get-statics", CountInterns);
 
 /* Manager Endpoints */

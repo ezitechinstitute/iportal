@@ -14,6 +14,7 @@ import { Login } from "./pages/Login";
 import { InterviewTest } from "./pages/InterviewTest";
 import { ActiveInterns } from "./pages/ActiveInterns";
 import { ContactWith } from "./pages/ContactWith";
+import { RemainingAmount } from "./pages/RemainingAmount";
 
 function App() {
   return (
@@ -32,6 +33,8 @@ function App() {
           <Route exact path="/intern-projects" element={<InternProjects />} />
           <Route exact path="/test-completed" element={<InternCompleted />} />
           <Route exact path="/active-interns" element={<ActiveInterns />} />
+          <Route exact path="/remaining-amount" element={<RemainingAmount />} />
+
           {/* <Route exact path="/manager-leave" element={<ManagerLeave />} /> */}
           {/* <Route exact path="/balance" element={<Balance />} /> */}
           {/* <Route exact path="/invoice" element={<Invoice />} /> */}
