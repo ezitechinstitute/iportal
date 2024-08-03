@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ManagerSidebar } from "../components/ManagerSidebar";
 import { ManagerTopbar } from "../components/ManagerTopbar";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Invoice = () => {
   const navigate = useNavigate();
@@ -10,6 +11,78 @@ const Invoice = () => {
   if (!check) {
     navigate("/");
   }
+
+  const [data, setData] = useState([]);
+  const currentMonth = new Date().getMonth() + 1;
+  const [month, setMonth] = useState(currentMonth);
+  const monthList = [1, 2, 3, , 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const [total, setTotal] = useState(0);
+  const [received, setReceived] = useState(0);
+  const [remaining, setRemaining] = useState(0);
+
+  console.log(month);
+
+  const GetInvoices = async () => {
+    try {
+      const res = await axios.get(
+        `https://api.ezitech.org/get-invoices/${month}`
+      );
+      setData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const GetTotal = async () => {
+    try {
+      const res = await axios.get("https://api.ezitech.org/get-total-amount");
+      setTotal(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const GetReceived = async () => {
+    try {
+      const res = await axios.get(
+        "https://api.ezitech.org/get-received-amount"
+      );
+      setReceived(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const GetRemaining = async () => {
+    try {
+      const res = await axios.get(
+        "https://api.ezitech.org/get-remaining-amount"
+      );
+      setRemaining(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    GetInvoices();
+    GetTotal();
+    GetReceived();
+    GetRemaining();
+  }, [GetInvoices, GetTotal, GetReceived, GetRemaining]);
+
+  const ApproveInvoice = async (email) => {
+    try {
+      const res = await axios.put(
+        `https://api.ezitech.org/approve-invoice/${email}`
+      );
+      if (res.data === 1) {
+        alert("Invoice Approved Successfully");
+      } else {
+        alert("Something Went Wrong!!!");
+      }
+    } catch (error) {}
+  };
   return (
     <>
       <ManagerTopbar />
@@ -22,31 +95,16 @@ const Invoice = () => {
           <div className="content-header row"></div>
           <div className="content-body"></div>
 
-          <div class="col-12 col-xl-12 col-md-12">
-            <div class="card card-statistics">
-              <div class="card-header">
-                <h1
-                  class="card-title"
-                  style={{
-                    fontSize: "30px",
-                    marginLeft: "-15px",
-                  }}
-                >
-                  Invoice
-                </h1>
-                <div class="d-flex align-items-center"></div>
-              </div>
-            </div>
-          </div>
-
           {/* <!-- Subscribers Chart Card starts --> */}
           <section id="dashboard-analytics">
-            <div class="row match-height">
-              <div class="col-lg-4 col-sm-6 col-12">
-                <div class="card pb-2">
-                  <div class="card-header flex-column align-items-center pb-0">
-                    <h2 class="font-weight-bolder mt-1">92.6k</h2>
-                    <p class="card-text">Total Amount</p>
+            <div className="row match-height">
+              <div className="col-lg-4 col-sm-6 col-12">
+                <div className="card pb-2">
+                  <div className="card-header flex-column align-items-center pb-0">
+                    <h2 className="font-weight-bolder mt-1">
+                      {total > 0 ? total.toLocaleString() : 0}
+                    </h2>
+                    <p className="card-text">Total Amount</p>
                   </div>
                   <div id="gained-chart"></div>
                 </div>
@@ -54,11 +112,13 @@ const Invoice = () => {
               {/* <!-- Subscribers Chart Card ends --> */}
 
               {/* <!-- Subscribers Chart Card starts --> */}
-              <div class="col-lg-4 col-sm-6 col-12 ">
-                <div class="card pb-2">
-                  <div class="card-header flex-column align-items-center pb-0">
-                    <h2 class="font-weight-bolder mt-1">92.6k</h2>
-                    <p class="card-text">Receive Amount</p>
+              <div className="col-lg-4 col-sm-6 col-12 ">
+                <div className="card pb-2">
+                  <div className="card-header flex-column align-items-center pb-0">
+                    <h2 className="font-weight-bolder mt-1">
+                      {received > 0 ? received.toLocaleString() : 0}
+                    </h2>
+                    <p className="card-text">Received Amount</p>
                   </div>
                   <div id="gained-chart"></div>
                 </div>
@@ -66,11 +126,13 @@ const Invoice = () => {
               {/* <!-- Subscribers Chart Card ends --> */}
 
               {/* <!-- Subscribers Chart Card starts --> */}
-              <div class="col-lg-4 col-sm-6 col-12">
-                <div class="card pb-2">
-                  <div class="card-header flex-column align-items-center pb-0">
-                    <h2 class="font-weight-bolder mt-1">92.6k</h2>
-                    <p class="card-text">Remaining Amount</p>
+              <div className="col-lg-4 col-sm-6 col-12">
+                <div className="card pb-2">
+                  <div className="card-header flex-column align-items-center pb-0">
+                    <h2 className="font-weight-bolder mt-1">
+                      {remaining > 0 ? remaining.toLocaleString() : 0}
+                    </h2>
+                    <p className="card-text">Remaining Amount</p>
                   </div>
                   <div id="gained-chart"></div>
                 </div>
@@ -79,128 +141,85 @@ const Invoice = () => {
             </div>
           </section>
 
-          <div class="card-datatable">
-            <table class="dt-complex-header table table-bordered table-responsive">
+          <div className="col-12 col-xl-12 col-md-12">
+            <div className="card card-statistics">
+              <div className="card-header">
+                <h1
+                  className="card-title"
+                  style={{
+                    lineHeight: "20px",
+                    marginLeft: "-15px",
+                  }}
+                >
+                  Invoice
+                </h1>
+                <div className="d-flex align-items-center">
+                  <select
+                    className="form-control"
+                    name="month"
+                    id=""
+                    onChange={(e) => setMonth(e.target.value)}
+                  >
+                    <option value={currentMonth} selected disabled>
+                      {" "}
+                      Current Month {currentMonth}
+                    </option>
+                    {Array.isArray(monthList)
+                      ? monthList.map((rs) => <option value={rs}>{rs}</option>)
+                      : ""}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="card-datatable">
+            <table className="dt-complex-header table table-bordered text-center">
               <thead>
                 <tr>
-                  <th>#</th>
                   <th>Invoice Id</th>
-                  <th>User Name</th>
-                  <th>Phone no</th>
-                  <th class="cell-fit">Technology</th>
+                  <th>Name</th>
+                  <th>Contact</th>
                   <th>Date</th>
                   <th>Total</th>
-                  <th>Paid</th>
-                  <th>Status</th>
+                  <th>Received</th>
                   <th>Action</th>
                 </tr>
-
-                <tr>
-                  <td>1111</td>
-                  <td>Faisal Bank</td>
-                  <td>00000000000000000000000</td>
-                  <td>mmmmmmaaaaatttttttt---</td>
-                  <td class="cell-fit">qwertyuiqwertyqwetyqwet</td>
-                  <td>12645667</td>
-                  <td>12345678</td>
-                  <td>asdfghj</td>
-                  <td>
-                    {" "}
-                    <span class="btn btn-success">Full-Paid</span>
-                  </td>
-                  <td>
-                    <div className="d-flex ">
-                      <button
-                        class="btn btn-info mr-1"
-                        style={{
-                          padding: "5px 15px",
-                        }}
-                      >
-                        <i data-feather="eye"></i>
-                      </button>
-                      <button
-                        class="btn btn-danger"
-                        style={{
-                          padding: "5px 15px",
-                        }}
-                      >
-                        <i data-feather="x-circle"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>1111</td>
-                  <td>Faisal Bank</td>
-                  <td>00000000000000000000000</td>
-                  <td>mmmmmmaaaaatttttttt---</td>
-                  <td class="cell-fit">qwertyuiqwertyqwetyqwet</td>
-                  <td>12645667</td>
-                  <td>12345678</td>
-                  <td>asdfghj</td>
-                  <td>
-                    {" "}
-                    <button class="btn btn-primary">Half-paid</button>
-                  </td>
-
-                  <td>
-                    <div className="d-flex ">
-                      <button
-                        class="btn btn-info mr-1"
-                        style={{
-                          padding: "5px 15px",
-                        }}
-                      >
-                        <i data-feather="eye"></i>
-                      </button>
-                      <button
-                        class="btn btn-danger"
-                        style={{
-                          padding: "5px 15px",
-                        }}
-                      >
-                        <i data-feather="x-circle"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>1111</td>
-                  <td>Faisal Bank</td>
-                  <td>00000000000000000000000</td>
-                  <td>mmmmmmaaaaatttttttt---</td>
-                  <td class="cell-fit">qwertyuiqwertyqwetyqwet</td>
-                  <td>12645667</td>
-                  <td>12345678</td>
-                  <td>asdfghj</td>
-                  <td>
-                    {" "}
-                    <button class="btn btn-secondary">Generated</button>
-                  </td>
-                  <td>
-                    <div className="d-flex ">
-                      <button
-                        class="btn btn-info mr-1"
-                        style={{
-                          padding: "5px 15px",
-                        }}
-                      >
-                        <i data-feather="eye"></i>
-                      </button>
-                      <button
-                        class="btn btn-danger"
-                        style={{
-                          padding: "5px 15px",
-                        }}
-                      >
-                        <i data-feather="x-circle"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
               </thead>
+
+              <tbody>
+                {Array.isArray(data)
+                  ? data.map((rs) => (
+                      <>
+                        <tr>
+                          <td>
+                            {" "}
+                            <b>{rs.inv_id}</b>
+                          </td>
+                          <td>{rs.name}</td>
+                          <td>{rs.contact}</td>
+                          <td>{rs.created_at.slice(0, 10)}</td>
+                          <td>{rs.total_amount}</td>
+                          <td>{rs.received_amount}</td>
+                          <td>
+                            {rs.status !== 1 ? (
+                              <button
+                                className="btn btn-warning"
+                                onClick={() => ApproveInvoice(rs.intern_email)}
+                              >
+                                Approve
+                              </button>
+                            ) : (
+                              <span className="btn btn-success" disabled>
+                                Approved
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      </>
+                    ))
+                  : ""}
+              </tbody>
             </table>
           </div>
         </div>

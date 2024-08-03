@@ -64,7 +64,7 @@ export const ManagerSidebar = () => {
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("dashboard")}
-                to="/"
+                to="/admin-dashboard"
               >
                 <i data-feather="home"></i>
                 <span
@@ -185,7 +185,9 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={activeLink === "supervisor" ? "active " : "undefined"}>
+            <li
+              className={activeLink === "supervisor" ? "active " : "undefined"}
+            >
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("invoice")}
@@ -198,7 +200,11 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={activeLink === "knowledgebase" ? "active " : "undefined"}>
+            <li
+              className={
+                activeLink === "knowledgebase" ? "active " : "undefined"
+              }
+            >
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("invoice")}
@@ -211,7 +217,9 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={activeLink === "technology" ? "active " : "undefined"}>
+            <li
+              className={activeLink === "technology" ? "active " : "undefined"}
+            >
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("invoice")}
@@ -224,7 +232,9 @@ export const ManagerSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={activeLink === "university" ? "active " : "undefined"}>
+            <li
+              className={activeLink === "university" ? "active " : "undefined"}
+            >
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("invoice")}

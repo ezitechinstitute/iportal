@@ -77,6 +77,9 @@ const {
   Transactions,
   Invoices,
   ApproveInvoice,
+  GetTotalAmount,
+  GetReceivedAmount,
+  GetRemainingAmount,
 } = require("../controller/admin/transaction-controller");
 const {
   GetManagers,
@@ -175,7 +178,10 @@ router.get("/get-admin-balance", GetAdminBalance);
 router.get("/get-salaries", GetSalaries);
 router.get("/get-transactions/:month", Transactions);
 router.get("/get-invoices/:month", Invoices);
-router.post("/approve-invoice", ApproveInvoice);
+router.put("/approve-invoice/:email", ApproveInvoice);
+router.get("/get-total-amount", GetTotalAmount);
+router.get("/get-received-amount", GetReceivedAmount);
+router.get("/get-remaining-amount", GetRemainingAmount);
 
 router.get("/get-managers", GetManagers);
 router.put("/freeze-manager/:email", FreezeManager);

@@ -205,5 +205,5 @@ module.exports = {
   SendMessageOther,
   SendMessageAssignPortal,
   SendInvoiceInitial,
-  SendInvoicePartial
+  SendInvoicePartial,
 };

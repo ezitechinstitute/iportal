@@ -113,21 +113,21 @@ export const InternCompleted = () => {
       });
   };
 
-  const ActivePortal = (email) => {
-    axios
-      .post(
-        "https://api.ezitech.org/active-portal",
-        { email },
-        { headers: { "x-access-token": token } }
-      )
-      .then((res) => {
-        if (res.data === 1) {
-          alert("Portal Activated");
-        } else {
-          alert("Something Went Wrong!!!");
-        }
-      });
-  };
+  // const ActivePortal = (email) => {
+  //   axios
+  //     .post(
+  //       "https://api.ezitech.org/active-portal",
+  //       { email },
+  //       { headers: { "x-access-token": token } }
+  //     )
+  //     .then((res) => {
+  //       if (res.data === 1) {
+  //         alert("Portal Activated");
+  //       } else {
+  //         alert("Something Went Wrong!!!");
+  //       }
+  //     });
+  // };
 
   return (
     <>
@@ -210,7 +210,7 @@ export const InternCompleted = () => {
                                               </a>
                                             </li> */}
 
-                                              <li>
+                                              {/*<li>
                                                 <a
                                                   className="dropdown-item"
                                                   href="#"
@@ -221,7 +221,7 @@ export const InternCompleted = () => {
                                                 >
                                                   Active Portal
                                                 </a>
-                                              </li>
+                                              </li>*/}
                                               <li>
                                                 <a
                                                   className="dropdown-item"
