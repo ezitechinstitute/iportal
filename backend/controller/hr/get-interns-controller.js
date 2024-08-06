@@ -72,7 +72,7 @@ const GetRemoteInterview = (req, res) => {
 
   if (email === "marketingmanager@ezitech.org") {
     const sql =
-      "SELECT * FROM `intern_table` WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `status` = 'Interview' ORDER BY `id` DESC";
+      "SELECT * FROM `intern_table` WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `interview_type` = 'Remote' AND `status` = 'Interview' ORDER BY `id` DESC";
 
     connection.query(sql, (err, data) => {
       if (err) {
@@ -232,7 +232,7 @@ const CountInterviewInterns = (req, res) => {
     });
   }
 
-  if (email === "marketingmanger@ezitech.org") {
+  if (email === "marketingmanager@ezitech.org") {
     const sql =
       "SELECT COUNT(*) as count FROM intern_table WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `status` = 'Interview'";
     connection.query(sql, (err, data) => {
