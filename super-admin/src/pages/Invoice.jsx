@@ -71,17 +71,20 @@ const Invoice = () => {
     GetRemaining();
   }, [GetInvoices, GetTotal, GetReceived, GetRemaining]);
 
-  const ApproveInvoice = async (email) => {
+  const ApproveInvoice = async (email, received) => {
     try {
       const res = await axios.put(
-        `https://api.ezitech.org/approve-invoice/${email}`
+        `https://api.ezitech.org/approve-invoice/${email}`,
+        { paidAmount: received }
       );
       if (res.data === 1) {
         alert("Invoice Approved Successfully");
       } else {
         alert("Something Went Wrong!!!");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -205,7 +208,12 @@ const Invoice = () => {
                             {rs.status !== 1 ? (
                               <button
                                 className="btn btn-warning"
-                                onClick={() => ApproveInvoice(rs.intern_email)}
+                                onClick={() =>
+                                  ApproveInvoice(
+                                    rs.intern_email,
+                                    rs.received_amount
+                                  )
+                                }
                               >
                                 Approve
                               </button>

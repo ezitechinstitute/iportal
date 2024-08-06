@@ -58,49 +58,49 @@ const AssignPortal = (req, res) => {
   });
 };
 
-const ActivePortal = (req, res) => {
-  const { email } = req.body;
+// const ActivePortal = (req, res) => {
+//   const { email } = req.body;
 
-  const sql0 =
-    "UPDATE `intern_table` SET `status`='Active' WHERE `email` = (?)";
-  connection.query(sql0, [email], (err, data) => {
-    if (err) {
-      return res.json(err);
-    } else {
-      if (data.affectedRows === 1) {
-        const sql1 =
-          "UPDATE `intern_accounts` SET `status`='Active' WHERE `email` = (?)";
-        connection.query(sql1, [email], (reject, resolve) => {
-          if (reject) {
-            return res.json(reject);
-          } else {
-            if (resolve.affectedRows === 1) {
-              const sql2 =
-                "UPDATE `complete_test` SET `status`='Active' WHERE `email` = (?)";
-              connection.query(sql2, [email], (rej, rev) => {
-                if (rej) {
-                  return res.json(rej);
-                } else {
-                  if (rev.affectedRows === 1) {
-                    const sql_delete =
-                      "DELETE FROM `complete_test` WHERE `email` = ?";
-                    connection.query(sql_delete, [email], (reje, reso) => {
-                      if (reje) {
-                        return res.json(reje);
-                      } else {
-                        return res.json(reso.affectedRows);
-                      }
-                    });
-                  }
-                }
-              });
-            }
-          }
-        });
-      }
-    }
-  });
-};
+//   const sql0 =
+//     "UPDATE `intern_table` SET `status`='Active' WHERE `email` = (?)";
+//   connection.query(sql0, [email], (err, data) => {
+//     if (err) {
+//       return res.json(err);
+//     } else {
+//       if (data.affectedRows === 1) {
+//         const sql1 =
+//           "UPDATE `intern_accounts` SET `status`='Active' WHERE `email` = (?)";
+//         connection.query(sql1, [email], (reject, resolve) => {
+//           if (reject) {
+//             return res.json(reject);
+//           } else {
+//             if (resolve.affectedRows === 1) {
+//               const sql2 =
+//                 "UPDATE `complete_test` SET `status`='Active' WHERE `email` = (?)";
+//               connection.query(sql2, [email], (rej, rev) => {
+//                 if (rej) {
+//                   return res.json(rej);
+//                 } else {
+//                   if (rev.affectedRows === 1) {
+//                     const sql_delete =
+//                       "DELETE FROM `complete_test` WHERE `email` = ?";
+//                     connection.query(sql_delete, [email], (reje, reso) => {
+//                       if (reje) {
+//                         return res.json(reje);
+//                       } else {
+//                         return res.json(reso.affectedRows);
+//                       }
+//                     });
+//                   }
+//                 }
+//               });
+//             }
+//           }
+//         });
+//       }
+//     }
+//   });
+// };
 
 let portalPhoneQueue = [];
 let portalNameQueue = [];
@@ -139,4 +139,4 @@ function getPasswordQueue() {
   return portalPasswordQueue.pop();
 }
 
-module.exports = { AssignPortal, ActivePortal };
+module.exports = { AssignPortal};

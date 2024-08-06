@@ -32,36 +32,6 @@ const Invoices = (req, res) => {
   });
 };
 
-const ApproveInvoice = (req, res) => {
-  const { email } = req.params;
-
-  const sql = `UPDATE invoices
-JOIN complete_test ON invoices.intern_email = complete_test.email
-JOIN intern_accounts ON invoices.intern_email = intern_accounts.email
-JOIN intern_table ON invoices.intern_email = intern_table.email
-SET invoices.status = 1,
-    complete_test.payment_status = 1,
-    intern_accounts.status = 'Active',
-    intern_table.status = 'Active'
-
-WHERE invoices.intern_email = ?`;
-
-  connection.query(sql, [email], (err, data) => {
-    if (err) {
-      return res.json(err);
-    } else {
-      const sql_update = "DELETE FROM `complete_test` WHERE `email` = ?";
-      connection.query(sql_update, [email], (reject, resolve) => {
-        if (reject) {
-          return res.json(err);
-        } else {
-          return res.json(resolve.affectedRows);
-        }
-      });
-    }
-  });
-};
-
 const GetTotalAmount = (req, res) => {
   const sql = "SELECT SUM(amount) as total_amount FROM transactions";
   connection.query(sql, (err, data) => {
@@ -95,6 +65,67 @@ const GetRemainingAmount = (req, res) => {
       return res.json(data[0].remaining_amount);
     }
   });
+};
+
+const ActivePortal = (email) => {
+  const sql0 =
+    "UPDATE `intern_table` SET `status`='Active' WHERE `email` = (?)";
+  connection.query(sql0, [email], (err, data) => {
+    if (err) {
+      return err;
+    } else {
+      if (data.affectedRows === 1) {
+        const sql1 =
+          "UPDATE `intern_accounts` SET `status`='Active' WHERE `email` = (?)";
+        connection.query(sql1, [email], (reject, resolve) => {
+          if (reject) {
+            return reject;
+          } else {
+            if (resolve.affectedRows === 1) {
+              const sql2 = "DELETE FROM `complete_test` WHERE `email` = (?)";
+              connection.query(sql2, [email], (rej, rev) => {
+                if (rej) {
+                  console.log(rej);
+                } else {
+                  console.log("Portal Activated");
+                }
+              });
+            }
+          }
+        });
+      }
+    }
+  });
+};
+
+const ApproveInvoice = (req, res) => {
+  const { email } = req.params;
+  const { paidAmount } = req.body;
+
+  if (paidAmount > 3000) {
+    const sql = "UPDATE `invoices` SET `status`= 1 WHERE `intern_email` = ?";
+
+    connection.query(sql, [email], async (err, data) => {
+      if (err) {
+        return res.json(err);
+      } else {
+        if (data.affectedRows === 1) {
+          ActivePortal(email);
+          return res.json(data.affectedRows);
+        }
+      }
+    });
+  } else {
+    const sql = "UPDATE `invoices` SET `status`= 1 WHERE `intern_email` = ?";
+
+    connection.query(sql, [email], (err, data) => {
+      if (err) {
+        return res.json(err);
+      } else {
+        return res.json(data.affectedRows);
+      }
+    });
+  }
 };
 
 module.exports = {

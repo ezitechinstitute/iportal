@@ -1,6 +1,20 @@
 const { connection } = require("../../config/connection");
 
-const CreateManager = (req, res) => {};
+const CreateManager = (req, res) => {
+  const { etiId, name, email, password, phone, joinDate } = req.body;
+
+  const sql =
+    "INSERT INTO `manager_accounts`(`eti_id`, `name`, `email`, `contact`, `join_date`, `password`) VALUES (?)";
+  const managerData = [etiId, name, email, phone, joinDate, password];
+  connection.query(sql, [managerData], (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.json(err);
+    } else {
+      return res.json("Manager Add Successfuly");
+    }
+  });
+};
 
 const GetManagers = (req, res) => {
   const sql = "SELECT * FROM `manager_accounts`";

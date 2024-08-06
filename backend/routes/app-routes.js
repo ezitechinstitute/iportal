@@ -87,6 +87,7 @@ const {
   ActiveManager,
   GetSingleManager,
   UpdateManager,
+  CreateManager,
 } = require("../controller/admin/manager-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
@@ -142,7 +143,7 @@ router.get("/get-remote-interns/:email", verifyToken, GetRemoteInterview);
 router.get("/get-contact-with/:email", verifyToken, GetContactWith);
 router.get("/get-test-interns/:email", verifyToken, GetTestIntern);
 router.get("/active-interns", verifyToken, GetActiveInterns);
-router.post("/active-portal", verifyToken, ActivePortal);
+// router.post("/active-portal", verifyToken, ActivePortal);
 router.get("/get-test-complete/:email", verifyToken, GetTestComplete);
 router.get("/count-interview/:email", verifyToken, CountInterviewInterns);
 router.get("/count-test/:email", verifyToken, CountTestInterns);
@@ -183,6 +184,7 @@ router.get("/get-total-amount", GetTotalAmount);
 router.get("/get-received-amount", GetReceivedAmount);
 router.get("/get-remaining-amount", GetRemainingAmount);
 
+router.post("/add-manager", CreateManager);
 router.get("/get-managers", GetManagers);
 router.put("/freeze-manager/:email", FreezeManager);
 router.put("/active-manager/:email", ActiveManager);
