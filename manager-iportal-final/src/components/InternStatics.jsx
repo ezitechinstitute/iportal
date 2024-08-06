@@ -83,7 +83,7 @@ export const InternStatics = () => {
                       </div>
                       <div className="media-body my-auto">
                         <h4 className="font-weight-bolder mb-0">
-                          {interview.toLocaleString()}
+                          {interview > 0 ? interview.toLocaleString() : "0"}
                         </h4>
                         <p
                           className="card-text font-small-3 mb-0"
@@ -104,7 +104,7 @@ export const InternStatics = () => {
                       </div>
                       <div className="media-body my-auto">
                         <h4 className="font-weight-bolder mb-0">
-                          {interview.toLocaleString()}
+                          {interview > 0 ? interview.toLocaleString() : "0"}
                         </h4>
                         <p
                           className="card-text font-small-3 mb-0"
@@ -128,7 +128,7 @@ export const InternStatics = () => {
 
                     <div className="media-body my-auto">
                       <h4 className="font-weight-bolder mb-0">
-                        {active.toLocaleString()}
+                        {active > 0 ? active.toLocaleString() : "0"}
                       </h4>
                       <p
                         className="card-text font-small-3 mb-0"
@@ -150,7 +150,7 @@ export const InternStatics = () => {
                     </div>
                     <div className="media-body my-auto">
                       <h4 className="font-weight-bolder mb-0">
-                        {test.toLocaleString()}
+                        {test > 0 ? test.toLocaleString() : "0"}
                       </h4>
                       <p
                         className="card-text font-small-3 mb-0"
@@ -175,7 +175,7 @@ export const InternStatics = () => {
                     </div>
                     <div className="media-body my-auto">
                       <h4 className="font-weight-bolder mb-0">
-                        {complete.toLocaleString()}
+                        {complete > 0 ? complete.toLocaleString() : "0"}
                       </h4>
                       <p
                         className="card-text font-small-3 mb-0"
