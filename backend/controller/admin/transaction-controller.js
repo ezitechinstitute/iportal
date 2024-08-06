@@ -50,16 +50,14 @@ WHERE invoices.intern_email = ?`;
     if (err) {
       return res.json(err);
     } else {
-      if (data.affectedRows === 4) {
-        const sql_update = "DELETE FROM `complete_test` WHERE `email` = ?";
-        connection.query(sql_update, [email], (reject, resolve) => {
-          if (reject) {
-            return res.json(err);
-          } else {
-            return res.json(resolve.affectedRows);
-          }
-        });
-      }
+      const sql_update = "DELETE FROM `complete_test` WHERE `email` = ?";
+      connection.query(sql_update, [email], (reject, resolve) => {
+        if (reject) {
+          return res.json(err);
+        } else {
+          return res.json(resolve.affectedRows);
+        }
+      });
     }
   });
 };
