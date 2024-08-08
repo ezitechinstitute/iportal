@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 
-export const Pagination = ({ dataPerPage, totalData, paginate }) => {
+export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const pageNumbers = [];
-
-  for (let i = 1; i <= Math.ceil(totalData / dataPerPage); i++) {
+  for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
 
@@ -20,16 +19,14 @@ export const Pagination = ({ dataPerPage, totalData, paginate }) => {
             {pageNumbers.map((number) => (
               <li
                 key={number}
-                className={`page-item ${
-                  activePage === number ? "active" : ""
-                }`}
+                className={`page-item ${activePage === number ? "active" : ""}`}
               >
                 <a
                   className="page-link"
                   href="#"
                   onClick={() => {
+                    onPageChange(number);
                     handlePageClick(number);
-                    paginate(number);
                   }}
                 >
                   {number}
