@@ -16,8 +16,8 @@ export const RemoteInterns = () => {
   const managerContact = sessionStorage.getItem("contact");
 
   // Pagination
-  // const [currentPage, settCurrentPage] = useState(1);
-  // const [dataPerPage] = useState(200);
+  const [currentPage, settCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   // const indexOfLastData = currentPage * dataPerPage;
   // const indexOfFirstData = indexOfLastData - dataPerPage;
@@ -32,13 +32,20 @@ export const RemoteInterns = () => {
     }
   });
 
-  const getRemoteRegister = async () => {
+  const getRemoteRegister = async (page = 1, limit = 20) => {
     try {
       const res = await axios.get(
         `https://api.ezitech.org/get-remote-interns/${userEmail}`,
+        { page: page, limit: limit },
         { headers: { "x-access-token": token } }
       );
-      setData(res.data);
+      setData(res.data.data);
+      settCurrentPage(res.data.meta.page);
+      setTotalPages(res.data.meta.totalPages);
+
+      console.log(data);
+      console.log(currentPage);
+      console.log(totalPages);
     } catch (error) {
       console.log(error);
     }

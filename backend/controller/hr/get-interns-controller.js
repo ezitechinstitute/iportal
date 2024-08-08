@@ -48,7 +48,7 @@ const GetOnsiteInterview = (req, res) => {
 
   if (email === "marketingmanager@ezitech.org") {
     const sql =
-      "SELECT * FROM `intern_table` WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview' ORDER BY `id` DESC LIMIT ? OFFSET ?";
+      "SELECT * FROM `intern_table` WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview' ORDER BY `id` DESC";
     connection.query(sql, [limit, offset], (err, data) => {
       if (err) {
         return res.json(err);
@@ -78,8 +78,8 @@ const GetOnsiteInterview = (req, res) => {
     });
   } else if (email === "onsitemanager@ezitech.org") {
     const sql =
-      "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview' ORDER BY `id` DESC LIMIT ? OFFSET ?";
-    connection.query(sql, [limit, offset], (err, data) => {
+      "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview' ORDER BY `id` DESC";
+    connection.query(sql, (err, data) => {
       if (err) {
         return res.json(err);
       } else {
