@@ -4,6 +4,7 @@ import { ManagerTopbar } from "../components/ManagerTopbar";
 import { ManagerSidebar } from "../components/ManagerSidebar";
 import { useNavigate } from "react-router-dom";
 import { InternStatics } from "../components/InternStatics";
+import { Pagination } from "../components/Pagination";
 
 export const RemoteInterns = () => {
   const [token, setToken] = useState(sessionStorage.getItem("token"));
@@ -13,6 +14,17 @@ export const RemoteInterns = () => {
   const check = sessionStorage.getItem("isLoggedIn");
   const userEmail = sessionStorage.getItem("email");
   const managerContact = sessionStorage.getItem("contact");
+
+  // Pagination
+  // const [currentPage, settCurrentPage] = useState(1);
+  // const [dataPerPage] = useState(200);
+
+  // const indexOfLastData = currentPage * dataPerPage;
+  // const indexOfFirstData = indexOfLastData - dataPerPage;
+  // const currentData = data.slice(indexOfFirstData, indexOfLastData);
+
+  // // change page
+  // const paginate = (pageNumber) => settCurrentPage(pageNumber);
 
   useEffect(() => {
     if (!check) {
@@ -238,38 +250,11 @@ export const RemoteInterns = () => {
                     </div>
                     <br />
                     {/* Pagination */}
-                    {/* <div>
-                      <nav>
-                      <ul className="pagination">
-                        <li className="page-item">
-                          <a href="#" className="page-link" onClick={prevPage}>
-                            Prev
-                          </a>
-                        </li>
-                        {numbers.map((n, i) => (
-                          <li
-                            className={`page-item ${
-                              currentPage === n ? "active" : "   "
-                            }`}
-                            key={i}
-                          >
-                            <a
-                              href="#"
-                              className="page-link"
-                              onClick={changeCurrentPage}
-                            >
-                              {n}
-                            </a>
-                          </li>
-                        ))}
-                        <li className="page-item">
-                          <a href="#" className="page-link" onClick={nextPage}>
-                            Next
-                          </a>
-                        </li>
-                      </ul>
-                      </nav>
-                    </div> */}
+                    {/* <Pagination
+                      dataPerPage={dataPerPage}
+                      totalData={data.length}
+                      paginate={paginate}
+                    /> */}
                   </div>
                 </div>
               </div>

@@ -42,25 +42,48 @@ const GetLatestRegister = (req, res) => {
 
 const GetOnsiteInterview = (req, res) => {
   const { email } = req.params;
+  const page = parseInt(req.body.page) || 1;
+  const limit = parseInt(req.body.limit) || 10;
+  const offset = (page - 1) * limit;
 
   if (email === "marketingmanager@ezitech.org") {
     const sql =
-      "SELECT * FROM `intern_table` WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview' ORDER BY `id` DESC";
-    connection.query(sql, (err, data) => {
+      "SELECT * FROM `intern_table` WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview' ORDER BY `id` DESC LIMIT ? OFFSET ?";
+    connection.query(sql, [limit, offset], (err, data) => {
       if (err) {
         return res.json(err);
       } else {
+        const countquery =
+          "SELECT COUNT(*) as count FROM intern_table WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview'";
+        connection.query(countquery, (countError, countResult) => {
+          if (countError) {
+            return res.json(countError);
+          } else {
+            const totalData = countResult[0].count;
+            const totalPages = Math.ceil(totalData / limit);
+
+            return res.json({
+              data: data,
+              meta: {
+                page,
+                limit,
+                totalData,
+                totalPages,
+              },
+            });
+          }
+        });
         return res.json(data);
       }
     });
   } else if (email === "onsitemanager@ezitech.org") {
     const sql =
-      "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview' ORDER BY `id` DESC";
-    connection.query(sql, (err, data) => {
+      "SELECT * FROM `intern_table` WHERE `technology` NOT IN ('WordPress Development', 'Digital Marketing', 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview' ORDER BY `id` DESC LIMIT ? OFFSET ?";
+    connection.query(sql, [limit, offset], (err, data) => {
       if (err) {
         return res.json(err);
       } else {
-        console.log(data)
+        console.log(data);
         return res.json(data);
       }
     });
