@@ -13,7 +13,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
   return (
     <>
-      <div className="container">
+      <div className="container overflow-x-scroll">
         <nav>
           <ul className="pagination">
             {pageNumbers.map((number) => (
