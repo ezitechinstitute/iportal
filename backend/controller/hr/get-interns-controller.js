@@ -53,16 +53,16 @@ const GetOnsiteInterview = (req, res) => {
       if (err) {
         return res.json(err);
       } else {
-        const countquery =
-          "SELECT COUNT(*) as count FROM intern_table WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview'";
-        connection.query(countquery, (countError, countResult) => {
-          if (countError) {
-            return res.json(countError);
-          } else {
-            const totalData = countResult[0].count;
-            const totalPages = Math.ceil(totalData / limit);
+        // const countquery =
+        //   "SELECT COUNT(*) as count FROM intern_table WHERE (`technology` = 'WordPress Development' OR `technology` = 'Digital Marketing' OR `technology` = 'Search Engine Optimization (SEO)') AND `interview_type` = 'Onsite' AND `status` = 'Interview'";
+        // connection.query(countquery, (countError, countResult) => {
+        //   if (countError) {
+        //     return res.json(countError);
+        //   } else {
+        //     const totalData = countResult[0].count;
+        //     const totalPages = Math.ceil(totalData / limit);
 
-            return res.json({
+        /* {
               data: data,
               meta: {
                 page,
@@ -70,9 +70,12 @@ const GetOnsiteInterview = (req, res) => {
                 totalData,
                 totalPages,
               },
-            });
-          }
-        });
+            }
+              */
+
+        //     return res.json(data);
+        //   }
+        // });
         return res.json(data);
       }
     });
