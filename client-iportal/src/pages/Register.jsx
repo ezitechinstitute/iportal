@@ -777,6 +777,9 @@ export const Register = () => {
                                   Frontend Development
                                 </option>
                                 <option value="Mern Stack">MERN Stack</option>
+                                <option value="React Native">
+                                  React Native
+                                </option>
                                 <option value="PHP Development">
                                   PHP Development
                                 </option>
@@ -810,7 +813,7 @@ export const Register = () => {
                                 <option disabled value="DevOps">
                                   DevOps
                                 </option>
-                                <option disabled value="Cybersecurity">
+                                <option value="Cybersecurity">
                                   Cybersecurity
                                 </option>
                                 <option value="Graphic Design">
@@ -822,7 +825,7 @@ export const Register = () => {
                                 <option value="Digital Marketing">
                                   Digital Marketing
                                 </option>
-                                <option  value="UI/UX Design">
+                                <option value="UI/UX Design">
                                   UI/UX Design
                                 </option>
                                 <option disabled value="Content Writing">
@@ -833,6 +836,10 @@ export const Register = () => {
                                 </option>
                                 <option value="Video Editing">
                                   Animation Designing
+                                </option>
+                                <option value="3D Modeling">3D Modeling</option>
+                                <option value="Game Development">
+                                  Game Development
                                 </option>
                               </select>
                             </div>
