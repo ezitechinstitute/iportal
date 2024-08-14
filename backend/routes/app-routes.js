@@ -89,6 +89,15 @@ const {
   UpdateManager,
   CreateManager,
 } = require("../controller/admin/manager-controller");
+const {
+  AddTechnology,
+  FreezeTech,
+  ActiveTech,
+  GetAdminTech,
+  GetFormTech,
+  EditTech,
+  UpdateTech,
+} = require("../controller/admin/tech-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -190,6 +199,13 @@ router.put("/freeze-manager/:email", FreezeManager);
 router.put("/active-manager/:email", ActiveManager);
 router.get("/get-single-manager/:id", GetSingleManager);
 router.put("/:id", UpdateManager);
+router.post("/add-tech", AddTechnology);
+router.put("/freeze-tech/:id", FreezeTech);
+router.put("/active-tech/:id", ActiveTech);
+router.get("/admin-tech", GetAdminTech);
+router.get("/form-tech", GetFormTech);
+router.get("/edit-tech/:id", EditTech);
+router.put("/update-tech/:id", UpdateTech);
 
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);

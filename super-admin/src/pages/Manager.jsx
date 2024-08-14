@@ -90,7 +90,9 @@ const Manager = () => {
       } else {
         alert("Something Went Wrong!!!");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

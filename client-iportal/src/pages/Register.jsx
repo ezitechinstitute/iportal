@@ -31,6 +31,21 @@ export const Register = () => {
   const [errorMsg, setErrorMsg] = useState(" ");
   const [loader, setLoader] = useState(false);
 
+  const [getTech, setTech] = useState([]);
+
+  const GetTech = async () => {
+    try {
+      const res = await axios.get("https://api.ezitech.org/form-tech");
+      setTech(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    GetTech();
+  }, [GetTech]);
+
   const handleDateClick = (date) => {
     setValue({ ...value, interviewDate: date.toDateString() });
     setSelectedDate(date);
@@ -770,7 +785,16 @@ export const Register = () => {
                                 <option selected disabled>
                                   --Select--
                                 </option>
-                                <option value="Web Development">
+
+                                {Array.isArray(getTech)
+                                  ? getTech.map((rs) => (
+                                      <option value={rs.technology}>
+                                        {rs.technology}
+                                      </option>
+                                    ))
+                                  : ""}
+
+                                {/* <option value="Web Development">
                                   Web Development
                                 </option>
                                 <option value="Frontend Development">
@@ -840,7 +864,7 @@ export const Register = () => {
                                 <option value="3D Modeling">3D Modeling</option>
                                 <option value="Game Development">
                                   Game Development
-                                </option>
+                                </option> */}
                               </select>
                             </div>
                           </div>
