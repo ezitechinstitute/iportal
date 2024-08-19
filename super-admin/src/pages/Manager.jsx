@@ -46,6 +46,7 @@ const Manager = () => {
           const res = await axios.post("https://api.ezitech.org/add-manager", {
             manager,
           });
+          console.log(res.data);
           alert(res.data);
         } catch (error) {
           console.log(error);
@@ -483,9 +484,10 @@ const Manager = () => {
                   <button
                     type="button"
                     className="btn btn-success"
-                    data-dismiss="modal"
+                    // data-dismiss="modal"
+                    onClick={CreateManagr}
                   >
-                    submit
+                    Submit
                   </button>
                 </div>
               </div>
