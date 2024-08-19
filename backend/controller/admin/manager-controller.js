@@ -1,7 +1,7 @@
 const { connection } = require("../../config/connection");
 
 const CreateManager = (req, res) => {
-  const { etiId, name, email, password, phone, joinDate } = req.body;
+  const { etiId, name, email, password, phone, joinDate } = req.body.manager;
 
   const sql =
     "INSERT INTO `manager_accounts`(`eti_id`, `name`, `email`, `contact`, `join_date`, `password`) VALUES (?)";

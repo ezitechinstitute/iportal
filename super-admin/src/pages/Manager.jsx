@@ -16,10 +16,46 @@ const Manager = () => {
   const [editdata, setEditData] = useState([]);
   const [editeddata, setEditedData] = useState({});
   const [isDataEdit, setIsDataEdit] = useState(false);
+  const [manager, setManager] = useState({});
 
   const handleEditInput = (e) => {
     const { name, value } = e.target;
     setEditedData({ ...editeddata, [name]: value });
+  };
+
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setManager({ ...manager, [name]: value });
+  };
+
+  const CreateManagr = async () => {
+    const id = Math.floor(100 + Math.random() * 900);
+    const eti_Id = "ETI-MANAGER-" + id;
+
+    setManager({ ...manager, etiId: eti_Id });
+
+    if (
+      manager.name !== undefined &&
+      manager.email !== undefined &&
+      manager.password !== undefined &&
+      manager.phone !== undefined &&
+      manager.joinDate !== undefined
+    ) {
+      if (manager.etiId !== undefined) {
+        try {
+          const res = await axios.post("https://api.ezitech.org/add-manager", {
+            manager,
+          });
+          alert(res.data);
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        alert("Are you sure? Click Submit");
+      }
+    } else {
+      alert("Please fill empty fields first!!!");
+    }
   };
 
   const GetManagers = async () => {
@@ -324,8 +360,9 @@ const Manager = () => {
                                       type="text"
                                       id="first-name"
                                       className="form-control"
-                                      name="fname"
-                                      placeholder="First Name"
+                                      name="name"
+                                      placeholder="Name"
+                                      onChange={handleInput}
                                     />
                                   </div>
                                 </div>
@@ -340,8 +377,9 @@ const Manager = () => {
                                       type="email"
                                       id="email-id"
                                       className="form-control"
-                                      name="email-id"
+                                      name="email"
                                       placeholder="Email"
+                                      onChange={handleInput}
                                     />
                                   </div>
                                 </div>
@@ -356,8 +394,9 @@ const Manager = () => {
                                       type="password"
                                       id="contact-info"
                                       className="form-control"
-                                      name="contact"
+                                      name="password"
                                       placeholder="Password"
+                                      onChange={handleInput}
                                     />
                                   </div>
                                 </div>
@@ -374,6 +413,7 @@ const Manager = () => {
                                       className="form-control"
                                       name="phone"
                                       placeholder="Phone"
+                                      onChange={handleInput}
                                     />
                                   </div>
                                 </div>
@@ -389,10 +429,10 @@ const Manager = () => {
                                   <div className="col-sm-9">
                                     <input
                                       type="date"
-                                      id="first-name"
                                       className="form-control"
                                       name="joinDate"
-                                      placeholder="First Name"
+                                      placeholder="Join Date"
+                                      onChange={handleInput}
                                     />
                                   </div>
 
