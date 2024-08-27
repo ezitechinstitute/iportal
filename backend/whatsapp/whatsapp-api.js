@@ -62,7 +62,7 @@ If the manager does not respond within 24 hours, you should send a reminder mess
 
 Best regards
   `,
-      instance_id: "6682624207C62",
+      instance_id: "66CD81E393509",
       access_token: "6635ec7382039",
     });
   } catch (error) {
@@ -98,7 +98,7 @@ If you encounter any issues while logging in or have any questions, feel free to
 Please contact your assign manager for queries & test submisson: ${contact}
 
 Best regards`,
-      instance_id: "668CF6A5AB89E",
+      instance_id: "66CD7FB1B30EB",
       access_token: "6635ec7382039",
     });
   } catch (error) {
@@ -143,7 +143,7 @@ Received By: ${m_name}
 
 Regards :
 Ezitech Institute`,
-      instance_id: "668CF6A5AB89E",
+      instance_id: "66CD7FB1B30EB",
       access_token: "6635ec7382039",
     });
   } catch (error) {
@@ -191,7 +191,7 @@ Received By: ${m_name}
 
 Regards :
 Ezitech Institute`,
-      instance_id: "668CF6A5AB89E",
+      instance_id: "66CD7FB1B30EB",
       access_token: "6635ec7382039",
     });
   } catch (error) {
