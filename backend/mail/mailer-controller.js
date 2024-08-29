@@ -274,38 +274,21 @@ function SendMailRegister(
                           <p style="color:#000000; font-size:16px; text-align:left; font-family: Verdana, Geneva, sans-serif; line-height:22px "> We are delighted to inform you that your registration was successful. Welcome to Ezitech's platform/community! 🎉 <br />
                             <br />
                             <br />
-                            <strong>Interview Process Details </strong>
+                            <strong> Your Details </strong>
                             <br/>
                             <br/>
-                            <strong> Onsite Interview: </strong>
+                            <strong> Technology: </strong> ${technology}
                             <br/>
-                            <strong> Days: </strong> Monday to Friday
+                            <strong> Interview Type: </strong> ${interview_type}
                             <br/>
-                            <strong> Time: </strong> 11:00Am to 3:00Pm
-                            <br/>
-                            <strong> Address: </strong> Office #304-B Amna Plaza, Near Radio Pakistan, Rawalpindi, Punjab 46000
-                            <br/>
-                            <strong> Location: </strong> https://maps.app.goo.gl/Q78i6r1DifnBWJtA8
-
-                            </br>
-                            <br/>
+                            <strong> Internship Type: </strong> ${intern_type}
                             <br/>
                             <br/>
                             <strong> Contact Us to Process Your Interview </strong>
                             <br/>
                             <br/>
                           </p>
-                          <table border="0" align="left" cellpadding="0" cellspacing="0" style="Margin:0 auto;">
-                            <tbody>
-                              <tr>
-                                <td align="center"><table border="0" cellpadding="0" cellspacing="0" style="Margin:0 auto;">
-                                    <tr>
-                                      <td width="250" height="60" align="center" bgcolor="#1f3ca6" style="-moz-border-radius: 30px; -webkit-border-radius: 30px; border-radius: 30px;"><a href="https://wa.me/923455555396?text=Hello%20Interview%20Process%20Details%20to%20Process%20Interview%20%3F." style="width:250; display:block; text-decoration:none; border:0; text-align:center; font-weight:bold;font-size:18px; font-family: Arial, sans-serif; color: #ffffff" class="button_link" target="_blank">Message on WhatsApp<img src="https://gallery.mailchimp.com/fdcaf86ecc5056741eb5cbc18/images/582dc751-b0fc-4769-ad74-35932c7594dd.png" width="32" height="17" style="padding-top:5px" alt="" border="0"/></a></td>
-                                    </tr>
-                                  </table></td>
-                              </tr>
-                            </tbody>
-                          </table>
+            
                           <p style="color:#000000; font-size:16px; text-align:left; font-family: Verdana, Geneva, sans-serif; line-height:22px "><br />
                             <br />
                             <br />
