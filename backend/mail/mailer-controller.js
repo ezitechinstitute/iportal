@@ -367,7 +367,7 @@ function SendMailAssignPortal(name, email, password) {
   let mailOptions = {
     from: process.env.REGMAIL, // Sender email address
     to: email, // List of recipients
-    subject: "Ezitech Internship Registration", // Subject line
+    subject: "", // Subject line
     // Plain text body
     // You can also use `html` property to send HTML formatted email
     html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -622,7 +622,7 @@ function SendMailAssignPortal(name, email, password) {
                           To help you get started, we have created an account for you on our company portal. Below are your login details:
                             <br />
                             <br />
-                            <strong> Your Details </strong>
+                            <strong> Login Details </strong>
                             <br/>
                             <br/>
                             <strong>Portal URL: </strong> https://interns.ezitech.org
@@ -636,6 +636,14 @@ function SendMailAssignPortal(name, email, password) {
                              <strong>Internship Status: </strong> Test
                             <br/>
                             <br/>
+                            <br/>
+                              <p>Please follow these steps to log in:</p>
+                            <br/>
+                            <br/>
+                            <ol> 
+                            <li>Click on the portal url above or copy and paste it into your browser</li>
+                            <li>Enter your email address and temporary password</li>
+                            </ol>
                             <p>If you encounter any issues while logging in or have any questions, feel free to reach out at help@ezitech.org</p>
                             <br/>
                           </p>
@@ -664,7 +672,7 @@ function SendMailAssignPortal(name, email, password) {
                             <table class="contents" style="border-spacing:0; width:100%">
                               <tr>
                                 
-                                <td width="100%" align="center" valign="middle" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;"><p style="color:#787777; font-size:13px; text-align:center; font-family: sans-serif"> Ezitech.org &copy; ${year}<br />
+                                <td width="100%" align="center" valign="middle" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;"><p style="color:#787777; font-size:13px; text-align:center; font-family: sans-serif"> ezitech.org &copy; ${year}<br />
                               </tr>
                             </table>
                           </div>
