@@ -272,7 +272,7 @@ function SendMailRegister(
                       <tr>
                         <td align="left" style="padding:50px 50px 50px 50px"><p style="color:#262626; font-size:24px; text-align:left; font-family: Verdana, Geneva, sans-serif"><strong>Dear ${name}</strong>,</p>
                           <p style="font-size:16px; text-align:left; font-family: sans-serif; line-height:20px "> 
-                          We are delighted to inform you that your registration is successful. Welcome to Ezitech's Community!
+                          We are delighted to inform you that your registration is successful. Welcome to Ezitech's Community! <br/> <br/>
 
                           Our Manager will contact you within 48 hours.
                           If the manager does not respond within 48 hours, you should send a reminder message to mail given below. <br />
@@ -290,12 +290,9 @@ function SendMailRegister(
                             <br/>
                             <p> If you encounter any issues during registration, please send your query to help@ezitech.org and your WhatsApp number. Your issue will be resolved within a few hours </p>
                             <br/>
-                            <br/>
                           </p>
             
-                          <p style="font-size:16px; text-align:left; font-family: sans-serif; line-height:20px "><br />
-                            <br />
-                           
+                          <p style="font-size:16px; text-align:left; font-family: sans-serif; line-height:20px ">
                             Best Regards, <br />
                             EZITECH</p></td>
                       </tr>
@@ -319,8 +316,8 @@ function SendMailRegister(
                           <div class="column" style="width:100%;max-width:350px;display:inline-block;vertical-align:top;">
                             <table class="contents" style="border-spacing:0; width:100%">
                               <tr>
-                                <td width="39%" align="right" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;"><a href="#" target="_blank"><img src="https://register.ezitech.org/MailLogo/mail.jpg" alt="" width="59" height="59" style="border-width:0; max-width:59px;height:auto; display:block; padding-right:20px" /></a></td>
-                                <td width="61%" align="left" valign="middle" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;"><p style="color:#787777; font-size:13px; text-align:left; font-family: Verdana, Geneva, sans-serif"> Ezitech.org &copy; ${year}<br />
+                                <td width="39%" align="right" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;"><a href="#" target="_blank"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJKN_B7on1fTJ_qT1bKLQpu_iBG1JsLwEM6Q&s" alt="" width="59" height="59" style="border-width:0; max-width:59px;height:auto; display:block; padding-right:20px" /></a></td>
+                                <td width="61%" align="left" valign="middle" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;"><p style="color:#787777; font-size:13px; text-align:left; font-family: sans-serif"> Ezitech.org &copy; ${year}<br />
                               </tr>
                             </table>
                           </div>
@@ -335,9 +332,8 @@ function SendMailRegister(
                                     <tr>
                                       <td width="32%" align="center" valign="top" style="padding-top:10px"><table width="150" border="0" cellspacing="0" cellpadding="0">
                                           <tr>
-                                            <td width="33" align="center"><a href="#" target="_blank"><img src="https://gallery.mailchimp.com/fdcaf86ecc5056741eb5cbc18/images/1f9161ee-46b5-4bdf-86db-9e32d4b98336.jpg" alt="facebook" width="36" height="36" border="0" style="border-width:0; max-width:36px;height:auto; display:block; max-height:36px"/></a></td>
-                                            <td width="34" align="center"><a href="#" target="_blank"><img src="https://gallery.mailchimp.com/fdcaf86ecc5056741eb5cbc18/images/4e449140-ec71-4978-97bf-8e0f15b5ff23.jpg" alt="twitter" width="36" height="36" border="0" style="border-width:0; max-width:36px;height:auto; display:block; max-height:36px"/></a></td>
-                                            <td width="33" align="center"><a href="#" target="_blank"><img src="https://gallery.mailchimp.com/fdcaf86ecc5056741eb5cbc18/images/d21cca91-335e-4fa4-9313-b0ea37e0452b.jpg" alt="linkedin" width="36" height="36" border="0" style="border-width:0; max-width:36px;height:auto; display:block; max-height:36px"/></a></td>
+                                            <td width="33" align="center"><a href="#" target="_blank"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiXN9xSEe8unzPBEQOeAKXd9Q55efGHGB9BA&s" alt="facebook" width="36" height="36" border="0" style="border-width:0; max-width:36px;height:auto; display:block; max-height:36px"/></a></td>
+                                            <td width="33" align="center"><a href="#" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="linkedin" width="36" height="36" border="0" style="border-width:0; max-width:36px;height:auto; display:block; max-height:36px"/></a></td>
                                           </tr>
                                         </table></td>
                                     </tr>
