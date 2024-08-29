@@ -271,7 +271,11 @@ function SendMailRegister(
                     <table class="one-column" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-spacing:0; border-left:1px solid #e8e7e5; border-right:1px solid #e8e7e5; border-bottom:1px solid #e8e7e5; border-top:1px solid #e8e7e5" bgcolor="#FFFFFF">
                       <tr>
                         <td align="left" style="padding:50px 50px 50px 50px"><p style="color:#262626; font-size:24px; text-align:left; font-family: Verdana, Geneva, sans-serif"><strong>Dear ${name}</strong>,</p>
-                          <p style="color:#000000; font-size:16px; text-align:left; font-family: Verdana, Geneva, sans-serif; line-height:22px "> We are delighted to inform you that your registration was successful. Welcome to Ezitech's platform/community! 🎉 <br />
+                          <p style="color:#000000; font-size:16px; text-align:left; font-family: Verdana, Geneva, sans-serif; line-height:22px "> Registration Successful! 
+                          We are delighted to inform you that your registration is successful. Welcome to Ezitech's Community!
+
+                          Our Manager will contact you as soon as possible.
+                          If the manager does not respond within 24 hours, you should send a reminder message to this number. <br />
                             <br />
                             <br />
                             <strong> Your Details </strong>
@@ -284,7 +288,7 @@ function SendMailRegister(
                             <strong> Internship Type: </strong> ${intern_type}
                             <br/>
                             <br/>
-                            <strong> Contact Us to Process Your Interview </strong>
+                            <p> If you encounter any issues during registration, please send your query to help@ezitech.org and your WhatsApp number. Your issue will be resolved within a few hours </p>
                             <br/>
                             <br/>
                           </p>
