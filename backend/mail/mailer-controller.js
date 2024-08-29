@@ -316,7 +316,7 @@ function SendMailRegister(
                           <div class="column" style="width:100%;max-width:350px;display:inline-block;vertical-align:top;">
                             <table class="contents" style="border-spacing:0; width:100%">
                               <tr>
-                                <td width="39%" align="right" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;"><a href="#" target="_blank"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJKN_B7on1fTJ_qT1bKLQpu_iBG1JsLwEM6Q&s" alt="" width="59" height="59" style="border-width:0; max-width:59px;height:auto; display:block; padding-right:20px" /></a></td>
+                                <td width="39%" align="right" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;"><a href="#" target="_blank"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJKN_B7on1fTJ_qT1bKLQpu_iBG1JsLwEM6Q&s" alt="" width="100" height="100" style="border-width:0; max-width:59px;height:auto; display:block; padding-right:20px" /></a></td>
                                 <td width="61%" align="left" valign="middle" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;"><p style="color:#787777; font-size:13px; text-align:left; font-family: sans-serif"> Ezitech.org &copy; ${year}<br />
                               </tr>
                             </table>
