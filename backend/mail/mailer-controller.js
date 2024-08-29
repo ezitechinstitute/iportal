@@ -271,11 +271,11 @@ function SendMailRegister(
                     <table class="one-column" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-spacing:0; border-left:1px solid #e8e7e5; border-right:1px solid #e8e7e5; border-bottom:1px solid #e8e7e5; border-top:1px solid #e8e7e5" bgcolor="#FFFFFF">
                       <tr>
                         <td align="left" style="padding:50px 50px 50px 50px"><p style="color:#262626; font-size:24px; text-align:left; font-family: Verdana, Geneva, sans-serif"><strong>Dear ${name}</strong>,</p>
-                          <p style="color:#000000; font-size:16px; text-align:left; font-family: Verdana, Geneva, sans-serif; line-height:22px "> Registration Successful! 
+                          <p style="color:#000000; font-size:16px; text-align:left; font-family: sans-serif; line-height:20px "> 
                           We are delighted to inform you that your registration is successful. Welcome to Ezitech's Community!
 
-                          Our Manager will contact you as soon as possible.
-                          If the manager does not respond within 24 hours, you should send a reminder message to this number. <br />
+                          Our Manager will contact you within 48 hours.
+                          If the manager does not respond within 48 hours, you should send a reminder message to mail given below. <br />
                             <br />
                             <br />
                             <strong> Your Details </strong>
