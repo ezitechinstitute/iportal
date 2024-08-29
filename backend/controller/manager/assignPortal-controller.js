@@ -1,4 +1,5 @@
 const { connection } = require("../../config/connection");
+const { SendMailAssignPortal } = require("../../mail/mailer-controller");
 const { SendMessageAssignPortal } = require("../../whatsapp/whatsapp-api");
 const bcrypt = require("bcryptjs");
 
@@ -30,26 +31,28 @@ const AssignPortal = (req, res) => {
           if (reject) {
             return res.json(reject);
           } else {
-            createPhoneQueue(phone);
-            createNameQueue(name);
-            createEmailQueue(email);
-            createPasswordQueue(password);
-            setInterval(() => {
-              if (
-                portalPhoneQueue.length > 0 &&
-                portalNameQueue.length > 0 &&
-                portalEmailQueue.length > 0 &&
-                portalPasswordQueue.length > 0
-              ) {
-                SendMessageAssignPortal(
-                  getPhoneQueue().slice(1, 13),
-                  getNameQueue(),
-                  getEmailQueue(),
-                  getPasswordQueue(),
-                  managerContact
-                );
-              }
-            }, 30000);
+
+            SendMailAssignPortal(name, email, password);
+            // createPhoneQueue(phone);
+            // createNameQueue(name);
+            // createEmailQueue(email);
+            // createPasswordQueue(password);
+            // setInterval(() => {
+            //   if (
+            //     portalPhoneQueue.length > 0 &&
+            //     portalNameQueue.length > 0 &&
+            //     portalEmailQueue.length > 0 &&
+            //     portalPasswordQueue.length > 0
+            //   ) {
+            //     SendMessageAssignPortal(
+            //       getPhoneQueue().slice(1, 13),
+            //       getNameQueue(),
+            //       getEmailQueue(),
+            //       getPasswordQueue(),
+            //       managerContact
+            //     );
+            //   }
+            // }, 30000);
           }
           return res.json(resolve.affectedRows);
         });
