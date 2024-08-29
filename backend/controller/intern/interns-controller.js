@@ -1,8 +1,5 @@
 const { connection } = require("../../config/connection");
-const {
-  SendMailRemote,
-  SendMailOnsite,
-} = require("../../mail/mailer-controller");
+const { SendMailRegister } = require("../../mail/mailer-controller");
 
 const {
   SendMessageRemote,
@@ -78,57 +75,64 @@ const RegisterInterns = (req, res) => {
             return res.json(err);
           } else {
             if (data.affectedRows === 1) {
-              if (interviewType === "Remote") {
-                if (
-                  internTechnology === "Digital Marketing" ||
-                  internTechnology === "Search Engine Optimization (SEO)" ||
-                  internTechnology === "WordPress Development"
-                ) {
-                  createOtherQueue(internPhone);
-                  setInterval(() => {
-                    if (dataOther.length > 0) {
-                      SendMessageOther(getOtherQueue().slice(1, 13));
-                    }
-                  }, 60000);
-                } else {
-                  createQueueRemote(internPhone);
-                  setInterval(() => {
-                    if (dataRemote.length > 0) {
-                      SendMessageRemote(getRemoteQueue().slice(1, 13));
-                    }
-                  }, 60000);
-                }
+              SendMailRegister(
+                internUsername,
+                internemail,
+                internTechnology,
+                internType,
+                interviewType
+              );
+              // if (interviewType === "Remote") {
+              //   if (
+              //     internTechnology === "Digital Marketing" ||
+              //     internTechnology === "Search Engine Optimization (SEO)" ||
+              //     internTechnology === "WordPress Development"
+              //   ) {
+              //     createOtherQueue(internPhone);
+              //     setInterval(() => {
+              //       if (dataOther.length > 0) {
+              //         SendMessageOther(getOtherQueue().slice(1, 13));
+              //       }
+              //     }, 60000);
+              //   } else {
+              //     createQueueRemote(internPhone);
+              //     setInterval(() => {
+              //       if (dataRemote.length > 0) {
+              //         SendMessageRemote(getRemoteQueue().slice(1, 13));
+              //       }
+              //     }, 60000);
+              //   }
 
-                // SendMailRemote(
-                //   internUsername,
-                //   internemail,
-                //   interviewDate,
-                //   interviewTime
-                // );
-              } else {
-                if (
-                  internTechnology === "Digital Marketing" ||
-                  internTechnology === "Search Engine Optimization (SEO)" ||
-                  internTechnology === "WordPress Development"
-                ) {
-                  createOtherQueue(internPhone);
-                  setInterval(() => {
-                    if (dataOther.length > 0) {
-                      SendMessageOther(getOtherQueue().slice(1, 13));
-                    }
-                  }, 60000);
-                } else {
-                  createQueueOnsite(internPhone);
-                  setInterval(() => {
-                    if (dataOnsite.length > 0) {
-                      SendMessageOnsite(getOnisteQueue().slice(1, 13));
-                    }
-                  }, 60000);
-                }
-                // getOnisteQueue();
+              //   // SendMailRemote(
+              //   //   internUsername,
+              //   //   internemail,
+              //   //   interviewDate,
+              //   //   interviewTime
+              //   // );
+              // } else {
+              //   if (
+              //     internTechnology === "Digital Marketing" ||
+              //     internTechnology === "Search Engine Optimization (SEO)" ||
+              //     internTechnology === "WordPress Development"
+              //   ) {
+              //     createOtherQueue(internPhone);
+              //     setInterval(() => {
+              //       if (dataOther.length > 0) {
+              //         SendMessageOther(getOtherQueue().slice(1, 13));
+              //       }
+              //     }, 60000);
+              //   } else {
+              //     createQueueOnsite(internPhone);
+              //     setInterval(() => {
+              //       if (dataOnsite.length > 0) {
+              //         SendMessageOnsite(getOnisteQueue().slice(1, 13));
+              //       }
+              //     }, 60000);
+              //   }
+              //   // getOnisteQueue();
 
-                // SendMailOnsite(internUsername, internemail);
-              }
+              //   // SendMailOnsite(internUsername, internemail);
+              // }
 
               return res.json(data.affectedRows);
             }
