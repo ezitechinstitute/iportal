@@ -167,7 +167,7 @@ router.get("/count-test-completed", verifyToken, CountTestCompleted);
 router.get("/count-contact-with/:email", verifyToken, CountContactWith);
 
 // Test
-router.get("/test-work/:managerid", TestFrameWork);
+// router.get("/test-work/:managerid", TestFrameWork);
 
 // router.get("/get-instructor-emails", verifyToken, GetInstructorEmail);
 // router.get("/get-manager-emails", verifyToken, GetManagerEmail);
