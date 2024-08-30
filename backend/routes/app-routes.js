@@ -1,5 +1,5 @@
 const express = require("express");
-const { RegisterInterns } = require("../controller/intern/interns-controller");
+const { RegisterInterns, SendVerificationCode } = require("../controller/intern/interns-controller");
 const {
   HrAuth,
   HrForgotPassword,
@@ -27,6 +27,7 @@ const {
   CountActive,
   GetContactWith,
   CountContactWith,
+  TestFrameWork,
 } = require("../controller/hr/get-interns-controller");
 const {
   GetManagerOnsite,
@@ -88,6 +89,8 @@ const {
   GetSingleManager,
   UpdateManager,
   CreateManager,
+  GetManagerPermissions,
+  GetNewPermissionsTech,
 } = require("../controller/admin/manager-controller");
 const {
   AddTechnology,
@@ -121,12 +124,13 @@ function verifyToken(req, res, next) {
   });
 }
 
-router.get("/", (req, res) => {
+router.get("/test", (req, res) => {
   res.send("Hello from NodeJs Server");
 });
 
 /* Interns Endpoints */
 router.post("/register-inters", RegisterInterns);
+router.post("/verification-code", SendVerificationCode);
 router.post("/intern-auth", InternAuth);
 router.post("/start-shift", verifyToken, StartShift);
 router.post("/end-shift", verifyToken, EndShift);
@@ -158,6 +162,9 @@ router.get("/count-interview/:email", verifyToken, CountInterviewInterns);
 router.get("/count-test/:email", verifyToken, CountTestInterns);
 router.get("/count-test-completed", verifyToken, CountTestCompleted);
 router.get("/count-contact-with/:email", verifyToken, CountContactWith);
+
+// Test
+router.get("/test-work/:managerid", TestFrameWork);
 
 // router.get("/get-instructor-emails", verifyToken, GetInstructorEmail);
 // router.get("/get-manager-emails", verifyToken, GetManagerEmail);
@@ -195,10 +202,13 @@ router.get("/get-remaining-amount", GetRemainingAmount);
 
 router.post("/add-manager", CreateManager);
 router.get("/get-managers", GetManagers);
+router.get("/get-manager-permissions/:id", GetManagerPermissions);
+router.get("/get-manager-new-permissions", GetNewPermissionsTech);
 router.put("/freeze-manager/:email", FreezeManager);
 router.put("/active-manager/:email", ActiveManager);
 router.get("/get-single-manager/:id", GetSingleManager);
 router.put("/:id", UpdateManager);
+
 router.post("/add-tech", AddTechnology);
 router.put("/freeze-tech/:id", FreezeTech);
 router.put("/active-tech/:id", ActiveTech);

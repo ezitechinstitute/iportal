@@ -31,7 +31,6 @@ const AssignPortal = (req, res) => {
           if (reject) {
             return res.json(reject);
           } else {
-
             SendMailAssignPortal(name, email, password);
             // createPhoneQueue(phone);
             // createNameQueue(name);
@@ -142,4 +141,4 @@ function getPasswordQueue() {
   return portalPasswordQueue.pop();
 }
 
-module.exports = { AssignPortal};
+module.exports = { AssignPortal };
