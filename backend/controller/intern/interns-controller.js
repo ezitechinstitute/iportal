@@ -149,11 +149,11 @@ const RegisterInterns = (req, res) => {
                     // }
                     ExpireCode(internemail);
                     return res.json(data.affectedRows);
-                  } else {
-                    ExpireCode(internemail);
                   }
                 }
               });
+            } else {
+              ExpireCode(internemail);
             }
           }
         });
