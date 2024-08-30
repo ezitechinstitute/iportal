@@ -74,6 +74,7 @@ const RegisterInterns = (req, res) => {
 
             for (let i = 0; i < data.length; i++) {
               if (data[0].email === internemail) {
+                ExpireCode(internemail)
                 flag = 1;
                 return res.json({ exist: true });
               }
@@ -152,8 +153,6 @@ const RegisterInterns = (req, res) => {
                   }
                 }
               });
-            } else {
-              ExpireCode(internemail);
             }
           }
         });
