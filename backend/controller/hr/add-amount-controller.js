@@ -4,6 +4,10 @@ const {
   SendInvoiceInitial,
   SendInvoicePartial,
 } = require("../../whatsapp/whatsapp-api");
+const {
+  SendMailInitialInvoice,
+  SendMailPartialInvoice,
+} = require("../../mail/mailer-controller");
 
 const AddAmount = (req, res) => {
   const {
@@ -160,8 +164,8 @@ const AddAmount = (req, res) => {
 
                 // setInterval(() => {
                 //   if (invoiceQueueInitial.length > 0) {
-                SendInvoiceInitial(
-                  internPhone.slice(1, 13),
+                SendMailInitialInvoice(
+                  internEmail,
                   internName,
                   invoiceId,
                   invoiceDate,
@@ -281,8 +285,8 @@ const AddAmount = (req, res) => {
 
           // setInterval(() => {
           //   if (invoiceQueuePartial.length > 0) {
-          SendInvoicePartial(
-            internPhone.slice(1, 13),
+          SendMailPartialInvoice(
+            internEmail,
             internName,
             invoiceId,
             invoiceDate,
