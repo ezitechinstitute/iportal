@@ -101,6 +101,20 @@ export const Register = () => {
     // }
   });
 
+  const VerifyEmail = async () => {
+    const verificationCode = Math.floor(1000 + Math.random() * 9000);
+
+    try {
+      const res = await axios.post("https://api.ezitech.org/verification-code", {
+        email: value.internemail,
+        code: verificationCode,
+      });
+      alert(res.data.msg);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleImage = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -117,6 +131,8 @@ export const Register = () => {
 
     if (value.internPhone !== " ") {
       if (
+        value.internCode !== undefined &&
+        value.internCity !== undefined &&
         value.internGender !== undefined &&
         value.internUniversity !== undefined &&
         value.internDegree !== undefined &&
@@ -134,13 +150,21 @@ export const Register = () => {
             console.log(res.data);
 
             if (res.data === 1) {
-              setRegisterMsg("Register Successfully");
+              setRegisterMsg("Register Successfully! Please Check Your Email");
               setTimeout(() => {
                 setLoader(false);
-                navigate("/information");
+                window.location.reload();
               }, 2000);
-              // window.location.reload();
             }
+
+            if (res.data.codeMsg === false) {
+              setErrorMsg("Email Verification Failed!!!");
+              alert(res.data.codeMsg);
+              setTimeout(() => {
+                setLoader(false);
+              }, 2000);
+            }
+
             if (res.data.exist === true) {
               setErrorMsg("You Already Registered");
               setTimeout(() => {
@@ -231,22 +255,89 @@ export const Register = () => {
                                 for="register-email"
                                 className="form-label"
                               >
-                                Email
+                                Valid Email
+                              </label>
+                              <div className="d-flex">
+                                <input
+                                  style={{
+                                    borderRight: "0",
+                                    borderTopRightRadius: "0",
+                                    borderBottomRightRadius: "0",
+                                  }}
+                                  type="text"
+                                  className="form-control"
+                                  id="internEmail"
+                                  name="internemail"
+                                  placeholder="info@ezitech.org"
+                                  aria-describedby="register-email"
+                                  tabindex="2"
+                                  onChange={handleInput}
+                                  required
+                                />
+                                <button
+                                  className="btn btn-success"
+                                  style={{
+                                    borderLeft: "0",
+                                    borderTopLeftRadius: "0",
+                                    borderBottomLeftRadius: "0",
+                                  }}
+                                  onClick={VerifyEmail}
+                                >
+                                  Verify
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="row">
+                          <div className="col-sm-6">
+                            <div className="form-group">
+                              <label
+                                for="register-username"
+                                className="form-label"
+                              >
+                                Verification Code
+                              </label>
+                              <input
+                                type="number"
+                                className="form-control"
+                                id="register-username"
+                                name="internCode"
+                                placeholder="Verification Code"
+                                aria-describedby="register-username"
+                                tabindex="1"
+                                autofocus
+                                onChange={handleInput}
+                                required
+                              />
+                            </div>
+                          </div>
+
+                          <div className="col-sm-6">
+                            <div className="form-group">
+                              <label
+                                for="register-username"
+                                className="form-label"
+                              >
+                                City
                               </label>
                               <input
                                 type="text"
                                 className="form-control"
-                                id="internEmail"
-                                name="internemail"
-                                placeholder="info@ezitech.org"
-                                aria-describedby="register-email"
-                                tabindex="2"
+                                id="register-username"
+                                name="internCity"
+                                placeholder="City"
+                                aria-describedby="register-username"
+                                tabindex="1"
+                                autofocus
                                 onChange={handleInput}
                                 required
                               />
                             </div>
                           </div>
                         </div>
+
                         <div className="row">
                           <div className="col-sm-6">
                             <div className="form-group">
