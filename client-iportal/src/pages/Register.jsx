@@ -105,10 +105,13 @@ export const Register = () => {
     const verificationCode = Math.floor(1000 + Math.random() * 9000);
 
     try {
-      const res = await axios.post("https://api.ezitech.org/verification-code", {
-        email: value.internemail,
-        code: verificationCode,
-      });
+      const res = await axios.post(
+        "https://api.ezitech.org/verification-code",
+        {
+          email: value.internemail,
+          code: verificationCode,
+        }
+      );
       alert(res.data.msg);
     } catch (error) {
       console.log(error);
@@ -161,6 +164,7 @@ export const Register = () => {
               setErrorMsg("Email Verification Failed!!!");
               setTimeout(() => {
                 setLoader(false);
+                window.location.reload();
               }, 2000);
             }
 
@@ -168,6 +172,7 @@ export const Register = () => {
               setErrorMsg("You Already Registered");
               setTimeout(() => {
                 setLoader(false);
+                window.location.reload();
               }, 2000);
             }
 
