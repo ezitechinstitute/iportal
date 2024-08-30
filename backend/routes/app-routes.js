@@ -205,12 +205,12 @@ router.get("/get-remaining-amount", GetRemainingAmount);
 
 router.post("/add-manager", CreateManager);
 router.get("/get-managers", GetManagers);
-router.get("/get-manager-permissions/:id", GetManagerPermissions);
-router.get("/get-manager-new-permissions", GetNewPermissionsTech);
-router.put("/freeze-manager/:email", FreezeManager);
-router.put("/active-manager/:email", ActiveManager);
-router.get("/get-single-manager/:id", GetSingleManager);
-router.put("/:id", UpdateManager);
+// router.get("/get-manager-permissions/:id", GetManagerPermissions);
+// router.get("/get-manager-new-permissions", GetNewPermissionsTech);
+// router.put("/freeze-manager/:email", FreezeManager);
+// router.put("/active-manager/:email", ActiveManager);
+// router.get("/get-single-manager/:id", GetSingleManager);
+// router.put("/:id", UpdateManager);
 
 router.post("/add-tech", AddTechnology);
 router.put("/freeze-tech/:id", FreezeTech);
