@@ -1,5 +1,8 @@
 const express = require("express");
-const { RegisterInterns, SendVerificationCode } = require("../controller/intern/interns-controller");
+const {
+  RegisterInterns,
+  SendVerificationCode,
+} = require("../controller/intern/interns-controller");
 const {
   HrAuth,
   HrForgotPassword,
@@ -124,7 +127,7 @@ function verifyToken(req, res, next) {
   });
 }
 
-router.get("/test", (req, res) => {
+router.get("/", (req, res) => {
   res.send("Hello from NodeJs Server");
 });
 
