@@ -62,6 +62,7 @@ const RegisterInterns = (req, res) => {
       return res.json(err);
     } else {
       if (data[0].code !== parseInt(internCode)) {
+        ExpireCode(internemail);
         return res.json({ codeMsg: false });
       } else {
         const sql0 = "SELECT * FROM `intern_table` WHERE `email`= (?)";

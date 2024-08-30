@@ -159,7 +159,6 @@ export const Register = () => {
 
             if (res.data.codeMsg === false) {
               setErrorMsg("Email Verification Failed!!!");
-              alert(res.data.codeMsg);
               setTimeout(() => {
                 setLoader(false);
               }, 2000);
