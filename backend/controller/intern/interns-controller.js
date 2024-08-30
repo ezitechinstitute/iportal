@@ -75,13 +75,11 @@ const RegisterInterns = (req, res) => {
             for (let i = 0; i < data.length; i++) {
               if (data[0].email === internemail) {
                 flag = 1;
-                ExpireCode(internemail);
                 return res.json({ exist: true });
               }
             }
 
             if (flag === 0) {
-              console.log("hello");
               const sql1 =
                 "INSERT INTO `intern_table`(`name`, `email`, `city`, `phone`, `cnic`, `gender`, `image`, `join_date`, `birth_date`, `university`, `degree`, `interview_type`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
 
@@ -151,6 +149,8 @@ const RegisterInterns = (req, res) => {
                     // }
                     ExpireCode(internemail);
                     return res.json(data.affectedRows);
+                  } else {
+                    ExpireCode(internemail);
                   }
                 }
               });
