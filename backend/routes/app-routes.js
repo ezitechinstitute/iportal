@@ -127,7 +127,7 @@ function verifyToken(req, res, next) {
   });
 }
 
-router.get("/", (req, res) => {
+router.get("/test", (req, res) => {
   res.send("Hello from NodeJs Server");
 });
 
