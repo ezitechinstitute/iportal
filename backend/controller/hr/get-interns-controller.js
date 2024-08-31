@@ -465,6 +465,49 @@ const CountContactWith = (req, res) => {
   }
 };
 
+const TestFrameWork = (req, res) => {
+  const { managerid } = req.params;
+
+  const sql_0 =
+    "SELECT DISTINCT technologies.technology, manager_permissions.interview_type FROM `intern_table` JOIN manager_permissions ON manager_permissions.interview_type = intern_table.interview_type JOIN technologies ON manager_permissions.tech_id = technologies.tech_id WHERE manager_permissions.manager_id = ?";
+  connection.query(sql_0, [managerid], (err, data) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      const managerTech = [];
+      const managerInterview = [];
+      for (let i = 0; i < data.length; i++) {
+        managerTech.push(data[i].technology);
+        managerInterview.push(data[i].interview_type);
+      }
+      // const managerTech = data[]
+
+      let query = "SELECT * FROM intern_table WHERE 1 = 1";
+      const techFilter = managerTech.map((t) => t).join("','");
+
+      if (techFilter.length > 0) {
+        query += ` AND technology IN ('${techFilter}')`;
+      }
+
+      const iview_type = [...new Set(managerInterview.map((i) => i))];
+
+      if (iview_type.length > 0) {
+        query += ` AND interview_type IN ('${iview_type.join(
+          "','"
+        )}') LIMIT 20`;
+      }
+
+      connection.query(query, (reject, resolve) => {
+        if (err) {
+          return res.json(err);
+        } else {
+          return res.json(resolve);
+        }
+      });
+    }
+  });
+};
+
 module.exports = {
   GetLatestRegister,
   GetOnsiteInterview,
@@ -477,4 +520,6 @@ module.exports = {
   CountTestInterns,
   CountTestCompleted,
   CountContactWith,
+
+  TestFrameWork,
 };

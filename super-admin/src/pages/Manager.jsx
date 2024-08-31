@@ -18,6 +18,14 @@ const Manager = () => {
   const [isDataEdit, setIsDataEdit] = useState(false);
   const [manager, setManager] = useState({});
 
+  const [managerPermissions, setManagerPermissions] = useState([]);
+
+  const [newPermission, setNewPermission] = useState([]); //Technologies
+
+  const [permissions, setPermissions] = useState({}); // Selected
+
+  const [manager_id, setManagerId] = useState(0);
+
   const handleEditInput = (e) => {
     const { name, value } = e.target;
     setEditedData({ ...editeddata, [name]: value });
@@ -61,12 +69,118 @@ const Manager = () => {
 
   const GetManagers = async () => {
     try {
-      const res = await axios.get("https://api.ezitech.org/get-managers");
+      const res = await axios.get("http://localhost:8800/get-managers");
       setData(res.data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const GetPermissions = async (id) => {
+    setManagerId(id);
+    try {
+      const res = await axios.get(
+        `http://localhost:8800/get-manager-permissions/${id}`
+      );
+      setManagerPermissions(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const GetNewPermissions = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:8800/get-manager-new-permissions"
+      );
+      const data = await res.json();
+      setNewPermission(data);
+
+      const initialPermissions = [];
+      data.forEach((tech) => {
+        initialPermissions[tech.tech_id] = {
+          selected: false,
+          Remote: false,
+          Onsite: false,
+        };
+      });
+      setPermissions(initialPermissions);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleTechSelect = (techId, checked) => {
+    setPermissions((prevSelectedPermissions) => ({
+      ...prevSelectedPermissions,
+      [techId]: {
+        ...prevSelectedPermissions[techId],
+        selected: checked,
+      },
+    }));
+  };
+
+  const handleOptionChange = (techId, option, checked) => {
+    setPermissions((prevSelectedPermissions) => ({
+      ...prevSelectedPermissions,
+      [techId]: {
+        ...prevSelectedPermissions[techId],
+        [option]: checked,
+      },
+    }));
+  };
+
+  const SubmitPermissions = async () => {
+    // alert(manageId);
+
+    // collect all techs with options
+    const selectedData = Object.keys(permissions)
+      .filter((techId) => permissions[techId].selected)
+      .flatMap((techId) => {
+        const tech = permissions[techId];
+        const allowPermission = [];
+
+        if (tech.Remote) {
+          allowPermission.push({ tech_id: techId, interview_type: "Remote" });
+        }
+
+        if (tech.Onsite) {
+          allowPermission.push({ tech_id: techId, interview_type: "Onsite" });
+        }
+
+        return allowPermission;
+      })
+      .map((p) => ({
+        ...p,
+        managerId: manager_id,
+      }));
+
+    try {
+      const res = await axios.post("http://localhost:8800/assign-permissions", {
+        selectedData,
+      });
+      alert(res.data.msg);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const RemovePermission = async (id) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8800/remove-manager-permission/${id}`
+      );
+      alert(res.data);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // const View = () => {
+  //   console.log(SubmitPermissions());
+  // };
 
   const FreezeManager = async (email) => {
     try {
@@ -131,6 +245,10 @@ const Manager = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    GetNewPermissions();
+  }, []);
 
   useEffect(() => {
     GetManagers();
@@ -201,7 +319,7 @@ const Manager = () => {
                                 {Array.isArray(data)
                                   ? data.map((rs, index) => {
                                       const {
-                                        id,
+                                        manager_id,
                                         eti_id,
                                         image,
                                         name,
@@ -269,10 +387,23 @@ const Manager = () => {
                                                     data-toggle="modal"
                                                     data-target="#large1"
                                                     onClick={() =>
-                                                      EditManager(id)
+                                                      EditManager(manager_id)
                                                     }
                                                   >
                                                     Edit
+                                                  </a>
+
+                                                  <a
+                                                    className="dropdown-item"
+                                                    href="javascript:void(0);"
+                                                    type="button"
+                                                    data-toggle="modal"
+                                                    data-target="#largePermissions"
+                                                    onClick={() =>
+                                                      GetPermissions(manager_id)
+                                                    }
+                                                  >
+                                                    Permissions
                                                   </a>
 
                                                   {status === 1 ? (
@@ -486,6 +617,192 @@ const Manager = () => {
                     className="btn btn-success"
                     // data-dismiss="modal"
                     onClick={CreateManagr}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Permissions */}
+
+          <div
+            className="modal fade text-left"
+            id="largePermissions"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myModalLabel17"
+            aria-hidden="true"
+          >
+            <div
+              className="modal-dialog modal-dialog-centered modal-lg"
+              role="document"
+            >
+              <div className="modal-content">
+                <div className="modal-header">
+                  {/* <button onClick={View}>View</button> */}
+                  <h4 className="modal-title" id="myModalLabel17">
+                    Manager Permissions
+                  </h4>
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  <div className="card-body">
+                    <div className="row">
+                      <div className=" col-lg-12 col-md-12 col-12">
+                        <div className="card-body">
+                          <h4>Allowed Permissions</h4>
+                          {/* <form className="form"> */}
+                          <table class="table table-bordered">
+                            <thead>
+                              <tr>
+                                <th>Technologies</th>
+                                <th>Interview Type</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+                              {managerPermissions.map((rs) => (
+                                <tr>
+                                  <td>
+                                    <input
+                                      type="checkbox"
+                                      name=""
+                                      id=""
+                                      value={rs.tech_id}
+                                      checked
+                                    />{" "}
+                                    &nbsp; {rs.technology}
+                                  </td>
+                                  <td>
+                                    <input
+                                      type="checkbox"
+                                      name=""
+                                      id=""
+                                      checked
+                                    />{" "}
+                                    &nbsp; {rs.interview_type}
+                                  </td>
+
+                                  <td>
+                                    <button
+                                      className="btn btn-danger"
+                                      onClick={() =>
+                                        RemovePermission(rs.manager_p_id)
+                                      }
+                                    >
+                                      Remove
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+
+                          <h4>New Permissions</h4>
+
+                          <table className="table">
+                            {/* <thead>
+                                <tr>
+                                  <th>Technology</th>
+                                  <th>Interview Type</th>
+                                </tr>
+                              </thead> */}
+                            <tbody>
+                              {newPermission.map((tech) => (
+                                <>
+                                  <tr key={tech.tech_id}>
+                                    <td>
+                                      <label>
+                                        <input
+                                          type="checkbox"
+                                          checked={
+                                            permissions[tech.tech_id]
+                                              ?.selected || false
+                                          }
+                                          onChange={(e) =>
+                                            handleTechSelect(
+                                              tech.tech_id,
+                                              e.target.checked
+                                            )
+                                          }
+                                        />{" "}
+                                        {tech.technology}
+                                      </label>
+                                    </td>
+                                    {permissions[tech.tech_id]?.selected && (
+                                      // <div>
+                                      <>
+                                        <td>
+                                          <label>
+                                            <input
+                                              type="checkbox"
+                                              checked={
+                                                permissions[tech.tech_id]
+                                                  ?.Remote || false
+                                              }
+                                              onChange={(e) =>
+                                                handleOptionChange(
+                                                  tech.tech_id,
+                                                  "Remote",
+                                                  e.target.checked
+                                                )
+                                              }
+                                            />{" "}
+                                            Remote
+                                          </label>
+                                        </td>
+
+                                        <td>
+                                          <label>
+                                            <input
+                                              type="checkbox"
+                                              checked={
+                                                permissions[tech.tech_id]
+                                                  ?.Onsite || false
+                                              }
+                                              onChange={(e) =>
+                                                handleOptionChange(
+                                                  tech.tech_id,
+                                                  "Onsite",
+                                                  e.target.checked
+                                                )
+                                              }
+                                            />{" "}
+                                            Onsite
+                                          </label>
+                                        </td>
+                                      </>
+
+                                      // </div>
+                                    )}
+                                  </tr>
+                                </>
+                              ))}
+                            </tbody>
+                          </table>
+                          {/* </form> */}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-success"
+                    // data-dismiss="modal"
+                    onClick={SubmitPermissions}
                   >
                     Submit
                   </button>
