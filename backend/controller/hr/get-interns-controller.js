@@ -395,6 +395,7 @@ const CountInterviewInterns = (req, res) => {
 };
 
 const CountTestInterns = (req, res) => {
+  const { managerid } = req.params;
   const sql_0 =
     "SELECT DISTINCT technologies.technology, manager_permissions.interview_type FROM `intern_table` JOIN manager_permissions ON manager_permissions.interview_type = intern_table.interview_type JOIN technologies ON manager_permissions.tech_id = technologies.tech_id WHERE manager_permissions.manager_id = ?";
   connection.query(sql_0, [managerid], (err, data) => {
@@ -451,6 +452,7 @@ const CountTestInterns = (req, res) => {
 };
 
 const CountTestCompleted = (req, res) => {
+  const { managerid } = req.params;
   const sql_0 =
     "SELECT DISTINCT technologies.technology, manager_permissions.interview_type FROM `intern_table` JOIN manager_permissions ON manager_permissions.interview_type = intern_table.interview_type JOIN technologies ON manager_permissions.tech_id = technologies.tech_id WHERE manager_permissions.manager_id = ?";
   connection.query(sql_0, [managerid], (err, data) => {
@@ -507,6 +509,7 @@ const CountTestCompleted = (req, res) => {
 };
 
 const CountContactWith = (req, res) => {
+  const { managerid } = req.params;
   const sql_0 =
     "SELECT DISTINCT technologies.technology, manager_permissions.interview_type FROM `intern_table` JOIN manager_permissions ON manager_permissions.interview_type = intern_table.interview_type JOIN technologies ON manager_permissions.tech_id = technologies.tech_id WHERE manager_permissions.manager_id = ?";
   connection.query(sql_0, [managerid], (err, data) => {

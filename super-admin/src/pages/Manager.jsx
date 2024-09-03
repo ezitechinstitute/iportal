@@ -156,9 +156,12 @@ const Manager = () => {
       }));
 
     try {
-      const res = await axios.post("https://api.ezitech.org/assign-permissions", {
-        selectedData,
-      });
+      const res = await axios.post(
+        "https://api.ezitech.org/assign-permissions",
+        {
+          selectedData,
+        }
+      );
       alert(res.data.msg);
       window.location.reload();
     } catch (error) {
