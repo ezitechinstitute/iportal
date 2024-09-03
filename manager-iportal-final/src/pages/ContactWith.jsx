@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { InvoiceModal } from "../components/InvoiceModal";
 import { InternStatics } from "../components/InternStatics";
+import { Pagination } from "../components/Pagination";
 
 export const ContactWith = () => {
   const [token, setToken] = useState(sessionStorage.getItem("token"));
@@ -13,7 +14,13 @@ export const ContactWith = () => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const userEmail = sessionStorage.getItem("email");
+  const managerid = sessionStorage.getItem("managerid");
   const managerContact = sessionStorage.getItem("contact");
+
+  const [currentPage, settCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [dataLimit, setDataLimit] = useState(50);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!check) {
@@ -22,58 +29,37 @@ export const ContactWith = () => {
   });
   //   https://api.ezitech.org/get-contact-with
 
-  const getContactWith = async () => {
+  const getContactWith = async (page) => {
+    setLoading(true);
     try {
       const res = await axios.get(
-        `https://api.ezitech.org/get-contact-with/${userEmail}`,
-        { headers: { "x-access-token": token } }
+        `https://api.ezitech.org/get-contact-interns/${managerid}`,
+        {
+          headers: { "x-access-token": token },
+          params: {
+            page: page,
+            limit: dataLimit,
+          },
+        }
       );
-      setData(res.data);
+      setData(res.data.data);
+      settCurrentPage(res.data.meta.page);
+      setTotalPages(res.data.meta.totalPages);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handlePageChange = (page) => {
+    settCurrentPage(page);
+  };
+
   useEffect(() => {
     // setInterval(() => {
-    getContactWith();
+    getContactWith(currentPage);
     // }, 2000);
-  });
-
-  const [currentPage, settCurrentPage] = useState(1);
-  const recordPerPage = 2;
-  const lastIndex = currentPage * recordPerPage;
-  const firstIndex = lastIndex - recordPerPage;
-  const records = data.slice(firstIndex, lastIndex);
-  const nPage = Math.ceil(data.length / recordPerPage);
-  const numbers = [...Array(nPage + 1).keys()].slice(1);
-
-  function prevPage() {
-    if (currentPage !== firstIndex) {
-      settCurrentPage(currentPage - 1);
-    }
-  }
-
-  function changeCurrentPage(id) {
-    settCurrentPage(id);
-  }
-
-  function nextPage() {
-    if (currentPage !== nPage) {
-      settCurrentPage(currentPage + 1);
-    }
-  }
-
-  // const GetSingleIntern = async (id) => {
-  //   try {
-  //     const res = await axios.post("http://localhost:8800/single-onsite", {
-  //       id,
-  //     });
-  //     setSingleIntern(res.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  }, [currentPage, dataLimit]);
 
   const RemoveOnsite = (email) => {
     axios
@@ -155,15 +141,27 @@ export const ContactWith = () => {
                   <div className="card">
                     <div className="card-header">
                       <h4 className="card-title">Contact With</h4>
+                      <select
+                        className="form-control w-25"
+                        name=""
+                        id=""
+                        onChange={(e) => setDataLimit(e.target.value)}
+                      >
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                        <option value={200}>200</option>
+                        <option value={300}>300</option>
+                        <option value={500}>500</option>
+                      </select>
                       {/* <!-- Button trigger modal --> */}
-                      <button
+                      {/* <button
                         type="button"
                         className="btn btn-primary"
                         data-bs-toggle="modal"
                         data-bs-target="#staticBackdrop"
                       >
                         Add Intern
-                      </button>
+                      </button> */}
                     </div>
 
                     <div className="card-body overflow-x-scroll text-center">
@@ -181,126 +179,106 @@ export const ContactWith = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {Array.isArray(data)
-                            ? data.map((rs) => {
-                                const {
-                                  id,
-                                  name,
-                                  email,
-                                  phone,
-                                  technology,
-                                  interview_type,
-                                  status,
-                                } = rs;
+                          {loading ? (
+                            <>
+                              <div className="text-center"></div>
+                              <h3>Loading...</h3>
+                            </>
+                          ) : Array.isArray(data) ? (
+                            data.map((rs) => {
+                              const {
+                                id,
+                                name,
+                                email,
+                                phone,
+                                technology,
+                                interview_type,
+                                status,
+                              } = rs;
 
-                                return (
-                                  <>
-                                    <tr>
-                                      <th className="border px-1" scope="row">
-                                        {id}
-                                      </th>
-                                      <td className="border px-1">{name}</td>
-                                      <td className="border px-1">{email}</td>
-                                      <td className="border px-1">{phone}</td>
-                                      <td className="border px-1">
-                                        {technology}
-                                      </td>
-                                      <td className="border px-1">
-                                        {interview_type}
-                                      </td>
-                                      <td className="border px-1">{status}</td>
-                                      <td className="border px-1">
-                                        <div className="dropdown">
-                                          <button
-                                            type="button"
-                                            className="btn btn-warning dropdown-toggle"
-                                            data-toggle="dropdown"
-                                          >
-                                            Action
-                                            {/* <i data-feather="more-vertical"></i> */}
-                                          </button>
-                                          <div>
-                                            <ul className="dropdown-menu">
-                                              {/* <li>
+                              return (
+                                <>
+                                  <tr>
+                                    <th className="border px-1" scope="row">
+                                      {id}
+                                    </th>
+                                    <td className="border px-1">{name}</td>
+                                    <td className="border px-1">{email}</td>
+                                    <td className="border px-1">{phone}</td>
+                                    <td className="border px-1">
+                                      {technology}
+                                    </td>
+                                    <td className="border px-1">
+                                      {interview_type}
+                                    </td>
+                                    <td className="border px-1">{status}</td>
+                                    <td className="border px-1">
+                                      <div className="dropdown">
+                                        <button
+                                          type="button"
+                                          className="btn btn-warning dropdown-toggle"
+                                          data-toggle="dropdown"
+                                        >
+                                          Action
+                                          {/* <i data-feather="more-vertical"></i> */}
+                                        </button>
+                                        <div>
+                                          <ul className="dropdown-menu">
+                                            {/* <li>
                                                 <a className="dropdown-item" href="#">
                                                   Send Mail
                                                 </a>
                                               </li> */}
-                                              <li>
-                                                <a
-                                                  className="dropdown-item"
-                                                  href="#"
-                                                  type="button"
-                                                  onClick={() =>
-                                                    AssignPortal(
-                                                      name,
-                                                      email,
-                                                      phone,
-                                                      technology
-                                                    )
-                                                  }
-                                                >
-                                                  Assign Portal
-                                                </a>
-                                              </li>
-                                              <li>
-                                                <a
-                                                  className="dropdown-item"
-                                                  href="#"
-                                                  type="button"
-                                                  onClick={() =>
-                                                    RemoveOnsite(email)
-                                                  }
-                                                >
-                                                  Remove
-                                                </a>
-                                              </li>
-                                            </ul>
-                                          </div>
+                                            <li>
+                                              <a
+                                                className="dropdown-item"
+                                                href="#"
+                                                type="button"
+                                                onClick={() =>
+                                                  AssignPortal(
+                                                    name,
+                                                    email,
+                                                    phone,
+                                                    technology
+                                                  )
+                                                }
+                                              >
+                                                Assign Portal
+                                              </a>
+                                            </li>
+                                            <li>
+                                              <a
+                                                className="dropdown-item"
+                                                href="#"
+                                                type="button"
+                                                onClick={() =>
+                                                  RemoveOnsite(email)
+                                                }
+                                              >
+                                                Remove
+                                              </a>
+                                            </li>
+                                          </ul>
                                         </div>
-                                      </td>
-                                    </tr>
-                                  </>
-                                );
-                              })
-                            : " "}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </>
+                              );
+                            })
+                          ) : (
+                            " "
+                          )}
                         </tbody>
                       </table>
                     </div>
                     <br />
                     {/* Pagination */}
-                    <div>
-                      {/* <nav> */}
-                      <ul className="pagination">
-                        <li className="page-item">
-                          <a href="#" className="page-link" onClick={prevPage}>
-                            Prev
-                          </a>
-                        </li>
-                        {/* {numbers.map((n, i) => (
-                            <li
-                              className={`page-item ${
-                                currentPage === n ? "active" : "   "
-                              }`}
-                              key={i}
-                            >
-                              <a
-                                href="#"
-                                className="page-link"
-                                onClick={changeCurrentPage}
-                              >
-                                {n}
-                              </a>
-                            </li>
-                          ))} */}
-                        <li className="page-item">
-                          <a href="#" className="page-link" onClick={nextPage}>
-                            Next
-                          </a>
-                        </li>
-                      </ul>
-                      {/* </nav> */}
-                    </div>
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                    />
                   </div>
                 </div>
               </div>

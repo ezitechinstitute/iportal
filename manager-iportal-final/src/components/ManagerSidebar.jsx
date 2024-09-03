@@ -98,16 +98,16 @@ export const ManagerSidebar = () => {
                 className="d-flex align-items-center"
                 onClick={() => setActive("interns")}
                 id={"2"}
-                to="/onsite-interns"
+                to="/manager-interns"
               >
                 <i data-feather="users"></i>
                 <span className="menu-item" data-i18n="eCommerce">
-                  Onsite Interns
+                  New Interns
                 </span>
               </NavLink>
             </li>
 
-            <li className={activeLink === "remote" ? "active" : "undefined"}>
+            {/* <li className={activeLink === "remote" ? "active" : "undefined"}>
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("remote")}
@@ -119,7 +119,7 @@ export const ManagerSidebar = () => {
                   Remote Interns
                 </span>
               </NavLink>
-            </li>
+            </li> */}
 
             <li className={activeLink === "contact" ? "active" : "undefined"}>
               <NavLink
@@ -204,7 +204,7 @@ export const ManagerSidebar = () => {
                 onClick={() => setActive("remaining")}
                 to={"/remaining-amount"}
               >
-                <i data-feather='dollar-sign'></i>
+                <i data-feather="dollar-sign"></i>
                 <span className="menu-title text-truncate" data-i18n="User">
                   Remaining Amount
                 </span>

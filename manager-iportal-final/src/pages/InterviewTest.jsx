@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ManagerTopbar } from "../components/ManagerTopbar";
 import { ManagerSidebar } from "../components/ManagerSidebar";
 import { InternStatics } from "../components/InternStatics";
+import { Pagination } from "../components/Pagination";
 
 export const InterviewTest = () => {
   const [token, setToken] = useState(sessionStorage.getItem("token"));
@@ -11,6 +12,12 @@ export const InterviewTest = () => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const userEmail = sessionStorage.getItem("email");
+  const managerid = sessionStorage.getItem("managerid");
+
+  const [currentPage, settCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [dataLimit, setDataLimit] = useState(50);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!check) {
@@ -18,21 +25,35 @@ export const InterviewTest = () => {
     }
   });
 
-  const getTestIntern = async () => {
+  const getTestIntern = async (page) => {
+    setLoading(true);
     try {
       const res = await axios.get(
-        `https://api.ezitech.org/get-test-interns/${userEmail}`,
-        { headers: { "x-access-token": token } }
+        `https://api.ezitech.org/get-test-interns/${managerid}`,
+        {
+          headers: { "x-access-token": token },
+          params: {
+            page: page,
+            limit: dataLimit,
+          },
+        }
       );
-      setData(res.data);
+      setData(res.data.data);
+      settCurrentPage(res.data.meta.page);
+      setTotalPages(res.data.meta.totalPages);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handlePageChange = (page) => {
+    settCurrentPage(page);
+  };
+
   useEffect(() => {
-    getTestIntern();
-  });
+    getTestIntern(currentPage);
+  }, [currentPage, dataLimit]);
 
   // const [currentPage, settCurrentPage] = useState(1);
   // const recordPerPage = 50;
@@ -87,7 +108,7 @@ export const InterviewTest = () => {
             <div className="content-body">
               <section id="dashboard-ecommerce">
                 {/* <!-- Statistics Card --> */}
-             <InternStatics/>
+                <InternStatics />
                 {/* <!--/ Statistics Card --> */}
 
                 {/* <!-- Table Hover Animation start --> */}
@@ -96,6 +117,18 @@ export const InterviewTest = () => {
                     <div className="card">
                       <div className="card-header">
                         <h4 className="card-title">Interview Test</h4>
+                        <select
+                          className="form-control w-25"
+                          name=""
+                          id=""
+                          onChange={(e) => setDataLimit(e.target.value)}
+                        >
+                          <option value={50}>50</option>
+                          <option value={100}>100</option>
+                          <option value={200}>200</option>
+                          <option value={300}>300</option>
+                          <option value={500}>500</option>
+                        </select>
                         {/* <!-- Button trigger modal --> */}
                         {/* <button
                           type="button"
@@ -122,46 +155,57 @@ export const InterviewTest = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {Array.isArray(data)
-                              ? data.map((rs) => {
-                                  const {
-                                    id,
-                                    name,
-                                    email,
-                                    phone,
-                                    technology,
-                                    interview_type,
-                                    status,
-                                  } = rs;
+                            {loading ? (
+                              <>
+                                <div className="text-center"></div>
+                                <h3>Loading...</h3>
+                              </>
+                            ) : Array.isArray(data) ? (
+                              data.map((rs) => {
+                                const {
+                                  id,
+                                  name,
+                                  email,
+                                  phone,
+                                  technology,
+                                  interview_type,
+                                  status,
+                                } = rs;
 
-                                  return (
-                                    <>
-                                      <tr>
-                                        <th className="border px-1" scope="row">{id}</th>
-                                        <td className="border px-1">{name}</td>
-                                        <td className="border px-1">{email}</td>
-                                        <td className="border px-1">{phone}</td>
-                                        <td className="border px-1">{technology}</td>
-                                        <td className="border px-1">{interview_type}</td>
-                                        <td className="border px-1">{status}</td>
-                                        <td className="border px-1">
-                                          <div className="dropdown">
-                                            <button
-                                              type="button"
-                                              className="btn btn-warning dropdown-toggle"
-                                              data-toggle="dropdown"
-                                            >
-                                              Action
-                                              {/* <i data-feather="more-vertical"></i> */}
-                                            </button>
-                                            <div>
-                                              <ul className="dropdown-menu">
-                                                {/* <li>
+                                return (
+                                  <>
+                                    <tr>
+                                      <th className="border px-1" scope="row">
+                                        {id}
+                                      </th>
+                                      <td className="border px-1">{name}</td>
+                                      <td className="border px-1">{email}</td>
+                                      <td className="border px-1">{phone}</td>
+                                      <td className="border px-1">
+                                        {technology}
+                                      </td>
+                                      <td className="border px-1">
+                                        {interview_type}
+                                      </td>
+                                      <td className="border px-1">{status}</td>
+                                      <td className="border px-1">
+                                        <div className="dropdown">
+                                          <button
+                                            type="button"
+                                            className="btn btn-warning dropdown-toggle"
+                                            data-toggle="dropdown"
+                                          >
+                                            Action
+                                            {/* <i data-feather="more-vertical"></i> */}
+                                          </button>
+                                          <div>
+                                            <ul className="dropdown-menu">
+                                              {/* <li>
                                               <a className="dropdown-item" href="#">
                                                 Send Mail
                                               </a>
                                             </li> */}
-                                                {/* <li>
+                                              {/* <li>
                                                   <a
                                                     className="dropdown-item"
                                                     href="#"
@@ -178,32 +222,39 @@ export const InterviewTest = () => {
                                                     Assign Portal
                                                   </a>
                                                 </li> */}
-                                                <li>
-                                                  <a
-                                                    className="dropdown-item"
-                                                    href="#"
-                                                    type="button"
-                                                    onClick={() =>
-                                                      RemoveTestIntern(email)
-                                                    }
-                                                  >
-                                                    Remove
-                                                  </a>
-                                                </li>
-                                              </ul>
-                                            </div>
+                                              <li>
+                                                <a
+                                                  className="dropdown-item"
+                                                  href="#"
+                                                  type="button"
+                                                  onClick={() =>
+                                                    RemoveTestIntern(email)
+                                                  }
+                                                >
+                                                  Remove
+                                                </a>
+                                              </li>
+                                            </ul>
                                           </div>
-                                        </td>
-                                      </tr>
-                                    </>
-                                  );
-                                })
-                              : " "}
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  </>
+                                );
+                              })
+                            ) : (
+                              " "
+                            )}
                           </tbody>
                         </table>
                       </div>
                       <br />
                       {/* Pagination */}
+                      <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                      />
                       {/* <div>
                         <nav>
                         <ul className="pagination">

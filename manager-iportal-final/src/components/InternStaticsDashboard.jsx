@@ -80,7 +80,7 @@ export const InternStaticsDashboard = () => {
                   </div>
                   <div className="media-body my-auto">
                     <h4 className="font-weight-bolder mb-0">
-                      {interview.toLocaleString()}
+                      {interview > 0 ? interview.toLocaleString() : "0"}
                     </h4>
                     <p className="card-text font-small-3 mb-0">Interview</p>
                   </div>
@@ -96,7 +96,7 @@ export const InternStaticsDashboard = () => {
 
                   <div className="media-body my-auto">
                     <h4 className="font-weight-bolder mb-0">
-                      {active.toLocaleString()}
+                      {active > 0 ? active.toLocaleString() : "0"}
                     </h4>
                     <p className="card-text font-small-3 mb-0">Contact</p>
                   </div>
@@ -111,7 +111,7 @@ export const InternStaticsDashboard = () => {
                   </div>
                   <div className="media-body my-auto">
                     <h4 className="font-weight-bolder mb-0">
-                      {test.toLocaleString()}
+                      {test > 0 ? test.toLocaleString() : "0"}
                     </h4>
                     <p className="card-text font-small-3 mb-0">Test</p>
                   </div>
@@ -129,7 +129,7 @@ export const InternStaticsDashboard = () => {
                   </div>
                   <div className="media-body my-auto">
                     <h4 className="font-weight-bolder mb-0">
-                      {complete.toLocaleString()}
+                      {complete > 0 ? complete.toLocaleString() : "0"}
                     </h4>
                     <p className="card-text font-small-3 mb-0">Completed</p>
                   </div>

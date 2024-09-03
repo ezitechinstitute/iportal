@@ -22,6 +22,7 @@ export const Login = () => {
             res.data.isLoggedIn === true &&
             res.data.user[0].loginas === "Manager"
           ) {
+            sessionStorage.setItem("managerid", res.data.user[0].manager_id);
             sessionStorage.setItem("username", res.data.user[0].name);
             sessionStorage.setItem("email", res.data.user[0].email);
             sessionStorage.setItem("token", res.data.token);

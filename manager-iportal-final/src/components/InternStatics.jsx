@@ -73,49 +73,26 @@ export const InternStatics = () => {
           <div className="card-body statistics-body">
             <div className="row">
               <div className="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                {managerEmail === "muzammil@ezitech.org" ? (
-                  <Link to={"/onsite-interns"}>
-                    <div className="media">
-                      <div className="avatar bg-light-primary mr-2">
-                        <div className="avatar-content">
-                          <i data-feather="users" className="avatar-icon"></i>
-                        </div>
-                      </div>
-                      <div className="media-body my-auto">
-                        <h4 className="font-weight-bolder mb-0">
-                          {interview > 0 ? interview.toLocaleString() : "0"}
-                        </h4>
-                        <p
-                          className="card-text font-small-3 mb-0"
-                          style={{ color: "black" }}
-                        >
-                          Interview
-                        </p>
+                <Link to={"/manager-interns"}>
+                  <div className="media">
+                    <div className="avatar bg-light-primary mr-2">
+                      <div className="avatar-content">
+                        <i data-feather="users" className="avatar-icon"></i>
                       </div>
                     </div>
-                  </Link>
-                ) : (
-                  <Link to={"/remote-interns"}>
-                    <div className="media">
-                      <div className="avatar bg-light-primary mr-2">
-                        <div className="avatar-content">
-                          <i data-feather="users" className="avatar-icon"></i>
-                        </div>
-                      </div>
-                      <div className="media-body my-auto">
-                        <h4 className="font-weight-bolder mb-0">
-                          {interview > 0 ? interview.toLocaleString() : "0"}
-                        </h4>
-                        <p
-                          className="card-text font-small-3 mb-0"
-                          style={{ color: "black" }}
-                        >
-                          Interview
-                        </p>
-                      </div>
+                    <div className="media-body my-auto">
+                      <h4 className="font-weight-bolder mb-0">
+                        {interview > 0 ? interview.toLocaleString() : "0"}
+                      </h4>
+                      <p
+                        className="card-text font-small-3 mb-0"
+                        style={{ color: "black" }}
+                      >
+                        Interview
+                      </p>
                     </div>
-                  </Link>
-                )}
+                  </div>
+                </Link>
               </div>
               <div className="col-xl-3 col-sm-6 col-12">
                 <Link to={"/contact-with"}>

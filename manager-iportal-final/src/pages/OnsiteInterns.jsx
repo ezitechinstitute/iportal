@@ -14,6 +14,8 @@ export const OnsiteInterns = () => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const userEmail = sessionStorage.getItem("email");
+  const managerid = sessionStorage.getItem("managerid");
+
   const managerContact = sessionStorage.getItem("contact");
   // Pagination
   const [currentPage, settCurrentPage] = useState(1);
@@ -31,7 +33,7 @@ export const OnsiteInterns = () => {
     setLoading(true);
     try {
       const res = await axios.get(
-        `https://api.ezitech.org/get-onsite-interns/${userEmail}`,
+        `https://api.ezitech.org/get-interns/${managerid}`,
         {
           headers: { "x-access-token": token },
           params: {
@@ -59,41 +61,6 @@ export const OnsiteInterns = () => {
     getOnsiteRegister(currentPage);
     // }, 2000);
   }, [currentPage, dataLimit]);
-
-  // const [currentPage, settCurrentPage] = useState(1);
-  // const recordPerPage = 2;
-  // const lastIndex = currentPage * recordPerPage;
-  // const firstIndex = lastIndex - recordPerPage;
-  // const records = data.slice(firstIndex, lastIndex);
-  // const nPage = Math.ceil(data.length / recordPerPage);
-  // const numbers = [...Array(nPage + 1).keys()].slice(1);
-
-  function prevPage() {
-    // if (currentPage !== firstIndex) {
-    //   settCurrentPage(currentPage - 1);
-    // }
-  }
-
-  // function changeCurrentPage(id) {
-  //   settCurrentPage(id);
-  // }
-
-  function nextPage() {
-    // if (currentPage !== nPage) {
-    //   settCurrentPage(currentPage + 1);
-    // }
-  }
-
-  // const GetSingleIntern = async (id) => {
-  //   try {
-  //     const res = await axios.post("http://localhost:8800/single-onsite", {
-  //       id,
-  //     });
-  //     setSingleIntern(res.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const RemoveOnsite = (email) => {
     axios
@@ -147,7 +114,7 @@ export const OnsiteInterns = () => {
                 <div className="col-12">
                   <div className="card">
                     <div className="card-header">
-                      <h4 className="card-title">Onsite Interns</h4>
+                      <h4 className="card-title">New Interns</h4>
                       <select
                         className="form-control w-25"
                         name=""

@@ -6,6 +6,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { InvoiceModal } from "../components/InvoiceModal";
 import { InternStatics } from "../components/InternStatics";
+import { Pagination } from "../components/Pagination";
 // import { Editor, EditorState } from "draft-js";
 // import "draft-js/dist/Draft.css";
 
@@ -15,8 +16,13 @@ export const InternCompleted = () => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const userEmail = sessionStorage.getItem("email");
+  const managerid = sessionStorage.getItem("managerid");
 
   const [invoiceData, setInvoiceData] = useState({});
+  const [currentPage, settCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [dataLimit, setDataLimit] = useState(50);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!check) {
@@ -24,78 +30,35 @@ export const InternCompleted = () => {
     }
   });
 
-  const getTestComplete = async () => {
+  const getTestComplete = async (page) => {
+    setLoading(true);
     try {
       const res = await axios.get(
-        `https://api.ezitech.org/get-test-complete/${userEmail}`,
-        { headers: { "x-access-token": token } }
+        `https://api.ezitech.org/get-completed-interns/${managerid}`,
+        {
+          headers: { "x-access-token": token },
+          params: {
+            page: page,
+            limit: dataLimit,
+          },
+        }
       );
-      setData(res.data);
+      setData(res.data.data);
+      settCurrentPage(res.data.meta.page);
+      setTotalPages(res.data.meta.totalPages);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handlePageChange = (page) => {
+    settCurrentPage(page);
+  };
+
   useEffect(() => {
-    getTestComplete();
-  }, [getTestComplete]);
-
-  // const [currentPage, settCurrentPage] = useState(1);
-  // const recordPerPage = 15;
-  // const lastIndex = currentPage * recordPerPage;
-  // const firstIndex = lastIndex - recordPerPage;
-  // const records = data.slice(firstIndex, lastIndex);
-  // const nPage = Math.ceil(data.length / recordPerPage);
-  // const numbers = [...Array(nPage + 1).keys()].slice(1);
-
-  // function prevPage() {
-  //   if (currentPage !== firstIndex) {
-  //     settCurrentPage(currentPage - 1);
-  //   }
-  // }
-
-  // function changeCurrentPage(id) {
-  //   settCurrentPage(id);
-  // }
-
-  // function nextPage() {
-  //   if (currentPage !== nPage) {
-  //     settCurrentPage(currentPage + 1);
-  //   }
-  // }
-
-  // const handleInput = (e) => {
-  //   setValues({ ...values, [e.target.name]: e.target.value });
-  // };
-
-  // const SubmitProject = (e) => {
-  //   e.preventDefault();
-
-  //   if (
-  //     values.title !== undefined &&
-  //     values.startDate !== undefined &&
-  //     values.endDate !== undefined &&
-  //     values.supervisor &&
-  //     values.email !== undefined &&
-  //     values.technology !== undefined
-  //   ) {
-  //     axios
-  //       .post("http://localhost:8800/assign-project", { values })
-  //       .then((res) => {
-  //         if (res.data === 1) {
-  //           alert("Project Assigned Successfuly");
-  //           window.location.reload();
-  //         } else {
-  //           alert("Something Went Wrong!!!");
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   } else {
-  //     alert("Please fill empty field first!!!");
-  //   }
-  // };
+    getTestComplete(currentPage);
+  }, [currentPage, dataLimit]);
 
   const RemoveCompletedIntern = (email) => {
     axios
@@ -112,22 +75,6 @@ export const InternCompleted = () => {
         }
       });
   };
-
-  // const ActivePortal = (email) => {
-  //   axios
-  //     .post(
-  //       "https://api.ezitech.org/active-portal",
-  //       { email },
-  //       { headers: { "x-access-token": token } }
-  //     )
-  //     .then((res) => {
-  //       if (res.data === 1) {
-  //         alert("Portal Activated");
-  //       } else {
-  //         alert("Something Went Wrong!!!");
-  //       }
-  //     });
-  // };
 
   return (
     <>
@@ -150,6 +97,18 @@ export const InternCompleted = () => {
                   <div className="card">
                     <div className="card-header">
                       <h4 className="card-title">Test Completed</h4>
+                      <select
+                        className="form-control w-25"
+                        name=""
+                        id=""
+                        onChange={(e) => setDataLimit(e.target.value)}
+                      >
+                        <option value={50}>50</option>
+                        <option value={100}>100</option>
+                        <option value={200}>200</option>
+                        <option value={300}>300</option>
+                        <option value={500}>500</option>
+                      </select>
                       {/* <!-- Button trigger modal --> */}
                       {/* <button
                         type="button"
@@ -174,43 +133,47 @@ export const InternCompleted = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {Array.isArray(data)
-                            ? data.map((rs) => {
-                                const { id, name, email, phone, technology } =
-                                  rs;
+                          {loading ? (
+                            <>
+                              <div className="text-center"></div>
+                              <h3>Loading...</h3>
+                            </>
+                          ) : Array.isArray(data) ? (
+                            data.map((rs) => {
+                              const { id, name, email, phone, technology } = rs;
 
-                                return (
-                                  <>
-                                    <tr>
-                                      <th className="border px-1" scope="row">
-                                        {id}
-                                      </th>
-                                      <td className="border px-1">{name}</td>
-                                      <td className="border px-1">{email}</td>
-                                      <td className="border px-1">{phone}</td>
-                                      <td className="border px-1">
-                                        {technology}
-                                      </td>
+                              return (
+                                <>
+                                  <tr>
+                                    <th className="border px-1" scope="row">
+                                      {id}
+                                    </th>
+                                    <td className="border px-1">{name}</td>
+                                    <td className="border px-1">{email}</td>
+                                    <td className="border px-1">{phone}</td>
+                                    <td className="border px-1">
+                                      {technology}
+                                    </td>
 
-                                      <td className="border px-1">
-                                        <div className="dropdown">
-                                          <button
-                                            type="button"
-                                            className="btn btn-warning dropdown-toggle"
-                                            data-toggle="dropdown"
-                                          >
-                                            Action
-                                            {/* <i data-feather="more-vertical"></i> */}
-                                          </button>
-                                          <div>
-                                            <ul className="dropdown-menu">
-                                              {/* <li>
+                                    <td className="border px-1">
+                                      <div className="dropdown">
+                                        <button
+                                          type="button"
+                                          className="btn btn-warning dropdown-toggle"
+                                          data-toggle="dropdown"
+                                        >
+                                          Action
+                                          {/* <i data-feather="more-vertical"></i> */}
+                                        </button>
+                                        <div>
+                                          <ul className="dropdown-menu">
+                                            {/* <li>
                                               <a className="dropdown-item" href="#">
                                                 Send Mail
                                               </a>
                                             </li> */}
 
-                                              {/*<li>
+                                            {/*<li>
                                                 <a
                                                   className="dropdown-item"
                                                   href="#"
@@ -222,82 +185,57 @@ export const InternCompleted = () => {
                                                   Active Portal
                                                 </a>
                                               </li>*/}
-                                              <li>
-                                                <a
-                                                  className="dropdown-item"
-                                                  href="#"
-                                                  type="button"
-                                                  data-toggle="modal"
-                                                  data-target="#default"
-                                                  onClick={() =>
-                                                    setInvoiceData({
-                                                      name: name,
-                                                      email: email,
-                                                      phone: phone,
-                                                    })
-                                                  }
-                                                >
-                                                  Invoice
-                                                </a>
-                                              </li>
-                                              <li>
-                                                <a
-                                                  className="dropdown-item"
-                                                  href="#"
-                                                  type="button"
-                                                  onClick={() =>
-                                                    RemoveCompletedIntern(email)
-                                                  }
-                                                >
-                                                  Remove
-                                                </a>
-                                              </li>
-                                            </ul>
-                                          </div>
+                                            <li>
+                                              <a
+                                                className="dropdown-item"
+                                                href="#"
+                                                type="button"
+                                                data-toggle="modal"
+                                                data-target="#default"
+                                                onClick={() =>
+                                                  setInvoiceData({
+                                                    name: name,
+                                                    email: email,
+                                                    phone: phone,
+                                                  })
+                                                }
+                                              >
+                                                Invoice
+                                              </a>
+                                            </li>
+                                            <li>
+                                              <a
+                                                className="dropdown-item"
+                                                href="#"
+                                                type="button"
+                                                onClick={() =>
+                                                  RemoveCompletedIntern(email)
+                                                }
+                                              >
+                                                Remove
+                                              </a>
+                                            </li>
+                                          </ul>
                                         </div>
-                                      </td>
-                                    </tr>
-                                  </>
-                                );
-                              })
-                            : " "}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </>
+                              );
+                            })
+                          ) : (
+                            " "
+                          )}
                         </tbody>
                       </table>
                     </div>
                     <br />
                     {/* Pagination */}
-                    {/* <div>
-                      <nav>
-                      <ul className="pagination">
-                        <li className="page-item">
-                          <a href="#" className="page-link" onClick={prevPage}>
-                            Prev
-                          </a>
-                        </li>
-                        {numbers.map((n, i) => (
-                          <li
-                            className={`page-item ${
-                              currentPage === n ? "active" : "   "
-                            }`}
-                            key={i}
-                          >
-                            <a
-                              href="#"
-                              className="page-link"
-                              onClick={changeCurrentPage}
-                            >
-                              {n}
-                            </a>
-                          </li>
-                        ))}
-                        <li className="page-item">
-                          <a href="#" className="page-link" onClick={nextPage}>
-                            Next
-                          </a>
-                        </li>
-                      </ul>
-                      </nav>
-                    </div> */}
+                    <Pagination
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                    />
                   </div>
                 </div>
               </div>

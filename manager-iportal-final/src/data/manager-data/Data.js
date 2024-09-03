@@ -1,11 +1,11 @@
 import axios from "axios";
 const token = sessionStorage.getItem("token");
-const managerEmail = sessionStorage.getItem("email");
+const managerid = sessionStorage.getItem("managerid");
 
 
 export const CountInterview = async () => {
   try {
-    const res = await axios.get(`https://api.ezitech.org/count-interview/${managerEmail}`, {
+    const res = await axios.get(`https://api.ezitech.org/count-interview/${managerid}`, {
       headers: { "x-access-token": token },
     });
     return res.data.count;
@@ -16,7 +16,7 @@ export const CountInterview = async () => {
 
 export const CountTest = async () => {
   try {
-    const res = await axios.get(`https://api.ezitech.org/count-test/${managerEmail}`, {
+    const res = await axios.get(`https://api.ezitech.org/count-test/${managerid}`, {
       headers: { "x-access-token": token },
     });
     return res.data.count;
@@ -28,7 +28,7 @@ export const CountTest = async () => {
 export const CountTestCompleted = async () => {
   try {
     const res = await axios.get(
-      "https://api.ezitech.org/count-test-completed",
+      `https://api.ezitech.org/count-test-completed/${managerid}`,
       {
         headers: { "x-access-token": token },
       }
@@ -41,7 +41,7 @@ export const CountTestCompleted = async () => {
 
 export const CountContactWith = async () => {
   try {
-    const res = await axios.get(`https://api.ezitech.org/count-contact-with/${managerEmail}`, {
+    const res = await axios.get(`https://api.ezitech.org/count-contact-with/${managerid}`, {
       headers: { "x-access-token": token },
     });
     return res.data.count;

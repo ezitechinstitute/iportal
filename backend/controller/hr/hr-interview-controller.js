@@ -63,7 +63,7 @@ const GetTestComplete = (req, res) => {
 
 const RemoveCompletedInterns = (req, res) => {
   const { email } = req.body;
-  const sql = "DELETE FROM `complete_test` WHERE `email` = ?";
+  const sql = "UPDATE `intern_table` SET `status`='Removed' WHERE `email` = ?";
   connection.query(sql, [email], (err, data) => {
     if (err) {
       return res.json(err);

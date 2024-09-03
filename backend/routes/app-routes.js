@@ -31,6 +31,10 @@ const {
   GetContactWith,
   CountContactWith,
   TestFrameWork,
+  GetNewInternsFrameWork,
+  GetContactInternsFrameWork,
+  GetTestInternsFrameWork,
+  GetTestCompleteInternsFrameWork,
 } = require("../controller/hr/get-interns-controller");
 const {
   GetManagerOnsite,
@@ -151,25 +155,40 @@ router.post("/manager-auth", HrAuth);
 // router.post("/manager-forgot-password", ManagerForgotPassword);
 
 /* HR All Endpoints */
-router.get("/get-latest-interns/:email", GetLatestRegister);
-router.get("/get-onsite-interns/:email", verifyToken, GetOnsiteInterview);
+// router.get("/get-latest-interns/:email", GetLatestRegister);
+// router.get("/get-onsite-interns/:email", verifyToken, GetOnsiteInterview);
 router.post("/update-contact-status", verifyToken, MarkAsContact);
 router.post("/update-intern-status", verifyToken, AssignTest);
 router.post("/remove-intern", verifyToken, RemoveIntern);
 router.post("/remove-completed", verifyToken, RemoveCompletedInterns);
-router.get("/get-remote-interns/:email", verifyToken, GetRemoteInterview);
-router.get("/get-contact-with/:email", verifyToken, GetContactWith);
-router.get("/get-test-interns/:email", verifyToken, GetTestIntern);
+// router.get("/get-remote-interns/:email", verifyToken, GetRemoteInterview);
+// router.get("/get-contact-with/:email", verifyToken, GetContactWith);
+// router.get("/get-test-interns/:email", verifyToken, GetTestIntern);
 router.get("/active-interns", verifyToken, GetActiveInterns);
 // router.post("/active-portal", verifyToken, ActivePortal);
-router.get("/get-test-complete/:email", verifyToken, GetTestComplete);
-router.get("/count-interview/:email", verifyToken, CountInterviewInterns);
-router.get("/count-test/:email", verifyToken, CountTestInterns);
-router.get("/count-test-completed", verifyToken, CountTestCompleted);
-router.get("/count-contact-with/:email", verifyToken, CountContactWith);
+// router.get("/get-test-complete/:email", verifyToken, GetTestComplete);
+router.get("/count-interview/:managerid", verifyToken, CountInterviewInterns);
+router.get("/count-test/:managerid", verifyToken, CountTestInterns);
+router.get("/count-test-completed/:managerid", verifyToken, CountTestCompleted);
+router.get("/count-contact-with/:managerid", verifyToken, CountContactWith);
 
 // Test
-// router.get("/test-work/:managerid", TestFrameWork);
+router.get("/get-interns/:managerid", verifyToken, GetNewInternsFrameWork);
+router.get(
+  "/get-contact-interns/:managerid",
+  verifyToken,
+  GetContactInternsFrameWork
+);
+router.get(
+  "/get-test-interns/:managerid",
+  verifyToken,
+  GetTestInternsFrameWork
+);
+router.get(
+  "/get-completed-interns/:managerid",
+  verifyToken,
+  GetTestCompleteInternsFrameWork
+);
 
 // router.get("/get-instructor-emails", verifyToken, GetInstructorEmail);
 // router.get("/get-manager-emails", verifyToken, GetManagerEmail);

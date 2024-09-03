@@ -69,7 +69,7 @@ const Manager = () => {
 
   const GetManagers = async () => {
     try {
-      const res = await axios.get("http://localhost:8800/get-managers");
+      const res = await axios.get("https://api.ezitech.org/get-managers");
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -80,7 +80,7 @@ const Manager = () => {
     setManagerId(id);
     try {
       const res = await axios.get(
-        `http://localhost:8800/get-manager-permissions/${id}`
+        `https://api.ezitech.org/get-manager-permissions/${id}`
       );
       setManagerPermissions(res.data);
     } catch (error) {
@@ -91,7 +91,7 @@ const Manager = () => {
   const GetNewPermissions = async () => {
     try {
       const res = await fetch(
-        "http://localhost:8800/get-manager-new-permissions"
+        "https://api.ezitech.org/get-manager-new-permissions"
       );
       const data = await res.json();
       setNewPermission(data);
@@ -156,7 +156,7 @@ const Manager = () => {
       }));
 
     try {
-      const res = await axios.post("http://localhost:8800/assign-permissions", {
+      const res = await axios.post("https://api.ezitech.org/assign-permissions", {
         selectedData,
       });
       alert(res.data.msg);
@@ -169,7 +169,7 @@ const Manager = () => {
   const RemovePermission = async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8800/remove-manager-permission/${id}`
+        `https://api.ezitech.org/remove-manager-permission/${id}`
       );
       alert(res.data);
       window.location.reload();
