@@ -61,7 +61,7 @@ const RegisterInterns = (req, res) => {
     if (err) {
       return res.json(err);
     } else {
-      if (data[0].code !== parseInt(internCode) && data.length < 0) {
+      if (data[0].code !== parseInt(internCode)) {
         ExpireCode(internemail);
         return res.json({ codeMsg: false });
       } else {
