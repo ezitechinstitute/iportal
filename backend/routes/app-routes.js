@@ -110,6 +110,7 @@ const {
   EditTech,
   UpdateTech,
 } = require("../controller/admin/tech-controller");
+const { AdminInterns } = require("../controller/admin/get-all-interns");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -223,6 +224,9 @@ router.put("/approve-invoice/:email", ApproveInvoice);
 router.get("/get-total-amount", GetTotalAmount);
 router.get("/get-received-amount", GetReceivedAmount);
 router.get("/get-remaining-amount", GetRemainingAmount);
+
+// Admin Inters
+router.get("/get-all-interns", AdminInterns);
 
 router.post("/add-manager", CreateManager);
 router.get("/get-managers", GetManagers);
