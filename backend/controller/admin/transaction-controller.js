@@ -82,14 +82,7 @@ const ActivePortal = (email) => {
             return reject;
           } else {
             if (resolve.affectedRows === 1) {
-              const sql2 = "DELETE FROM `complete_test` WHERE `email` = (?)";
-              connection.query(sql2, [email], (rej, rev) => {
-                if (rej) {
-                  console.log(rej);
-                } else {
-                  console.log("Portal Activated");
-                }
-              });
+              console.log("Portal Activated");
             }
           }
         });

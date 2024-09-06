@@ -16,8 +16,8 @@ const MarkTaskComplete = (req, res) => {
   const taskData = [name, email, phone, technology];
 
   const sql =
-    "INSERT INTO `complete_test`(`name`, `email`, `phone`, `technology`) VALUES (?)";
-  connection.query(sql, [taskData], (err, data) => {
+    "UPDATE `intern_table` SET `status` = 'Completed' WHERE `email` = ?";
+  connection.query(sql, [email], (err, data) => {
     if (err) throw err;
     return res.json(data.affectedRows);
   });
