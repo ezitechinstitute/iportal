@@ -226,7 +226,7 @@ router.get("/get-received-amount", GetReceivedAmount);
 router.get("/get-remaining-amount", GetRemainingAmount);
 
 // Admin Inters
-router.get("/get-all-interns", AdminInterns);
+// router.get("/get-all-interns", AdminInterns);
 
 router.post("/add-manager", CreateManager);
 router.get("/get-managers", GetManagers);
