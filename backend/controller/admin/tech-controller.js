@@ -16,7 +16,7 @@ const AddTechnology = (req, res) => {
 const FreezeTech = (req, res) => {
   const { id } = req.params;
 
-  const sql = "UPDATE `technologies` SET `status`= 0 WHERE `id` = ?";
+  const sql = "UPDATE `technologies` SET `status`= 0 WHERE `tech_id` = ?";
   connection.query(sql, [id], (err, data) => {
     if (err) {
       return res.json(err);
@@ -29,7 +29,7 @@ const FreezeTech = (req, res) => {
 const ActiveTech = (req, res) => {
   const { id } = req.params;
 
-  const sql = "UPDATE `technologies` SET `status`= 1 WHERE `id` = ?";
+  const sql = "UPDATE `technologies` SET `status`= 1 WHERE `tech_id` = ?";
   connection.query(sql, [id], (err, data) => {
     if (err) {
       console.log(err);
@@ -67,7 +67,7 @@ const GetFormTech = (req, res) => {
 const EditTech = (req, res) => {
   const { id } = req.params;
 
-  const sql = "SELECT * FROM `technologies` WHERE `id` = ?";
+  const sql = "SELECT * FROM `technologies` WHERE `tech_id` = ?";
   connection.query(sql, [id], (err, data) => {
     if (err) {
       return res.json(err);
@@ -81,7 +81,7 @@ const UpdateTech = (req, res) => {
   const { id } = req.params;
   const { technology } = req.body.editedData;
 
-  const sql = "UPDATE `technologies` SET `technology`= ? WHERE `id` = ?";
+  const sql = "UPDATE `technologies` SET `technology`= ? WHERE `tech_id` = ?";
   connection.query(sql, [technology, id], (err, data) => {
     if (err) {
       return res.json(err);

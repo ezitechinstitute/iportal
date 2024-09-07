@@ -201,7 +201,9 @@ const Technology = () => {
                                                 type="button"
                                                 data-toggle="modal"
                                                 data-target="#large1"
-                                                onClick={() => EditTech(rs.tech_id)}
+                                                onClick={() =>
+                                                  EditTech(rs.tech_id)
+                                                }
                                               >
                                                 Edit
                                               </a>
