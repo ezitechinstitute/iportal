@@ -352,7 +352,7 @@ const Technology = () => {
                         <div className="row">
                           <div className=" col-lg-12 col-md-12 col-12">
                             <div className="card-body" key={index}>
-                              {isEdit && editedData.id === rs.tech_id ? (
+                              {isEdit && editedData.id === rs.id ? (
                                 <>
                                   <form className="form form-horizontal d-flex">
                                     <div className="row ">
