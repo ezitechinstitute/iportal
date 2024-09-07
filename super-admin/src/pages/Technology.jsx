@@ -159,7 +159,7 @@ const Technology = () => {
                                   ? data.map((rs) => (
                                       <tr>
                                         <td>
-                                          <strong>{rs.id}</strong>
+                                          <strong>{rs.tech_id}</strong>
                                         </td>
                                         <td>{rs.technology}</td>
 
@@ -201,7 +201,7 @@ const Technology = () => {
                                                 type="button"
                                                 data-toggle="modal"
                                                 data-target="#large1"
-                                                onClick={() => EditTech(rs.id)}
+                                                onClick={() => EditTech(rs.tech_id)}
                                               >
                                                 Edit
                                               </a>
@@ -212,7 +212,7 @@ const Technology = () => {
                                                   href="javascript:void(0);"
                                                   type="button"
                                                   onClick={() =>
-                                                    FreezeTech(rs.id)
+                                                    FreezeTech(rs.tech_id)
                                                   }
                                                 >
                                                   Freeze
@@ -223,7 +223,7 @@ const Technology = () => {
                                                   href="javascript:void(0);"
                                                   type="button"
                                                   onClick={() =>
-                                                    ActiveTech(rs.id)
+                                                    ActiveTech(rs.tech_id)
                                                   }
                                                 >
                                                   Active
@@ -350,7 +350,7 @@ const Technology = () => {
                         <div className="row">
                           <div className=" col-lg-12 col-md-12 col-12">
                             <div className="card-body" key={index}>
-                              {isEdit && editedData.id === rs.id ? (
+                              {isEdit && editedData.id === rs.tech_id ? (
                                 <>
                                   <form className="form form-horizontal d-flex">
                                     <div className="row ">
