@@ -279,7 +279,7 @@ export const Register = () => {
                                   required
                                 />
                                 <button
-                                  className="btn btn-success"
+                                  className="btn btn-primary"
                                   style={{
                                     borderLeft: "0",
                                     borderTopLeftRadius: "0",
@@ -287,7 +287,7 @@ export const Register = () => {
                                   }}
                                   onClick={VerifyEmail}
                                 >
-                                  Verify
+                                  Click to Verify
                                 </button>
                               </div>
                             </div>
