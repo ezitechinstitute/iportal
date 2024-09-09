@@ -267,6 +267,7 @@ export const Register = () => {
                                     borderRight: "0",
                                     borderTopRightRadius: "0",
                                     borderBottomRightRadius: "0",
+                                    height: "52px"
                                   }}
                                   type="text"
                                   className="form-control"
@@ -278,17 +279,20 @@ export const Register = () => {
                                   onChange={handleInput}
                                   required
                                 />
-                                <button
-                                  className="btn btn-primary"
-                                  style={{
-                                    borderLeft: "0",
-                                    borderTopLeftRadius: "0",
-                                    borderBottomLeftRadius: "0",
-                                  }}
-                                  onClick={VerifyEmail}
-                                >
-                                  Click to Verify
-                                </button>
+                                {/* <span> */}
+                                  <button
+                                    className="btn btn-primary"
+                                    style={{
+                                      borderLeft: "0",
+                                      borderTopLeftRadius: "0",
+                                      borderBottomLeftRadius: "0",
+                                      // height: "38px",
+                                    }}
+                                    onClick={VerifyEmail}
+                                  >
+                                    Send Code
+                                  </button>
+                                {/* </span> */}
                               </div>
                             </div>
                           </div>
