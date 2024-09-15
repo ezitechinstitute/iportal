@@ -111,6 +111,18 @@ const {
   UpdateTech,
 } = require("../controller/admin/tech-controller");
 const { AdminInterns } = require("../controller/admin/get-all-interns");
+const {
+  AddBalance,
+  DebitSum,
+  CreditSum,
+
+  GetAllRecords,
+} = require("../controller/admin/account-controller");
+const {
+  LeaveApprove,
+  GetEmployeeLeaves,
+  LeaveReject,
+} = require("../controller/admin/employee-leave-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -228,6 +240,18 @@ router.get("/get-remaining-amount", GetRemainingAmount);
 // Admin Inters
 // router.get("/get-all-interns", AdminInterns);
 
+// Admin Account Credit Debit Endpoints
+router.get("/all-account-rec", GetAllRecords);
+router.post("/add-balance", AddBalance);
+router.get("/get-debit-total", DebitSum);
+router.get("/get-credit-total", CreditSum);
+
+// Admin Employee Leave Endpoints
+// router.get("/get-employee-leaves", GetEmployeeLeaves);
+// router.put("/approve-leave/:id", LeaveApprove);
+// router.put("/reject-leave/:id", LeaveReject);
+
+// Admin Manager Endpoints
 router.post("/add-manager", CreateManager);
 router.get("/get-managers", GetManagers);
 router.get("/get-manager-permissions/:id", GetManagerPermissions);
@@ -239,6 +263,7 @@ router.put("/active-manager/:email", ActiveManager);
 router.get("/get-single-manager/:id", GetSingleManager);
 router.put("/:id", UpdateManager);
 
+// Admin Tech Endpoints
 router.post("/add-tech", AddTechnology);
 router.put("/freeze-tech/:id", FreezeTech);
 router.put("/active-tech/:id", ActiveTech);

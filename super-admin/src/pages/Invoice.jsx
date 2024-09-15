@@ -107,7 +107,9 @@ const Invoice = () => {
                     <h2 className="font-weight-bolder mt-1">
                       {total > 0 ? total.toLocaleString() : 0}
                     </h2>
-                    <p className="card-text">Total Amount</p>
+                    <b>
+                      <p className="card-text">TOTAL AMOUNT</p>
+                    </b>
                   </div>
                   <div id="gained-chart"></div>
                 </div>
@@ -121,7 +123,9 @@ const Invoice = () => {
                     <h2 className="font-weight-bolder mt-1">
                       {received > 0 ? received.toLocaleString() : 0}
                     </h2>
-                    <p className="card-text">Received Amount</p>
+                    <b>
+                      <p className="card-text">RECEIVED AMOUNT</p>
+                    </b>
                   </div>
                   <div id="gained-chart"></div>
                 </div>
@@ -135,7 +139,9 @@ const Invoice = () => {
                     <h2 className="font-weight-bolder mt-1">
                       {remaining > 0 ? remaining.toLocaleString() : 0}
                     </h2>
-                    <p className="card-text">Remaining Amount</p>
+                    <b>
+                      <p className="card-text">REMAINING AMOUNT</p>
+                    </b>
                   </div>
                   <div id="gained-chart"></div>
                 </div>
