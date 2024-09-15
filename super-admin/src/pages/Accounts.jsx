@@ -72,14 +72,23 @@ const Accounts = () => {
   };
 
   const Submit = async () => {
-    try {
-      const res = await axios.post("https://api.ezitech.org/add-balance", {
-        transaction,
-      });
-      alert(res.data.message);
-      window.location.reload();
-    } catch (error) {
-      console.log(error);
+    if (
+      transaction.tDate !== undefined &&
+      transaction.popt !== undefined &&
+      transaction.amount !== undefined &&
+      transaction.description !== undefined
+    ) {
+      try {
+        const res = await axios.post("https://api.ezitech.org/add-balance", {
+          transaction,
+        });
+        alert(res.data.message);
+        window.location.reload();
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert("Please Fill Empty Field First!!!");
     }
   };
 
@@ -313,10 +322,8 @@ const Accounts = () => {
                               <div className="col-sm-9">
                                 <input
                                   type="date"
-                                  id="first-name"
                                   className="form-control"
                                   name="tDate"
-                                  placeholder="Name"
                                   onChange={handleInput}
                                   required
                                 />
