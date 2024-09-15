@@ -80,20 +80,24 @@ const AddBalance = (req, res) => {
       if (err) {
         return res.json(err);
       } else {
-        const total = data[0].totalBalance - parseInt(amount);
-        const sql =
-          "INSERT INTO accounts (date,debit,description,balance) VALUES (?,?,?,?)";
-        const values = [tDate, amount, description, total];
-        connection.query(sql, values, (err, data) => {
-          if (err) {
-            return res.json(err);
-          } else {
-            return res.send({
-              message: "Transaction Submit Successfully",
-              data: data,
-            });
-          }
-        });
+        if (data[0].totalBalance > 0) {
+          const total = data[0].totalBalance - parseInt(amount);
+          const sql =
+            "INSERT INTO accounts (date,debit,description,balance) VALUES (?,?,?,?)";
+          const values = [tDate, amount, description, total];
+          connection.query(sql, values, (err, data) => {
+            if (err) {
+              return res.json(err);
+            } else {
+              return res.send({
+                message: "Transaction Submit Successfully",
+                data: data,
+              });
+            }
+          });
+        } else {
+          return res.json({ message: "You have insufficient balance" });
+        }
       }
     });
   }
