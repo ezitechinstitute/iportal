@@ -47,7 +47,7 @@ const DebitSum = (req, res) => {
 };
 
 const AddBalance = (req, res) => {
-  const { date, popt, description, amount } = req.body.transaction;
+  const { tDate, popt, description, amount } = req.body.transaction;
   console.log(req.body);
   if (popt === "credit") {
     const sql =
@@ -59,7 +59,7 @@ const AddBalance = (req, res) => {
         const total = parseInt(amount) + data[0].totalBalance;
         const sql =
           "INSERT INTO accounts (date,credit,description,balance) VALUES (?,?,?,?)";
-        const values = [date, amount, description, total];
+        const values = [tDate, amount, description, total];
         connection.query(sql, values, (err, data) => {
           if (err) {
             return res.json(err);
@@ -83,7 +83,7 @@ const AddBalance = (req, res) => {
         const total = data[0].totalBalance - parseInt(amount);
         const sql =
           "INSERT INTO accounts (date,debit,description,balance) VALUES (?,?,?,?)";
-        const values = [date, amount, description, total];
+        const values = [tDate, amount, description, total];
         connection.query(sql, values, (err, data) => {
           if (err) {
             return res.json(err);

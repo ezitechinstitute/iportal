@@ -315,7 +315,7 @@ const Accounts = () => {
                                   type="date"
                                   id="first-name"
                                   className="form-control"
-                                  name="date"
+                                  name="tDate"
                                   placeholder="Name"
                                   onChange={handleInput}
                                   required
