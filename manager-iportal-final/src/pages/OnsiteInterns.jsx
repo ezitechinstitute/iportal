@@ -22,6 +22,8 @@ export const OnsiteInterns = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [dataLimit, setDataLimit] = useState(50);
   const [loading, setLoading] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (!check) {
@@ -43,6 +45,7 @@ export const OnsiteInterns = () => {
         }
       );
       setData(res.data.data);
+      setFilteredData(res.data.data);
       settCurrentPage(res.data.meta.page);
       setTotalPages(res.data.meta.totalPages);
       setLoading(false);
@@ -50,6 +53,17 @@ export const OnsiteInterns = () => {
       console.log(error);
     }
   };
+
+  // item.interview_type.toLowerCase().includes(searchTerm.toLowerCase())
+
+  useEffect(() => {
+    const filter = data.filter((item) =>
+      item.interview_type.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    setFilteredData(filter);
+    console.log(filteredData);
+  }, [searchTerm, data]);
 
   const handlePageChange = (page) => {
     settCurrentPage(page);
@@ -127,6 +141,19 @@ export const OnsiteInterns = () => {
                         <option value={300}>300</option>
                         <option value={500}>500</option>
                       </select>
+
+                      <select
+                        name="interView"
+                        id=""
+                        className="form-control w-25"
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      >
+                        <option selected disabled>
+                          --Select Remote/Onsite--
+                        </option>
+                        <option value="Remote">Remote</option>
+                        <option value="Onsite">Onsite</option>
+                      </select>
                       {/* <!-- Button trigger modal --> */}
                       <button
                         type="button"
@@ -158,8 +185,8 @@ export const OnsiteInterns = () => {
                               <div className="text-center"></div>
                               <h3>Loading...</h3>
                             </>
-                          ) : Array.isArray(data) ? (
-                            data.map((rs) => {
+                          ) : Array.isArray(filteredData) ? (
+                            filteredData.map((rs) => {
                               const {
                                 id,
                                 name,
