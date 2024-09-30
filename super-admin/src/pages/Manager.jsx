@@ -47,7 +47,8 @@ const Manager = () => {
       manager.email !== undefined &&
       manager.password !== undefined &&
       manager.phone !== undefined &&
-      manager.joinDate !== undefined
+      manager.joinDate !== undefined &&
+      manager.role !== undefined
     ) {
       if (manager.etiId !== undefined) {
         try {
@@ -234,7 +235,7 @@ const Manager = () => {
   const SubmitEdit = async () => {
     try {
       const res = await axios.put(
-        `https://api.ezitech.org/${editeddata.id}`,
+        `https://api.ezitech.org/${editeddata.manager_id}`,
         editeddata
       );
       if (res.data === 1) {
@@ -570,17 +571,30 @@ const Manager = () => {
                                       onChange={handleInput}
                                     />
                                   </div>
+                                </div>
+                              </div>
 
-                                  {/* <div className="form-group col-sm-5">
+                              <div className="col-6">
+                                <div className="form-group row">
+                                  <div
+                                    className="col-sm-3 col-form-label"
+                                    id="date"
+                                  >
+                                    <label for="first-name">Role</label>
+                                  </div>
+                                  <div className="col-sm-9">
                                     <select
                                       className="form-control"
-                                      id="basicSelect"
+                                      // id="basicSelect"
+                                      name="role"
+                                      onChange={handleInput}
                                     >
-                                      <option>%</option>
-                                      <option>Blade Runner</option>
-                                      <option>Thor Ragnarok</option>
+                                      <option disabled selected>
+                                        --Select--
+                                      </option>
+                                      <option value={"Manager"}>Manager</option>
                                     </select>
-                                  </div> */}
+                                  </div>
                                 </div>
                               </div>
 

@@ -123,6 +123,17 @@ const {
   GetEmployeeLeaves,
   LeaveReject,
 } = require("../controller/admin/employee-leave-controller");
+const {
+  CreateSupervisor,
+  GetSupervisors,
+  GetSupervisorsPermissions,
+  AssignSupervisorPermissions,
+  RemoveSupervisorPermissions,
+  FreezeSupervisor,
+  ActiveSupervisor,
+  GetSingleSupervisor,
+  UpdateSupervisor,
+} = require("../controller/admin/supervisor-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -252,16 +263,27 @@ router.get("/get-credit-total", CreditSum);
 // router.put("/reject-leave/:id", LeaveReject);
 
 // Admin Manager Endpoints
-router.post("/add-manager", CreateManager);
+router.put("/:id", UpdateManager);
 router.get("/get-managers", GetManagers);
-router.get("/get-manager-permissions/:id", GetManagerPermissions);
-router.get("/get-manager-new-permissions", GetNewPermissionsTech);
-router.post("/assign-permissions", AssignPermissions);
-router.delete("/remove-manager-permission/:id", RemovePermission);
+router.post("/add-manager", CreateManager);
 router.put("/freeze-manager/:email", FreezeManager);
 router.put("/active-manager/:email", ActiveManager);
+router.post("/assign-permissions", AssignPermissions);
 router.get("/get-single-manager/:id", GetSingleManager);
-router.put("/:id", UpdateManager);
+router.get("/get-manager-permissions/:id", GetManagerPermissions);
+router.get("/get-manager-new-permissions", GetNewPermissionsTech);
+router.delete("/remove-manager-permission/:id", RemovePermission);
+
+// Admin Supervisor Endpoints
+router.put("/:supid", UpdateSupervisor);
+router.get("/get-supervisors", GetSupervisors);
+router.post("/add-supervisor", CreateSupervisor);
+router.put("/freeze-supervisor/:id", FreezeSupervisor);
+router.put("/active-supervisor/:id", ActiveSupervisor);
+router.get("/get-single-sup/:id", GetSingleSupervisor);
+router.get("/get-sup-permissions/:id", GetSupervisorsPermissions);
+router.post("/assign-sup-permissions", AssignSupervisorPermissions);
+router.delete("/remove-sup-permission/:id", RemoveSupervisorPermissions);
 
 // Admin Tech Endpoints
 router.post("/add-tech", AddTechnology);
