@@ -16,42 +16,21 @@ const {
   MarkAsContact,
 } = require("../controller/hr/hr-interview-controller");
 const {
-  GetLatestRegister,
-  GetOnsiteInterview,
-  GetRemoteInterview,
-  GetTestIntern,
-  GetUmairInternsOnsite,
-  GetUmairInternsRemote,
   GetActiveInterns,
   CountInterns,
   CountInterviewInterns,
   CountTestInterns,
   CountTestCompleted,
-  CountActive,
-  GetContactWith,
   CountContactWith,
-  TestFrameWork,
   GetNewInternsFrameWork,
   GetContactInternsFrameWork,
   GetTestInternsFrameWork,
   GetTestCompleteInternsFrameWork,
 } = require("../controller/hr/get-interns-controller");
 const {
-  GetManagerOnsite,
-  GetManagerRemote,
-  OnsiteSingle,
-  RemoteSingle,
-  CountOnsite,
-  GetInternsEmail,
-  GetInternsPhone,
-} = require("../controller/manager/get-manager-interns");
-const {
-  AssignProject,
-} = require("../controller/manager/assignproject-controller");
-const {
   AssignPortal,
   ActivePortal,
-} = require("../controller/manager/assignPortal-controller");
+} = require("../controller/hr/assignPortal-controller");
 const {
   StartShift,
   EndShift,
@@ -134,6 +113,13 @@ const {
   GetSingleSupervisor,
   UpdateSupervisor,
 } = require("../controller/admin/supervisor-controller");
+const {
+  GetSupervisorsInterns,
+  AssignProject,
+  GetProjects,
+  GetTasks,
+} = require("../controller/supervisor/sup-interns-controller");
+const { SupervisorAuth } = require("../controller/supervisor/supervisor-auth");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -179,24 +165,16 @@ router.post("/manager-auth", HrAuth);
 // router.post("/manager-forgot-password", ManagerForgotPassword);
 
 /* HR All Endpoints */
-// router.get("/get-latest-interns/:email", GetLatestRegister);
-// router.get("/get-onsite-interns/:email", verifyToken, GetOnsiteInterview);
 router.post("/update-contact-status", verifyToken, MarkAsContact);
 router.post("/update-intern-status", verifyToken, AssignTest);
 router.post("/remove-intern", verifyToken, RemoveIntern);
 router.post("/remove-completed", verifyToken, RemoveCompletedInterns);
-// router.get("/get-remote-interns/:email", verifyToken, GetRemoteInterview);
-// router.get("/get-contact-with/:email", verifyToken, GetContactWith);
-// router.get("/get-test-interns/:email", verifyToken, GetTestIntern);
 router.get("/active-interns", verifyToken, GetActiveInterns);
-// router.post("/active-portal", verifyToken, ActivePortal);
-// router.get("/get-test-complete/:email", verifyToken, GetTestComplete);
+router.get("/get-test-complete/:email", verifyToken, GetTestComplete);
 router.get("/count-interview/:managerid", verifyToken, CountInterviewInterns);
 router.get("/count-test/:managerid", verifyToken, CountTestInterns);
 router.get("/count-test-completed/:managerid", verifyToken, CountTestCompleted);
 router.get("/count-contact-with/:managerid", verifyToken, CountContactWith);
-
-// Test
 router.get("/get-interns/:managerid", verifyToken, GetNewInternsFrameWork);
 router.get(
   "/get-contact-interns/:managerid",
@@ -213,29 +191,11 @@ router.get(
   verifyToken,
   GetTestCompleteInternsFrameWork
 );
-
-// router.get("/get-instructor-emails", verifyToken, GetInstructorEmail);
-// router.get("/get-manager-emails", verifyToken, GetManagerEmail);
 router.post("/add-amount", verifyToken, AddAmount);
-// router.post("/get-intern-emails", GetInternsEmail);
-// router.post("/get-intern-phone", GetInternsPhone);
 router.get("/get-manager-amount/:email", verifyToken, GetManagerBalance);
-// router.get("/get-instructor-amount/:email", GetManagerBalance);
 router.get("/pending-amount", verifyToken, GetPendingAmount);
 router.get("/get-statics", CountInterns);
-
-/* Manager Endpoints */
-router.get("/get-manager-onsite", GetManagerOnsite);
-router.get("/get-manager-remote", GetManagerRemote);
-router.post("/single-onsite", OnsiteSingle);
-router.post("/single-remote", RemoteSingle);
-router.post("/get-emails", GetInternsEmail);
-
-/* Assign Portal Endpoint */
 router.post("/assign-portal", AssignPortal);
-
-/* Assign Project Endpoints */
-router.post("/assign-project", AssignProject);
 
 /* Admin Endpoint */
 router.post("/admin-auth", AdminAuth);
@@ -262,7 +222,7 @@ router.get("/get-credit-total", CreditSum);
 // router.put("/approve-leave/:id", LeaveApprove);
 // router.put("/reject-leave/:id", LeaveReject);
 
-// Admin Manager Endpoints
+// Admin To Manager Endpoints
 router.put("/:id", UpdateManager);
 router.get("/get-managers", GetManagers);
 router.post("/add-manager", CreateManager);
@@ -274,7 +234,7 @@ router.get("/get-manager-permissions/:id", GetManagerPermissions);
 router.get("/get-manager-new-permissions", GetNewPermissionsTech);
 router.delete("/remove-manager-permission/:id", RemovePermission);
 
-// Admin Supervisor Endpoints
+// Admin To Supervisor Endpoints
 router.put("/:supid", UpdateSupervisor);
 router.get("/get-supervisors", GetSupervisors);
 router.post("/add-supervisor", CreateSupervisor);
@@ -293,6 +253,13 @@ router.get("/admin-tech", GetAdminTech);
 router.get("/form-tech", GetFormTech);
 router.get("/edit-tech/:id", EditTech);
 router.put("/update-tech/:id", UpdateTech);
+
+// Supervisor To Interns Controller
+router.post("/supervisor-auth", SupervisorAuth);
+router.get("/get-sup-interns/:supid", GetSupervisorsInterns);
+router.post("/assign-project", AssignProject);
+router.get("/get-sup-projects/:supid", GetProjects);
+router.get("/get-sup-tasks/:supid", GetTasks);
 
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);

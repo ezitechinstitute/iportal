@@ -4,6 +4,7 @@ import { SupervisorChartOne } from "./SupervisorChartOne";
 import { FiRefreshCw } from "react-icons/fi";
 
 export const SupervisorDashboard = () => {
+  const username = sessionStorage.getItem("username");
   const [userData, SetUserData] = useState({
     labels: DataSet1.map((rs) => rs.Years),
     datasets: [
@@ -35,7 +36,7 @@ export const SupervisorDashboard = () => {
                 <div class="col-xl-4 col-md-6 col-12">
                   <div class="card card-congratulation-medal p-1">
                     <div class="card-body">
-                      <h5>Congratulations 🎉 John!</h5>
+                      <h5>Congratulations 🎉 {username}!</h5>
                       <p class="card-text font-small-3">
                         You have earn in March
                       </p>

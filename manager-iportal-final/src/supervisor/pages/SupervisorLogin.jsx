@@ -9,54 +9,34 @@ export const SupervisorLogin = () => {
     setValue({ ...value, [e.target.name]: e.target.value });
   };
   // https://api.ezitech.org
-  // const Login = () => {
-  //   if (
-  //     value.email !== undefined &&
-  //     value.password !== undefined &&
-  //     value.loginAs !== undefined
-  //   ) {
-  //     axios
-  //       .post("https://api.ezitech.org/manager-auth", { value })
-  //       .then((res) => {
-  //         if (
-  //           res.data.isLoggedIn === true &&
-  //           res.data.user[0].loginas === "Manager"
-  //         ) {
-  //           sessionStorage.setItem("managerid", res.data.user[0].manager_id);
-  //           sessionStorage.setItem("username", res.data.user[0].name);
-  //           sessionStorage.setItem("email", res.data.user[0].email);
-  //           sessionStorage.setItem("token", res.data.token);
-  //           sessionStorage.setItem("role", res.data.user[0].loginas);
-  //           sessionStorage.setItem("contact", res.data.user[0].contact);
-  //           sessionStorage.setItem("isLoggedIn", true);
-  //           alert("Login Successfully");
-  //           navigate("/manager-dashboard");
-  //           // }
-  //           // else if (
-  //           //   res.data.isLoggedIn === true &&
-  //           //   res.data.user[0].loginas === "Instructor"
-  //           // ) {
-  //           //   sessionStorage.setItem("username", res.data.user[0].name);
-  //           //   sessionStorage.setItem("email", res.data.user[0].email);
-  //           //   sessionStorage.setItem("isInstructorLoggedIn", true);
-  //           //   alert("Login Successfully");
-  //           //   navigate("/instructor-dashboard");
-  //         } else {
-  //           alert("Invalid User!!!");
-  //         }
-  //       });
-  //   } else {
-  //     alert("Please empty fields first!!!");
-  //   }
-  // };
+  const Login = () => {
+    if (value.email !== undefined && value.password !== undefined) {
+      axios
+        .post("http://localhost:8800/supervisor-auth", { value })
+        .then((res) => {
+          if (
+            res.data.isLoggedIn === true &&
+            res.data.user[0].loginas === "Supervisor"
+          ) {
+            sessionStorage.setItem("managerid", res.data.user[0].manager_id);
+            sessionStorage.setItem("username", res.data.user[0].name);
+            sessionStorage.setItem("email", res.data.user[0].email);
+            sessionStorage.setItem("token", res.data.token);
+            sessionStorage.setItem("role", res.data.user[0].loginas);
+
+            sessionStorage.setItem("isLoggedIn", true);
+            alert("Login Successfully");
+            navigate("/supervisor-dashboard");
+          } else {
+            alert("Invalid User!!!");
+          }
+        });
+    } else {
+      alert("Please empty fields first!!!");
+    }
+  };
   return (
     <>
-      {/* <div className="app-content content ">
-        <div className="content-overlay"></div>
-        <div className="header-navbar-shadow"></div>
-        <div className="content-wrapper">
-          <div className="content-header row"></div>
-          <div className="content-body"> */}
       <div className="auth-wrapper auth-v2">
         <div className="auth-inner row m-0">
           {/* <!-- Brand logo--> */}
@@ -132,24 +112,7 @@ export const SupervisorLogin = () => {
                   </div>
                 </div>
               </div>
-              {/* <div className="form-group">
-                <label className="form-label" for="login-email">
-                  Login As
-                </label>
-                <select
-                  name="loginAs"
-                  className="form-control"
-                  id=""
-                  onChange={handleInput}
-                >
-                  <option selected disabled>
-                    {" "}
-                    --Select--{" "}
-                  </option>
-                  <option value="Manager">Manager</option>
-                  <option value="Instructor">Instructor</option>
-                </select>
-              </div> */}
+
               <div className="form-group">
                 <div className="custom-control custom-checkbox">
                   <input
@@ -167,7 +130,7 @@ export const SupervisorLogin = () => {
               <button
                 className="btn btn-primary btn-block"
                 tabindex="4"
-                // onClick={Login}
+                onClick={Login}
               >
                 Login
               </button>

@@ -2,6 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export const SupervisorTopbar = () => {
+  const username = sessionStorage.getItem("username");
+  const role = sessionStorage.getItem("role");
+
+  const LogOut = () => {
+    sessionStorage.clear();
+    alert("Loggedout!!!");
+  };
+
   return (
     <>
       {/* BEGIN: Header */}
@@ -40,8 +48,10 @@ export const SupervisorTopbar = () => {
                 aria-expanded="false"
               >
                 <div className="user-nav d-sm-flex d-none">
-                  <span className="user-name font-weight-bolder">John Doe</span>
-                  <span className="user-status">Manager</span>
+                  <span className="user-name font-weight-bolder">
+                    {username}
+                  </span>
+                  <span className="user-status">{role}</span>
                 </div>
                 <span className="avatar">
                   <img
@@ -61,26 +71,17 @@ export const SupervisorTopbar = () => {
                 <a className="dropdown-item" href="page-profile.html">
                   <i className="mr-50" data-feather="user"></i> Profile
                 </a>
-                {/* <a className="dropdown-item" href="app-email.html">
-                  <i className="mr-50" data-feather="mail"></i> Inbox
-                </a>
-                <a className="dropdown-item" href="app-todo.html">
-                  <i className="mr-50" data-feather="check-square"></i> Task
-                </a>
-                <a className="dropdown-item" href="app-chat.html">
-                  <i className="mr-50" data-feather="message-square"></i> Chats
-                </a> */}
-                {/* <div className="dropdown-divider"></div> */}
+
                 <a className="dropdown-item" href="page-account-settings.html">
                   <i data-feather="code"></i> Technology
                 </a>
-                {/* <a className="dropdown-item" href="page-pricing.html">
-                  <i className="mr-50" data-feather="credit-card"></i> Pricing
-                </a>
-                <a className="dropdown-item" href="page-faq.html">
-                  <i className="mr-50" data-feather="help-circle"></i> FAQ
-                </a> */}
-                <Link className="dropdown-item" to="/supervisor">
+
+                <Link
+                  className="dropdown-item"
+                  to="/supervisor"
+                  type="button"
+                  onClick={LogOut}
+                >
                   <i className="mr-50" data-feather="power"></i> Logout
                 </Link>
               </div>
