@@ -118,6 +118,10 @@ const {
   AssignProject,
   GetProjects,
   GetTasks,
+  GetAttendance,
+  CountAllProjects,
+  CountCompProjects,
+  CountExpProjects,
 } = require("../controller/supervisor/sup-interns-controller");
 const { SupervisorAuth } = require("../controller/supervisor/supervisor-auth");
 const dotenv = require("dotenv").config();
@@ -258,6 +262,11 @@ router.put("/update-tech/:id", UpdateTech);
 router.post("/supervisor-auth", SupervisorAuth);
 router.get("/get-sup-interns/:supid", GetSupervisorsInterns);
 router.post("/assign-project", AssignProject);
+router.get("/count-attend/:email", GetAttendance);
+router.get("/count-all-proj/:email", CountAllProjects);
+router.get("/count-comp-proj/:email", CountCompProjects);
+router.get("/count-exp-proj/:email", CountExpProjects);
+
 router.get("/get-sup-projects/:supid", GetProjects);
 router.get("/get-sup-tasks/:supid", GetTasks);
 

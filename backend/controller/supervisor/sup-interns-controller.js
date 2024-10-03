@@ -71,7 +71,7 @@ const GetSupervisorsInterns = (req, res) => {
               } else {
                 const totalData = countResult[0].count;
                 const totalPages = Math.ceil(totalData / limit);
-                console.log(resolve);
+
                 return res.json({
                   data: resolve,
                   meta: {
@@ -94,30 +94,90 @@ const GetSupervisorsInterns = (req, res) => {
 
 const AssignProject = (req, res) => {
   const {
-    eti_id,
-    project_title,
+    etiId,
+    projectTitle,
+    startDate,
+    endDate,
+    durationDays,
+    points,
     description,
-    start_date,
-    end_date,
-    duration,
-    supid,
-  } = req.body;
+    supId,
+  } = req.body.project;
   const sql =
-    "INSERT INTO `intern_projects` (`eti_id`,`title`, `description`, `start_date`, `end_date`, `duration`, `assigend_by`)  VALUES (?,?,?,?,?,?,?)";
+    "INSERT INTO `intern_projects`(`eti_id`, `title`, `start_date`, `end_date`, `duration`, `project_marks`, `description`, `assigned_by`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
   const values = [
-    eti_id,
-    project_title,
+    etiId,
+    projectTitle,
+    startDate,
+    endDate,
+    durationDays,
+    points,
     description,
-    start_date,
-    end_date,
-    duration,
-    supid,
+    supId,
   ];
   connection.query(sql, values, (err, data) => {
     if (err) {
+      console.log(err);
       return res.json(err);
     } else {
-      return res.send({ msg: "Project Assigned successfully" });
+      return res.send({ msg: "Project Assigned successfully", data: data });
+    }
+  });
+};
+
+const GetAttendance = (req, res) => {
+  const { email } = req.params;
+  const sql =
+    "SELECT COUNT(*) as countAttend FROM `intern_attendance` WHERE `email` = ?";
+  connection.query(sql, [email], (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.json(err);
+    } else {
+      return res.json(data[0].countAttend);
+    }
+  });
+};
+
+const CountAllProjects = (req, res) => {
+  const { email } = req.params;
+  const sql =
+    "SELECT COUNT(*) as countAllProject FROM `intern_projects` WHERE `email` = ?";
+  connection.query(sql, [email], (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.json(err);
+    } else {
+      return res.json(data[0].countAllProject);
+    }
+  });
+};
+
+const CountCompProjects = (req, res) => {
+  const { email } = req.params;
+  const sql =
+    "SELECT COUNT(*) as countCompProject FROM `intern_projects` WHERE `email` = ? AND pstatus = 'Completed'";
+  connection.query(sql, [email], (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.json(err);
+    } else {
+      return res.json(data[0].countCompProject);
+    }
+  });
+};
+
+const CountExpProjects = (req, res) => {
+  const { email } = req.params;
+  const sql =
+    "SELECT COUNT(*) as countExpProject FROM `intern_projects` WHERE `email` = ? AND pstatus = 'Expire'";
+  connection.query(sql, [email], (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.json(err);
+    } else {
+      // console.log(data[0].countAttend)
+      return res.json(data[0].countExpProject);
     }
   });
 };
@@ -143,7 +203,7 @@ const GetTasks = (req, res) => {
 
 const DayIncrement = (req, res) => {
   const sql1 =
-    "SELECT days, duration FROM intern_projects WHERE status = 'ongoing'";
+    "SELECT days, duration FROM intern_projects WHERE pstatus = 'Ongoing'";
   connection.query(sql1, (err, data1) => {
     if (err) {
       return res.json(err);
@@ -151,7 +211,7 @@ const DayIncrement = (req, res) => {
       for (let i = 0; i < data1.length; i++) {
         if (data1[i].days < data1[i].duration) {
           const day = data1[i].days + 1;
-          const sql2 = `UPDATE intern_projects SET days = ${day} WHERE status = 'ongoing' `;
+          const sql2 = `UPDATE intern_projects SET days = ${day} WHERE pstatus = 'Ongoing' `;
           connection.query(sql2, (err, data2) => {
             if (err) {
               console.log(err);
@@ -160,7 +220,8 @@ const DayIncrement = (req, res) => {
             }
           });
         } else {
-          const sql2 = "UPDATE intern_projects SET status = 'expire' ";
+          const sql2 =
+            "UPDATE intern_projects SET pstatus = 'Expire' WHERE pstatus = 'Ongoing'";
           connection.query(sql2, (err, data3) => {
             if (err) {
               console.log(err);
@@ -182,6 +243,10 @@ cron.schedule("0 0 1 * * *", () => {
 module.exports = {
   GetSupervisorsInterns,
   AssignProject,
+  GetAttendance,
+  CountAllProjects,
   GetProjects,
   GetTasks,
+  CountCompProjects,
+  CountExpProjects,
 };

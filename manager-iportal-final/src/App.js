@@ -28,6 +28,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+
         <Routes>
           {/* Index Routes */}
 

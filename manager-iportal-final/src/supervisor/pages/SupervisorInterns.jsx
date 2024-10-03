@@ -5,11 +5,23 @@ import { SupervisorSidebar } from "../components/SupervisorSidebar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Pagination } from "../../components/Pagination";
+import { AttendanceReport } from "../components/AttendanceReport";
+import { ProjectReport } from "../components/ProjectReport";
+import { AssignProject } from "../components/AssignProject";
 
 const SupervisorInterns = () => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const managerid = sessionStorage.getItem("managerid");
+  const [intId, setIntId] = useState({});
+  const [attendVal, setAttendVal] = useState({
+    join: null,
+    duration: null,
+    intEmail: null,
+  });
+  const [projVal, setProjVal] = useState({
+    intEmail: null,
+  });
 
   const [data, setData] = useState([]);
 
@@ -27,6 +39,7 @@ const SupervisorInterns = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const GetInterns = async (page) => {
     setLoading(true);
     try {
@@ -60,11 +73,11 @@ const SupervisorInterns = () => {
     );
 
     setFilteredData(filter);
-    console.log(filteredData);
   }, [searchTerm, data]);
 
   useEffect(() => {
     GetInterns(currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, dataLimit]);
 
   return (
@@ -114,14 +127,13 @@ const SupervisorInterns = () => {
                     <table class="dt-complex-header table table-bordered table-responsive text-center">
                       <thead>
                         <tr>
-                          <th>ETI-ID</th>
+                          <th colSpan={2}>ETI-ID</th>
                           <th>Name</th>
                           <th>Image</th>
+                          <th>Email</th>
                           <th>Duration</th>
                           <th>Join</th>
                           <th>Technology</th>
-                          <th>Attendence</th>
-                          <th>Projects</th>
                           <th>Allow</th>
                           <th>Status</th>
                           <th>Action</th>
@@ -140,6 +152,7 @@ const SupervisorInterns = () => {
                             const {
                               eti_id,
                               name,
+                              email,
                               image,
                               duration,
                               join_date,
@@ -147,11 +160,21 @@ const SupervisorInterns = () => {
                               intern_type,
                               status,
                             } = rs;
+                            let intMonth = 0;
+                            if (duration === "1 Month") {
+                              intMonth = 1;
+                            } else if (duration === "2 Month") {
+                              intMonth = 2;
+                            } else if (duration === "3 Month") {
+                              intMonth = 3;
+                            } else if (duration === "6 Month") {
+                              intMonth = 6;
+                            }
 
                             return (
                               <>
                                 <tr>
-                                  <td>
+                                  <td colSpan={2}>
                                     <strong>{eti_id}</strong>
                                   </td>
                                   <td>{name}</td>
@@ -164,11 +187,11 @@ const SupervisorInterns = () => {
                                       className="rounded"
                                     />
                                   </td>
+                                  <td>{email}</td>
                                   <td>{duration}</td>
                                   <td>{join_date}</td>
                                   <td>{technology}</td>
-                                  <td>0/0</td>
-                                  <td>0/0</td>
+
                                   <td>{intern_type}</td>
                                   <td>
                                     {status === "Active" ? (
@@ -205,9 +228,52 @@ const SupervisorInterns = () => {
                                               className="dropdown-item"
                                               href="#"
                                               type="button"
-                                              // onClick={() => ContactWith(email)}
+                                              data-toggle="modal"
+                                              data-target="#default2"
+                                              onClick={() =>
+                                                setIntId({
+                                                  intEmail: email,
+                                                  idInt: eti_id,
+                                                  idMan: managerid,
+                                                })
+                                              }
                                             >
                                               Assign Project
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a
+                                              className="dropdown-item"
+                                              href="#"
+                                              type="button"
+                                              data-toggle="modal"
+                                              data-target="#default"
+                                              onClick={() =>
+                                                setAttendVal({
+                                                  join: join_date,
+                                                  duration:
+                                                    intMonth !== 0
+                                                      ? intMonth
+                                                      : "",
+                                                  intEmail: email,
+                                                })
+                                              }
+                                            >
+                                              Attendance
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a
+                                              className="dropdown-item"
+                                              href="#"
+                                              type="button"
+                                              data-toggle="modal"
+                                              data-target="#default1"
+                                              onClick={() =>
+                                                setProjVal({ intEmail: email })
+                                              }
+                                            >
+                                              Projects
                                             </a>
                                           </li>
                                         </ul>
@@ -235,6 +301,10 @@ const SupervisorInterns = () => {
               </div>
             </div>
           </section>
+
+          <AssignProject id={intId} />
+          <AttendanceReport values={attendVal} />
+          <ProjectReport values={projVal} />
         </div>
       </div>
     </>
