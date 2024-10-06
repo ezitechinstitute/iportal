@@ -35,7 +35,7 @@ const InternTasks = () => {
   const GetTasks = async (page) => {
     // setLoader(true);
     await axios
-      .get(`http://localhost:8800/get-sup-tasks/${supid}`, {
+      .get(`https://api.ezitech.org/get-sup-tasks/${supid}`, {
         params: {
           page: page,
           limit: dataLimit,

@@ -35,7 +35,7 @@ const SupervisorLeave = () => {
   const GetInternLeaves = async (page) => {
     // setLoader(true);
     await axios
-      .get(`http://localhost:8800/get-intern-leaves/${supid}`, {
+      .get(`https://api.ezitech.org/get-intern-leaves/${supid}`, {
         params: {
           page: page,
           limit: dataLimit,

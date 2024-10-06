@@ -44,7 +44,7 @@ const SupervisorInterns = () => {
   const GetInterns = async (page) => {
     setLoading(true);
     await axios
-      .get(`http://localhost:8800/get-sup-interns/${managerid}`, {
+      .get(`https://api.ezitech.org/get-sup-interns/${managerid}`, {
         params: {
           page: page,
           limit: dataLimit,

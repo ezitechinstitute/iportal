@@ -33,43 +33,49 @@ export const InternLogin = () => {
           res.data.loginStatus &&
           !res.data.passwordStatus
         ) {
-          if (res.data.intern.status === "Test") {
+          if (res.data.intern.int_status === "Test") {
             setToken(res.data.token);
             setUser({
               username: res.data.intern.name,
               email: res.data.intern.email,
               phone: res.data.intern.phone,
-              status: res.data.intern.status,
-              tech: res.data.intern.technology,
+              status: res.data.intern.int_status,
+              tech: res.data.intern.int_technology,
             });
             sessionStorage.setItem("isLoggedIn", true);
             sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("username", res.data.intern.name);
             sessionStorage.setItem("email", res.data.intern.email);
             sessionStorage.setItem("phone", res.data.intern.phone);
-            sessionStorage.setItem("internStatus", res.data.intern.status);
-            sessionStorage.setItem("technology", res.data.intern.technology);
+            sessionStorage.setItem("internStatus", res.data.intern.int_status);
+            sessionStorage.setItem(
+              "technology",
+              res.data.intern.int_technology
+            );
             alert("Login Successfully");
             navigate("/internDashboard");
           }
 
-          if (res.data.intern.status === "Active") {
+          if (res.data.intern.int_status === "Active") {
             setToken(res.data.token);
             setUser({
               username: res.data.intern.name,
               email: res.data.intern.email,
               phone: res.data.intern.phone,
-              ezi_id: res.data.intern.ezi_id,
-              status: res.data.intern.status,
-              tech: res.data.intern.technology,
+              ezi_id: res.data.intern.eti_id,
+              status: res.data.intern.int_status,
+              tech: res.data.intern.int_technology,
             });
             sessionStorage.setItem("isLoggedIn", true);
             sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("username", res.data.intern.name);
             sessionStorage.setItem("email", res.data.intern.email);
-            sessionStorage.setItem("eziId", res.data.intern.ezi_id);
-            sessionStorage.setItem("internStatus", res.data.intern.status);
-            sessionStorage.setItem("technology", res.data.intern.technology);
+            sessionStorage.setItem("eziId", res.data.intern.eti_id);
+            sessionStorage.setItem("internStatus", res.data.intern.int_status);
+            sessionStorage.setItem(
+              "technology",
+              res.data.intern.int_technology
+            );
             alert("Login Successfully");
             navigate("/internDashboard");
           }

@@ -12,7 +12,7 @@ export const SupervisorLogin = () => {
   const Login = () => {
     if (value.email !== undefined && value.password !== undefined) {
       axios
-        .post("http://localhost:8800/supervisor-auth", { value })
+        .post("https://api.ezitech.org/supervisor-auth", { value })
         .then((res) => {
           if (
             res.data.isLoggedIn === true &&

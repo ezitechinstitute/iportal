@@ -54,7 +54,7 @@ const Supervisor = () => {
       if (supervisor.etiId !== undefined) {
         // console.log(supervisor);
         try {
-          const res = await axios.post("http://localhost:8800/add-supervisor", {
+          const res = await axios.post("https://api.ezitech.org/add-supervisor", {
             supervisor,
           });
           alert(res.data);
@@ -71,7 +71,7 @@ const Supervisor = () => {
 
   const GetSupervisors = async () => {
     try {
-      const res = await axios.get("http://localhost:8800/get-supervisors");
+      const res = await axios.get("https://api.ezitech.org/get-supervisors");
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -81,7 +81,7 @@ const Supervisor = () => {
   const FreezeManager = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:8800/freeze-supervisor/${id}`
+        `https://api.ezitech.org/freeze-supervisor/${id}`
       );
       if (res.data === 1) {
         alert("Supervisor Freezed Successfuly");
@@ -96,7 +96,7 @@ const Supervisor = () => {
   const ActiveManager = async (id) => {
     try {
       const res = await axios.put(
-        `http://localhost:8800/active-supervisor/${id}`
+        `https://api.ezitech.org/active-supervisor/${id}`
       );
       if (res.data === 1) {
         alert("Supervisor Activated Successfuly");
@@ -111,7 +111,7 @@ const Supervisor = () => {
   const EditSupervisor = async (id) => {
     // console.log(id)
     try {
-      const res = await axios.get(`http://localhost:8800/get-single-sup/${id}`);
+      const res = await axios.get(`https://api.ezitech.org/get-single-sup/${id}`);
       setEditData(res.data);
     } catch (error) {
       console.log(error);
@@ -126,7 +126,7 @@ const Supervisor = () => {
   const SubmitEdit = async () => {
     try {
       const res = await axios.put(
-        `http://localhost:8800/${editeddata.manager_id}`,
+        `https://api.ezitech.org/${editeddata.manager_id}`,
         editeddata
       );
       console.log(res.data);
@@ -146,7 +146,7 @@ const Supervisor = () => {
     setManagerId(id);
     try {
       const res = await axios.get(
-        `http://localhost:8800/get-sup-permissions/${id}`
+        `https://api.ezitech.org/get-sup-permissions/${id}`
       );
       setManagerPermissions(res.data);
     } catch (error) {
@@ -157,7 +157,7 @@ const Supervisor = () => {
   const GetNewPermissions = async () => {
     try {
       const res = await fetch(
-        "http://localhost:8800/get-manager-new-permissions"
+        "https://api.ezitech.org/get-manager-new-permissions"
       );
       const data = await res.json();
       setNewPermission(data);
@@ -223,7 +223,7 @@ const Supervisor = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:8800/assign-sup-permissions",
+        "https://api.ezitech.org/assign-sup-permissions",
         {
           selectedData,
         }
@@ -238,7 +238,7 @@ const Supervisor = () => {
   const RemovePermission = async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8800/remove-sup-permission/${id}`
+        `https://api.ezitech.org/remove-sup-permission/${id}`
       );
       alert(res.data);
       window.location.reload();

@@ -108,23 +108,23 @@ export const ActiveInterns = () => {
                           {Array.isArray(data)
                             ? data.map((rs) => {
                                 const {
-                                  ezi_id,
+                                  eti_id,
                                   name,
                                   email,
                                   phone,
-                                  technology,
+                                  int_technology,
                                 } = rs;
 
                                 return (
                                   <>
                                     <tr>
                                       <th className="border px-1" scope="row">
-                                        {ezi_id}
+                                        {eti_id}
                                       </th>
                                       <td className="border px-1">{name}</td>
                                       <td className="border px-1">{email}</td>
                                       <td className="border px-1">{phone}</td>
-                                      <td className="border px-1">{technology}</td>
+                                      <td className="border px-1">{int_technology}</td>
 
                                       <td className="border px-1">
                                         <div className="dropdown">

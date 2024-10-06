@@ -9,7 +9,7 @@ export const ProjectReport = ({ values }) => {
 
   const CountAllProjects = async () => {
     await axios
-      .get(`http://localhost:8800/count-all-proj/${values.intEmail}`, {
+      .get(`https://api.ezitech.org/count-all-proj/${values.intEmail}`, {
         headers: { "x-access-token": token },
       })
       .then((res) => {
@@ -22,7 +22,7 @@ export const ProjectReport = ({ values }) => {
 
   const CountCompletedProjects = async () => {
     await axios
-      .get(`http://localhost:8800/count-comp-proj/${values.intEmail}`, {
+      .get(`https://api.ezitech.org/count-comp-proj/${values.intEmail}`, {
         headers: { "x-access-token": token },
       })
       .then((res) => {
@@ -35,7 +35,7 @@ export const ProjectReport = ({ values }) => {
 
   const CountExpireProjects = async () => {
     await axios
-      .get(`http://localhost:8800/count-exp-proj/${values.intEmail}`, {
+      .get(`https://api.ezitech.org/count-exp-proj/${values.intEmail}`, {
         headers: { "x-access-token": token },
       })
       .then((res) => {

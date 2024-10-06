@@ -10,11 +10,7 @@ export const Login = () => {
   };
   // https://api.ezitech.org
   const Login = () => {
-    if (
-      value.email !== undefined &&
-      value.password !== undefined &&
-      value.loginAs !== undefined
-    ) {
+    if (value.email !== undefined && value.password !== undefined) {
       axios
         .post("https://api.ezitech.org/manager-auth", { value })
         .then((res) => {
@@ -31,16 +27,6 @@ export const Login = () => {
             sessionStorage.setItem("isLoggedIn", true);
             alert("Login Successfully");
             navigate("/manager-dashboard");
-            // }
-            // else if (
-            //   res.data.isLoggedIn === true &&
-            //   res.data.user[0].loginas === "Instructor"
-            // ) {
-            //   sessionStorage.setItem("username", res.data.user[0].name);
-            //   sessionStorage.setItem("email", res.data.user[0].email);
-            //   sessionStorage.setItem("isInstructorLoggedIn", true);
-            //   alert("Login Successfully");
-            //   navigate("/instructor-dashboard");
           } else {
             alert("Invalid User!!!");
           }
@@ -132,24 +118,7 @@ export const Login = () => {
                   </div>
                 </div>
               </div>
-              <div className="form-group">
-                <label className="form-label" for="login-email">
-                  Login As
-                </label>
-                <select
-                  name="loginAs"
-                  className="form-control"
-                  id=""
-                  onChange={handleInput}
-                >
-                  <option selected disabled>
-                    {" "}
-                    --Select--{" "}
-                  </option>
-                  <option value="Manager">Manager</option>
-                  <option value="Instructor">Instructor</option>
-                </select>
-              </div>
+              
               <div className="form-group">
                 <div className="custom-control custom-checkbox">
                   <input

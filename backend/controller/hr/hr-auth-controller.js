@@ -4,12 +4,12 @@ const dotenv = require("dotenv").config();
 const secretKey = process.env.SECRETKEY;
 
 const HrAuth = (req, res) => {
-  const { email, password, loginAs } = req.body.value;
+  const { email, password } = req.body.value;
 
   const sql =
-    "SELECT `manager_id`, `image`, `name`, `email`, `contact`, `password`, `loginas`  FROM `manager_accounts` WHERE `email` = ? AND `password`= ? AND `loginas` = ? AND `status` = 1";
+    "SELECT `manager_id`, `image`, `name`, `email`, `contact`, `password`, `loginas`  FROM `manager_accounts` WHERE `email` = ? AND `password`= ? AND `loginas` = 'Manager' AND `status` = 1";
 
-  connection.query(sql, [email, password, loginAs], (err, data) => {
+  connection.query(sql, [email, password], (err, data) => {
     if (err) {
       console.log(err);
       return res.json(err);

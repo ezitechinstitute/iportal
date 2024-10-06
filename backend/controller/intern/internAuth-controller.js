@@ -11,6 +11,7 @@ const InternAuth = (req, res) => {
   const sql = "SELECT * FROM `intern_accounts` WHERE `email` = ?";
   connection.query(sql, [loginEmail], (err, data) => {
     if (err) throw err;
+    // console.log(data)
     if (data.length === 0) {
       return res.json({ userStatus: false });
     }

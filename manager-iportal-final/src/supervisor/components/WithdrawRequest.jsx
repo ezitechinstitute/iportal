@@ -51,7 +51,7 @@ export const WithdrawRequest = ({ values }) => {
       if (request.description !== null) {
         await axios
           .post(
-            "http://localhost:8800/create-withdraw-req",
+            "https://api.ezitech.org/create-withdraw-req",
             { request },
             {
               headers: { "x-access-token": token },

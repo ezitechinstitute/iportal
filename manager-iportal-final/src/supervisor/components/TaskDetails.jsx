@@ -8,7 +8,7 @@ export const TaskDetails = ({ values }) => {
 
   const GetTaskDetails = async () => {
     await axios
-      .get("http://localhost:8800/get-task-details", {
+      .get("https://api.ezitech.org/get-task-details", {
         params: {
           intId: values.etiId,
           pId: values.projectId,

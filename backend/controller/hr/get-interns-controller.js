@@ -2,7 +2,7 @@ const { connection } = require("../../config/connection");
 
 
 const GetActiveInterns = (req, res) => {
-  const sql = "SELECT * FROM `intern_accounts` WHERE `status` = 'Active'";
+  const sql = "SELECT * FROM `intern_accounts` WHERE `int_status` = 'Active'";
   connection.query(sql, (err, data) => {
     if (err) {
       return res.json(err);

@@ -243,15 +243,15 @@ export const InternTopbar = () => {
                     ""
                   ) : (
                     <a className="dropdown-item">
-                      <i className="mr-0"></i>ID : {user.ezi_id}
+                      <i className="mr-0"></i>ID <br /> {user.ezi_id}
                     </a>
                   )}
 
                   <a className="dropdown-item">
-                    <i className="mr-0"></i>Tech : {user.tech}
+                    <i className="mr-0"></i>Tech <br /> {user.tech}
                   </a>
                   <a className="dropdown-item">
-                    <i className="mr-0"></i>Status : {user.status}
+                    <i className="mr-0"></i>Status <br /> {user.status}
                   </a>
                 </small>
 

@@ -29,7 +29,7 @@ const InternProjects = () => {
   const GetProjects = async (page) => {
     // setLoader(true);
     await axios
-      .get(`http://localhost:8800/get-sup-projects/${supid}`, {
+      .get(`https://api.ezitech.org/get-sup-projects/${supid}`, {
         params: {
           page: page,
           limit: dataLimit,

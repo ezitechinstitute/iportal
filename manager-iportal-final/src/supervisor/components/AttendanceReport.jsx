@@ -30,7 +30,7 @@ export const AttendanceReport = ({ values }) => {
 
   const GetAttendance = async () => {
     await axios
-      .get(`http://localhost:8800/count-attend/${values.intEmail}`, {
+      .get(`https://api.ezitech.org/count-attend/${values.intEmail}`, {
         headers: { "x-access-token": token },
       })
       .then((res) => {
