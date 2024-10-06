@@ -122,8 +122,16 @@ const {
   CountAllProjects,
   CountCompProjects,
   CountExpProjects,
+  GetTaskDetails,
+  GetInterLeaves,
+  RejectInternLeave,
+  ApproveInternLeave,
 } = require("../controller/supervisor/sup-interns-controller");
 const { SupervisorAuth } = require("../controller/supervisor/supervisor-auth");
+const {
+  CreateWithdrawReq,
+  GetSupWithdrawReq,
+} = require("../controller/supervisor/sup-balance-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -132,19 +140,23 @@ const secretKey = process.env.SECRETKEY;
 function verifyToken(req, res, next) {
   const token = req.headers["x-access-token"];
 
+  // console.log(token)
+
   if (!token) {
-    return res.json({ tokenMessage: "Token not provided" });
+    return res.json("Token not provided");
+    // console.log("Token not provided");
+  } else {
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+        console.log(err);
+        console.log("Failed to authenticate token");
+       return res.json("Failed to authenticate token");
+      }
+
+      req.internEmail = decoded.email;
+      next();
+    });
   }
-
-  jwt.verify(token, secretKey, (err, decoded) => {
-    if (err) {
-      console.log(err);
-      return res.json({ authMessage: "Failed to authenticate token" });
-    }
-
-    req.internEmail = decoded.email;
-    next();
-  });
 }
 
 router.get("/test", (req, res) => {
@@ -260,15 +272,22 @@ router.put("/update-tech/:id", UpdateTech);
 
 // Supervisor To Interns Controller
 router.post("/supervisor-auth", SupervisorAuth);
-router.get("/get-sup-interns/:supid", GetSupervisorsInterns);
-router.post("/assign-project", AssignProject);
-router.get("/count-attend/:email", GetAttendance);
-router.get("/count-all-proj/:email", CountAllProjects);
-router.get("/count-comp-proj/:email", CountCompProjects);
-router.get("/count-exp-proj/:email", CountExpProjects);
+router.get("/get-sup-interns/:supid", verifyToken, GetSupervisorsInterns);
+router.post("/assign-project", verifyToken, AssignProject);
+router.get("/count-attend/:email", verifyToken, GetAttendance);
+router.get("/count-all-proj/:email", verifyToken, CountAllProjects);
+router.get("/count-comp-proj/:email", verifyToken, CountCompProjects);
+router.get("/count-exp-proj/:email", verifyToken, CountExpProjects);
+router.get("/get-sup-projects/:supid", verifyToken, GetProjects);
+router.get("/get-sup-tasks/:supid", verifyToken, GetTasks);
+router.get("/get-task-details", verifyToken, GetTaskDetails);
+router.get("/get-intern-leaves/:supid", verifyToken, GetInterLeaves);
+router.put("/approve-int-leave/:intId", verifyToken, ApproveInternLeave);
+router.put("/reject-int-leave/:intId", verifyToken, RejectInternLeave);
 
-router.get("/get-sup-projects/:supid", GetProjects);
-router.get("/get-sup-tasks/:supid", GetTasks);
+// Supervisor Balance Controller
+router.post("/create-withdraw-req", verifyToken, CreateWithdrawReq);
+router.get("/get-sup-withdraw-req", verifyToken, GetSupWithdrawReq);
 
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);

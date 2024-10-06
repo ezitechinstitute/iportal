@@ -19,6 +19,7 @@ export const SupervisorLogin = () => {
             res.data.user[0].loginas === "Supervisor"
           ) {
             sessionStorage.setItem("managerid", res.data.user[0].manager_id);
+            sessionStorage.setItem("etiId", res.data.user[0].eti_id);
             sessionStorage.setItem("username", res.data.user[0].name);
             sessionStorage.setItem("email", res.data.user[0].email);
             sessionStorage.setItem("token", res.data.token);

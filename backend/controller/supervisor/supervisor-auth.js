@@ -7,7 +7,7 @@ const SupervisorAuth = (req, res) => {
   const { email, password } = req.body.value;
 
   const sql =
-    "SELECT `manager_id`, `image`, `name`, `email`, `loginas` FROM `manager_accounts` WHERE `email` = ? AND `password`= ? AND `loginas` = 'Supervisor' AND `status` = 1";
+    "SELECT `eti_id`, `manager_id`, `image`, `name`, `email`, `loginas` FROM `manager_accounts` WHERE `email` = ? AND `password`= ? AND `loginas` = 'Supervisor' AND `status` = 1";
 
   connection.query(sql, [email, password], (err, data) => {
     if (err) {

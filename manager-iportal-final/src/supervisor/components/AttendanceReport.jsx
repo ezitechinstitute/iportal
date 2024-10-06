@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 export const AttendanceReport = ({ values }) => {
+  const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [countAttend, setCountAttend] = useState(0);
   const [countDuration, setCountDuration] = useState(0);
 
@@ -29,9 +30,11 @@ export const AttendanceReport = ({ values }) => {
 
   const GetAttendance = async () => {
     await axios
-      .get(`http://localhost:8800/count-attend/${values.intEmail}`)
+      .get(`http://localhost:8800/count-attend/${values.intEmail}`, {
+        headers: { "x-access-token": token },
+      })
       .then((res) => {
-        console.log(res.data)
+        console.log(res.data);
         setCountAttend(res.data);
       })
       .catch((err) => {

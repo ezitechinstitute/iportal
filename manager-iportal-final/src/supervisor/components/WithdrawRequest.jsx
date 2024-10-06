@@ -4,14 +4,13 @@ import "react-quill/dist/quill.snow.css"; // Import Quill styles
 import "react-quill/dist/quill.bubble.css"; // Bubble theme
 import axios from "axios";
 
-export const AssignProject = ({ id }) => {
+export const WithdrawRequest = ({ values }) => {
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [value, setValue] = useState("");
-  const [project, setProject] = useState({
-    durationDays: null,
+  const [request, setRequest] = useState({
     description: null,
     etiId: null,
-    supId: null,
+    reqBy: null,
   });
 
   const handleChange = (content) => {
@@ -19,40 +18,41 @@ export const AssignProject = ({ id }) => {
   };
 
   const handleInput = (e) => {
-    setProject({ ...project, [e.target.name]: e.target.value });
+    setRequest({ ...request, [e.target.name]: e.target.value });
   };
 
-  useEffect(() => {
-    const CalculateDuration = () => {
-      const startDate = new Date(project.startDate);
-      const endDate = new Date(project.endDate);
-      const duration = endDate.getTime() - startDate.getTime();
-      const days = Math.floor(duration / (1000 * 60 * 60 * 24));
-      setProject({ ...project, durationDays: days });
-    };
+  //   useEffect(() => {
+  //     const CalculateDuration = () => {
+  //       const startDate = new Date(project.startDate);
+  //       const endDate = new Date(project.endDate);
+  //       const duration = endDate.getTime() - startDate.getTime();
+  //       const days = Math.floor(duration / (1000 * 60 * 60 * 24));
+  //       setProject({ ...project, durationDays: days });
+  //     };
 
-    CalculateDuration();
-  }, [project.startDate, project.endDate]);
+  //     CalculateDuration();
+  //   }, [project.startDate, project.endDate]);
 
-  const AssignProject = async () => {
-    setProject({
-      ...project,
+  const SubmitRequest = async () => {
+    setRequest({
+      ...request,
       description: value,
-      etiId: id.idInt,
-      supId: id.idMan,
+      etiId: values.seid,
+      reqBy: values.sid,
     });
 
     if (
-      project.projectTitle !== undefined &&
-      project.startDate !== undefined &&
-      project.endDate !== undefined &&
-      project.points !== undefined
+      request.bank !== undefined &&
+      request.acNo !== undefined &&
+      request.acName !== undefined &&
+      request.date !== undefined &&
+      request.amount !== undefined
     ) {
-      if (project.description !== null) {
+      if (request.description !== null) {
         await axios
           .post(
-            "http://localhost:8800/assign-project",
-            { project },
+            "http://localhost:8800/create-withdraw-req",
+            { request },
             {
               headers: { "x-access-token": token },
             }
@@ -77,7 +77,7 @@ export const AssignProject = ({ id }) => {
         {/* <!-- Modal --> */}
         <div
           className="modal fade"
-          id="default2"
+          id="defaultwithdraw"
           tabindex="-1"
           role="dialog"
           aria-labelledby="myModalLabel1"
@@ -87,7 +87,7 @@ export const AssignProject = ({ id }) => {
             <div className="modal-content">
               <div className="modal-header">
                 <h4 className="modal-title" id="myModalLabel1">
-                  Assign Project
+                  Withdraw Request
                 </h4>
                 <button
                   type="button"
@@ -101,53 +101,50 @@ export const AssignProject = ({ id }) => {
               <div className="modal-body">
                 <div className="row">
                   <div className="col-sm-12">
-                    <label htmlFor="">Project Title</label>
+                    <label htmlFor="">Bank Name</label>
                     <input
                       type="text"
-                      name="projectTitle"
+                      name="bank"
                       onChange={handleInput}
                       className="form-control"
                     />
                   </div>
 
                   <div className="col-sm-6">
-                    <label htmlFor="">Start Date</label>
+                    <label htmlFor="">Account Number</label>
                     <input
-                      type="date"
-                      name="startDate"
-                      onChange={handleInput}
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="col-sm-6">
-                    <label htmlFor="">End Date</label>
-                    <input
-                      type="date"
-                      name="endDate"
-                      onChange={handleInput}
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="col-sm-6">
-                    <label htmlFor="">Duration</label>
-                    <input
-                      value={
-                        project.durationDays !== NaN ? project.durationDays : ""
-                      }
                       type="text"
-                      name="duration"
+                      name="acNo"
                       onChange={handleInput}
                       className="form-control"
                     />
                   </div>
 
                   <div className="col-sm-6">
-                    <label htmlFor="">Points</label>
+                    <label htmlFor="">Account Name</label>
+                    <input
+                      type="text"
+                      name="acName"
+                      onChange={handleInput}
+                      className="form-control"
+                    />
+                  </div>
+
+                  <div className="col-sm-6">
+                    <label htmlFor="">Date</label>
+                    <input
+                      type="date"
+                      name="date"
+                      onChange={handleInput}
+                      className="form-control"
+                    />
+                  </div>
+
+                  <div className="col-sm-6">
+                    <label htmlFor="">Amount</label>
                     <input
                       type="number"
-                      name="points"
+                      name="amount"
                       onChange={handleInput}
                       className="form-control"
                     />
@@ -163,9 +160,9 @@ export const AssignProject = ({ id }) => {
                       placeholder="Project description..."
                     />
                     {/* <div>
-                      <h3>Preview:</h3>
-                      <div dangerouslySetInnerHTML={{ __html: value }}></div>
-                    </div> */}
+                        <h3>Preview:</h3>
+                        <div dangerouslySetInnerHTML={{ __html: value }}></div>
+                      </div> */}
                   </div>
                 </div>
               </div>
@@ -174,9 +171,9 @@ export const AssignProject = ({ id }) => {
                 <button
                   type="button"
                   className="btn btn-success"
-                  onClick={AssignProject}
+                  onClick={SubmitRequest}
                 >
-                  Assign Project
+                  Submit Request
                 </button>
               </div>
             </div>

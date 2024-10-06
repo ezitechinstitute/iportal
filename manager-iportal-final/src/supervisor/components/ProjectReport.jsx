@@ -2,13 +2,16 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 export const ProjectReport = ({ values }) => {
+  const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [countAllPro, setCountAllPro] = useState(0);
   const [countCompPro, setCountCompPro] = useState(0);
   const [countExpPro, setCountExpPro] = useState(0);
 
   const CountAllProjects = async () => {
     await axios
-      .get(`http://localhost:8800/count-all-proj/${values.intEmail}`)
+      .get(`http://localhost:8800/count-all-proj/${values.intEmail}`, {
+        headers: { "x-access-token": token },
+      })
       .then((res) => {
         setCountAllPro(res.data);
       })
@@ -19,7 +22,9 @@ export const ProjectReport = ({ values }) => {
 
   const CountCompletedProjects = async () => {
     await axios
-      .get(`http://localhost:8800/count-comp-proj/${values.intEmail}`)
+      .get(`http://localhost:8800/count-comp-proj/${values.intEmail}`, {
+        headers: { "x-access-token": token },
+      })
       .then((res) => {
         setCountCompPro(res.data);
       })
@@ -30,7 +35,9 @@ export const ProjectReport = ({ values }) => {
 
   const CountExpireProjects = async () => {
     await axios
-      .get(`http://localhost:8800/count-exp-proj/${values.intEmail}`)
+      .get(`http://localhost:8800/count-exp-proj/${values.intEmail}`, {
+        headers: { "x-access-token": token },
+      })
       .then((res) => {
         setCountExpPro(res.data);
       })

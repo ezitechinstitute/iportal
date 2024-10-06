@@ -11,6 +11,7 @@ import { AssignProject } from "../components/AssignProject";
 
 const SupervisorInterns = () => {
   const navigate = useNavigate();
+  const [token, setToken] = useState(sessionStorage.getItem("token"));
   const check = sessionStorage.getItem("isLoggedIn");
   const managerid = sessionStorage.getItem("managerid");
   const [intId, setIntId] = useState({});
@@ -42,25 +43,44 @@ const SupervisorInterns = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const GetInterns = async (page) => {
     setLoading(true);
-    try {
-      const res = await axios.get(
-        `http://localhost:8800/get-sup-interns/${managerid}`,
-        {
-          // headers: { "x-access-token": token },
-          params: {
-            page: page,
-            limit: dataLimit,
-          },
-        }
-      );
-      setData(res.data.data);
-      setFilteredData(res.data.data);
-      settCurrentPage(res.data.meta.page);
-      setTotalPages(res.data.meta.totalPages);
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
+    await axios
+      .get(`http://localhost:8800/get-sup-interns/${managerid}`, {
+        params: {
+          page: page,
+          limit: dataLimit,
+        },
+        headers: { "x-access-token": token },
+      })
+      .then((res) => {
+        setData(res.data.data);
+        setFilteredData(data);
+        settCurrentPage(res.data.meta.page);
+        setTotalPages(res.data.meta.totalPages);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // try {
+    //   const res = await axios.get(
+    //     `http://localhost:8800/get-sup-interns/${managerid}`,
+    //     {
+    //       params: {
+    //         page: page,
+    //         limit: dataLimit,
+    //       },
+    //       headers: { "x-access-token": token },
+    //     }
+    //   );
+    //   setData(res.data.data);
+    //   setFilteredData(data);
+    //   settCurrentPage(res.data.meta.page);
+    //   setTotalPages(res.data.meta.totalPages);
+    //   setLoading(false);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const handlePageChange = (page) => {
@@ -196,14 +216,7 @@ const SupervisorInterns = () => {
                                   <td>
                                     {status === "Active" ? (
                                       <>
-                                        <span
-                                          className="px-1 rounded"
-                                          style={{
-                                            backgroundColor: "limegreen",
-                                            color: "white",
-                                            fontWeight: "bold",
-                                          }}
-                                        >
+                                        <span className="badge badge-pill badge-glow badge-success">
                                           {status}
                                         </span>
                                       </>
