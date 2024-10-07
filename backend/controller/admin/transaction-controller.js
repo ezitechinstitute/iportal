@@ -76,7 +76,7 @@ const ActivePortal = (email) => {
     } else {
       if (data.affectedRows === 1) {
         const sql1 =
-          "UPDATE `intern_accounts` SET `status`='Active' WHERE `email` = (?)";
+          "UPDATE `intern_accounts` SET `int_status`='Active' WHERE `email` = (?)";
         connection.query(sql1, [email], (reject, resolve) => {
           if (reject) {
             return reject;
