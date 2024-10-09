@@ -25,7 +25,7 @@ const AssignPortal = (req, res) => {
         ];
 
         const sql1 =
-          "INSERT INTO `intern_accounts`(`ezi_id`, `name`, `email`, `phone`, `password`, `technology`) VALUES (?)";
+          "INSERT INTO `intern_accounts`(`eti_id`, `name`, `email`, `phone`, `password`, `int_technology`) VALUES (?)";
 
         connection.query(sql1, [internData], (reject, resolve) => {
           if (reject) {
