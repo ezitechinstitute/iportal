@@ -210,8 +210,8 @@ router.get(
 router.post("/add-amount", verifyToken, AddAmount);
 router.get("/get-manager-amount/:email", verifyToken, GetManagerBalance);
 router.get("/pending-amount", verifyToken, GetPendingAmount);
-router.get("/get-statics", CountInterns);
-router.post("/assign-portal", AssignPortal);
+router.get("/get-statics", verifyToken, CountInterns);
+router.post("/assign-portal", verifyToken, AssignPortal);
 
 /* Admin Endpoint */
 router.post("/admin-auth", AdminAuth);
