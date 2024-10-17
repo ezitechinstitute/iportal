@@ -14,6 +14,7 @@ import OnGoing from "./components/interns-components/OnGoing/OnGoing";
 import Completed from "./components/interns-components/Completed/Completed";
 import { InternLogin } from "./pages/interns-pages/InternLogin";
 import { InternTest } from "./pages/interns-pages/InternTest";
+import { InternTasks } from "./pages/interns-pages/InternTasks";
 
 function App() {
   return (
@@ -22,12 +23,15 @@ function App() {
         <Routes>
           <Route index path="/" element={<InternLogin />} />
           <Route path="/intern-test" element={<InternTest />} />
-          <Route path="/internDashboard" element={<InternDashboard />} />
-          <Route path="/internLeave" element={<Leave />} />
-          <Route path="/internAttendence" element={<Attendence />} />
+          <Route path="/intern-dashboard" element={<InternDashboard />} />
+          <Route path="/intern-leave" element={<Leave />} />
+          <Route path="/intern-attendence" element={<Attendence />} />
+          <Route path="/intern-projects" element={<Projects />} />
+          <Route path="/intern-tasks" element={<InternTasks />} />
+
+
 
           {/* <Route path="/internFeedback" element={<Feedback />} />
-          <Route path="/internProjects" element={<Projects />} />
           <Route path="/internAttendence" element={<Attendence />} />
           <Route path="/internTasks" element={<Task />} />
           <Route path="/internAnnouncement" element={<Announcement />} />

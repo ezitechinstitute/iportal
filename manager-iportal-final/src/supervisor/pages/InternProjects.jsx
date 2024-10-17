@@ -9,11 +9,12 @@ const InternProjects = () => {
   const navigate = useNavigate();
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const check = sessionStorage.getItem("isLoggedIn");
-  const supid = sessionStorage.getItem("managerid");
+  // const supid = sessionStorage.getItem("managerid");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loader, setLoader] = useState(false);
+  const supid = 11;
 
   // Pagination
   const [currentPage, settCurrentPage] = useState(1);
@@ -134,13 +135,13 @@ const InternProjects = () => {
                       <div class="col-12">
                         <div class="card">
                           <div class="card-datatable">
-                            <table class="dt-complex-header table table-bordered table-responsive text-center">
+                            <table class="dt-complex-header table table-bordered table-responsive">
                               <thead>
                                 <tr>
-                                  <th>ETI-ID</th>
+                                  {/* <th>ETI-ID</th> */}
                                   <th>Name</th>
                                   <th>Title</th>
-                                  <th>Technology</th>
+                                  {/* <th>Technology</th> */}
                                   <th>Start Date</th>
                                   <th>Duration</th>
                                   <th>Days</th>
@@ -171,12 +172,12 @@ const InternProjects = () => {
                                     return (
                                       <>
                                         <tr>
-                                          <td>
+                                          {/* <td>
                                             <strong>{eti_id}</strong>
-                                          </td>
+                                          </td> */}
                                           <td>{name}</td>
                                           <td>{title}</td>
-                                          <td>{int_technology}</td>
+                                          {/* <td>{int_technology}</td> */}
                                           <td>{start_date}</td>
                                           <td>{duration}</td>
                                           <td>{days}</td>

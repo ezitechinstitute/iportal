@@ -8,6 +8,7 @@ import { Pagination } from "../../components/Pagination";
 import { AttendanceReport } from "../components/AttendanceReport";
 import { ProjectReport } from "../components/ProjectReport";
 import { AssignProject } from "../components/AssignProject";
+import { AssignShift } from "../components/AssignShift";
 
 const SupervisorInterns = () => {
   const navigate = useNavigate();
@@ -22,6 +23,11 @@ const SupervisorInterns = () => {
   });
   const [projVal, setProjVal] = useState({
     intEmail: null,
+  });
+
+  const [shiftData, setShiftData] = useState({
+    email: null,
+    etiId: null,
   });
 
   const [data, setData] = useState([]);
@@ -61,26 +67,6 @@ const SupervisorInterns = () => {
       .catch((err) => {
         console.log(err);
       });
-
-    // try {
-    //   const res = await axios.get(
-    //     `http://localhost:8800/get-sup-interns/${managerid}`,
-    //     {
-    //       params: {
-    //         page: page,
-    //         limit: dataLimit,
-    //       },
-    //       headers: { "x-access-token": token },
-    //     }
-    //   );
-    //   setData(res.data.data);
-    //   setFilteredData(data);
-    //   settCurrentPage(res.data.meta.page);
-    //   setTotalPages(res.data.meta.totalPages);
-    //   setLoading(false);
-    // } catch (error) {
-    //   console.log(error);
-    // }
   };
 
   const handlePageChange = (page) => {
@@ -242,6 +228,23 @@ const SupervisorInterns = () => {
                                               href="#"
                                               type="button"
                                               data-toggle="modal"
+                                              data-target="#shiftModal"
+                                              onClick={() =>
+                                                setShiftData({
+                                                  email: email,
+                                                  etiId: eti_id,
+                                                })
+                                              }
+                                            >
+                                              Assign Shift
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a
+                                              className="dropdown-item"
+                                              href="#"
+                                              type="button"
+                                              data-toggle="modal"
                                               data-target="#default2"
                                               onClick={() =>
                                                 setIntId({
@@ -315,6 +318,7 @@ const SupervisorInterns = () => {
             </div>
           </section>
 
+          <AssignShift values={shiftData} />
           <AssignProject id={intId} />
           <AttendanceReport values={attendVal} />
           <ProjectReport values={projVal} />

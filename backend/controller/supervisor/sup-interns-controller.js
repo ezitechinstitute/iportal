@@ -361,45 +361,56 @@ const ProjectDayIncrement = (req, res) => {
   });
 };
 
-const TaskDayIncrement = (req, res) => {
-  const sql1 =
-    "SELECT task_days, task_duration FROM intern_tasks WHERE task_status = 'Ongoing'";
-  connection.query(sql1, (err, data1) => {
-    if (err) {
-      return res.json(err);
-    } else {
-      for (let i = 0; i < data1.length; i++) {
-        if (data1[i].task_days < data1[i].task_duration) {
-          const day = data1[i].days + 1;
-          const sql2 = `UPDATE intern_tasks SET task_days = ${day} WHERE task_status = 'Ongoing' `;
-          connection.query(sql2, (err, data2) => {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log(data2);
-            }
-          });
-        } else {
-          const sql2 =
-            "UPDATE intern_tasks SET task_status = 'Expired' WHERE task_status = 'Ongoing'";
-          connection.query(sql2, (err, data3) => {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log(data3);
-            }
-          });
-        }
-      }
-    }
-  });
-};
-
 cron.schedule("0 0 1 * * *", () => {
   console.log("running the project schedule");
   ProjectDayIncrement();
-  TaskDayIncrement();
+  // TaskDayIncrement();
 });
+
+const GetSubmittedTasks = (req, res) => {
+  const { id } = req.params;
+
+  const sql = "SELECT * FROM `submitted_task` WHERE `task_id` = ?";
+  connection.query(sql, [id], (err, data) => {
+    if (err) throw err;
+    return res.json(data);
+  });
+};
+
+const SubmitReview = (req, res) => {
+  const { id } = req.params;
+  const { points, desc } = req.body.review;
+
+  const sql =
+    "UPDATE `intern_tasks` SET `task_obt_mark`= ?,`review`= ? WHERE `task_id` = ?";
+
+  connection.query(sql, [points, desc, id], (err) => {
+    if (err) throw err;
+    return res.json({ msg: "Review submitted successfully" });
+  });
+};
+
+const ApproveTask = (req, res) => {
+  const { id } = req.params;
+
+  const sql =
+    "UPDATE `intern_tasks` SET `task_status_final`= 1 WHERE `task_id` = ?";
+  connection.query(sql, [id], (err, data) => {
+    if (err) throw err;
+    return res.json({ msg: "Task approved successfully" });
+  });
+};
+
+const RejectTask = (req, res) => {
+  const { id } = req.params;
+
+  const sql =
+    "UPDATE `intern_tasks` SET `task_status_final`= 0 WHERE `task_id` = ?";
+  connection.query(sql, [id], (err, data) => {
+    if (err) throw err;
+    return res.json({ msg: "Task rejected successfully" });
+  });
+};
 
 module.exports = {
   GetSupervisorsInterns,
@@ -414,4 +425,8 @@ module.exports = {
   GetInterLeaves,
   ApproveInternLeave,
   RejectInternLeave,
+  GetSubmittedTasks,
+  SubmitReview,
+  ApproveTask,
+  RejectTask,
 };

@@ -10,7 +10,9 @@ const InternTasks = () => {
   const navigate = useNavigate();
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const check = sessionStorage.getItem("isLoggedIn");
-  const supid = sessionStorage.getItem("managerid");
+  // const supid = sessionStorage.getItem("managerid");
+  const supid = 11;
+
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,9 +23,7 @@ const InternTasks = () => {
   const [dataLimit, setDataLimit] = useState(50);
 
   const [taskData, setTaskData] = useState({
-    etiId: null,
-    taskNo: null,
-    projectId: null,
+    taskId: null,
   });
 
   useEffect(() => {
@@ -139,15 +139,13 @@ const InternTasks = () => {
                       <div class="col-12">
                         <div class="card">
                           <div class="card-datatable">
-                            <table class="dt-complex-header table table-bordered table-responsive text-center">
+                            <table class="dt-complex-header table table-bordered table-responsive">
                               <thead>
                                 <tr>
-                                  <th>ETI_ID</th>
                                   <th>Name</th>
-                                  <th>Task No</th>
                                   <th>Task Title</th>
                                   <th>Project Title</th>
-                                  <th>Technology</th>
+
                                   <th>Start Date</th>
                                   <th>Duration</th>
                                   <th>Days</th>
@@ -162,15 +160,16 @@ const InternTasks = () => {
                                       const {
                                         eti_id,
                                         project_id,
+                                        task_id,
                                         name,
-                                        task_no,
                                         task_title,
                                         title,
-                                        int_technology,
                                         t_start_date,
                                         task_duration,
                                         task_days,
                                         task_status,
+                                        task_submit_status,
+                                        task_status_final,
                                       } = rs;
 
                                       const date = new Date(
@@ -180,82 +179,67 @@ const InternTasks = () => {
                                       return (
                                         <>
                                           <tr>
-                                            <td>
-                                              <strong>{eti_id}</strong>
-                                            </td>
                                             <td>{name}</td>
-                                            <td>{task_no}</td>
                                             <td>{task_title}</td>
                                             <td>{title}</td>
-                                            <td>{int_technology}</td>
                                             <td>{date}</td>
                                             <td>{task_duration}</td>
                                             <td>{task_days}</td>
 
-                                            <td>
-                                              {task_status === "Ongoing" ? (
-                                                <>
-                                                  <span className="badge badge-pill badge-glow badge-primary">
-                                                    {task_status}
+                                            {task_submit_status !== 1 ? (
+                                              <td>
+                                                {task_status === "Ongoing" ? (
+                                                  <span className="badge badge-glow badge-info">
+                                                    {" "}
+                                                    {task_status}{" "}
                                                   </span>
-                                                </>
-                                              ) : task_status ===
-                                                "Completed" ? (
-                                                <>
-                                                  <span className="badge badge-pill badge-glow badge-success">
-                                                    {task_status}
+                                                ) : task_status ===
+                                                  "Expired" ? (
+                                                  <span className="badge badge-glow badge-danger">
+                                                    {" "}
+                                                    {task_status}{" "}
                                                   </span>
-                                                </>
-                                              ) : task_status === "Expired" ? (
-                                                <>
-                                                  <span className="badge badge-pill badge-glow badge-danger">
-                                                    {task_status}
-                                                  </span>
-                                                </>
-                                              ) : (
-                                                ""
-                                              )}
-                                            </td>
+                                                ) : (
+                                                  ""
+                                                )}
+                                              </td>
+                                            ) : task_status_final === 1 ? (
+                                              <td>
+                                                <span className="badge badge-glow badge-success">
+                                                  Approve
+                                                </span>
+                                              </td>
+                                            ) : task_status_final === 0 ? (
+                                              <td>
+                                                <span className="badge badge-glow badge-danger">
+                                                  Reject
+                                                </span>
+                                              </td>
+                                            ) : (
+                                              <td>
+                                                <span className="badge badge-glow badge-success">
+                                                  Submitted
+                                                </span>
+                                              </td>
+                                            )}
 
                                             <td>
                                               <div class="btn-group">
                                                 <button
-                                                  class="btn btn-warning dropdown-toggle"
+                                                  class="btn btn-warning"
                                                   type="button"
-                                                  id="dropdownMenuButton5"
-                                                  data-toggle="dropdown"
                                                   aria-haspopup="true"
                                                   aria-expanded="false"
+                                                  data-toggle="modal"
+                                                  data-target="#xlarge"
+                                                  onClick={() =>
+                                                    setTaskData({
+                                                      taskId: task_id,
+                                                    })
+                                                  }
                                                 >
-                                                  Action
+                                                  View
                                                 </button>
-                                                <div
-                                                  class="dropdown-menu"
-                                                  aria-labelledby="dropdownMenuButton5"
-                                                >
-                                                  <a
-                                                    type="button"
-                                                    class="dropdown-item"
-                                                    href="javascript:void(0);"
-                                                    data-toggle="modal"
-                                                    data-target="#xlarge"
-                                                    onClick={() =>
-                                                      setTaskData({
-                                                        etiId: eti_id,
-                                                        projectId: project_id,
-                                                        taskNo: task_no,
-                                                      })
-                                                    }
-                                                  >
-                                                    Task Details
-                                                  </a>
-                                                  <a
-                                                    class="dropdown-item"
-                                                    href="javascript:void(0);"
-                                                  >
-                                                    Freeze
-                                                  </a>
-                                                </div>
                                               </div>
                                             </td>
                                           </tr>

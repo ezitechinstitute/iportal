@@ -126,12 +126,26 @@ const {
   GetInterLeaves,
   RejectInternLeave,
   ApproveInternLeave,
+  GetSubmittedTasks,
+  SubmitReview,
+  ApproveTask,
+  RejectTask,
 } = require("../controller/supervisor/sup-interns-controller");
 const { SupervisorAuth } = require("../controller/supervisor/supervisor-auth");
 const {
   CreateWithdrawReq,
   GetSupWithdrawReq,
 } = require("../controller/supervisor/sup-balance-controller");
+const {
+  GetInternProjects,
+  CreateTask,
+  GetInternTasks,
+  UploadTask,
+} = require("../controller/intern/intern-projects-controller");
+const {
+  AssignShift,
+  UpdateShift,
+} = require("../controller/supervisor/shift-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -150,7 +164,7 @@ function verifyToken(req, res, next) {
       if (err) {
         console.log(err);
         console.log("Failed to authenticate token");
-       return res.json("Failed to authenticate token");
+        return res.json("Failed to authenticate token");
       }
 
       req.internEmail = decoded.email;
@@ -174,6 +188,12 @@ router.post("/intern-test", verifyToken, GetTask);
 router.get("/get-intern-attendance", verifyToken, GetInternAttendance);
 router.post("/mark-test-complete", verifyToken, MarkTaskComplete);
 router.post("/update-intern-password", ForgotInternPassword);
+
+/* Intern Projects */
+router.get("/intern-projects", GetInternProjects);
+router.post("/create-task", CreateTask);
+router.get("/intern-tasks", GetInternTasks);
+router.post("/upload-task", UploadTask);
 
 /* Manager Auth Endpoints */
 router.post("/manager-auth", HrAuth);
@@ -284,6 +304,16 @@ router.get("/get-task-details", verifyToken, GetTaskDetails);
 router.get("/get-intern-leaves/:supid", verifyToken, GetInterLeaves);
 router.put("/approve-int-leave/:intId", verifyToken, ApproveInternLeave);
 router.put("/reject-int-leave/:intId", verifyToken, RejectInternLeave);
+
+// Get Submitted Task
+router.get("/get-submit-task/:id", GetSubmittedTasks);
+router.put("/submit-review/:id", SubmitReview);
+router.put("/approve-task/:id", ApproveTask);
+router.put("/reject-task/:id", RejectTask);
+
+// Supervisor Shift Controller Endpoints
+router.post("/assign-shift", AssignShift);
+router.put("/update-shift/:check", UpdateShift);
 
 // Supervisor Balance Controller
 router.post("/create-withdraw-req", verifyToken, CreateWithdrawReq);

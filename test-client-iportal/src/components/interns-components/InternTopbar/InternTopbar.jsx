@@ -15,6 +15,7 @@ export const InternTopbar = () => {
     status: sessionStorage.getItem("internStatus"),
     tech: sessionStorage.getItem("technology"),
   });
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
 
   useEffect(() => {
     axios
@@ -34,21 +35,37 @@ export const InternTopbar = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      });
+    }
+  }, []);
+
   const StartShift = () => {
     axios
       .post(
         "https://api.ezitech.org/start-shift",
-        { email: user.email },
+        {
+          id: user.ezi_id,
+          email: user.email,
+          currentLat: 33.6151,
+          currentLon: 73.0551,
+        },
         { headers: { "x-access-token": token } }
       )
       .then((res) => {
+        alert(res.data.message);
         if (res.data.startShiftStatus) {
           setShiftStarted("checkout");
-          alert("Shift Start");
-          window.location.reload();
         } else {
           setMessage("Today Attendance Marked");
         }
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -59,15 +76,20 @@ export const InternTopbar = () => {
     axios
       .post(
         "https://api.ezitech.org/end-shift",
-        { email: user.email },
+        {
+          id: user.ezi_id,
+          email: user.email,
+          currentLat: 33.6151,
+          currentLon: 73.0551,
+        },
         { headers: { "x-access-token": token } }
       )
       .then((res) => {
+        alert(res.data.message);
         if (res.data.endShiftStatus) {
           setShiftStarted("checkin");
-          alert("Shift End");
-          window.location.reload();
         }
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);

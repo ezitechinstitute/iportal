@@ -53,7 +53,7 @@ export const InternLogin = () => {
               res.data.intern.int_technology
             );
             alert("Login Successfully");
-            navigate("/internDashboard");
+            navigate("/intern-dashboard");
           }
 
           if (res.data.intern.int_status === "Active") {
@@ -77,7 +77,7 @@ export const InternLogin = () => {
               res.data.intern.int_technology
             );
             alert("Login Successfully");
-            navigate("/internDashboard");
+            navigate("/intern-dashboard");
           }
         } else {
           alert("Invalid User!!!");

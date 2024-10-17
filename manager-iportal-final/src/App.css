@@ -28,6 +28,12 @@
   color: #61dafb;
 }
 
+.full-page-screenshot {
+  width: 100%;
+  height: auto;
+  max-height: 400px; /* Adjust based on preference */
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

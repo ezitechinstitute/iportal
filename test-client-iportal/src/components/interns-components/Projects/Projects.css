@@ -5,13 +5,13 @@
 
 .card-Ptitle{
     padding-top: 10px;
-    padding-left: 10px;
+    /* padding-left: 10px; */
     font-weight: 700;
 }
 
 .pro-btns{
     margin-top: 15px;
-    margin-left: 40px;
+    margin-left: 20px;
     margin-bottom: 20px;
 }
 

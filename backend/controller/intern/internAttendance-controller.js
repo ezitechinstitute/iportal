@@ -1,4 +1,5 @@
 const { connection } = require("../../config/connection");
+const cron = require("node-cron");
 
 function checkAttendanceMarked(email, callback) {
   const startDay = new Date();
@@ -14,80 +15,263 @@ function checkAttendanceMarked(email, callback) {
 }
 
 const StartShift = (req, res) => {
-  const { email } = req.body;
+  const { id, email, currentLat, currentLon } = req.body;
+  console.log(req.body);
 
   checkAttendanceMarked(email, (err, haMarked) => {
+    console.log(err);
     if (err) throw err;
 
     if (haMarked) {
       return res.json({ hasMarkedStatus: true });
     } else {
-      const startTime = new Date();
-      const sql =
-        "INSERT INTO `intern_attendance`(`email`, `start_shift`) VALUES (?, ?)";
-      connection.query(sql, [email, startTime], (err, data) => {
-        if (err) {
-          return res.json(err);
-        } else {
-          return res.json({ startShiftStatus: true });
-        }
+      const sql = "SELECT lati, longi FROM `office_location` WHERE 1";
+      connection.query(sql, (err, officeLocation) => {
+        if (err) throw err;
+        console.log(officeLocation);
+        const radius = 0.5; // 0.5 km radius
+        const sql =
+          "SELECT `start_shift`, `end_shift`, `onsite_remote` FROM `shift_table` WHERE `eti_id` = ? AND `intern_email` = ?";
+        connection.query(sql, [id, email], (err, shiftResult) => {
+          if (err) throw err;
+          console.log(shiftResult);
+
+          const shift = shiftResult[0];
+          const startTime = new Date(`1970-01-01T${shift.start_shift}`);
+          const endTime = new Date(`1970-01-01T${shift.end_shift}`);
+
+          // Get the current time
+          const currentTime = new Date();
+          const currentHourMinute = new Date(
+            `1970-01-01T${currentTime.getHours()}:${currentTime.getMinutes()}:00`
+          );
+
+          // Check if the current time is within the shift start and end times
+          if (currentHourMinute < startTime || currentHourMinute > endTime) {
+            console.log("Check-in is only allowed during shift hours");
+            return res.json({
+              message: "Check-in is only allowed during shift hours",
+            });
+          }
+
+          if (shift.onsite_remote === "Onsite") {
+            console.log("Onsite");
+            // Calculate the distance from the office
+            const distance = calculateDistance(
+              officeLocation[0].lati,
+              officeLocation[0].longi,
+              currentLat,
+              currentLon
+            );
+
+            if (distance <= radius) {
+              console.log("Heelo", distance);
+              // Allow check-in
+              const checkInTime = new Date();
+
+              // Insert check-in details into the database
+              const sql =
+                "INSERT INTO `intern_attendance`(`eti_id`, `email`, `start_shift`) VALUES (?, ?, ?)";
+              connection.query(sql, [id, email, checkInTime], (err, result) => {
+                if (err) {
+                  console.log(err);
+                  return res.json({ error: "Error saving check-in data" });
+                } else {
+                  return res.json({
+                    success: true,
+                    message: "Checked in successfully.",
+                    startShiftStatus: true,
+                  });
+                }
+              });
+            } else {
+              // Deny check-in due to location
+              res.json({
+                message: "You are not at the office. Check-in denied.",
+              });
+            }
+          } else {
+            console.log("Remote");
+
+            const checkInTime = new Date();
+
+            // Insert check-in details into the database
+            const sql =
+              "INSERT INTO `intern_attendance`(`eti_id`, `email`, `start_shift`) VALUES (?, ?, ?)";
+            connection.query(sql, [id, email, checkInTime], (err, result) => {
+              if (err) {
+                console.log(err);
+                return res.json({ error: "Error saving check-in data" });
+              } else {
+                return res.json({
+                  success: true,
+                  message: "Checked in successfully.",
+                  startShiftStatus: true,
+                });
+              }
+            });
+          }
+        });
       });
     }
   });
 };
 
-// function checkAttendanceNotMark(email, callback) {
-//   const startDay = new Date();
-//   startDay.setHours(0, 0, 0, 0);
-
-//   const sql =
-//     "SELECT COUNT(*) AS count FROM `intern_attendance` WHERE `email` = ? AND start_shift >= ?";
-
-//   connection.query(sql, [email, startDay], (err, data) => {
-//     if (err) return callback(err, null);
-//     callback(null, data[0].count > 0);
-//   });
-// }
-
 const EndShift = (req, res) => {
-  const { email } = req.body;
+  console.log("first");
+  const { id, email, currentLat, currentLon } = req.body;
 
-  // checkAttendanceNotMark(email, (err, NotMarked) => {
-  //   if (err) throw err;
+  const sql = "SELECT lati, longi FROM `office_location` WHERE 1";
+  connection.query(sql, (err, officeLocation) => {
+    if (err) throw err;
 
-  //   if (NotMarked) {
-  //     return res.json({ notMarked: true });
-  //   } else {
-  const endTime = new Date();
-  const sql0 =
-    "SELECT `start_shift` FROM `intern_attendance` WHERE `email` = ? AND `end_shift` IS NUll ORDER BY `id` DESC LIMIT 1";
+    const radius = 0.5; // 0.5 km radius
+    const sql =
+      "SELECT `start_shift`, `end_shift`, `onsite_remote` FROM `shift_table` WHERE `eti_id` = ? AND `intern_email` = ?";
+    connection.query(sql, [id, email], (err, shiftResult) => {
+      if (err) throw err;
 
-  connection.query(sql0, [email], (err, data) => {
-    if (err) {
-      return res.json(err);
-    } else {
-      if (data.length > 0) {
+      const shift = shiftResult[0];
+      const endTime = new Date(`1970-01-01T${shift.end_shift}`);
+
+      // Get the current time
+      const currentTime = new Date();
+      const currentHourMinute = new Date(
+        `1970-01-01T${currentTime.getHours()}:${currentTime.getMinutes()}:00`
+      );
+
+      // Check if the current time is after the shift's end time
+      if (currentHourMinute >= endTime) {
+        return res.json({
+          message: "Check-out is only allowed during shift hours",
+        });
+      }
+
+      if (shift.onsite_remote === "Onsite") {
+        console.log("Onsite");
+
+        // Calculate the distance from the office
+        const distance = calculateDistance(
+          officeLocation[0].lati,
+          officeLocation[0].longi,
+          currentLat,
+          currentLon
+        );
+
+        if (distance <= radius) {
+          console.log("Checking out", distance);
+          const checkOutTime = new Date();
+
+          // Update the check-out time in the attendance record
+          const sql =
+            "UPDATE `intern_attendance` SET `end_shift` = ?, status = 1 WHERE `eti_id` = ? AND `email` = ?";
+          connection.query(sql, [checkOutTime, id, email], (err, result) => {
+            if (err) {
+              console.log(err);
+              return res.json({ error: "Error saving check-out data" });
+            } else {
+              return res.json({
+                success: true,
+                message: "Checked out successfully.",
+                endShiftStatus: true,
+              });
+            }
+          });
+        } else {
+          // Deny check-out due to location
+          res.json({
+            message: "You are not at the office. Check-out denied.",
+          });
+        }
+      } else {
+        console.log("Remote");
+
+        const checkOutTime = new Date();
+
+        // Update the check-out time in the attendance record
         const sql =
-          "UPDATE `intern_attendance` SET `end_shift`= (?) WHERE `email` = (?) AND `end_shift` IS NULL ORDER BY `id` DESC LIMIT 1";
-        connection.query(sql, [endTime, email], (err, data) => {
+          "UPDATE `intern_attendance` SET `end_shift` = ?, status = 1 WHERE `eti_id` = ? AND `email` = ?";
+        connection.query(sql, [checkOutTime, id, email], (err, result) => {
           if (err) {
-            return res.json(err);
+            console.log(err);
+            return res.json({ error: "Error saving check-out data" });
           } else {
-            return res.json({ endShiftStatus: true });
+            return res.json({
+              success: true,
+              message: "Checked out successfully.",
+              endShiftStatus: true,
+            });
           }
         });
       }
+    });
+  });
+};
+
+const MarkAbsentAuto = (req, res) => {
+  // SQL query to find interns who checked in but haven't checked out
+  const sql = `SELECT id, email FROM intern_attendance 
+    WHERE end_shift IS NULL AND status IS NULL AND DATE(start_shift) = CURDATE()`;
+
+  connection.query(sql, (err, results) => {
+    if (err) throw err;
+    // Get the current time
+    const currentTime = new Date();
+    // const currentHourMinute = new Date(
+    //   `1970-01-01T${currentTime.getHours()}:${currentTime.getMinutes()}:00`
+    // );
+
+    if (results.length > 0) {
+      results.forEach((intern) => {
+        // Mark absent for interns who haven't checked out
+        const updateSql = `UPDATE intern_attendance
+                SET status = 0, end_shift = ?
+                WHERE id = ? AND end_shift IS NULL`;
+
+        connection.query(updateSql, [currentTime, intern.id], (err, result) => {
+          if (err) {
+            console.log(`Error marking absent for intern ${intern.email}`, err);
+          } else {
+            console.log(`Intern ${intern.email} marked as absent.`);
+          }
+        });
+      });
+    } else {
+      console.log("No pending checkouts for today.");
     }
   });
-  //   }
-  // });
 };
+
+cron.schedule("59 23 * * * *", () => {
+  console.log("running the project schedule");
+  // ProjectDayIncrement();
+  MarkAbsentAuto();
+});
+
+// Function to calculate distance using the Haversine formula
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371; // Radius of the Earth in kilometers
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c; // Distance in kilometers
+  // console.log(distance);
+  return distance;
+}
 
 const CurrentShift = (req, res) => {
   const { email } = req.params;
 
   const sql =
-    "SELECT `start_shift` FROM `intern_attendance` WHERE `email` = ? AND `end_shift` IS NULL ORDER BY `id` DESC LIMIT 1";
+    "SELECT `start_shift` FROM `intern_attendance` WHERE `email` = ? AND `end_shift` IS NULL AND status IS NULL ORDER BY `id` DESC LIMIT 1";
 
   connection.query(sql, [email], (err, data) => {
     if (err) {
@@ -100,11 +284,6 @@ const CurrentShift = (req, res) => {
           if (err) throw err;
           return res.json({ shiftActive: false, hasMarked });
         });
-
-        // checkAttendanceNotMark(email, (err, notMarked) => {
-        //   if (err) throw err;
-        //   return res.json({ shiftActive: "true", notMarked });
-        // });
       }
     }
   });

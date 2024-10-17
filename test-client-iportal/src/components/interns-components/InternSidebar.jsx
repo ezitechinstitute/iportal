@@ -8,6 +8,8 @@ export const InternSidebar = () => {
     status: sessionStorage.getItem("internStatus"),
     tech: sessionStorage.getItem("technology"),
   });
+  const [activeLink, setActive] = useState(" ");
+
   return (
     <>
       {/* BEGIN: Main Menu */}
@@ -117,7 +119,7 @@ export const InternSidebar = () => {
                   </a>
                 </li>
 
-                <li
+                {/* <li
                   className="nav-item"
                   style={{ marginTop: "-10px", opacity: "0.4" }}
                 >
@@ -143,7 +145,7 @@ export const InternSidebar = () => {
                       </span>
                     </Link>
                   </a>
-                </li>
+                </li> */}
 
                 <li
                   className="nav-item"
@@ -193,8 +195,20 @@ export const InternSidebar = () => {
             ) : (
               <>
                 <li className="nav-item">
-                  <a className="d-flex align-items-center" href="index.html">
-                    <Link to={"/internDashboard"}>
+                  <a
+                    className={
+                      activeLink === "dashboard"
+                        ? "active"
+                        : "d-flex align-items-center"
+                    }
+                    href="#"
+                  >
+                    <Link
+                     
+                      to={"/intern-dashboard"}
+                      type="button"
+                      onClick={() => setActive("dashboard")}
+                    >
                       <i data-feather="home"></i>
                       <span
                         className="menu-title text-truncate"
@@ -206,15 +220,23 @@ export const InternSidebar = () => {
                   </a>
                 </li>
 
-                <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
-                >
+                <li className="nav-item" style={{ marginTop: "-10px" }}>
                   <a className="d-flex align-items-center">
-                    <Link className="d-flex align-items-center">
+                    <Link to={"/intern-projects"}>
                       <i data-feather="grid"></i>
                       <span className="menu-item" data-i18n="eCommerce">
-                        Work
+                        Projects
+                      </span>
+                    </Link>
+                  </a>
+                </li>
+
+                <li className="nav-item" style={{ marginTop: "-10px" }}>
+                  <a className="d-flex align-items-center">
+                    <Link to={"/intern-tasks"}>
+                    <i data-feather='check-square'></i>
+                      <span className="menu-item" data-i18n="eCommerce">
+                        Tasks
                       </span>
                     </Link>
                   </a>
@@ -222,8 +244,8 @@ export const InternSidebar = () => {
 
                 <li className="nav-item" style={{ marginTop: "-10px" }}>
                   <a className="d-flex align-items-center" href="#">
-                    <Link to={"/internAttendence"}>
-                      <i data-feather="check-square"></i>
+                    <Link to={"/intern-attendence"}>
+                    <i data-feather='check-circle'></i>
                       <span className="menu-item" data-i18n="eCommerce">
                         Attendance
                       </span>
@@ -245,7 +267,7 @@ export const InternSidebar = () => {
                   </a>
                 </li>
 
-                <li
+                {/* <li
                   className="nav-item"
                   style={{ marginTop: "-10px", opacity: "0.4" }}
                 >
@@ -257,9 +279,9 @@ export const InternSidebar = () => {
                       </span>
                     </Link>
                   </a>
-                </li>
+                </li> */}
 
-                <li
+                {/* <li
                   className="nav-item"
                   style={{ marginTop: "-10px", opacity: "0.4" }}
                 >
@@ -271,7 +293,7 @@ export const InternSidebar = () => {
                       </span>
                     </Link>
                   </a>
-                </li>
+                </li> */}
 
                 <li
                   className="nav-item"
