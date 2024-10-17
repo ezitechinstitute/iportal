@@ -22,7 +22,7 @@ const Projects = () => {
 
   const GetProjects = async () => {
     await axios
-      .get(`http://localhost:8800/intern-projects`, {
+      .get(`https://api.ezitech.org/intern-projects`, {
         params: {
           id: id,
         },
