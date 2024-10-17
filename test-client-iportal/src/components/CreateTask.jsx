@@ -43,7 +43,7 @@ export const CreateTask = ({ data }) => {
         task.points !== undefined
       ) {
         await axios
-          .post("http://localhost:8800/create-task", { task })
+          .post("https://api.ezitech.org/create-task", { task })
           .then((res) => {
             alert(res.data.msg);
           })
