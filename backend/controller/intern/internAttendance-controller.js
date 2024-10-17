@@ -47,7 +47,7 @@ const StartShift = (req, res) => {
           );
 
           // Check if the current time is within the shift start and end times
-          if (currentHourMinute < startTime || currentHourMinute > endTime) {
+          if (currentHourMinute < startTime && currentHourMinute > endTime) {
             console.log("Check-in is only allowed during shift hours");
             return res.json({
               message: "Check-in is only allowed during shift hours",
