@@ -6,14 +6,14 @@ import axios from "axios";
 import { UploadTask } from "../../components/UploadTask";
 
 export const InternTasks = () => {
-  // const id = sessionStorage.getItem("eziId");
+  const id = sessionStorage.getItem("eziId");
   const [values, setValues] = useState({
     id: null,
     projectId: null,
     taskId: null,
     taskTitle: null,
   });
-  const id = "EZI-23-5-24/7832";
+  // const id = "EZI-23-5-24/7832";
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [searchTerm, setSearchterm] = useState("");
