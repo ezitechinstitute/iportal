@@ -47,26 +47,55 @@ const StartShift = (req, res) => {
           );
 
           // Check if the current time is within the shift start and end times
-          if (currentHourMinute < startTime && currentHourMinute > endTime) {
+          if (currentHourMinute < startTime || currentHourMinute > endTime) {
             console.log("Check-in is only allowed during shift hours");
             return res.json({
               message: "Check-in is only allowed during shift hours",
             });
-          }
+          } else {
+            if (shift.onsite_remote === "Onsite") {
+              console.log("Onsite");
+              // Calculate the distance from the office
+              const distance = calculateDistance(
+                officeLocation[0].lati,
+                officeLocation[0].longi,
+                currentLat,
+                currentLon
+              );
 
-          if (shift.onsite_remote === "Onsite") {
-            console.log("Onsite");
-            // Calculate the distance from the office
-            const distance = calculateDistance(
-              officeLocation[0].lati,
-              officeLocation[0].longi,
-              currentLat,
-              currentLon
-            );
+              if (distance <= radius) {
+                console.log("Heelo", distance);
+                // Allow check-in
+                const checkInTime = new Date();
 
-            if (distance <= radius) {
-              console.log("Heelo", distance);
-              // Allow check-in
+                // Insert check-in details into the database
+                const sql =
+                  "INSERT INTO `intern_attendance`(`eti_id`, `email`, `start_shift`) VALUES (?, ?, ?)";
+                connection.query(
+                  sql,
+                  [id, email, checkInTime],
+                  (err, result) => {
+                    if (err) {
+                      console.log(err);
+                      return res.json({ error: "Error saving check-in data" });
+                    } else {
+                      return res.json({
+                        success: true,
+                        message: "Checked in successfully.",
+                        startShiftStatus: true,
+                      });
+                    }
+                  }
+                );
+              } else {
+                // Deny check-in due to location
+                res.json({
+                  message: "You are not at the office. Check-in denied.",
+                });
+              }
+            } else {
+              console.log("Remote");
+
               const checkInTime = new Date();
 
               // Insert check-in details into the database
@@ -84,32 +113,7 @@ const StartShift = (req, res) => {
                   });
                 }
               });
-            } else {
-              // Deny check-in due to location
-              res.json({
-                message: "You are not at the office. Check-in denied.",
-              });
             }
-          } else {
-            console.log("Remote");
-
-            const checkInTime = new Date();
-
-            // Insert check-in details into the database
-            const sql =
-              "INSERT INTO `intern_attendance`(`eti_id`, `email`, `start_shift`) VALUES (?, ?, ?)";
-            connection.query(sql, [id, email, checkInTime], (err, result) => {
-              if (err) {
-                console.log(err);
-                return res.json({ error: "Error saving check-in data" });
-              } else {
-                return res.json({
-                  success: true,
-                  message: "Checked in successfully.",
-                  startShiftStatus: true,
-                });
-              }
-            });
           }
         });
       });
