@@ -255,10 +255,10 @@ export const InternSidebar = () => {
 
                 <li
                   className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
+                  style={{ marginTop: "-10px"}}
                 >
                   <a className="d-flex align-items-center">
-                    <Link className="d-flex align-items-center">
+                    <Link className="d-flex align-items-center" to={"/intern-leave"}>
                       <i data-feather="calendar"></i>
                       <span className="menu-item" data-i18n="eCommerce">
                         Leave
@@ -269,7 +269,7 @@ export const InternSidebar = () => {
 
                 {/* <li
                   className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
+                  style={{ marginTop: "-10px"}}
                 >
                   <a className="d-flex align-items-center">
                     <Link className="d-flex align-items-center">
@@ -297,7 +297,7 @@ export const InternSidebar = () => {
 
                 <li
                   className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
+                  style={{ marginTop: "-10px"}}
                 >
                   <a className="d-flex align-items-center">
                     <Link>
@@ -311,7 +311,7 @@ export const InternSidebar = () => {
 
                 <li
                   className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
+                  style={{ marginTop: "-10px"}}
                 >
                   <a className="d-flex align-items-center">
                     <Link>

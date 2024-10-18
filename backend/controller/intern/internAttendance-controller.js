@@ -34,7 +34,7 @@ const StartShift = (req, res) => {
           "SELECT `start_shift`, `end_shift`, `onsite_remote` FROM `shift_table` WHERE `eti_id` = ? AND `intern_email` = ?";
         connection.query(sql, [id, email], (err, shiftResult) => {
           if (err) throw err;
-          
+
           if (shiftResult.length === 0) {
             return res.json({
               message:

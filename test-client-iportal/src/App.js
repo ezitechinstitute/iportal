@@ -28,8 +28,7 @@ function App() {
           <Route path="/intern-attendence" element={<Attendence />} />
           <Route path="/intern-projects" element={<Projects />} />
           <Route path="/intern-tasks" element={<InternTasks />} />
-
-
+          <Route path="/intern-leave" element={<Leave />} />
 
           {/* <Route path="/internFeedback" element={<Feedback />} />
           <Route path="/internAttendence" element={<Attendence />} />

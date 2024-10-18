@@ -1,10 +1,17 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AttendaceButton } from "../AttendaceButton";
 import InternTopbar from "../InternTopbar/InternTopbar";
 import InternSidebar from "../InternSidebar";
+import { CreateLeave } from "./CreateLeave";
 
 const Leave = () => {
+  const checkLoggedIn = sessionStorage.getItem("isLoggedIn");
+  const navigate = useNavigate();
+
+  if (!checkLoggedIn) {
+    navigate("/");
+  }
   return (
     <>
       <InternTopbar />
@@ -15,41 +22,29 @@ const Leave = () => {
         <div className="content-wrapper">
           <div className="content-header row"></div>
           <div className="content-body">
-            <AttendaceButton />
+            <div>
+              <button
+                className="btn btn-warning"
+                data-toggle="modal"
+                data-target="#leaveRequest"
+              >
+                Leave Request
+              </button>
+            </div>
+
             {/* Basic Tables start */}
-            <div className="table-responsive">
-              <table className="table">
+            <div className="table-responsive mt-1">
+              <table className="table table-bordered">
                 <thead>
                   <tr>
                     <th>DATE</th>
-                    <th>To</th>
+                    <th>TO</th>
                     <th>FROM</th>
                     <th>REASON</th>
-                    <th>PROGRESS</th>
+                    <th>STATUS</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
                   <tr>
                     <td></td>
                     <td></td>
@@ -62,6 +57,8 @@ const Leave = () => {
             </div>
           </div>
         </div>
+        {/* Leave Modal */}
+        <CreateLeave />
         <footer
           className="footer footer-static footer-light"
           style={{ padding: "0px", margin: "0px", marginTop: "195px" }}

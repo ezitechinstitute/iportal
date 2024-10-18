@@ -64,7 +64,7 @@ export const Attendence = () => {
                           <td>{res.start_shift.slice(0, 10)}</td>
                           <td>{startLocal}</td>
                           <td>{endLocal}</td>
-                          {end_shift === null ? (
+                          {res.status === 0 ? (
                             <>
                               <td>
                                 <button className="btn btn-danger" disabled>

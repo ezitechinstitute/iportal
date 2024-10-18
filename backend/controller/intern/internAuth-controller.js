@@ -8,7 +8,7 @@ const secretKey = process.env.SECRETKEY;
 const InternAuth = (req, res) => {
   const { loginEmail, loginPassword } = req.body.values;
 
-  const sql = "SELECT * FROM `intern_accounts` WHERE `email` = ?";
+  const sql = "SELECT ia.*, it.technology, it.intern_type FROM intern_accounts ia JOIN intern_table it ON ia.email = it.email WHERE ia.email = ?";
   connection.query(sql, [loginEmail], (err, data) => {
     if (err) throw err;
     // console.log(data)

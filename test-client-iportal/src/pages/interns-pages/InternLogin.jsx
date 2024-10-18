@@ -14,6 +14,7 @@ export const InternLogin = () => {
     ezi_id: sessionStorage.getItem("eziId"),
     status: sessionStorage.getItem("internStatus"),
     tech: sessionStorage.getItem("technology"),
+    internType: sessionStorage.getItem("internType"),
   });
 
   const [updatePasswordData, setUpdatePasswordData] = useState({});
@@ -65,12 +66,15 @@ export const InternLogin = () => {
               ezi_id: res.data.intern.eti_id,
               status: res.data.intern.int_status,
               tech: res.data.intern.int_technology,
+              internType: res.data.intern.intern_type,
             });
             sessionStorage.setItem("isLoggedIn", true);
             sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("username", res.data.intern.name);
             sessionStorage.setItem("email", res.data.intern.email);
             sessionStorage.setItem("eziId", res.data.intern.eti_id);
+            sessionStorage.setItem("tech", res.data.intern.technology);
+            sessionStorage.setItem("internType", res.data.intern.intern_type);
             sessionStorage.setItem("internStatus", res.data.intern.int_status);
             sessionStorage.setItem(
               "technology",
