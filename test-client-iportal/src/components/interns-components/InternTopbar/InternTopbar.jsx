@@ -53,8 +53,8 @@ export const InternTopbar = () => {
         {
           id: user.ezi_id,
           email: user.email,
-          currentLat: 33.6151,
-          currentLon: 73.0551,
+          currentLat: location.latitude,
+          currentLon: location.longitude,
         },
         { headers: { "x-access-token": token } }
       )
@@ -79,8 +79,8 @@ export const InternTopbar = () => {
         {
           id: user.ezi_id,
           email: user.email,
-          currentLat: 33.6151,
-          currentLon: 73.0551,
+          currentLat: location.latitude,
+          currentLon: location.longitude,
         },
         { headers: { "x-access-token": token } }
       )

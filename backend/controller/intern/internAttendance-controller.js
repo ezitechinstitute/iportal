@@ -42,9 +42,13 @@ const StartShift = (req, res) => {
 
           // Get the current time
           const currentTime = new Date();
-          const currentHourMinute = new Date(
-            `1970-01-01T${currentTime.getHours()}:${currentTime.getMinutes()}:00`
-          );
+          const timeFrom1970 = new Date("1970-01-01T00:00:00.000Z");
+          timeFrom1970.setUTCHours(currentTime.getUTCHours());
+          timeFrom1970.setUTCMinutes(currentTime.getUTCMinutes());
+          timeFrom1970.setUTCSeconds(currentTime.getUTCSeconds());
+          timeFrom1970.setUTCMilliseconds(0);
+
+          const currentHourMinute = new Date(timeFrom1970.toISOString());
 
           // Check if the current time is within the shift start and end times
           if (currentHourMinute < startTime || currentHourMinute > endTime) {
@@ -139,13 +143,18 @@ const EndShift = (req, res) => {
       const endTime = new Date(`1970-01-01T${shift.end_shift}`);
 
       // Get the current time
+
       const currentTime = new Date();
-      const currentHourMinute = new Date(
-        `1970-01-01T${currentTime.getHours()}:${currentTime.getMinutes()}:00`
-      );
+      const timeFrom1970 = new Date("1970-01-01T00:00:00.000Z");
+      timeFrom1970.setUTCHours(currentTime.getUTCHours());
+      timeFrom1970.setUTCMinutes(currentTime.getUTCMinutes());
+      timeFrom1970.setUTCSeconds(currentTime.getUTCSeconds());
+      timeFrom1970.setUTCMilliseconds(0);
+
+      const currentHourMinute = new Date(timeFrom1970.toISOString());
 
       // Check if the current time is after the shift's end time
-      if (currentHourMinute >= endTime) {
+      if (currentHourMinute > endTime) {
         return res.json({
           message: "Check-out is only allowed during shift hours",
         });
