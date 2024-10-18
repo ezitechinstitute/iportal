@@ -57,6 +57,7 @@ export const UploadTask = ({ values }) => {
           )
           .then((res) => {
             alert(res.data.msg);
+            window.location.reload();
           })
           .catch((err) => {
             console.log(err);

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 export const CreateTask = ({ data }) => {
-    console.log(data)
+  console.log(data);
   const [task, setTask] = useState({
     durationDays: null,
   });
@@ -46,6 +46,7 @@ export const CreateTask = ({ data }) => {
           .post("https://api.ezitech.org/create-task", { task })
           .then((res) => {
             alert(res.data.msg);
+            window.location.reload();
           })
           .catch((err) => {
             console.log(err);

@@ -139,6 +139,13 @@ const EndShift = (req, res) => {
     connection.query(sql, [id, email], (err, shiftResult) => {
       if (err) throw err;
 
+      if (shiftResult.length === 0) {
+        return res.json({
+          message:
+            "You are not assigned to any shift! Please contact your supervisor.",
+        });
+      }
+
       const shift = shiftResult[0];
       const endTime = new Date(`1970-01-01T${shift.end_shift}`);
 
