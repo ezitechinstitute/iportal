@@ -34,7 +34,13 @@ const StartShift = (req, res) => {
           "SELECT `start_shift`, `end_shift`, `onsite_remote` FROM `shift_table` WHERE `eti_id` = ? AND `intern_email` = ?";
         connection.query(sql, [id, email], (err, shiftResult) => {
           if (err) throw err;
-          console.log(shiftResult);
+          
+          if (shiftResult.length === 0) {
+            return res.json({
+              message:
+                "You are not assigned to any shift! Please contact your supervisor.",
+            });
+          }
 
           const shift = shiftResult[0];
           const startTime = new Date(`1970-01-01T${shift.start_shift}`);
