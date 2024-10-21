@@ -48,12 +48,12 @@ const StartShift = (req, res) => {
           // const endTime = new Date(`1970-01-01T${shift.end_shift}Z`);
           // Stored start and end times in "HH:mm:ss" format (these can still be in UTC or another time zone if required)
           const startTime = moment.tz(
-            shift.start_shift,
+            currentHourMinute.format("YYYY-MM-DD") + shift.start_shift,
             "HH:mm:ss",
             "Asia/Karachi"
           );
           const endTime = moment.tz(
-            shift.end_shift,
+            currentHourMinute.format("YYYY-MM-DD") + shift.end_shift,
             "HH:mm:ss",
             "Asia/Karachi"
           );
