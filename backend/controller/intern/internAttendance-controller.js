@@ -84,7 +84,7 @@ const StartShift = (req, res) => {
             currentHourMinute.isAfter(endTime)
           ) {
             return res.json({
-              message: "Check-in is only allowed during shift hours",
+              message: `Check-in is only allowed during shift hours ${currentHourMinute}`,
             });
           }
           // if (currentHourMinute < startTime || currentHourMinute > endTime) {
