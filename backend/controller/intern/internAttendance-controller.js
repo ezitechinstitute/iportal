@@ -44,8 +44,19 @@ const StartShift = (req, res) => {
           }
 
           const shift = shiftResult[0];
-          const startTime = new Date(`1970-01-01T${shift.start_shift}Z`);
-          const endTime = new Date(`1970-01-01T${shift.end_shift}Z`);
+          // const startTime = new Date(`1970-01-01T${shift.start_shift}Z`);
+          // const endTime = new Date(`1970-01-01T${shift.end_shift}Z`);
+          // Stored start and end times in "HH:mm:ss" format (these can still be in UTC or another time zone if required)
+          const startTime = moment.tz(
+            shift.start_shift,
+            "HH:mm:ss",
+            "Asia/Karachi"
+          );
+          const endTime = moment.tz(
+            shift.end_shift,
+            "HH:mm:ss",
+            "Asia/Karachi"
+          );
 
           // Get the current time
           // const currentTime = new Date();
@@ -55,22 +66,34 @@ const StartShift = (req, res) => {
           // timeFrom1970.setUTCSeconds(currentTime.getSeconds());
           // timeFrom1970.setMilliseconds(0);
 
-          // Base date
-          const baseDate = "1970-01-01T";
-          // Convert to Pakistan Standard Time (UTC+5)
-          const pakistanTime = moment.tz().tz("Asia/Karachi");
-          // Create the final date string in the format '1970-01-01T17:00:00Z'
+          // // Base date
+          // const baseDate = "1970-01-01T";
+          // // Convert to Pakistan Standard Time (UTC+5)
+          // const pakistanTime = moment.tz().tz("Asia/Karachi");
+          // // Create the final date string in the format '1970-01-01T17:00:00Z'
 
-          const currentHourMinute = `${baseDate}${pakistanTime.format(
-            "HH:mm:ss"
-          )}Z`; // Add "Z" to indicate UTC
+          // const currentHourMinute = `${baseDate}${pakistanTime.format(
+          //   "HH:mm:ss"
+          // )}Z`; // Add "Z" to indicate UTC
+
+          const currentHourMinute = moment
+            .tz("Asia/Karachi")
+            .format("HH:mm:ss");
 
           // Check if the current time is within the shift start and end times
-          if (currentHourMinute < startTime || currentHourMinute > endTime) {
+          if (
+            currentHourMinute.isBefore(startTime) ||
+            currentHourMinute.isAfter(endTime)
+          ) {
             return res.json({
               message: "Check-in is only allowed during shift hours",
             });
           }
+          // if (currentHourMinute < startTime || currentHourMinute > endTime) {
+          //   return res.json({
+          //     message: "Check-in is only allowed during shift hours",
+          //   });
+          // }
 
           if (shift.onsite_remote === "Onsite") {
             console.log("Onsite");
