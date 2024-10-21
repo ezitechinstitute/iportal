@@ -49,10 +49,10 @@ const StartShift = (req, res) => {
           // Get the current time
           const currentTime = new Date();
           const timeFrom1970 = new Date("1970-01-01T00:00:00.000Z");
-          timeFrom1970.setUTCHours(currentTime.getUTCHours());
-          timeFrom1970.setUTCMinutes(currentTime.getUTCMinutes());
-          timeFrom1970.setUTCSeconds(currentTime.getUTCSeconds());
-          timeFrom1970.setUTCMilliseconds(0);
+          timeFrom1970.setUTCHours(currentTime.getHours());
+          timeFrom1970.setUTCMinutes(currentTime.getMinutes());
+          timeFrom1970.setUTCSeconds(currentTime.getSeconds());
+          timeFrom1970.setMilliseconds(0);
 
           const currentHourMinute = new Date(timeFrom1970.toISOString());
 
@@ -60,7 +60,7 @@ const StartShift = (req, res) => {
           if (currentHourMinute < startTime || currentHourMinute > endTime) {
             console.log("Check-in is only allowed during shift hours");
             return res.json({
-              message: "Check-in is only allowed during shift hours",
+              message: `Check-in is only allowed during shift hours current time (${currentHourMinute}) and shift time (${startTime})`,
             });
           } else {
             if (shift.onsite_remote === "Onsite") {
