@@ -106,7 +106,7 @@ const StartShift = (req, res) => {
             } else {
               // Deny check-in due to location
               res.json({
-                message: "You are not at the office. Check-in denied.",
+                message: `You are not at the office. Check-in denied. ${currentHourMinute}`,
               });
             }
           } else {
