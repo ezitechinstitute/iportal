@@ -1,5 +1,6 @@
 const { connection } = require("../../config/connection");
 const cron = require("node-cron");
+const moment = require("moment-timezone");
 
 function checkAttendanceMarked(email, callback) {
   const startDay = new Date();
@@ -47,14 +48,22 @@ const StartShift = (req, res) => {
           const endTime = new Date(`1970-01-01T${shift.end_shift}`);
 
           // Get the current time
-          const currentTime = new Date();
-          const timeFrom1970 = new Date("1970-01-01T00:00:00.000Z");
-          timeFrom1970.setUTCHours(currentTime.getHours());
-          timeFrom1970.setUTCMinutes(currentTime.getMinutes());
-          timeFrom1970.setUTCSeconds(currentTime.getSeconds());
-          timeFrom1970.setMilliseconds(0);
+          // const currentTime = new Date();
+          // const timeFrom1970 = new Date("1970-01-01T00:00:00.000Z");
+          // timeFrom1970.setUTCHours(currentTime.getHours());
+          // timeFrom1970.setUTCMinutes(currentTime.getMinutes());
+          // timeFrom1970.setUTCSeconds(currentTime.getSeconds());
+          // timeFrom1970.setMilliseconds(0);
 
-          const currentHourMinute = new Date(timeFrom1970.toISOString());
+          // Base date
+          const baseDate = "1970-01-01T";
+          // Convert to Pakistan Standard Time (UTC+5)
+          const pakistanTime = singaporeTime.clone().tz("Asia/Karachi");
+          // Create the final date string in the format '1970-01-01T17:00:00Z'
+
+          const currentHourMinute = `${baseDate}${pakistanTime.format(
+            "HH:mm:ss"
+          )}Z`; // Add "Z" to indicate UTC
 
           // Check if the current time is within the shift start and end times
           if (currentHourMinute < startTime || currentHourMinute > endTime) {
