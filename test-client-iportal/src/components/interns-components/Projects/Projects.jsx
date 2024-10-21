@@ -142,6 +142,15 @@ const Projects = () => {
                                                       href="javascript:void(0);"
                                                       data-toggle="modal"
                                                       data-target="#large"
+                                                      onClick={() =>
+                                                        setValues({
+                                                          id: id,
+                                                          projectId:
+                                                            project_id,
+                                                          points:
+                                                            project_marks,
+                                                        })
+                                                      }
                                                     >
                                                       <i
                                                         data-feather="eye"
