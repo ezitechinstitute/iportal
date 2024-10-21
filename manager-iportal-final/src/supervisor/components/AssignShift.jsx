@@ -94,13 +94,16 @@ export const AssignShift = ({ values }) => {
               <div className="modal-body">
                 <div className="row">
                   <div className="col-sm-12">
-                    <label htmlFor="">Shift Type</label>
+                    <label htmlFor="">Shift Mode</label>
                     <select
                       className="form-control"
                       name="shiftType"
                       id=""
                       onChange={handleInput}
                     >
+                      <option selected disabled>
+                        --Select--
+                      </option>
                       <option value="Onsite">Onsite</option>
                       <option value="Remote">Remote</option>
                     </select>

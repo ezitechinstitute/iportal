@@ -145,17 +145,11 @@ const Projects = () => {
                                                       onClick={() =>
                                                         setValues({
                                                           id: id,
-                                                          projectId:
-                                                            project_id,
-                                                          points:
-                                                            project_marks,
+                                                          projectId: project_id,
+                                                          points: project_marks,
                                                         })
                                                       }
                                                     >
-                                                      <i
-                                                        data-feather="eye"
-                                                        className="mr-50"
-                                                      ></i>
                                                       <span>View Details</span>
                                                     </a>
                                                     {pstatus !== "Expired" ? (
@@ -174,10 +168,6 @@ const Projects = () => {
                                                           })
                                                         }
                                                       >
-                                                        <i
-                                                          data-feather="plus-square"
-                                                          className="mr-50"
-                                                        ></i>
                                                         <span>Create Task</span>
                                                       </a>
                                                     ) : (

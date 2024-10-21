@@ -1,14 +1,14 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-export const ViewProject = ({ values }) => {
-  const [data, setData] = useState([]);
+export const ViewProject = ({ data }) => {
+  const [details, setDetails] = useState([]);
 
   const GetProjectDetails = async () => {
     await axios
-      .get(`https://api.ezitech.org/projects-details/${values.projectId}`)
+      .get(`https://api.ezitech.org/projects-details/${data.projectId}`)
       .then((res) => {
-        setData(res.data);
+        setDetails(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -17,7 +17,7 @@ export const ViewProject = ({ values }) => {
 
   useEffect(() => {
     GetProjectDetails();
-  }, [GetProjectDetails]);
+  }, [data]);
   return (
     <>
       {/* <!-- Modal --> */}
@@ -45,12 +45,15 @@ export const ViewProject = ({ values }) => {
               </button>
             </div>
             <div className="modal-body">
-              {Array.isArray(data)
-                ? data.map((rs) => (
+              {Array.isArray(details)
+                ? details.map((rs) => (
                     <>
-                      <h3>{rs.title}</h3>
+                      <h4>Title: {rs.title}</h4>
                       <hr />
-                      {rs.description}
+                      <div
+                        style={{lineHeight: "5px", fontFamily: "sans-serif"}}
+                        dangerouslySetInnerHTML={{ __html: rs.description }}
+                      ></div>
                     </>
                   ))
                 : ""}
