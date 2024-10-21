@@ -58,7 +58,7 @@ const StartShift = (req, res) => {
           // Base date
           const baseDate = "1970-01-01T";
           // Convert to Pakistan Standard Time (UTC+5)
-          const pakistanTime = singaporeTime.clone().tz("Asia/Karachi");
+          const pakistanTime = moment.tz().tz("Asia/Karachi");
           // Create the final date string in the format '1970-01-01T17:00:00Z'
 
           const currentHourMinute = `${baseDate}${pakistanTime.format(
