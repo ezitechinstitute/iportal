@@ -76,9 +76,7 @@ const StartShift = (req, res) => {
           //   "HH:mm:ss"
           // )}Z`; // Add "Z" to indicate UTC
 
-          const currentHourMinute = moment
-            .tz("Asia/Karachi")
-            .format("HH:mm:ss");
+          const currentHourMinute = moment.tz("Asia/Karachi");
 
           // Check if the current time is within the shift start and end times
           if (
