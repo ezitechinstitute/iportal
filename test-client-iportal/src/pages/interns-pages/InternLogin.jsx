@@ -76,10 +76,7 @@ export const InternLogin = () => {
             sessionStorage.setItem("tech", res.data.intern.technology);
             sessionStorage.setItem("internType", res.data.intern.intern_type);
             sessionStorage.setItem("internStatus", res.data.intern.int_status);
-            sessionStorage.setItem(
-              "technology",
-              res.data.intern.int_technology
-            );
+
             alert("Login Successfully");
             navigate("/intern-dashboard");
           }

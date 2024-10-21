@@ -49,7 +49,7 @@ const StartShift = (req, res) => {
           // Get the current time
           const currentTime = new Date();
           const timeFrom1970 = new Date("1970-01-01T00:00:00.000Z");
-          timeFrom1970.setUTCHours(currentTime.getUTCHours());
+          timeFrom1970.setUTCHours(currentTime.getUTCHours() + 5);
           timeFrom1970.setUTCMinutes(currentTime.getUTCMinutes());
           timeFrom1970.setUTCSeconds(currentTime.getUTCSeconds());
           timeFrom1970.setUTCMilliseconds(0);
@@ -159,7 +159,7 @@ const EndShift = (req, res) => {
 
       const currentTime = new Date();
       const timeFrom1970 = new Date("1970-01-01T00:00:00.000Z");
-      timeFrom1970.setUTCHours(currentTime.getUTCHours());
+      timeFrom1970.setUTCHours(currentTime.getUTCHours() + 5);
       timeFrom1970.setUTCMinutes(currentTime.getUTCMinutes());
       timeFrom1970.setUTCSeconds(currentTime.getUTCSeconds());
       timeFrom1970.setUTCMilliseconds(0);
