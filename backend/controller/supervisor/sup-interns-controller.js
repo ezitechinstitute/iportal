@@ -1,5 +1,6 @@
 const { connection } = require("../../config/connection");
 const cron = require("node-cron");
+const moment = require("moment-timezone");
 
 // Update intern_account table when deploy
 const GetSupervisorsInterns = (req, res) => {
@@ -361,11 +362,18 @@ const ProjectDayIncrement = (req, res) => {
   });
 };
 
-cron.schedule("0 0 1 * * *", () => {
-  console.log("running the project schedule");
-  ProjectDayIncrement();
-  // TaskDayIncrement();
-});
+cron.schedule(
+  "0 0 1 * * *",
+  () => {
+    console.log("running the project schedule");
+    ProjectDayIncrement();
+    // TaskDayIncrement();
+  },
+  {
+    scheduled: true,
+    timezone: "Asia/Karachi", // Set the timezone to Pakistan
+  }
+);
 
 const GetSubmittedTasks = (req, res) => {
   const { id } = req.params;

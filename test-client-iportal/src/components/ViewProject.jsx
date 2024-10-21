@@ -1,6 +1,23 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
-export const ViewProject = () => {
+export const ViewProject = ({ values }) => {
+  const [data, setData] = useState([]);
+
+  const GetProjectDetails = async () => {
+    await axios
+      .get(`https://api.ezitech.org/projects-details/${values.projectId}`)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    GetProjectDetails();
+  }, [GetProjectDetails]);
   return (
     <>
       {/* <!-- Modal --> */}
@@ -12,14 +29,11 @@ export const ViewProject = () => {
         aria-labelledby="myModalLabel17"
         aria-hidden="true"
       >
-        <div
-          className="modal-dialog  modal-lg"
-          role="document"
-        >
+        <div className="modal-dialog modal-lg" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h4 className="modal-title" id="myModalLabel17">
-                Large Modal
+                Project Details
               </h4>
               <button
                 type="button"
@@ -31,12 +45,17 @@ export const ViewProject = () => {
               </button>
             </div>
             <div className="modal-body">
-              I love tart cookie cupcake. I love chupa chups biscuit. I love
-              marshmallow apple pie wafer liquorice. Marshmallow cotton candy
-              chocolate. Apple pie muffin tart. Marshmallow halvah pie marzipan
-              lemon drops jujubes. Macaroon sugar plum cake icing toffee.
+              {Array.isArray(data)
+                ? data.map((rs) => (
+                    <>
+                      <h3>{rs.title}</h3>
+                      <hr />
+                      {rs.description}
+                    </>
+                  ))
+                : ""}
             </div>
-            <div className="modal-footer">
+            {/* <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-primary"
@@ -44,7 +63,7 @@ export const ViewProject = () => {
               >
                 Accept
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -1,10 +1,22 @@
 const { connection } = require("../../config/connection");
 const cron = require("node-cron");
+const moment = require("moment-timezone");
 
 const GetInternProjects = (req, res) => {
   const { id } = req.query;
 
   const sql = "SELECT * FROM `intern_projects` WHERE `eti_id` = ?";
+  connection.query(sql, [id], (err, data) => {
+    if (err) throw err;
+    return res.json(data);
+  });
+};
+
+const GetProjectDetail = (req, res) => {
+  const { id } = req.params;
+
+  const sql =
+    "SELECT title, description FROM `intern_projects` WHERE `project_id` = ?";
   connection.query(sql, [id], (err, data) => {
     if (err) throw err;
     return res.json(data);
@@ -99,11 +111,18 @@ const TaskDayIncrement = (req, res) => {
 //   TaskDayIncrement();
 // });
 
-cron.schedule("0 0 1 * * *", () => {
-  console.log("running the project schedule");
-  // ProjectDayIncrement();
-  TaskDayIncrement();
-});
+cron.schedule(
+  "0 0 1 * * *",
+  () => {
+    console.log("running the project schedule");
+    // ProjectDayIncrement();
+    TaskDayIncrement();
+  },
+  {
+    scheduled: true,
+    timezone: "Asia/Karachi", // Set the timezone to Pakistan
+  }
+);
 
 function DeleteExtraTask(id) {
   const sql = "DELETE FROM `intern_tasks` WHERE `task_id` = ?";
@@ -158,4 +177,5 @@ module.exports = {
   CreateTask,
   GetInternTasks,
   UploadTask,
+  GetProjectDetail,
 };

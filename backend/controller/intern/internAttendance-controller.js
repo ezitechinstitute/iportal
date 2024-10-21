@@ -174,15 +174,15 @@ const EndShift = (req, res) => {
       // timeFrom1970.setUTCMilliseconds(0);
 
       // const currentHourMinute = new Date(timeFrom1970.toISOString());
-       // Base date
-       const baseDate = "1970-01-01T";
-       // Convert to Pakistan Standard Time (UTC+5)
-       const pakistanTime = moment.tz().tz("Asia/Karachi");
-       // Create the final date string in the format '1970-01-01T17:00:00Z'
+      // Base date
+      const baseDate = "1970-01-01T";
+      // Convert to Pakistan Standard Time (UTC+5)
+      const pakistanTime = moment.tz().tz("Asia/Karachi");
+      // Create the final date string in the format '1970-01-01T17:00:00Z'
 
-       const currentHourMinute = `${baseDate}${pakistanTime.format(
-         "HH:mm:ss"
-       )}Z`; // Add "Z" to indicate UTC
+      const currentHourMinute = `${baseDate}${pakistanTime.format(
+        "HH:mm:ss"
+      )}Z`; // Add "Z" to indicate UTC
 
       // Check if the current time is after the shift's end time
       if (currentHourMinute > endTime) {
@@ -286,11 +286,18 @@ const MarkAbsentAuto = (req, res) => {
   });
 };
 
-cron.schedule("59 23 * * * *", () => {
-  console.log("running the project schedule");
-  // ProjectDayIncrement();
-  MarkAbsentAuto();
-});
+cron.schedule(
+  "59 23 * * * *",
+  () => {
+    console.log("running the project schedule");
+    // ProjectDayIncrement();
+    MarkAbsentAuto();
+  },
+  {
+    scheduled: true,
+    timezone: "Asia/Karachi", // Set the timezone to Pakistan
+  }
+);
 
 // Function to calculate distance using the Haversine formula
 function calculateDistance(lat1, lon1, lat2, lon2) {

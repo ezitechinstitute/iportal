@@ -141,6 +141,7 @@ const {
   CreateTask,
   GetInternTasks,
   UploadTask,
+  GetProjectDetail,
 } = require("../controller/intern/intern-projects-controller");
 const {
   AssignShift,
@@ -191,6 +192,7 @@ router.post("/update-intern-password", ForgotInternPassword);
 
 /* Intern Projects */
 router.get("/intern-projects", GetInternProjects);
+router.get("/projects-details/:id", GetProjectDetail);
 router.post("/create-task", CreateTask);
 router.get("/intern-tasks", GetInternTasks);
 router.post("/upload-task", UploadTask);

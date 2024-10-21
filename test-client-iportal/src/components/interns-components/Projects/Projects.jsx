@@ -8,13 +8,13 @@ import { CreateTask } from "../../CreateTask";
 import axios from "axios";
 
 const Projects = () => {
-  // const id = sessionStorage.getItem("eziId");
+  const id = sessionStorage.getItem("eziId");
   const [values, setValues] = useState({
     id: null,
     projectId: null,
     points: null,
   });
-  const id = "EZI-23-5-24/7832";
+  // const id = "EZI-23-5-24/7832";
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [searchTerm, setSearchterm] = useState("");
@@ -195,7 +195,7 @@ const Projects = () => {
             </section>
 
             {/* View Project Details */}
-            <ViewProject />
+            <ViewProject data={values} />
             {/* Create Tasl */}
             <CreateTask data={values} />
             {/* Footer */}

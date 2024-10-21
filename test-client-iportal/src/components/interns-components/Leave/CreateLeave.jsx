@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -56,7 +57,7 @@ export const CreateLeave = () => {
       ) {
         await axios
           .post("https://api.ezitech.org/leave-request", { data })
-          .then((rs) => {
+          .then((res) => {
             alert(res.data.message);
             window.location.reload();
           })
