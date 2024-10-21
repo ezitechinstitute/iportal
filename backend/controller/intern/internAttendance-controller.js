@@ -44,8 +44,8 @@ const StartShift = (req, res) => {
           }
 
           const shift = shiftResult[0];
-          const startTime = new Date(`1970-01-01T${shift.start_shift}`);
-          const endTime = new Date(`1970-01-01T${shift.end_shift}`);
+          const startTime = new Date(`1970-01-01T${shift.start_shift}Z`);
+          const endTime = new Date(`1970-01-01T${shift.end_shift}Z`);
 
           // Get the current time
           // const currentTime = new Date();
@@ -67,9 +67,8 @@ const StartShift = (req, res) => {
 
           // Check if the current time is within the shift start and end times
           if (currentHourMinute < startTime || currentHourMinute > endTime) {
-            console.log("Check-in is only allowed during shift hours");
             return res.json({
-              message: `Check-in is only allowed during shift hours current time (${currentHourMinute}) and shift time (${startTime})`,
+              message: "Check-in is only allowed during shift hours",
             });
           }
 
@@ -106,10 +105,11 @@ const StartShift = (req, res) => {
             } else {
               // Deny check-in due to location
               res.json({
-                message: `You are not at the office. Check-in denied. ${currentHourMinute}`,
+                message: "You are not at the office. Check-in denied",
               });
             }
-          } else {
+          }
+          if (shift.onsite_remote === "Remote") {
             console.log("Remote");
 
             const checkInTime = new Date();
