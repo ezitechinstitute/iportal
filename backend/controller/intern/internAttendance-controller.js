@@ -166,14 +166,23 @@ const EndShift = (req, res) => {
 
       // Get the current time
 
-      const currentTime = new Date();
-      const timeFrom1970 = new Date("1970-01-01T00:00:00.000Z");
-      timeFrom1970.setUTCHours(currentTime.getUTCHours());
-      timeFrom1970.setUTCMinutes(currentTime.getUTCMinutes());
-      timeFrom1970.setUTCSeconds(currentTime.getUTCSeconds());
-      timeFrom1970.setUTCMilliseconds(0);
+      // const currentTime = new Date();
+      // const timeFrom1970 = new Date("1970-01-01T00:00:00.000Z");
+      // timeFrom1970.setUTCHours(currentTime.getUTCHours());
+      // timeFrom1970.setUTCMinutes(currentTime.getUTCMinutes());
+      // timeFrom1970.setUTCSeconds(currentTime.getUTCSeconds());
+      // timeFrom1970.setUTCMilliseconds(0);
 
-      const currentHourMinute = new Date(timeFrom1970.toISOString());
+      // const currentHourMinute = new Date(timeFrom1970.toISOString());
+       // Base date
+       const baseDate = "1970-01-01T";
+       // Convert to Pakistan Standard Time (UTC+5)
+       const pakistanTime = moment.tz().tz("Asia/Karachi");
+       // Create the final date string in the format '1970-01-01T17:00:00Z'
+
+       const currentHourMinute = `${baseDate}${pakistanTime.format(
+         "HH:mm:ss"
+       )}Z`; // Add "Z" to indicate UTC
 
       // Check if the current time is after the shift's end time
       if (currentHourMinute > endTime) {
