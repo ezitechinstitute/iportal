@@ -79,12 +79,9 @@ const StartShift = (req, res) => {
           )}Z`; // Add "Z" to indicate UTC
 
           // Check if the current time is within the shift start and end times
-          if (
-            currentHourMinute.isBefore(startTime) ||
-            currentHourMinute.isAfter(endTime)
-          ) {
+          if (currentHourMinute < startTime || currentHourMinute > endTime) {
             return res.json({
-              message: `Check-in is only allowed during shift hours ${currentHourMinute}, ${startTime}, ${endTime}`,
+              message: `Check-in is only allowed during shift hours`,
             });
           }
           // if (currentHourMinute < startTime || currentHourMinute > endTime) {
