@@ -47,6 +47,9 @@ const StartShift = (req, res) => {
           // const startTime = new Date(`1970-01-01T${shift.start_shift}Z`);
           // const endTime = new Date(`1970-01-01T${shift.end_shift}Z`);
           // Stored start and end times in "HH:mm:ss" format (these can still be in UTC or another time zone if required)
+          const currentHourMinute = moment.tz("Asia/Karachi");
+          
+          
           const startTime = moment.tz(
             currentHourMinute.format("YYYY-MM-DD") + shift.start_shift,
             "HH:mm:ss",
@@ -76,7 +79,6 @@ const StartShift = (req, res) => {
           //   "HH:mm:ss"
           // )}Z`; // Add "Z" to indicate UTC
 
-          const currentHourMinute = moment.tz("Asia/Karachi");
 
           // Check if the current time is within the shift start and end times
           if (
