@@ -205,7 +205,7 @@ const StartShift = (req, res) => {
               } else {
                 return res.json({
                   success: true,
-                  message: `Checked in successfully. ${currentTimeInPakistan}, ${startTime}, ${endTime}`,
+                  message: `Checked in successfully. ${currentTime}, ${startTime}, ${endTime}`,
                   startShiftStatus: true,
                 });
               }
