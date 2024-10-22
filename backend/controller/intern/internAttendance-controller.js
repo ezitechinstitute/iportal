@@ -51,8 +51,8 @@ const StartShift = (req, res) => {
           // const formattedStartTime = shift.startTime.toFormat("HH:mm:ss");
           // const formattedEndTime = shift.endTime.toFormat("HH:mm:ss");
 
-          console.log("Formatted Start Time:", formattedStartTime);
-          console.log("Formatted End Time:", formattedEndTime);
+          // console.log("Formatted Start Time:", formattedStartTime);
+          // console.log("Formatted End Time:", formattedEndTime);
 
           // Check if the current time is within the shift start and end times
           if (
