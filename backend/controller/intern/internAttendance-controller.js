@@ -1,6 +1,7 @@
 const { connection } = require("../../config/connection");
 const cron = require("node-cron");
 const moment = require("moment-timezone");
+const { DateTime } = require("luxon"); // Install luxon for better date handling
 
 function checkAttendanceMarked(email, callback) {
   const startDay = new Date();
@@ -44,33 +45,52 @@ const StartShift = (req, res) => {
           }
 
           const shift = shiftResult[0];
-          // Get the current date and time in Pakistan time
-          const currentDate = new Date();
-          const currentTimeInPakistan = new Date(
-            `1970-01-01T${currentDate.toLocaleString("en-PK", {
-              timeZone: "Asia/Karachi",
-            })}`
-          );
 
-          // Convert shift start and end times to local time in Pakistan
-          const startTime = new Date(
-            new Date(`1970-01-01T${shift.start_shift}`).toLocaleString("en-PK")
+          // Convert shift times to Luxon DateTime objects
+          const startTime = DateTime.fromISO(
+            `1970-01-01T${shift.start_shift}`,
+            { zone: "Asia/Karachi" }
           );
-          const endTime = new Date(
-            new Date(`1970-01-01T${shift.end_shift}`).toLocaleString("en-PK", {
-              timeZone: "Asia/Karachi",
-            })
-          );
+          const endTime = DateTime.fromISO(`1970-01-01T${shift.end_shift}`, {
+            zone: "Asia/Karachi",
+          });
+
+          // Get the current time in Pakistan Standard Time
+          const currentTime = DateTime.now().setZone("Asia/Karachi");
 
           // Check if the current time is within the shift start and end times
-          if (
-            currentTimeInPakistan < startTime ||
-            currentTimeInPakistan > endTime
-          ) {
+          if (currentTime < startTime || currentTime > endTime) {
             return res.json({
-              message: `Check-in is only allowed during shift hours ${currentTimeInPakistan}, ${startTime}, ${endTime}`,
+              message: `Check-in is only allowed during shift hours ${currentTime}, ${startTime}, ${endTime}`,
             });
           }
+          // Get the current date and time in Pakistan time
+          // const currentDate = new Date();
+          // const currentTimeInPakistan = new Date(
+          //   `1970-01-01T${currentDate.toLocaleString("en-PK", {
+          //     timeZone: "Asia/Karachi",
+          //   })}`
+          // );
+
+          // // Convert shift start and end times to local time in Pakistan
+          // const startTime = new Date(
+          //   new Date(`1970-01-01T${shift.start_shift}`).toLocaleString("en-PK")
+          // );
+          // const endTime = new Date(
+          //   new Date(`1970-01-01T${shift.end_shift}`).toLocaleString("en-PK", {
+          //     timeZone: "Asia/Karachi",
+          //   })
+          // );
+
+          // // Check if the current time is within the shift start and end times
+          // if (
+          //   currentTimeInPakistan < startTime ||
+          //   currentTimeInPakistan > endTime
+          // ) {
+          //   return res.json({
+          //     message: `Check-in is only allowed during shift hours ${currentTimeInPakistan}, ${startTime}, ${endTime}`,
+          //   });
+          // }
           // const currentTime = moment.tz("Asia/Karachi");
           // const startTime = moment.tz(
           //   `1970-01-01T${shift.start_shift}`,
