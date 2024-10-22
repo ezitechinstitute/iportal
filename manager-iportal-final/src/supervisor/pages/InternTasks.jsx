@@ -10,8 +10,8 @@ const InternTasks = () => {
   const navigate = useNavigate();
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const check = sessionStorage.getItem("isLoggedIn");
-  // const supid = sessionStorage.getItem("managerid");
-  const supid = 11;
+  const supid = sessionStorage.getItem("managerid");
+  // const supid = 11;
 
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
