@@ -55,7 +55,10 @@ const StartShift = (req, res) => {
           console.log("Formatted End Time:", formattedEndTime);
 
           // Check if the current time is within the shift start and end times
-          if (currentTime < formattedStartTime || formattedEndTime > endTime) {
+          if (
+            currentTime < formattedStartTime ||
+            currentTime > formattedEndTime
+          ) {
             return res.json({
               message: `TRUE: ${currentTime}, ${formattedStartTime}, ${formattedEndTime}`,
             });
