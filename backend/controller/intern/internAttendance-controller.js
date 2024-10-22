@@ -69,7 +69,7 @@ const StartShift = (req, res) => {
             currentTimeInPakistan > endTime
           ) {
             return res.json({
-              message: "Check-in is only allowed during shift hours",
+              message: `Check-in is only allowed during shift hours ${currentTimeInPakistan}, ${startTime}, ${endTime}`,
             });
           }
           // const currentTime = moment.tz("Asia/Karachi");
