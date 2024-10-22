@@ -44,22 +44,50 @@ const StartShift = (req, res) => {
           }
 
           const shift = shiftResult[0];
-          const currentTime = moment.tz("Asia/Karachi");
-          const startTime = moment.tz(
-            `1970-01-01T${shift.start_shift}`,
-            "Asia/Karachi"
+          // Get the current date and time in Pakistan time
+          const currentDate = new Date();
+          const currentTimeInPakistan = new Date(
+            currentDate.toLocaleString("en-US", { timeZone: "Asia/Karachi" })
           );
-          const endTime = moment.tz(
-            `1970-01-01T${shift.end_shift}`,
-            "Asia/Karachi"
+
+          // Convert shift start and end times to local time in Pakistan
+          const startTime = new Date(
+            new Date(`1970-01-01T${shift.start_shift}`).toLocaleString(
+              "en-US",
+              { timeZone: "Asia/Karachi" }
+            )
+          );
+          const endTime = new Date(
+            new Date(`1970-01-01T${shift.end_shift}`).toLocaleString("en-US", {
+              timeZone: "Asia/Karachi",
+            })
           );
 
           // Check if the current time is within the shift start and end times
-          if (currentTime.isBefore(startTime) || currentTime.isAfter(endTime)) {
+          if (
+            currentTimeInPakistan < startTime ||
+            currentTimeInPakistan > endTime
+          ) {
             return res.json({
-              message: `Check-in is only allowed during shift hours`,
+              message: "Check-in is only allowed during shift hours",
             });
           }
+          // const currentTime = moment.tz("Asia/Karachi");
+          // const startTime = moment.tz(
+          //   `1970-01-01T${shift.start_shift}`,
+          //   "Asia/Karachi"
+          // );
+          // const endTime = moment.tz(
+          //   `1970-01-01T${shift.end_shift}`,
+          //   "Asia/Karachi"
+          // );
+
+          // // Check if the current time is within the shift start and end times
+          // if (currentTime.isBefore(startTime) || currentTime.isAfter(endTime)) {
+          //   return res.json({
+          //     message: `Check-in is only allowed during shift hours`,
+          //   });
+          // }
           // const startTime = new Date(`1970-01-01T${shift.start_shift}Z`);
           // const endTime = new Date(`1970-01-01T${shift.end_shift}Z`);
           // Stored start and end times in "HH:mm:ss" format (these can still be in UTC or another time zone if required)
