@@ -48,10 +48,10 @@ const StartShift = (req, res) => {
 
           // Convert shift times to Luxon DateTime objects
           const startTime = DateTime.fromISO(
-            `1970-01-01T${shift.start_shift}`,
+            `YYYY-MM-DDT${shift.start_shift}`,
             { zone: "Asia/Karachi" }
           );
-          const endTime = DateTime.fromISO(`1970-01-01T${shift.end_shift}`, {
+          const endTime = DateTime.fromISO(`YYYY-MM-DDT${shift.end_shift}`, {
             zone: "Asia/Karachi",
           });
 
