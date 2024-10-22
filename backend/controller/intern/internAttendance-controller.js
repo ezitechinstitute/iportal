@@ -155,30 +155,15 @@ const EndShift = (req, res) => {
       }
 
       const shift = shiftResult[0];
-      const endTime = new Date(`1970-01-01T${shift.end_shift}`);
+      // Get the current time in Pakistan Standard Time
+      const timestamp = DateTime.now().setZone("Asia/Karachi");
 
-      // Get the current time
+      const dt = DateTime.fromISO(timestamp).setZone("Asia/Karachi");
 
-      // const currentTime = new Date();
-      // const timeFrom1970 = new Date("1970-01-01T00:00:00.000Z");
-      // timeFrom1970.setUTCHours(currentTime.getUTCHours());
-      // timeFrom1970.setUTCMinutes(currentTime.getUTCMinutes());
-      // timeFrom1970.setUTCSeconds(currentTime.getUTCSeconds());
-      // timeFrom1970.setUTCMilliseconds(0);
-
-      // const currentHourMinute = new Date(timeFrom1970.toISOString());
-      // Base date
-      const baseDate = "1970-01-01T";
-      // Convert to Pakistan Standard Time (UTC+5)
-      const pakistanTime = moment.tz().tz("Asia/Karachi");
-      // Create the final date string in the format '1970-01-01T17:00:00Z'
-
-      const currentHourMinute = `${baseDate}${pakistanTime.format(
-        "HH:mm:ss"
-      )}Z`; // Add "Z" to indicate UTC
+      const currentTime = dt.toFormat("HH:mm:ss");
 
       // Check if the current time is after the shift's end time
-      if (currentHourMinute > endTime) {
+      if (currentTime > shift.end_shift) {
         return res.json({
           message: "Check-out is only allowed during shift hours",
         });
@@ -197,7 +182,9 @@ const EndShift = (req, res) => {
 
         if (distance <= radius) {
           console.log("Checking out", distance);
-          const checkOutTime = new Date();
+          const checkOutTime = DateTime.now()
+            .setZone("Asia/Karachi")
+            .toFormat("yyyy-MM-dd HH:mm:ss");
 
           // Update the check-out time in the attendance record
           const sql =
