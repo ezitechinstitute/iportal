@@ -232,27 +232,37 @@ const EndShift = (req, res) => {
   });
 };
 
+// Function to check if it's midnight in Pakistan (Asia/Karachi)
+const isMidnightInPakistan = () => {
+  const nowInPakistan = DateTime.now().setZone("Asia/Karachi");
+  const hour = nowInPakistan.hour;
+  const minute = nowInPakistan.minute;
+
+  return hour === 0 && minute === 0; // Midnight check
+};
+
 const MarkAbsentAuto = (req, res) => {
+  const currentDate = DateTime.now()
+    .setZone("Asia/Karachi")
+    .toFormat("yyyy-MM-dd");
+
   // SQL query to find interns who checked in but haven't checked out
   const sql = `SELECT id, email FROM intern_attendance 
-    WHERE end_shift IS NULL AND status IS NULL AND DATE(start_shift) = CURDATE()`;
+WHERE end_shift IS NULL AND status IS NULL AND DATE(start_shift) = ${currentDate}`;
 
   connection.query(sql, (err, results) => {
     if (err) throw err;
     // Get the current time
-    const currentTime = new Date();
-    // const currentHourMinute = new Date(
-    //   `1970-01-01T${currentTime.getHours()}:${currentTime.getMinutes()}:00`
-    // );
+    const absentTime = `${currentDate} 23:59:59`; // Mark the end time as the end of the day
 
     if (results.length > 0) {
       results.forEach((intern) => {
         // Mark absent for interns who haven't checked out
         const updateSql = `UPDATE intern_attendance
-                SET status = 0, end_shift = ?
-                WHERE id = ? AND end_shift IS NULL`;
+            SET status = 0, end_shift = ?
+            WHERE id = ? AND end_shift IS NULL`;
 
-        connection.query(updateSql, [currentTime, intern.id], (err, result) => {
+        connection.query(updateSql, [absentTime, intern.id], (err, result) => {
           if (err) {
             console.log(`Error marking absent for intern ${intern.email}`, err);
           } else {
@@ -266,18 +276,13 @@ const MarkAbsentAuto = (req, res) => {
   });
 };
 
-cron.schedule(
-  "59 23 * * * *",
-  () => {
-    console.log("running the project schedule");
+cron.schedule("* * * * * ", () => {
+  console.log("running the project schedule");
+  if (isMidnightInPakistan()) {
     // ProjectDayIncrement();
     MarkAbsentAuto();
-  },
-  {
-    scheduled: true,
-    timezone: "Asia/Karachi", // Set the timezone to Pakistan
   }
-);
+});
 
 // Function to calculate distance using the Haversine formula
 function calculateDistance(lat1, lon1, lat2, lon2) {

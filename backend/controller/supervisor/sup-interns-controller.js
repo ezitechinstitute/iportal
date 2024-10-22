@@ -1,6 +1,7 @@
 const { connection } = require("../../config/connection");
 const cron = require("node-cron");
 const moment = require("moment-timezone");
+const { DateTime } = require("luxon"); // Install luxon for better date handling
 
 // Update intern_account table when deploy
 const GetSupervisorsInterns = (req, res) => {
@@ -362,11 +363,21 @@ const ProjectDayIncrement = (req, res) => {
   });
 };
 
+const isMidnightInPakistan = () => {
+  const nowInPakistan = DateTime.now().setZone("Asia/Karachi");
+  const hour = nowInPakistan.hour;
+  const minute = nowInPakistan.minute;
+
+  return hour === 0 && minute === 0; // Midnight check
+};
+
 cron.schedule(
-  "0 0 1 * * *",
+  "* * * * * ",
   () => {
     console.log("running the project schedule");
-    ProjectDayIncrement();
+    if (isMidnightInPakistan()) {
+      ProjectDayIncrement();
+    }
     // TaskDayIncrement();
   },
   {

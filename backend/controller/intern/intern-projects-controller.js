@@ -1,6 +1,8 @@
 const { connection } = require("../../config/connection");
 const cron = require("node-cron");
 const moment = require("moment-timezone");
+const { DateTime } = require("luxon"); // Install luxon for better date handling
+
 
 const GetInternProjects = (req, res) => {
   const { id } = req.query;
@@ -111,18 +113,21 @@ const TaskDayIncrement = (req, res) => {
 //   TaskDayIncrement();
 // });
 
-cron.schedule(
-  "0 0 1 * * *",
-  () => {
-    console.log("running the project schedule");
-    // ProjectDayIncrement();
+const isMidnightInPakistan = () => {
+  const nowInPakistan = DateTime.now().setZone("Asia/Karachi");
+  const hour = nowInPakistan.hour;
+  const minute = nowInPakistan.minute;
+
+  return hour === 0 && minute === 0; // Midnight check
+};
+
+cron.schedule("* * * * *", () => {
+  console.log("running the project schedule");
+  // ProjectDayIncrement();
+  if (isMidnightInPakistan()) {
     TaskDayIncrement();
-  },
-  {
-    scheduled: true,
-    timezone: "Asia/Karachi", // Set the timezone to Pakistan
   }
-);
+});
 
 function DeleteExtraTask(id) {
   const sql = "DELETE FROM `intern_tasks` WHERE `task_id` = ?";
