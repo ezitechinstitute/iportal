@@ -78,7 +78,9 @@ const StartShift = (req, res) => {
             if (distance <= radius) {
               console.log("Heelo", distance);
               // Allow check-in
-              const checkInTime = DateTime.now().setZone("Asia/Karachi");
+              const checkInTime = DateTime.now()
+                .setZone("Asia/Karachi")
+                .toFormat("yyyy-MM-dd HH:mm:ss");
 
               // Insert check-in details into the database
               const sql =
@@ -105,7 +107,9 @@ const StartShift = (req, res) => {
           if (shift.onsite_remote === "Remote") {
             console.log("Remote");
 
-            const checkInTime = DateTime.now().setZone("Asia/Karachi");
+            const checkInTime = DateTime.now()
+              .setZone("Asia/Karachi")
+              .toFormat("yyyy-MM-dd HH:mm:ss");
 
             // Insert check-in details into the database
             const sql =
