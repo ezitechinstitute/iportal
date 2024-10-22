@@ -46,17 +46,18 @@ const StartShift = (req, res) => {
           const shift = shiftResult[0];
           // Get the current date and time in Pakistan time
           const currentDate = new Date();
-          const currentTimeInPakistan = new Date(`1970-01-01T${currentDate.toLocaleTimeString("en-PK")}`)
+          const currentTimeInPakistan = new Date(
+            `1970-01-01T${currentDate.toLocaleString("en-PK", {
+              timeZone: "Asia/Karachi",
+            })}`
+          );
 
           // Convert shift start and end times to local time in Pakistan
           const startTime = new Date(
-            new Date(`1970-01-01T${shift.start_shift}`).toLocaleString(
-              "en-US",
-              { timeZone: "Asia/Karachi" }
-            )
+            new Date(`1970-01-01T${shift.start_shift}`).toLocaleString("en-PK")
           );
           const endTime = new Date(
-            new Date(`1970-01-01T${shift.end_shift}`).toLocaleString("en-US", {
+            new Date(`1970-01-01T${shift.end_shift}`).toLocaleString("en-PK", {
               timeZone: "Asia/Karachi",
             })
           );
