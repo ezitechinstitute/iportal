@@ -46,7 +46,11 @@ const StartShift = (req, res) => {
 
           const shift = shiftResult[0];
           // Get the current time in Pakistan Standard Time
-          const currentTime = DateTime.now().setZone("Asia/Karachi");
+          const timestamp = DateTime.now().setZone("Asia/Karachi");
+
+          const dt = DateTime.fromISO(timestamp);
+
+          const currentTime = dt.toFormat("HH:mm:ss");
           // Format startTime and endTime to HH:mm:ss
           // const formattedStartTime = shift.startTime.toFormat("HH:mm:ss");
           // const formattedEndTime = shift.endTime.toFormat("HH:mm:ss");
