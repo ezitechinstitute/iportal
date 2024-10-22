@@ -48,19 +48,19 @@ const StartShift = (req, res) => {
           // Get the current time in Pakistan Standard Time
           const currentTime = DateTime.now().setZone("Asia/Karachi");
           // Format startTime and endTime to HH:mm:ss
-          const formattedStartTime = shift.startTime.toFormat("HH:mm:ss");
-          const formattedEndTime = shift.endTime.toFormat("HH:mm:ss");
+          // const formattedStartTime = shift.startTime.toFormat("HH:mm:ss");
+          // const formattedEndTime = shift.endTime.toFormat("HH:mm:ss");
 
           console.log("Formatted Start Time:", formattedStartTime);
           console.log("Formatted End Time:", formattedEndTime);
 
           // Check if the current time is within the shift start and end times
           if (
-            currentTime < formattedStartTime ||
-            currentTime > formattedEndTime
+            currentTime < shift.start_shift ||
+            currentTime > shift.end_shift
           ) {
             return res.json({
-              message: `TRUE: ${currentTime}, ${formattedStartTime}, ${formattedEndTime}`,
+              message: `TRUE: ${currentTime}, ${shift.start_shift}, ${shift.end_shift}`,
             });
 
             // return res.json({
@@ -68,7 +68,7 @@ const StartShift = (req, res) => {
             // });
           } else {
             return res.json({
-              message: `FALSE: ${currentTime}, ${formattedStartTime}, ${formattedEndTime}`,
+              message: `FALSE: ${currentTime}, ${shift.start_shift}, ${shift.end_shift}`,
             });
           }
 
