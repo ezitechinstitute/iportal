@@ -46,9 +46,7 @@ const StartShift = (req, res) => {
           const shift = shiftResult[0];
           // Get the current date and time in Pakistan time
           const currentDate = new Date();
-          const currentTimeInPakistan = new Date(
-            currentDate.toLocaleString("en-US", { timeZone: "Asia/Karachi" })
-          );
+          const currentTimeInPakistan = new Date(`1970-01-01T${currentDate.toLocaleTimeString("en-PK")}`)
 
           // Convert shift start and end times to local time in Pakistan
           const startTime = new Date(
