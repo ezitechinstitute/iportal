@@ -45,172 +45,88 @@ const StartShift = (req, res) => {
           }
 
           const shift = shiftResult[0];
-
-          // Convert shift times to Luxon DateTime objects
-          const startTime = DateTime.fromISO(
-            `YYYY-MM-DDT${shift.start_shift}`,
-            { zone: "Asia/Karachi" }
-          );
-          const endTime = DateTime.fromISO(`YYYY-MM-DDT${shift.end_shift}`, {
-            zone: "Asia/Karachi",
-          });
-
           // Get the current time in Pakistan Standard Time
           const currentTime = DateTime.now().setZone("Asia/Karachi");
+          // Format startTime and endTime to HH:mm:ss
+          const formattedStartTime = startTime.toFormat("HH:mm:ss");
+          const formattedEndTime = endTime.toFormat("HH:mm:ss");
+
+          console.log("Formatted Start Time:", formattedStartTime);
+          console.log("Formatted End Time:", formattedEndTime);
 
           // Check if the current time is within the shift start and end times
           if (currentTime < startTime || currentTime > endTime) {
             return res.json({
-              message: `Check-in is only allowed during shift hours ${currentTime}, ${startTime}, ${endTime}`,
+              message: `TRUE: ${currentTime}, ${formattedStartTime}, ${formattedEndTime}`,
+            });
+
+            // return res.json({
+            //   message: `Check-in is only allowed during shift hours`,
+            // });
+          } else {
+            return res.json({
+              message: `FALSE: ${currentTime}, ${formattedStartTime}, ${formattedEndTime}`,
             });
           }
-          // Get the current date and time in Pakistan time
-          // const currentDate = new Date();
-          // const currentTimeInPakistan = new Date(
-          //   `1970-01-01T${currentDate.toLocaleString("en-PK", {
-          //     timeZone: "Asia/Karachi",
-          //   })}`
-          // );
 
-          // // Convert shift start and end times to local time in Pakistan
-          // const startTime = new Date(
-          //   new Date(`1970-01-01T${shift.start_shift}`).toLocaleString("en-PK")
-          // );
-          // const endTime = new Date(
-          //   new Date(`1970-01-01T${shift.end_shift}`).toLocaleString("en-PK", {
-          //     timeZone: "Asia/Karachi",
-          //   })
-          // );
+          // if (shift.onsite_remote === "Onsite") {
+          //   console.log("Onsite");
+          //   // Calculate the distance from the office
+          //   const distance = calculateDistance(
+          //     officeLocation[0].lati,
+          //     officeLocation[0].longi,
+          //     currentLat,
+          //     currentLon
+          //   );
 
-          // // Check if the current time is within the shift start and end times
-          // if (
-          //   currentTimeInPakistan < startTime ||
-          //   currentTimeInPakistan > endTime
-          // ) {
-          //   return res.json({
-          //     message: `Check-in is only allowed during shift hours ${currentTimeInPakistan}, ${startTime}, ${endTime}`,
+          //   if (distance <= radius) {
+          //     console.log("Heelo", distance);
+          //     // Allow check-in
+          //     const checkInTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
+
+          //     // Insert check-in details into the database
+          //     const sql =
+          //       "INSERT INTO `intern_attendance`(`eti_id`, `email`, `start_shift`) VALUES (?, ?, ?)";
+          //     connection.query(sql, [id, email, checkInTime], (err, result) => {
+          //       if (err) {
+          //         console.log(err);
+          //         return res.json({ error: "Error saving check-in data" });
+          //       } else {
+          //         return res.json({
+          //           success: true,
+          //           message: "Checked in successfully.",
+          //           startShiftStatus: true,
+          //         });
+          //       }
+          //     });
+          //   } else {
+          //     // Deny check-in due to location
+          //     res.json({
+          //       message: "You are not at the office. Check-in denied",
+          //     });
+          //   }
+          // }
+          // if (shift.onsite_remote === "Remote") {
+          //   console.log("Remote");
+
+          //   const checkInTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
+
+          //   // Insert check-in details into the database
+          //   const sql =
+          //     "INSERT INTO `intern_attendance`(`eti_id`, `email`, `start_shift`) VALUES (?, ?, ?)";
+          //   connection.query(sql, [id, email, checkInTime], (err, result) => {
+          //     if (err) {
+          //       console.log(err);
+          //       return res.json({ error: "Error saving check-in data" });
+          //     } else {
+          //       return res.json({
+          //         success: true,
+          //         message: `Checked in successfully. ${currentTime}, ${startTime}, ${endTime}`,
+          //         startShiftStatus: true,
+          //       });
+          //     }
           //   });
           // }
-          // const currentTime = moment.tz("Asia/Karachi");
-          // const startTime = moment.tz(
-          //   `1970-01-01T${shift.start_shift}`,
-          //   "Asia/Karachi"
-          // );
-          // const endTime = moment.tz(
-          //   `1970-01-01T${shift.end_shift}`,
-          //   "Asia/Karachi"
-          // );
-
-          // // Check if the current time is within the shift start and end times
-          // if (currentTime.isBefore(startTime) || currentTime.isAfter(endTime)) {
-          //   return res.json({
-          //     message: `Check-in is only allowed during shift hours`,
-          //   });
-          // }
-          // const startTime = new Date(`1970-01-01T${shift.start_shift}Z`);
-          // const endTime = new Date(`1970-01-01T${shift.end_shift}Z`);
-          // Stored start and end times in "HH:mm:ss" format (these can still be in UTC or another time zone if required)
-          // const currentHourMinute = moment.tz("Asia/Karachi");
-
-          // const startTime = moment.tz(
-          //   currentHourMinute.format("YYYY-MM-DD") + shift.start_shift,
-          //   "HH:mm:ss",
-          //   "Asia/Karachi"
-          // );
-          // const endTime = moment.tz(
-          //   currentHourMinute.format("YYYY-MM-DD") + shift.end_shift,
-          //   "HH:mm:ss",
-          //   "Asia/Karachi"
-          // );
-
-          // Get the current time
-          // const currentTime = new Date();
-          // const timeFrom1970 = new Date("1970-01-01T00:00:00.000Z");
-          // timeFrom1970.setUTCHours(currentTime.getHours());
-          // timeFrom1970.setUTCMinutes(currentTime.getMinutes());
-          // timeFrom1970.setUTCSeconds(currentTime.getSeconds());
-          // timeFrom1970.setMilliseconds(0);
-
-          // // Base date
-          // const baseDate = "1970-01-01T";
-          // // Convert to Pakistan Standard Time (UTC+5)
-          // const pakistanTime = moment.tz().tz("Asia/Karachi");
-          // // Create the final date string in the format '1970-01-01T17:00:00Z'
-
-          // const currentHourMinute = `${baseDate}${pakistanTime.format(
-          //   "HH:mm:ss"
-          // )}Z`; // Add "Z" to indicate UTC
-
-          // Check if the current time is within the shift start and end times
-          // if (currentHourMinute < startTime || currentHourMinute > endTime) {
-          //   return res.json({
-          //     message: `Check-in is only allowed during shift hours`,
-          //   });
-          // }
-          // if (currentHourMinute < startTime || currentHourMinute > endTime) {
-          //   return res.json({
-          //     message: "Check-in is only allowed during shift hours",
-          //   });
-          // }
-
-          if (shift.onsite_remote === "Onsite") {
-            console.log("Onsite");
-            // Calculate the distance from the office
-            const distance = calculateDistance(
-              officeLocation[0].lati,
-              officeLocation[0].longi,
-              currentLat,
-              currentLon
-            );
-
-            if (distance <= radius) {
-              console.log("Heelo", distance);
-              // Allow check-in
-              const checkInTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
-
-              // Insert check-in details into the database
-              const sql =
-                "INSERT INTO `intern_attendance`(`eti_id`, `email`, `start_shift`) VALUES (?, ?, ?)";
-              connection.query(sql, [id, email, checkInTime], (err, result) => {
-                if (err) {
-                  console.log(err);
-                  return res.json({ error: "Error saving check-in data" });
-                } else {
-                  return res.json({
-                    success: true,
-                    message: "Checked in successfully.",
-                    startShiftStatus: true,
-                  });
-                }
-              });
-            } else {
-              // Deny check-in due to location
-              res.json({
-                message: "You are not at the office. Check-in denied",
-              });
-            }
-          }
-          if (shift.onsite_remote === "Remote") {
-            console.log("Remote");
-
-            const checkInTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
-
-            // Insert check-in details into the database
-            const sql =
-              "INSERT INTO `intern_attendance`(`eti_id`, `email`, `start_shift`) VALUES (?, ?, ?)";
-            connection.query(sql, [id, email, checkInTime], (err, result) => {
-              if (err) {
-                console.log(err);
-                return res.json({ error: "Error saving check-in data" });
-              } else {
-                return res.json({
-                  success: true,
-                  message: `Checked in successfully. ${currentTime}, ${startTime}, ${endTime}`,
-                  startShiftStatus: true,
-                });
-              }
-            });
-          }
         });
       });
     }
