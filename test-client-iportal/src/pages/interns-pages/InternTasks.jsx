@@ -12,6 +12,7 @@ export const InternTasks = () => {
     projectId: null,
     taskId: null,
     taskTitle: null,
+    points: null,
   });
   // const id = "EZI-23-5-24/7832";
   const [data, setData] = useState([]);
@@ -183,6 +184,7 @@ export const InternTasks = () => {
                                                         taskId: task_id,
                                                         projectId: project_id,
                                                         taskTitle: task_title,
+                                                        points: task_mark,
                                                       })
                                                     }
                                                   >

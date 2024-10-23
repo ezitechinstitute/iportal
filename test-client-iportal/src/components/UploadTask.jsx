@@ -38,6 +38,7 @@ export const UploadTask = ({ values }) => {
       projectId: values.projectId,
       taskId: values.taskId,
       taskTitle: values.taskTitle,
+      taskPoints: values.points
     });
 
     if (task.liveUrl !== undefined && task.repoUrl !== undefined) {

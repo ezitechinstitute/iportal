@@ -145,7 +145,7 @@ export const TaskDetails = ({ values }) => {
                             type="number"
                             id="points"
                             className="form-control"
-                            value={rs.task_mark}
+                            value={rs.task_points}
                             // onChange={handlePointsChange}
                             min="0"
                             readOnly

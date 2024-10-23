@@ -3,7 +3,6 @@ const cron = require("node-cron");
 const moment = require("moment-timezone");
 const { DateTime } = require("luxon"); // Install luxon for better date handling
 
-
 const GetInternProjects = (req, res) => {
   const { id } = req.query;
 
@@ -147,6 +146,7 @@ const UploadTask = (req, res) => {
     liveUrl,
     repoUrl,
     description,
+    taskPoints,
   } = req.body.task;
 
   const taskData = [
@@ -158,12 +158,13 @@ const UploadTask = (req, res) => {
     liveUrl,
     repoUrl,
     description,
+    taskPoints,
   ];
 
   // console.log(taskData);
 
   const sql =
-    "INSERT INTO `submitted_task`(`task_id`, `project_id`, `eti_id`, `images`, `task_title`, `live_url`, `git_url`, `description`) VALUES (?)";
+    "INSERT INTO `submitted_task`(`task_id`, `project_id`, `eti_id`, `images`, `task_title`, `live_url`, `git_url`, `description`, `task_points`) VALUES (?)";
   connection.query(sql, [taskData], (err, data) => {
     if (err) throw err;
     if (data.insertId > 0) {
