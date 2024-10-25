@@ -331,30 +331,41 @@ const RejectInternLeave = (req, res) => {
 
 const ProjectDayIncrement = (req, res) => {
   const sql1 =
-    "SELECT days, duration FROM intern_projects WHERE pstatus = 'Ongoing'";
+    "SELECT project_id, days, duration FROM intern_projects WHERE pstatus = 'Ongoing'";
   connection.query(sql1, (err, data1) => {
     if (err) {
       return res.json(err);
     } else {
       for (let i = 0; i < data1.length; i++) {
-        if (data1[i].days < data1[i].duration) {
-          const day = data1[i].days + 1;
-          const sql2 = `UPDATE intern_projects SET days = ${day} WHERE pstatus = 'Ongoing' `;
-          connection.query(sql2, (err, data2) => {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log(data2);
-            }
-          });
-        } else {
+        const project = data1[i];
+
+        if (project.days < project.duration) {
+          const updatedDays = project.days + 1;
           const sql2 =
-            "UPDATE intern_projects SET pstatus = 'Expired' WHERE pstatus = 'Ongoing'";
-          connection.query(sql2, (err, data3) => {
+            "UPDATE intern_projects SET days = ? WHERE project_id = ?";
+          connection.query(
+            sql2,
+            [updatedDays, project.project_id],
+            (err, data2) => {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log(
+                  `Updated days for project ID ${project.project_id}`
+                );
+              }
+            }
+          );
+        } else {
+          const sql3 =
+            "UPDATE intern_projects SET pstatus = 'Expired' WHERE project_id = ?";
+          connection.query(sql3, [project.project_id], (err, data3) => {
             if (err) {
               console.log(err);
             } else {
-              console.log(data3);
+              console.log(
+                `Set pstatus to 'Expired' for project ID ${project.idproject_id}`
+              );
             }
           });
         }
