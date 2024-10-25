@@ -238,7 +238,7 @@ const isMidnightInPakistan = () => {
   const hour = nowInPakistan.hour;
   const minute = nowInPakistan.minute;
 
-  return hour === 0 && minute === 0; // Midnight check
+  return hour === 23 && minute === 55; // Midnight check
 };
 
 const MarkAbsentAuto = (req, res) => {
@@ -253,7 +253,7 @@ WHERE end_shift IS NULL AND status IS NULL AND DATE(start_shift) = ${currentDate
   connection.query(sql, (err, results) => {
     if (err) throw err;
     // Get the current time
-    const absentTime = `${currentDate} 23:59:59`; // Mark the end time as the end of the day
+    const absentTime = `${currentDate} 23:55:59`; // Mark the end time as the end of the day
 
     if (results.length > 0) {
       results.forEach((intern) => {

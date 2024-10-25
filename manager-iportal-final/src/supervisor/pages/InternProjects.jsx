@@ -49,6 +49,17 @@ const InternProjects = () => {
       });
   };
 
+  const MarkasCompleted = async (id) => {
+    await axios
+      .put(`https://api.ezitech.org/mark-as-complete/${id}`)
+      .then((res) => {
+        alert(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     const filter = data.filter((item) =>
       item.pstatus.toLowerCase().includes(searchTerm.toLowerCase())
@@ -159,6 +170,7 @@ const InternProjects = () => {
                                 ) : Array.isArray(filteredData) ? (
                                   filteredData.map((rs) => {
                                     const {
+                                      project_id,
                                       eti_id,
                                       name,
                                       title,
@@ -233,6 +245,16 @@ const InternProjects = () => {
                                                   href="javascript:void(0);"
                                                 >
                                                   Freeze
+                                                </a>
+                                                <a
+                                                  class="dropdown-item"
+                                                  href="javascript:void(0);"
+                                                  type="button"
+                                                  onClick={() =>
+                                                    MarkasCompleted(project_id)
+                                                  }
+                                                >
+                                                  Mark as Completed
                                                 </a>
                                               </div>
                                             </div>

@@ -81,8 +81,7 @@ const TaskDayIncrement = (req, res) => {
         if (data1[i].task_days < data1[i].task_duration) {
           const day = data1[i].task_days + 1;
 
-          const sql2 =
-            "UPDATE `intern_tasks` SET `task_days`=? WHERE `task_status` = 'Ongoing'";
+          const sql2 = `UPDATE intern_tasks SET task_days= ? WHERE task_status = 'Ongoing' AND t_end_date < CURRENT_DATE`;
           connection.query(sql2, [day], (err, data2) => {
             if (err) {
               console.log(err);
@@ -92,7 +91,7 @@ const TaskDayIncrement = (req, res) => {
           });
         } else {
           const sql2 =
-            "UPDATE intern_tasks SET task_status = 'Expired' WHERE task_status = 'Ongoing'";
+            `UPDATE intern_tasks SET task_status = 'Expired' WHERE task_status = 'Ongoing' AND t_end_date > CURRENT_DATE`;
           connection.query(sql2, (err, data3) => {
             if (err) {
               console.log(err);

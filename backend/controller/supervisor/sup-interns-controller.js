@@ -187,7 +187,7 @@ const CountExpProjects = (req, res) => {
 const GetProjects = (req, res) => {
   const { supid } = req.params;
   const sql =
-    "SELECT ip.*, ia.name, ia.email, ia.int_technology FROM `intern_projects` ip JOIN `intern_accounts` ia ON ip.eti_id = ia.eti_id WHERE `assigned_by` = ?";
+    "SELECT ip.*, ia.name, ia.email, ia.int_technology, COUNT(it.task_id) as taskCount FROM `intern_projects` ip JOIN `intern_accounts` ia ON ip.eti_id = ia.eti_id LEFT JOIN `intern_tasks` it ON ip.project_id = it.project_id AND it.eti_id = ia.eti_id WHERE ip.assigned_by = ? GROUP BY ip.project_id, ia.eti_id";
   connection.query(sql, [supid], (err, data) => {
     if (err) throw err;
     return res.json(data);
@@ -371,20 +371,13 @@ const isMidnightInPakistan = () => {
   return hour === 0 && minute === 0; // Midnight check
 };
 
-cron.schedule(
-  "* * * * * ",
-  () => {
-    console.log("running the project schedule");
-    if (isMidnightInPakistan()) {
-      ProjectDayIncrement();
-    }
-    // TaskDayIncrement();
-  },
-  {
-    scheduled: true,
-    timezone: "Asia/Karachi", // Set the timezone to Pakistan
+cron.schedule("* * * * * ", () => {
+  console.log("running the project schedule");
+  if (isMidnightInPakistan()) {
+    ProjectDayIncrement();
   }
-);
+  // TaskDayIncrement();
+});
 
 const GetSubmittedTasks = (req, res) => {
   const { id } = req.params;

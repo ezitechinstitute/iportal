@@ -312,6 +312,7 @@ router.get("/get-submit-task/:id", GetSubmittedTasks);
 router.put("/submit-review/:id", SubmitReview);
 router.put("/approve-task/:id", ApproveTask);
 router.put("/reject-task/:id", RejectTask);
+// router.put("/mark-project-complete/:id")
 
 // Supervisor Shift Controller Endpoints
 router.post("/assign-shift", AssignShift);
