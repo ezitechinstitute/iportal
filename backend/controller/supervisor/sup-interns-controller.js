@@ -364,7 +364,7 @@ const ProjectDayIncrement = (req, res) => {
               console.log(err);
             } else {
               console.log(
-                `Set pstatus to 'Expired' for project ID ${project.idproject_id}`
+                `Set pstatus to 'Expired' for project ID ${project.project_id}`
               );
             }
           });

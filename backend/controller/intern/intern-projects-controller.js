@@ -72,7 +72,7 @@ const GetInternTasks = (req, res) => {
 
 const TaskDayIncrement = (req, res) => {
   const sql1 =
-    "SELECT id, task_days, task_duration, t_end_date FROM intern_tasks WHERE task_status = 'Ongoing'";
+    "SELECT task_id, task_days, task_duration, t_end_date FROM intern_tasks WHERE task_status = 'Ongoing'";
   connection.query(sql1, (err, data1) => {
     if (err) {
       return res.json(err);
@@ -86,22 +86,22 @@ const TaskDayIncrement = (req, res) => {
         ) {
           const updatedDays = task.task_days + 1;
           const sql2 = "UPDATE intern_tasks SET task_days = ? WHERE task_id = ?";
-          connection.query(sql2, [updatedDays, task.id], (err, data2) => {
+          connection.query(sql2, [updatedDays, task.task_id], (err, data2) => {
             if (err) {
               console.log(err);
             } else {
-              console.log(`Updated task_days for task ID ${task.id}`);
+              console.log(`Updated task_days for task ID ${task.task_id}`);
             }
           });
         } else if (task.t_end_date <= new Date()) {
           const sql2 =
             "UPDATE intern_tasks SET task_status = 'Expired' WHERE task_id = ?";
-          connection.query(sql2, [task.id], (err, data3) => {
+          connection.query(sql2, [task.task_id], (err, data3) => {
             if (err) {
               console.log(err);
             } else {
               console.log(
-                `Updated task_status to 'Expired' for task ID ${task.id}`
+                `Updated task_status to 'Expired' for task ID ${task.task_id}`
               );
             }
           });
