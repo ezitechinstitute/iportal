@@ -15,7 +15,7 @@ export const TaskDetails = ({ values }) => {
 
   const GetSubmittedTask = async () => {
     await axios
-      .get(`https://api.ezitech.org/get-submit-task/${values.taskId}`)
+      .get(`http://localhost:8800/get-submit-task/${values.taskId}`)
       .then((res) => {
         setData(res.data);
       })
@@ -43,6 +43,7 @@ export const TaskDetails = ({ values }) => {
         })
         .then((res) => {
           alert(res.data.msg);
+          window.location.reload();
         })
         .catch((err) => {
           console.log(err);
@@ -57,6 +58,7 @@ export const TaskDetails = ({ values }) => {
       .put(`https://api.ezitech.org/approve-task/${values.taskId}`)
       .then((res) => {
         alert(res.data.msg);
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -68,6 +70,7 @@ export const TaskDetails = ({ values }) => {
       .put(`https://api.ezitech.org/reject-task/${values.taskId}`)
       .then((res) => {
         alert(res.data.msg);
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -106,7 +109,7 @@ export const TaskDetails = ({ values }) => {
                   <>
                     <div className="card">
                       <img
-                        src={rs.images}
+                        src={rs.task_screenshot}
                         className="card-img-top full-page-screenshot"
                         alt="Website Screenshot"
                       />
@@ -115,11 +118,13 @@ export const TaskDetails = ({ values }) => {
                         <div>
                           <h6>Description:</h6>
                           <div
-                            dangerouslySetInnerHTML={{ __html: rs.description }}
+                            dangerouslySetInnerHTML={{
+                              __html: rs.submit_description,
+                            }}
                           ></div>
                         </div>
                         <a
-                          href={rs.live_url}
+                          href={rs.task_live_url}
                           className="btn btn-primary"
                           target="_blank"
                           rel="noreferrer"
@@ -127,7 +132,7 @@ export const TaskDetails = ({ values }) => {
                           View Live Site
                         </a>
                         <a
-                          href={rs.git_url}
+                          href={rs.task_git_url}
                           className="btn btn-secondary ml-1"
                           target="_blank"
                           rel="noreferrer"

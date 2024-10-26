@@ -232,15 +232,6 @@ const EndShift = (req, res) => {
   });
 };
 
-// Function to check if it's midnight in Pakistan (Asia/Karachi)
-const isMidnightInPakistan = () => {
-  const nowInPakistan = DateTime.now().setZone("Asia/Karachi");
-  const hour = nowInPakistan.hour;
-  const minute = nowInPakistan.minute;
-
-  return hour === 23 && minute === 55; // Midnight check
-};
-
 const MarkAbsentAuto = (req, res) => {
   const currentDate = DateTime.now()
     .setZone("Asia/Karachi")
@@ -275,14 +266,6 @@ WHERE end_shift IS NULL AND status IS NULL AND DATE(start_shift) = ${currentDate
     }
   });
 };
-
-cron.schedule("* * * * * ", () => {
-  console.log("running the project schedule");
-  if (isMidnightInPakistan()) {
-    // ProjectDayIncrement();
-    MarkAbsentAuto();
-  }
-});
 
 // Function to calculate distance using the Haversine formula
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -338,4 +321,5 @@ module.exports = {
   EndShift,
   CurrentShift,
   GetInternAttendance,
+  MarkAbsentAuto,
 };

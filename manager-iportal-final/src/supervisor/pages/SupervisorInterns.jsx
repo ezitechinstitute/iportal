@@ -9,6 +9,7 @@ import { AttendanceReport } from "../components/AttendanceReport";
 import { ProjectReport } from "../components/ProjectReport";
 import { AssignProject } from "../components/AssignProject";
 import { AssignShift } from "../components/AssignShift";
+import { AssignTask } from "../components/AssignTask";
 
 const SupervisorInterns = () => {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ const SupervisorInterns = () => {
   const GetInterns = async (page) => {
     setLoading(true);
     await axios
-      .get(`https://api.ezitech.org/get-sup-interns/${managerid}`, {
+      .get(`http://localhost:8800/get-sup-interns/${managerid}`, {
         params: {
           page: page,
           limit: dataLimit,
@@ -263,6 +264,24 @@ const SupervisorInterns = () => {
                                               href="#"
                                               type="button"
                                               data-toggle="modal"
+                                              data-target="#taskModal"
+                                              onClick={() =>
+                                                setIntId({
+                                                  intEmail: email,
+                                                  idInt: eti_id,
+                                                  idMan: managerid,
+                                                })
+                                              }
+                                            >
+                                              Assign Task
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a
+                                              className="dropdown-item"
+                                              href="#"
+                                              type="button"
+                                              data-toggle="modal"
                                               data-target="#default"
                                               onClick={() =>
                                                 setAttendVal({
@@ -320,6 +339,7 @@ const SupervisorInterns = () => {
 
           <AssignShift values={shiftData} />
           <AssignProject id={intId} />
+          <AssignTask id={intId} />
           <AttendanceReport values={attendVal} />
           <ProjectReport values={projVal} />
         </div>

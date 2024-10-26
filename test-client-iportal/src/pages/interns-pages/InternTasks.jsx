@@ -4,6 +4,8 @@ import InternSidebar from "../../components/interns-components/InternSidebar";
 import { Footer } from "../../components/Footer";
 import axios from "axios";
 import { UploadTask } from "../../components/UploadTask";
+import { ViewProject } from "../../components/ViewProject";
+import { TaskView } from "../../components/TaskView";
 
 export const InternTasks = () => {
   const id = sessionStorage.getItem("eziId");
@@ -76,7 +78,6 @@ export const InternTasks = () => {
                               <table className="dt-complex-header table table-bordered table-responsive">
                                 <thead>
                                   <tr>
-                                    <th>PROJECT</th>
                                     <th>TITLE</th>
                                     <th>START DATE</th>
                                     <th>DURATION</th>
@@ -84,7 +85,7 @@ export const InternTasks = () => {
                                     <th>POINTS</th>
                                     <th>REVIEW</th>
                                     <th>STATUS</th>
-                                    <th>ACTION</th>
+                                    <th>Action</th>
                                   </tr>
                                 </thead>
 
@@ -93,104 +94,128 @@ export const InternTasks = () => {
                                     ? filtered.map((rs) => {
                                         const {
                                           task_id,
-                                          project_id,
-                                          title,
                                           task_title,
-                                          t_start_date,
+                                          task_start,
                                           task_duration,
                                           task_days,
-                                          task_mark,
+                                          task_points,
                                           task_status,
-                                          task_submit_status,
-                                          task_obt_mark,
+                                          task_approve,
+                                          task_obt_points,
                                           review,
-                                          task_status_final,
                                         } = rs;
 
                                         const date = new Date(
-                                          t_start_date
-                                        ).toLocaleDateString();
+                                          task_start
+                                        ).toLocaleDateString("en-PK");
 
                                         return (
                                           <>
                                             <tr>
-                                              <td>{title}</td>
                                               <td>{task_title}</td>
                                               <td>{date}</td>
                                               <td>{task_duration}</td>
                                               <td>{task_days}</td>
                                               <td>
-                                                {task_obt_mark} / {task_mark}
+                                                {task_obt_points} /{" "}
+                                                {task_points}
                                               </td>
                                               <td>
                                                 {review ? review : <p>---</p>}
                                               </td>
-                                              {task_submit_status !== 1 ? (
-                                                <td>
-                                                  {task_status === "Ongoing" ? (
-                                                    <span className="badge badge-glow badge-info">
-                                                      {" "}
-                                                      {task_status}{" "}
-                                                    </span>
-                                                  ) : task_status ===
-                                                    "Expired" ? (
-                                                    <span className="badge badge-glow badge-danger">
-                                                      {" "}
-                                                      {task_status}{" "}
-                                                    </span>
-                                                  ) : (
-                                                    ""
-                                                  )}
-                                                </td>
-                                              ) : task_status_final === 1 ? (
+                                              {task_approve === null ? (
+                                                <>
+                                                  <td>
+                                                    {task_status ===
+                                                    "Ongoing" ? (
+                                                      <span className="badge badge-glow badge-info">
+                                                        {" "}
+                                                        {task_status}{" "}
+                                                      </span>
+                                                    ) : task_status ===
+                                                      "Expired" ? (
+                                                      <span className="badge badge-glow badge-danger">
+                                                        {" "}
+                                                        {task_status}{" "}
+                                                      </span>
+                                                    ) : task_status ===
+                                                      "Submitted" ? (
+                                                      <span className="badge badge-glow badge-success">
+                                                        {" "}
+                                                        {task_status}{" "}
+                                                      </span>
+                                                    ) : (
+                                                      " "
+                                                    )}
+                                                  </td>
+                                                </>
+                                              ) : task_approve === 1 ? (
                                                 <td>
                                                   <span className="badge badge-glow badge-success">
-                                                    Approve
+                                                    {" "}
+                                                    {task_status}{" "}
                                                   </span>
                                                 </td>
-                                              ) : task_status_final === 0 ? (
+                                              ) : task_approve === 0 ? (
                                                 <td>
                                                   <span className="badge badge-glow badge-danger">
-                                                    Reject
+                                                    {" "}
+                                                    {task_status}{" "}
                                                   </span>
                                                 </td>
                                               ) : (
-                                                <td>
-                                                  <span className="badge badge-glow badge-success">
-                                                    Submitted
-                                                  </span>
-                                                </td>
+                                                ""
                                               )}
 
                                               <td>
-                                                {task_submit_status === 1 ||
-                                                task_status === "Expired" ? (
+                                                <div className="dropdown">
                                                   <button
                                                     type="button"
-                                                    className="btn btn-warning hide-arrow"
-                                                    disabled
+                                                    className="btn btn-warning dropdown-toggle hide-arrow"
+                                                    data-toggle="dropdown"
                                                   >
-                                                    Upload
+                                                    Action
                                                   </button>
-                                                ) : (
-                                                  <button
-                                                    type="button"
-                                                    className="btn btn-warning hide-arrow"
-                                                    data-toggle="modal"
-                                                    data-target="#default2"
-                                                    onClick={() =>
-                                                      setValues({
-                                                        id: id,
-                                                        taskId: task_id,
-                                                        projectId: project_id,
-                                                        taskTitle: task_title,
-                                                        points: task_mark,
-                                                      })
-                                                    }
-                                                  >
-                                                    Upload
-                                                  </button>
-                                                )}
+                                                  <div className="dropdown-menu">
+                                                    <a
+                                                      className="dropdown-item"
+                                                      href="javascript:void(0);"
+                                                      data-toggle="modal"
+                                                      data-target="#large"
+                                                      onClick={() =>
+                                                        setValues({
+                                                          id: id,
+                                                          taskId: task_id,
+                                                          points: task_points,
+                                                        })
+                                                      }
+                                                    >
+                                                      <span>View Details</span>
+                                                    </a>
+                                                    {task_status !==
+                                                    "Expired" ? (
+                                                      <a
+                                                        className="dropdown-item"
+                                                        href="javascript:void(0);"
+                                                        data-toggle="modal"
+                                                        data-target="#default2"
+                                                        onClick={() =>
+                                                          setValues({
+                                                            id: id,
+                                                            taskId: task_id,
+                                                            taskTitle:
+                                                              task_title,
+                                                            points: task_points,
+                                                          })
+                                                        }
+                                                      >
+                                                        <span>Submit Task</span>
+                                                      </a>
+                                                    ) : (
+                                                      ""
+                                                    )}
+                                                  </div>
+                                                </div>
                                               </td>
                                             </tr>
                                           </>
@@ -209,6 +234,8 @@ export const InternTasks = () => {
               </div>
             </section>
 
+            {/* Task Details */}
+            <TaskView data={values} />
             {/* Upload Task */}
             <UploadTask values={values} />
             <Footer />

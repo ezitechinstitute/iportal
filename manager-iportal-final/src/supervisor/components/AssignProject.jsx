@@ -51,7 +51,7 @@ export const AssignProject = ({ id }) => {
       if (project.description !== null) {
         await axios
           .post(
-            "https://api.ezitech.org/assign-project",
+            "http://localhost:8800/assign-project",
             { project },
             {
               headers: { "x-access-token": token },

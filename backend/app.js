@@ -3,6 +3,7 @@ const cors = require("cors");
 const { DataBase } = require("./config/connection");
 const router = require("./routes/app-routes");
 const bodyParser = require("body-parser");
+const RunJob = require("./controller/combine/Run-Scheduler");
 const dotenv = require("dotenv").config();
 const PORT = process.env.PORT;
 
@@ -23,3 +24,5 @@ DataBase();
 app.listen(PORT, () => {
   console.log(`Server Running on: ${PORT}`);
 });
+
+RunJob();

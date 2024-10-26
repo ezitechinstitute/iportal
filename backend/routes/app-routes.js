@@ -130,6 +130,8 @@ const {
   SubmitReview,
   ApproveTask,
   RejectTask,
+  AssignTask,
+  GetSupTaskDetails,
 } = require("../controller/supervisor/sup-interns-controller");
 const { SupervisorAuth } = require("../controller/supervisor/supervisor-auth");
 const {
@@ -142,6 +144,8 @@ const {
   GetInternTasks,
   UploadTask,
   GetProjectDetail,
+  GetTaskDetail,
+  GetInternProjectTask,
 } = require("../controller/intern/intern-projects-controller");
 const {
   AssignShift,
@@ -296,13 +300,17 @@ router.put("/update-tech/:id", UpdateTech);
 router.post("/supervisor-auth", SupervisorAuth);
 router.get("/get-sup-interns/:supid", verifyToken, GetSupervisorsInterns);
 router.post("/assign-project", verifyToken, AssignProject);
+router.post("/assign-task", verifyToken, AssignTask);
+
 router.get("/count-attend/:email", verifyToken, GetAttendance);
 router.get("/count-all-proj/:email", verifyToken, CountAllProjects);
 router.get("/count-comp-proj/:email", verifyToken, CountCompProjects);
 router.get("/count-exp-proj/:email", verifyToken, CountExpProjects);
 router.get("/get-sup-projects/:supid", verifyToken, GetProjects);
 router.get("/get-sup-tasks/:supid", verifyToken, GetTasks);
-router.get("/get-task-details", verifyToken, GetTaskDetails);
+router.get("/get-task-details", verifyToken, GetSupTaskDetails);
+router.get("/task-details/:id", GetTaskDetail);
+router.get("/get-project-task", GetInternProjectTask);
 router.get("/get-intern-leaves/:supid", verifyToken, GetInterLeaves);
 router.put("/approve-int-leave/:intId", verifyToken, ApproveInternLeave);
 router.put("/reject-int-leave/:intId", verifyToken, RejectInternLeave);

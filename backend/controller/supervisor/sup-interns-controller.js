@@ -127,6 +127,39 @@ const AssignProject = (req, res) => {
   });
 };
 
+const AssignTask = (req, res) => {
+  const {
+    etiId,
+    taskTitle,
+    startDate,
+    endDate,
+    durationDays,
+    points,
+    description,
+    supId,
+  } = req.body.task;
+  const sql =
+    "INSERT INTO `intern_tasks`(`eti_id`, `task_title`, `task_start`, `task_end`, `task_duration`, `task_points`, `task_description`, `assigned_by`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+  const values = [
+    etiId,
+    taskTitle,
+    startDate,
+    endDate,
+    durationDays,
+    points,
+    description,
+    supId,
+  ];
+  connection.query(sql, values, (err, data) => {
+    if (err) {
+      console.log(err);
+      return res.json(err);
+    } else {
+      return res.send({ msg: "Task Assigned successfully", data: data });
+    }
+  });
+};
+
 const GetAttendance = (req, res) => {
   const { email } = req.params;
   const sql =
@@ -185,26 +218,26 @@ const CountExpProjects = (req, res) => {
 };
 
 const GetProjects = (req, res) => {
-  const { supid } = req.params;
-  const sql =
-    "SELECT ip.*, ia.name, ia.email, ia.int_technology, COUNT(it.task_id) as taskCount FROM `intern_projects` ip JOIN `intern_accounts` ia ON ip.eti_id = ia.eti_id LEFT JOIN `intern_tasks` it ON ip.project_id = it.project_id AND it.eti_id = ia.eti_id WHERE ip.assigned_by = ? GROUP BY ip.project_id, ia.eti_id";
-  connection.query(sql, [supid], (err, data) => {
-    if (err) throw err;
-    return res.json(data);
-  });
+  // const { supid } = req.params;
+  // const sql =
+  //   "SELECT ip.*, ia.name, ia.email, ia.int_technology, COUNT(it.task_id) as taskCount FROM `intern_projects` ip JOIN `intern_accounts` ia ON ip.eti_id = ia.eti_id LEFT JOIN `intern_tasks` it ON ip.project_id = it.project_id AND it.eti_id = ia.eti_id WHERE ip.assigned_by = ? GROUP BY ip.project_id, ia.eti_id";
+  // connection.query(sql, [supid], (err, data) => {
+  //   if (err) throw err;
+  //   return res.json(data);
+  // });
 };
 
 const GetTasks = (req, res) => {
   const { supid } = req.params;
   const sql =
-    "SELECT it.*, ip.*, ia.name, ia.int_technology FROM intern_tasks it JOIN intern_projects ip ON it.project_id = ip.project_id JOIN intern_accounts ia ON it.eti_id = ia.eti_id WHERE ip.assigned_by = ?";
+    "SELECT it.*, ia.name, ia.int_technology FROM intern_tasks it JOIN intern_accounts ia ON it.eti_id = ia.eti_id WHERE it.assigned_by = ?";
   connection.query(sql, [supid], (err, data) => {
     if (err) throw err;
     return res.json(data);
   });
 };
 
-const GetTaskDetails = (req, res) => {
+const GetSupTaskDetails = (req, res) => {
   const { tNo, intId, pId } = req.query;
 
   const sql =
@@ -374,26 +407,10 @@ const ProjectDayIncrement = (req, res) => {
   });
 };
 
-const isMidnightInPakistan = () => {
-  const nowInPakistan = DateTime.now().setZone("Asia/Karachi");
-  const hour = nowInPakistan.hour;
-  const minute = nowInPakistan.minute;
-
-  return hour === 0 && minute === 0; // Midnight check
-};
-
-cron.schedule("* * * * * ", () => {
-  console.log("running the project schedule");
-  if (isMidnightInPakistan()) {
-    ProjectDayIncrement();
-  }
-  // TaskDayIncrement();
-});
-
 const GetSubmittedTasks = (req, res) => {
   const { id } = req.params;
 
-  const sql = "SELECT * FROM `submitted_task` WHERE `task_id` = ?";
+  const sql = "SELECT * FROM `intern_tasks` WHERE `task_id` = ?";
   connection.query(sql, [id], (err, data) => {
     if (err) throw err;
     return res.json(data);
@@ -405,7 +422,7 @@ const SubmitReview = (req, res) => {
   const { points, desc } = req.body.review;
 
   const sql =
-    "UPDATE `intern_tasks` SET `task_obt_mark`= ?,`review`= ? WHERE `task_id` = ?";
+    "UPDATE `intern_tasks` SET `task_obt_points`= ?,`review`= ? WHERE `task_id` = ?";
 
   connection.query(sql, [points, desc, id], (err) => {
     if (err) throw err;
@@ -417,7 +434,7 @@ const ApproveTask = (req, res) => {
   const { id } = req.params;
 
   const sql =
-    "UPDATE `intern_tasks` SET `task_status_final`= 1 WHERE `task_id` = ?";
+    "UPDATE `intern_tasks` SET `task_status`= 'Approved', `task_approve` = 1 WHERE `task_id` = ?";
   connection.query(sql, [id], (err, data) => {
     if (err) throw err;
     return res.json({ msg: "Task approved successfully" });
@@ -428,7 +445,7 @@ const RejectTask = (req, res) => {
   const { id } = req.params;
 
   const sql =
-    "UPDATE `intern_tasks` SET `task_status_final`= 0 WHERE `task_id` = ?";
+    "UPDATE `intern_tasks` SET `task_status`= 'Rejected', `task_approve` = 0 WHERE `task_id` = ?";
   connection.query(sql, [id], (err, data) => {
     if (err) throw err;
     return res.json({ msg: "Task rejected successfully" });
@@ -436,13 +453,15 @@ const RejectTask = (req, res) => {
 };
 
 module.exports = {
+  ProjectDayIncrement,
   GetSupervisorsInterns,
   AssignProject,
+  AssignTask,
   GetAttendance,
   CountAllProjects,
   GetProjects,
   GetTasks,
-  GetTaskDetails,
+  GetSupTaskDetails,
   CountCompProjects,
   CountExpProjects,
   GetInterLeaves,

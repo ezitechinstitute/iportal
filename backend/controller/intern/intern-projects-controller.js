@@ -13,11 +13,33 @@ const GetInternProjects = (req, res) => {
   });
 };
 
+const GetInternProjectTask = (req, res) => {
+  const { id } = req.query;
+
+  const sql =
+    "SELECT pt.*, ia.name, ip.* FROM `project_tasks` pt JOIN intern_accounts ia ON pt.eti_id = ia.eti_id JOIN intern_projects ip ON pt.project_id = ip.project_id WHERE pt.project_id = ?";
+  connection.query(sql, [id], (err, data) => {
+    if (err) throw err;
+    return res.json(data);
+  });
+};
+
 const GetProjectDetail = (req, res) => {
   const { id } = req.params;
 
   const sql =
     "SELECT title, description FROM `intern_projects` WHERE `project_id` = ?";
+  connection.query(sql, [id], (err, data) => {
+    if (err) throw err;
+    return res.json(data);
+  });
+};
+
+const GetTaskDetail = (req, res) => {
+  const { id } = req.params;
+
+  const sql =
+    "SELECT task_title, task_description FROM `intern_tasks` WHERE `task_id` = ?";
   connection.query(sql, [id], (err, data) => {
     if (err) throw err;
     return res.json(data);
@@ -31,29 +53,29 @@ const CreateTask = (req, res) => {
   const values = [projectId, id, taskTitle, startDate, endDate, durationDays];
 
   const sql =
-    "INSERT INTO `intern_tasks`(`project_id`, `eti_id`, `task_title`, `t_start_date`, `t_end_date`, `task_duration`) VALUES (?)";
+    "INSERT INTO `project_tasks`(`project_id`, `eti_id`, `task_title`, `t_start_date`, `t_end_date`, `task_duration`) VALUES (?)";
   connection.query(sql, [values], (err, data) => {
     if (err) throw err;
     let lastId = data.insertId;
 
     const sql =
-      "SELECT COUNT(*) as tasksCount FROM `intern_tasks` WHERE `project_id` = ?";
+      "SELECT COUNT(*) as tasksCount FROM `project_tasks` WHERE `project_id` = ?";
     connection.query(sql, [projectId], (reject, resolve) => {
       if (err) throw err;
-      if (resolve[0].tasksCount <= points) {
+      if (resolve[0].tasksCount <= 3) {
         let taskPoint = points / resolve[0].tasksCount;
 
         console.log(taskPoint);
 
         const sql =
-          "UPDATE `intern_tasks` SET `task_mark` = ? WHERE `project_id` = ?";
+          "UPDATE `project_tasks` SET `task_mark` = ? WHERE `project_id` = ?";
         connection.query(sql, [taskPoint, projectId], (err, result) => {
           if (err) throw err;
           return res.json({ msg: "Task created successfully" });
         });
       } else {
         DeleteExtraTask(lastId);
-        return res.json({ msg: "Task limit exceeds project points!!!" });
+        return res.json({ msg: "Task limit exceeds!!!" });
       }
     });
   });
@@ -62,8 +84,7 @@ const CreateTask = (req, res) => {
 const GetInternTasks = (req, res) => {
   const { id } = req.query;
 
-  const sql =
-    "SELECT * FROM intern_tasks JOIN intern_projects ON intern_tasks.project_id = intern_projects.project_id WHERE intern_tasks.eti_id = ?";
+  const sql = "SELECT * FROM intern_tasks WHERE intern_tasks.eti_id = ?";
   connection.query(sql, [id], (err, data) => {
     if (err) throw err;
     return res.json(data);
@@ -85,7 +106,8 @@ const TaskDayIncrement = (req, res) => {
           task.t_end_date >= new Date()
         ) {
           const updatedDays = task.task_days + 1;
-          const sql2 = "UPDATE intern_tasks SET task_days = ? WHERE task_id = ?";
+          const sql2 =
+            "UPDATE intern_tasks SET task_days = ? WHERE task_id = ?";
           connection.query(sql2, [updatedDays, task.task_id], (err, data2) => {
             if (err) {
               console.log(err);
@@ -111,28 +133,6 @@ const TaskDayIncrement = (req, res) => {
   });
 };
 
-// cron.schedule("0 * * * * *", () => {
-//   console.log("running the project schedule");
-//   // ProjectDayIncrement();
-//   TaskDayIncrement();
-// });
-
-const isMidnightInPakistan = () => {
-  const nowInPakistan = DateTime.now().setZone("Asia/Karachi");
-  const hour = nowInPakistan.hour;
-  const minute = nowInPakistan.minute;
-
-  return hour === 0 && minute === 0; // Midnight check
-};
-
-cron.schedule("* * * * *", () => {
-  console.log("running the project schedule");
-  // ProjectDayIncrement();
-  if (isMidnightInPakistan()) {
-    TaskDayIncrement();
-  }
-});
-
 function DeleteExtraTask(id) {
   const sql = "DELETE FROM `intern_tasks` WHERE `task_id` = ?";
   connection.query(sql, [id], (err, data) => {
@@ -142,45 +142,22 @@ function DeleteExtraTask(id) {
 }
 
 const UploadTask = (req, res) => {
-  const {
-    projectId,
-    taskId,
-    etiId,
-    taskImage,
-    taskTitle,
-    liveUrl,
-    repoUrl,
-    description,
-    taskPoints,
-  } = req.body.task;
+  const { taskId, taskImage, liveUrl, repoUrl, description } = req.body.task;
 
-  const taskData = [
-    taskId,
-    projectId,
-    etiId,
-    taskImage,
-    taskTitle,
-    liveUrl,
-    repoUrl,
-    description,
-    taskPoints,
-  ];
+  // const taskData = [taskImage, liveUrl, repoUrl, description];
 
   // console.log(taskData);
 
   const sql =
-    "INSERT INTO `submitted_task`(`task_id`, `project_id`, `eti_id`, `images`, `task_title`, `live_url`, `git_url`, `description`, `task_points`) VALUES (?)";
-  connection.query(sql, [taskData], (err, data) => {
-    if (err) throw err;
-    if (data.insertId > 0) {
-      const sql =
-        "UPDATE `intern_tasks` SET `task_submit_status`= 1 WHERE `task_id` = ?";
-      connection.query(sql, [taskId], (err, data) => {
-        if (err) throw err;
-        return res.json({ msg: "Task uploaded successfuly" });
-      });
+    "UPDATE `intern_tasks` SET `task_screenshot`= ?, `task_live_url`= ?, `task_git_url`= ?, `submit_description`= ? WHERE `task_id` = ?";
+  connection.query(
+    sql,
+    [taskImage, liveUrl, repoUrl, description, taskId],
+    (err, data) => {
+      if (err) throw err;
+      return res.json({ msg: "Task uploaded successfuly" });
     }
-  });
+  );
 };
 
 module.exports = {
@@ -189,4 +166,7 @@ module.exports = {
   GetInternTasks,
   UploadTask,
   GetProjectDetail,
+  GetTaskDetail,
+  TaskDayIncrement,
+  GetInternProjectTask,
 };

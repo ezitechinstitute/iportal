@@ -14,7 +14,7 @@ const InternProjects = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loader, setLoader] = useState(false);
-  // const supid = 11;
+  // const supid = 13;
 
   // Pagination
   const [currentPage, settCurrentPage] = useState(1);
@@ -49,9 +49,11 @@ const InternProjects = () => {
       });
   };
 
+  // https://api.ezitech.org
+
   const MarkasCompleted = async (id) => {
     await axios
-      .put(`https://api.ezitech.org/mark-as-complete/${id}`)
+      .put(`http://localhost:8800/mark-as-complete/${id}`)
       .then((res) => {
         alert(res.data.message);
       })

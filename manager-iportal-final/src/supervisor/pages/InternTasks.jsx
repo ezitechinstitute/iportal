@@ -144,9 +144,10 @@ const InternTasks = () => {
                                 <tr>
                                   <th>Name</th>
                                   <th>Task Title</th>
-                                  <th>Project Title</th>
+                                  {/* <th>Project Title</th> */}
 
                                   <th>Start Date</th>
+                                  <th>End Date</th>
                                   <th>Duration</th>
                                   <th>Days</th>
                                   <th>Status</th>
@@ -159,68 +160,78 @@ const InternTasks = () => {
                                   ? filteredData.map((rs) => {
                                       const {
                                         eti_id,
-                                        project_id,
                                         task_id,
                                         name,
                                         task_title,
-                                        title,
-                                        t_start_date,
+
+                                        task_start,
+                                        task_end,
                                         task_duration,
                                         task_days,
                                         task_status,
-                                        task_submit_status,
-                                        task_status_final,
+                                        task_approve,
                                       } = rs;
-
+                                      console.log(task_approve);
                                       const date = new Date(
-                                        t_start_date
-                                      ).toLocaleDateString();
+                                        task_start
+                                      ).toLocaleDateString("en-PK");
+                                      const endDate = new Date(
+                                        task_end
+                                      ).toLocaleDateString("en-PK");
 
                                       return (
                                         <>
                                           <tr>
                                             <td>{name}</td>
                                             <td>{task_title}</td>
-                                            <td>{title}</td>
+                                            {/* <td>{task_description}</td> */}
                                             <td>{date}</td>
+                                            <td>{endDate}</td>
+
                                             <td>{task_duration}</td>
                                             <td>{task_days}</td>
 
-                                            {task_submit_status !== 1 ? (
-                                              <td>
-                                                {task_status === "Ongoing" ? (
-                                                  <span className="badge badge-glow badge-info">
-                                                    {" "}
-                                                    {task_status}{" "}
-                                                  </span>
-                                                ) : task_status ===
-                                                  "Expired" ? (
-                                                  <span className="badge badge-glow badge-danger">
-                                                    {" "}
-                                                    {task_status}{" "}
-                                                  </span>
-                                                ) : (
-                                                  ""
-                                                )}
-                                              </td>
-                                            ) : task_status_final === 1 ? (
+                                            {task_approve === null ? (
+                                              <>
+                                                <td>
+                                                  {task_status === "Ongoing" ? (
+                                                    <span className="badge badge-glow badge-info">
+                                                      {" "}
+                                                      {task_status}{" "}
+                                                    </span>
+                                                  ) : task_status ===
+                                                    "Expired" ? (
+                                                    <span className="badge badge-glow badge-danger">
+                                                      {" "}
+                                                      {task_status}{" "}
+                                                    </span>
+                                                  ) : task_status ===
+                                                    "Submitted" ? (
+                                                    <span className="badge badge-glow badge-success">
+                                                      {" "}
+                                                      {task_status}{" "}
+                                                    </span>
+                                                  ) : (
+                                                    " "
+                                                  )}
+                                                </td>
+                                              </>
+                                            ) : task_approve === 1 ? (
                                               <td>
                                                 <span className="badge badge-glow badge-success">
-                                                  Approve
+                                                  {" "}
+                                                  {task_status}{" "}
                                                 </span>
                                               </td>
-                                            ) : task_status_final === 0 ? (
+                                            ) : task_approve === 0 ? (
                                               <td>
                                                 <span className="badge badge-glow badge-danger">
-                                                  Reject
+                                                  {" "}
+                                                  {task_status}{" "}
                                                 </span>
                                               </td>
                                             ) : (
-                                              <td>
-                                                <span className="badge badge-glow badge-success">
-                                                  Submitted
-                                                </span>
-                                              </td>
+                                              ""
                                             )}
 
                                             <td>
