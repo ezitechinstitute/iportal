@@ -13,7 +13,7 @@ export const InternTopbar = () => {
     email: sessionStorage.getItem("email"),
     ezi_id: sessionStorage.getItem("eziId"),
     status: sessionStorage.getItem("internStatus"),
-    tech: sessionStorage.getItem("technology"),
+    tech: sessionStorage.getItem("tech"),
   });
   const [location, setLocation] = useState({ latitude: null, longitude: null });
 

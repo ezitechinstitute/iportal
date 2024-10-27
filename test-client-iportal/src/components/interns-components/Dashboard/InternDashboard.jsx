@@ -27,7 +27,8 @@ import { GrInProgress } from "react-icons/gr";
 export const InternDashboard = () => {
   const checkLoggedIn = sessionStorage.getItem("isLoggedIn");
   const navigate = useNavigate();
-  const id = "EZI-23-5-24/7832";
+  const id = sessionStorage.getItem("eziId");
+  // const id = "EZI-23-5-24/7832";
 
   const [totalProjects, setTotalProjects] = useState(0);
   const [inPorgress, setInProgress] = useState(0);
