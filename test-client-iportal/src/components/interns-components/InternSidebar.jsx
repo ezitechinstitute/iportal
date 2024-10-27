@@ -233,8 +233,19 @@ export const InternSidebar = () => {
 
                 <li className="nav-item" style={{ marginTop: "-10px" }}>
                   <a className="d-flex align-items-center">
+                    <Link to={"/project-tasks"}>
+                      <i data-feather="check-square"></i>
+                      <span className="menu-item" data-i18n="eCommerce">
+                        Project Tasks
+                      </span>
+                    </Link>
+                  </a>
+                </li>
+
+                <li className="nav-item" style={{ marginTop: "-10px" }}>
+                  <a className="d-flex align-items-center">
                     <Link to={"/intern-tasks"}>
-                    <i data-feather='check-square'></i>
+                    <i data-feather='clipboard'></i>
                       <span className="menu-item" data-i18n="eCommerce">
                         Tasks
                       </span>

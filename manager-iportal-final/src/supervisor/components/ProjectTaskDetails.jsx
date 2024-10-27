@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "../../App.css";
 
-export const TaskDetails = ({ values }) => {
+export const ProjectTaskDetails = ({ values }) => {
   const [review, setReview] = useState("");
   const [data, setData] = useState([]);
 
@@ -15,7 +15,7 @@ export const TaskDetails = ({ values }) => {
 
   const GetSubmittedTask = async () => {
     await axios
-      .get(`https://api.ezitech.org/get-submit-task/${values.taskId}`)
+      .get(`https://api.ezitech.org/get-submit-ptask/${values.taskId}`)
       .then((res) => {
         setData(res.data);
       })
@@ -38,7 +38,7 @@ export const TaskDetails = ({ values }) => {
 
     if (review.points !== undefined && review.desc !== undefined) {
       await axios
-        .put(`https://api.ezitech.org/submit-review/${values.taskId}`, {
+        .put(`https://api.ezitech.org/submit-proj-review/${values.taskId}`, {
           review,
         })
         .then((res) => {
@@ -55,7 +55,7 @@ export const TaskDetails = ({ values }) => {
 
   const ApprovedTask = async () => {
     await axios
-      .put(`https://api.ezitech.org/approve-task/${values.taskId}`)
+      .put(`https://api.ezitech.org/approve-proj-task/${values.taskId}`)
       .then((res) => {
         alert(res.data.msg);
         window.location.reload();
@@ -67,7 +67,7 @@ export const TaskDetails = ({ values }) => {
 
   const RejectTask = async () => {
     await axios
-      .put(`https://api.ezitech.org/reject-task/${values.taskId}`)
+      .put(`https://api.ezitech.org/reject-proj-task/${values.taskId}`)
       .then((res) => {
         alert(res.data.msg);
         window.location.reload();
@@ -76,7 +76,6 @@ export const TaskDetails = ({ values }) => {
         console.log(err);
       });
   };
-
   return (
     // <!-- Modal -->
     <div
@@ -119,7 +118,7 @@ export const TaskDetails = ({ values }) => {
                           <h6>Description:</h6>
                           <div
                             dangerouslySetInnerHTML={{
-                              __html: rs.submit_description,
+                              __html: rs.description,
                             }}
                           ></div>
                         </div>
@@ -150,7 +149,7 @@ export const TaskDetails = ({ values }) => {
                             type="number"
                             id="points"
                             className="form-control"
-                            value={rs.task_points}
+                            value={rs.task_mark}
                             // onChange={handlePointsChange}
                             min="0"
                             readOnly
@@ -196,8 +195,8 @@ export const TaskDetails = ({ values }) => {
                     <div>
                       <h6>Description:</h6>
                       {/* <div
-                        dangerouslySetInnerHTML={{ __html: rs.description }}
-                      ></div> */}
+                            dangerouslySetInnerHTML={{ __html: rs.description }}
+                          ></div> */}
                     </div>
                     <a
                       href={website.liveLink}

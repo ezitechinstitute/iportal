@@ -132,6 +132,12 @@ const {
   RejectTask,
   AssignTask,
   GetSupTaskDetails,
+  GetProjectTasks,
+  GetSubmittedProjTasks,
+  SubmitProjReview,
+  ApproveProjTask,
+  RejectProjTask,
+  MarkProjectComplete,
 } = require("../controller/supervisor/sup-interns-controller");
 const { SupervisorAuth } = require("../controller/supervisor/supervisor-auth");
 const {
@@ -146,11 +152,20 @@ const {
   GetProjectDetail,
   GetTaskDetail,
   GetInternProjectTask,
+  SubmitProjectTask,
 } = require("../controller/intern/intern-projects-controller");
 const {
   AssignShift,
   UpdateShift,
 } = require("../controller/supervisor/shift-controller");
+const {
+  CountProjects,
+  CountInPorgressProjects,
+  CountCompletedProjects,
+  CountAttendance,
+  CountHolidays,
+  CountLeaves,
+} = require("../controller/intern/intern-statics-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -200,6 +215,15 @@ router.get("/projects-details/:id", GetProjectDetail);
 router.post("/create-task", CreateTask);
 router.get("/intern-tasks", GetInternTasks);
 router.post("/upload-task", UploadTask);
+router.post("/submit-project-task", SubmitProjectTask);
+
+// Intern Statics
+router.get("/count-int-proj", CountProjects);
+router.get("/count-int-prog-proj", CountInPorgressProjects);
+router.get("/count-int-comp-proj", CountCompletedProjects);
+router.get("/count-int-attend", CountAttendance);
+router.get("/count-int-holidays", CountHolidays);
+router.get("/count-int-leaves", CountLeaves);
 
 /* Manager Auth Endpoints */
 router.post("/manager-auth", HrAuth);
@@ -307,6 +331,7 @@ router.get("/count-all-proj/:email", verifyToken, CountAllProjects);
 router.get("/count-comp-proj/:email", verifyToken, CountCompProjects);
 router.get("/count-exp-proj/:email", verifyToken, CountExpProjects);
 router.get("/get-sup-projects/:supid", verifyToken, GetProjects);
+router.get("/get-projects-tasks/:supid", verifyToken, GetProjectTasks);
 router.get("/get-sup-tasks/:supid", verifyToken, GetTasks);
 router.get("/get-task-details", verifyToken, GetSupTaskDetails);
 router.get("/task-details/:id", GetTaskDetail);
@@ -320,7 +345,12 @@ router.get("/get-submit-task/:id", GetSubmittedTasks);
 router.put("/submit-review/:id", SubmitReview);
 router.put("/approve-task/:id", ApproveTask);
 router.put("/reject-task/:id", RejectTask);
-// router.put("/mark-project-complete/:id")
+
+router.get("/get-submit-ptask/:id", GetSubmittedProjTasks);
+router.put("/submit-proj-review/:id", SubmitProjReview);
+router.put("/approve-proj-task/:id", ApproveProjTask);
+router.put("/reject-proj-task/:id", RejectProjTask);
+router.put("/mark-project-complete/:id", MarkProjectComplete);
 
 // Supervisor Shift Controller Endpoints
 router.post("/assign-shift", AssignShift);

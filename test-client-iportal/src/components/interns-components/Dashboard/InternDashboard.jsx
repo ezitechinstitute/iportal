@@ -17,6 +17,8 @@ import logo23 from "./mediaa/logo23.png";
 import InternTopbar from "../InternTopbar/InternTopbar";
 import InternSidebar from "../InternSidebar";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { GrInProgress } from "react-icons/gr";
 
 // ...........................inline css............
 
@@ -25,10 +27,118 @@ import { useNavigate } from "react-router-dom";
 export const InternDashboard = () => {
   const checkLoggedIn = sessionStorage.getItem("isLoggedIn");
   const navigate = useNavigate();
+  const id = "EZI-23-5-24/7832";
+
+  const [totalProjects, setTotalProjects] = useState(0);
+  const [inPorgress, setInProgress] = useState(0);
+  const [completed, setCompleted] = useState(0);
+  const [attendance, setAttendance] = useState(0);
+  const [holidays, setHolidays] = useState(0);
+  const [leaves, setLeaves] = useState(0);
 
   if (!checkLoggedIn) {
     navigate("/");
   }
+
+  const CountProjects = async () => {
+    await axios
+      .get(`https://api.ezitech.org/count-int-proj`, {
+        params: {
+          id: id,
+        },
+      })
+      .then((res) => {
+        setTotalProjects(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const CountProgressProjects = async () => {
+    await axios
+      .get(`https://api.ezitech.org/count-int-prog-proj`, {
+        params: {
+          id: id,
+        },
+      })
+      .then((res) => {
+        setInProgress(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const CountCompletedProjects = async () => {
+    await axios
+      .get(`https://api.ezitech.org/count-int-comp-proj`, {
+        params: {
+          id: id,
+        },
+      })
+      .then((res) => {
+        setCompleted(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const CountAttendance = async () => {
+    await axios
+      .get(`https://api.ezitech.org/count-int-attend`, {
+        params: {
+          id: id,
+        },
+      })
+      .then((res) => {
+        setAttendance(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const CountHolidays = async () => {
+    await axios
+      .get(`https://api.ezitech.org/count-int-holidays`, {
+        params: {
+          id: id,
+        },
+      })
+      .then((res) => {
+        setHolidays(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const CountLeaves = async () => {
+    await axios
+      .get(`https://api.ezitech.org/count-int-leaves`, {
+        params: {
+          id: id,
+        },
+      })
+      .then((res) => {
+        setLeaves(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    CountProjects();
+    CountProgressProjects();
+    CountCompletedProjects();
+    CountAttendance();
+    CountHolidays();
+    CountLeaves();
+  });
+
   // counter javascript
   const speed = 200;
   const [counts, setCounts] = useState([]);
@@ -103,7 +213,6 @@ export const InternDashboard = () => {
                           <div
                             class="card1"
                             style={{
-                              width: "220px",
                               boxshadow: "0px 4px  #eae8fd",
                               marginright: "10px",
                             }}
@@ -121,7 +230,9 @@ export const InternDashboard = () => {
                                 >
                                   <i data-feather="grid"></i>
                                 </i>
-                                <h3>0</h3>
+                                <h3>
+                                  {totalProjects !== 0 ? totalProjects : 0}
+                                </h3>
                               </div>
                               <div class="card-body pl-1 mt-1">
                                 <h4
@@ -152,7 +263,6 @@ export const InternDashboard = () => {
                           <div
                             class="card2 "
                             style={{
-                              width: "220px",
                               boxshadow: "0px 4px #fff1e3",
                               marginright: "18px",
                             }}
@@ -170,7 +280,7 @@ export const InternDashboard = () => {
                                 >
                                   <i data-feather="loader"></i>
                                 </i>
-                                <h3>0</h3>
+                                <h3>{inPorgress !== 0 ? inPorgress : 0}</h3>
                               </div>
                               <div class="card-body pl-1 mt-1">
                                 <h4
@@ -201,7 +311,6 @@ export const InternDashboard = () => {
                           <div
                             class="card3"
                             style={{
-                              width: "220px",
                               boxshadow: "0px 4px #fce5e6",
                             }}
                           >
@@ -218,7 +327,7 @@ export const InternDashboard = () => {
                                 >
                                   <i data-feather="menu"></i>
                                 </i>
-                                <h3>0</h3>
+                                <h3>{completed !== 0 ? completed : 0}</h3>
                               </div>
                               <div class="card-body pl-1 mt-1">
                                 <h4
@@ -252,7 +361,6 @@ export const InternDashboard = () => {
                           <div
                             class="card4"
                             style={{
-                              width: "220px",
                               boxshadow: "0px 4px #d9f8fc",
                               marginright: "18px",
                             }}
@@ -270,7 +378,7 @@ export const InternDashboard = () => {
                                 >
                                   <i data-feather="check-square"></i>
                                 </i>
-                                <h3>0</h3>
+                                <h3>{attendance !== 0 ? attendance : 0}</h3>
                               </div>
                               <div class="card-body pl-1 mt-1">
                                 <h4
@@ -301,7 +409,6 @@ export const InternDashboard = () => {
                           <div
                             class="card5"
                             style={{
-                              width: "220px",
                               boxshadow: "0px 4px #dcf6e8",
                               marginright: "18px",
                             }}
@@ -319,7 +426,7 @@ export const InternDashboard = () => {
                                 >
                                   <i data-feather="coffee"></i>
                                 </i>
-                                <h3>0</h3>
+                                <h3>{holidays !== 0 ? holidays : 0}</h3>
                               </div>
                               <div class="card-body pl-1 mt-1">
                                 <h4
@@ -350,7 +457,6 @@ export const InternDashboard = () => {
                           <div
                             class="card6"
                             style={{
-                              width: "220px",
                               boxshadow: "0px 4px #fff0f8",
                               marginright: "18px",
                             }}
@@ -368,7 +474,7 @@ export const InternDashboard = () => {
                                 >
                                   <i data-feather="home"></i>
                                 </i>
-                                <h3>0</h3>
+                                <h3>{leaves !== 0 ? leaves : 0}</h3>
                               </div>
                               <div class="card-body pl-1 mt-1">
                                 <h4

@@ -8,13 +8,14 @@ import { CreateTask } from "../../CreateTask";
 import axios from "axios";
 
 const Projects = () => {
-  // const id = sessionStorage.getItem("eziId");
+  const id = sessionStorage.getItem("eziId");
   const [values, setValues] = useState({
     id: null,
     projectId: null,
     points: null,
+    supid: null,
   });
-  const id = "EZI-23-5-24/7832";
+  // const id = "EZI-23-5-24/7832";
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [searchTerm, setSearchterm] = useState("");
@@ -23,7 +24,7 @@ const Projects = () => {
 
   const GetProjects = async () => {
     await axios
-      .get(`http://localhost:8800/intern-projects`, {
+      .get(`https://api.ezitech.org/intern-projects`, {
         params: {
           id: id,
         },
@@ -39,7 +40,7 @@ const Projects = () => {
 
   const GetProjectTask = async (id) => {
     await axios
-      .get(`http://localhost:8800/get-project-task`, {
+      .get(`https://api.ezitech.org/get-project-task`, {
         params: {
           id: id,
         },
@@ -112,28 +113,22 @@ const Projects = () => {
                                           duration,
                                           days,
                                           project_marks,
+                                          obt_marks,
                                           pstatus,
+                                          assigned_by,
                                         } = rs;
 
                                         console.log(`#${project_id}`);
                                         return (
                                           <>
-                                            <tr
-                                              id="headingCollapse1"
-                                              role="button"
-                                              data-toggle="collapse"
-                                              data-target={`#test${project_id}`}
-                                              onClick={() =>
-                                                GetProjectTask(project_id)
-                                              }
-                                              aria-expanded="false"
-                                              aria-controls="collapse1"
-                                            >
+                                            <tr>
                                               <td>{title}</td>
                                               <td>{start_date}</td>
                                               <td>{duration}</td>
                                               <td>{days}</td>
-                                              <td>{project_marks}</td>
+                                              <td>
+                                                {obt_marks} / {project_marks}
+                                              </td>
                                               <td>
                                                 {pstatus === "Ongoing" ? (
                                                   <span className="badge badge-glow badge-info">
@@ -192,6 +187,7 @@ const Projects = () => {
                                                               project_id,
                                                             points:
                                                               project_marks,
+                                                            supid: assigned_by,
                                                           })
                                                         }
                                                       >
@@ -203,187 +199,6 @@ const Projects = () => {
                                                   </div>
                                                 </div>
                                               </th>
-                                            </tr>
-
-                                            <tr>
-                                              <td colSpan={7}>
-                                                <div
-                                                  id={`test${project_id}`}
-                                                  role="tabpanel"
-                                                  aria-labelledby="headingCollapse1"
-                                                  class="collapse"
-                                                >
-                                                  <div
-                                                    class="card-body"
-                                                    style={{
-                                                      backgroundColor: "white",
-                                                    }}
-                                                  >
-                                                    <h5>Project Tasks</h5>
-                                                    <table
-                                                      className="table table-responsive bordered"
-                                                      style={{
-                                                        backgroundColor:
-                                                          "white",
-                                                      }}
-                                                    >
-                                                      <thead>
-                                                        <tr>
-                                                          <th>NAME</th>
-                                                          <th>TITLE</th>
-                                                          <th>PROJECT</th>
-                                                          <th>DATE</th>
-                                                          <th>DURATION</th>
-                                                          <th>Days</th>
-                                                          <th>POINTS</th>
-                                                          <th>REVIEW</th>
-                                                          <th>STATUS</th>
-                                                          <th>Action</th>
-                                                        </tr>
-                                                      </thead>
-
-                                                      <tbody>
-                                                        {Array.isArray(taskData)
-                                                          ? taskData.map(
-                                                              (res) => {
-                                                                const {
-                                                                  task_id,
-                                                                  project_id,
-                                                                  name,
-                                                                  task_title,
-                                                                  title,
-                                                                  t_start_date,
-                                                                  task_duration,
-                                                                  task_days,
-                                                                  task_mark,
-                                                                  task_obt_mark,
-                                                                  task_status,
-                                                                  approved,
-                                                                  review,
-                                                                } = res;
-
-                                                                const date =
-                                                                  new Date(
-                                                                    t_start_date
-                                                                  ).toLocaleDateString(
-                                                                    "en-PK"
-                                                                  );
-
-                                                                return (
-                                                                  <>
-                                                                    <tr>
-                                                                      <td>
-                                                                        {name}
-                                                                      </td>
-                                                                      <td>
-                                                                        {
-                                                                          task_title
-                                                                        }
-                                                                      </td>
-                                                                      <td>
-                                                                        {title}
-                                                                      </td>
-                                                                      <td>
-                                                                        {date}
-                                                                      </td>
-                                                                      <td>
-                                                                        {
-                                                                          task_duration
-                                                                        }
-                                                                      </td>
-                                                                      <td>
-                                                                        {
-                                                                          task_days
-                                                                        }
-                                                                      </td>
-                                                                      <td>
-                                                                        {
-                                                                          task_obt_mark
-                                                                        }{" "}
-                                                                        /{" "}
-                                                                        {
-                                                                          task_mark
-                                                                        }
-                                                                      </td>
-                                                                      <td>
-                                                                        {review
-                                                                          ? review
-                                                                          : "---"}
-                                                                      </td>
-                                                                      {approved ===
-                                                                      null ? (
-                                                                        <>
-                                                                          <td>
-                                                                            {task_status ===
-                                                                            "Ongoing" ? (
-                                                                              <span className="badge badge-glow badge-info">
-                                                                                {" "}
-                                                                                {
-                                                                                  task_status
-                                                                                }{" "}
-                                                                              </span>
-                                                                            ) : task_status ===
-                                                                              "Expired" ? (
-                                                                              <span className="badge badge-glow badge-danger">
-                                                                                {" "}
-                                                                                {
-                                                                                  task_status
-                                                                                }{" "}
-                                                                              </span>
-                                                                            ) : task_status ===
-                                                                              "Submitted" ? (
-                                                                              <span className="badge badge-glow badge-success">
-                                                                                {" "}
-                                                                                {
-                                                                                  task_status
-                                                                                }{" "}
-                                                                              </span>
-                                                                            ) : (
-                                                                              " "
-                                                                            )}
-                                                                          </td>
-                                                                        </>
-                                                                      ) : approved ===
-                                                                        1 ? (
-                                                                        <td>
-                                                                          <span className="badge badge-glow badge-success">
-                                                                            {" "}
-                                                                            {
-                                                                              task_status
-                                                                            }{" "}
-                                                                          </span>
-                                                                        </td>
-                                                                      ) : approved ===
-                                                                        0 ? (
-                                                                        <td>
-                                                                          <span className="badge badge-glow badge-danger">
-                                                                            {" "}
-                                                                            {
-                                                                              task_status
-                                                                            }{" "}
-                                                                          </span>
-                                                                        </td>
-                                                                      ) : (
-                                                                        <div className="center">
-                                                                          <span>
-                                                                            {" "}
-                                                                            No
-                                                                            task
-                                                                            found!!!
-                                                                          </span>
-                                                                        </div>
-                                                                      )}
-                                                                    </tr>
-                                                                  </>
-                                                                );
-                                                              }
-                                                            )
-                                                          : ""}
-                                                      </tbody>
-                                                    </table>
-                                                  </div>
-                                                </div>
-                                              </td>
                                             </tr>
                                           </>
                                         );

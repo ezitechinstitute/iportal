@@ -52,7 +52,9 @@ export const TaskView = ({ data }) => {
                       <hr />
                       <div
                         style={{ lineHeight: "5px", fontFamily: "sans-serif" }}
-                        dangerouslySetInnerHTML={{ __html: rs.task_description }}
+                        dangerouslySetInnerHTML={{
+                          __html: rs.task_description,
+                        }}
                       ></div>
                     </>
                   ))

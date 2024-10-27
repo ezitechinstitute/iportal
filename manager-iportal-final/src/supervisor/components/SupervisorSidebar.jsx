@@ -85,12 +85,16 @@ export const SupervisorSidebar = () => {
               >
                 <i data-feather="users"></i>
                 <span className="menu-item" data-i18n="eCommerce">
-                   Interns
+                  Interns
                 </span>
               </NavLink>
             </li>
 
-            <li className={activeLink === "intern-projects" ? "active" : "undefined"}>
+            <li
+              className={
+                activeLink === "intern-projects" ? "active" : "undefined"
+              }
+            >
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("remote")}
@@ -104,20 +108,39 @@ export const SupervisorSidebar = () => {
               </NavLink>
             </li>
 
-            <li className={activeLink === "intern-tasks" ? "active" : "undefined"}>
+            <li
+              className={
+                activeLink === "project-tasks" ? "active" : "undefined"
+              }
+            >
+              <NavLink
+                className="d-flex align-items-center"
+                onClick={() => setActive("remote")}
+                id={"3"}
+                to="/project-tasks"
+              >
+                <i data-feather="check-square"></i>
+                <span className="menu-item" data-i18n="eCommerce">
+                  Project Tasks
+                </span>
+              </NavLink>
+            </li>
+
+            <li
+              className={activeLink === "intern-tasks" ? "active" : "undefined"}
+            >
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("projects")}
                 id={"3"}
                 to="/intern-tasks"
               >
-                <i data-feather="check-square"></i>
+                <i data-feather="clipboard"></i>
                 <span className="menu-item" data-i18n="eCommerce">
                   Intern Tasks
                 </span>
               </NavLink>
             </li>
-
 
             <li className={activeLink === "leave" ? "active" : "undefined"}>
               <NavLink
@@ -145,8 +168,6 @@ export const SupervisorSidebar = () => {
                 </span>
               </NavLink>
             </li>
-
-
           </ul>
         </div>
       </div>

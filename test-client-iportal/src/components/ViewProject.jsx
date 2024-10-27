@@ -51,7 +51,7 @@ export const ViewProject = ({ data }) => {
                       <h4>Title: {rs.title}</h4>
                       <hr />
                       <div
-                        style={{lineHeight: "5px", fontFamily: "sans-serif"}}
+                        style={{ lineHeight: "5px", fontFamily: "sans-serif" }}
                         dangerouslySetInnerHTML={{ __html: rs.description }}
                       ></div>
                     </>

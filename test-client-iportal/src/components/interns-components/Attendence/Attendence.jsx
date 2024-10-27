@@ -53,11 +53,11 @@ export const Attendence = () => {
                     const { start_shift, end_shift } = res;
                     const isoStartDate = start_shift;
                     const startDate = new Date(isoStartDate);
-                    const startLocal = startDate.toLocaleTimeString();
+                    const startLocal = startDate.toLocaleTimeString("en-PK");
 
                     const isoEndDate = end_shift;
                     const endDate = new Date(isoEndDate);
-                    const endLocal = endDate.toLocaleTimeString();
+                    const endLocal = endDate.toLocaleTimeString("en-PK");
                     return (
                       <>
                         <tr>

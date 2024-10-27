@@ -4,7 +4,7 @@ import "react-quill/dist/quill.snow.css"; // Import Quill styles
 import "react-quill/dist/quill.bubble.css"; // Bubble theme
 import axios from "axios";
 
-export const UploadTask = ({ values }) => {
+export const UploadProjectTask = ({ values }) => {
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [value, setValue] = useState("");
   const [task, setTask] = useState({
@@ -30,7 +30,7 @@ export const UploadTask = ({ values }) => {
     setTask({ ...task, [e.target.name]: e.target.value });
   };
 
-  const UploadTask = async () => {
+  const SubmitProjectTask = async () => {
     setTask({
       ...task,
       description: value,
@@ -42,7 +42,7 @@ export const UploadTask = ({ values }) => {
         console.log(task);
         await axios
           .post(
-            "https://api.ezitech.org/upload-task",
+            "https://api.ezitech.org/submit-project-task",
             { task }
             // {
             //   headers: { "x-access-token": token },
@@ -56,20 +56,19 @@ export const UploadTask = ({ values }) => {
             console.log(err);
           });
       } else {
-        alert("Are you sure? Click again on Upload Task");
+        alert("Are you sure? Click again on Submit Task");
       }
     } else {
       alert("Please fill empty field first!!!");
     }
   };
-
   return (
     <>
       <div className="basic-modal">
         {/* <!-- Modal --> */}
         <div
           className="modal fade"
-          id="default2"
+          id="project-task"
           tabindex="-1"
           role="dialog"
           aria-labelledby="myModalLabel1"
@@ -79,7 +78,7 @@ export const UploadTask = ({ values }) => {
             <div className="modal-content">
               <div className="modal-header">
                 <h4 className="modal-title" id="myModalLabel1">
-                  Submit Task
+                  Submit Project Task
                 </h4>
                 <button
                   type="button"
@@ -145,9 +144,9 @@ export const UploadTask = ({ values }) => {
                       placeholder="Task description..."
                     />
                     {/* <div>
-                      <h3>Preview:</h3>
-                      <div dangerouslySetInnerHTML={{ __html: value }}></div>
-                    </div> */}
+                          <h3>Preview:</h3>
+                          <div dangerouslySetInnerHTML={{ __html: value }}></div>
+                        </div> */}
                   </div>
                 </div>
               </div>
@@ -156,7 +155,7 @@ export const UploadTask = ({ values }) => {
                 <button
                   type="button"
                   className="btn btn-success"
-                  onClick={UploadTask}
+                  onClick={SubmitProjectTask}
                 >
                   Submit Task
                 </button>

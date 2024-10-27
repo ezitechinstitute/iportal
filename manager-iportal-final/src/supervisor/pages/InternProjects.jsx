@@ -14,7 +14,7 @@ const InternProjects = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loader, setLoader] = useState(false);
-  // const supid = 13;
+  // const supid = 11;
 
   // Pagination
   const [currentPage, settCurrentPage] = useState(1);
@@ -53,7 +53,7 @@ const InternProjects = () => {
 
   const MarkasCompleted = async (id) => {
     await axios
-      .put(`http://localhost:8800/mark-as-complete/${id}`)
+      .put(`https://api.ezitech.org/mark-project-complete/${id}`)
       .then((res) => {
         alert(res.data.message);
       })
@@ -156,8 +156,10 @@ const InternProjects = () => {
                                   <th>Title</th>
                                   {/* <th>Technology</th> */}
                                   <th>Start Date</th>
+                                  <th>End Date</th>
                                   <th>Duration</th>
                                   <th>Days</th>
+                                  <th>POINTS</th>
                                   <th>Status</th>
                                   <th>Tasks</th>
                                   <th>Action</th>
@@ -178,9 +180,13 @@ const InternProjects = () => {
                                       title,
                                       int_technology,
                                       start_date,
+                                      end_date,
                                       duration,
                                       days,
+                                      project_marks,
+                                      obt_marks,
                                       pstatus,
+                                      taskCount,
                                     } = rs;
 
                                     return (
@@ -193,8 +199,13 @@ const InternProjects = () => {
                                           <td>{title}</td>
                                           {/* <td>{int_technology}</td> */}
                                           <td>{start_date}</td>
+                                          <td>{end_date}</td>
+
                                           <td>{duration}</td>
                                           <td>{days}</td>
+                                          <td>
+                                            {obt_marks} / {project_marks}
+                                          </td>
 
                                           <td>
                                             {pstatus === "Ongoing" ? (
@@ -219,7 +230,7 @@ const InternProjects = () => {
                                               ""
                                             )}
                                           </td>
-                                          <td>1</td>
+                                          <td>{taskCount}</td>
                                           <td>
                                             <div class="btn-group">
                                               <button

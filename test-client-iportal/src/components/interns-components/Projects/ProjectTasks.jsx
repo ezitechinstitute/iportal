@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import InternTopbar from "../../components/interns-components/InternTopbar/InternTopbar";
-import InternSidebar from "../../components/interns-components/InternSidebar";
-import { Footer } from "../../components/Footer";
+import InternTopbar from "../InternTopbar/InternTopbar";
+import InternSidebar from "../InternSidebar";
 import axios from "axios";
-import { UploadTask } from "../../components/UploadTask";
-import { ViewProject } from "../../components/ViewProject";
-import { TaskView } from "../../components/TaskView";
+import { UploadProjectTask } from "./UploadProjectTask";
 
-export const InternTasks = () => {
-  const id = sessionStorage.getItem("eziId");
+export const ProjectTasks = () => {
+  const [taskData, setTaskData] = useState([]);
   const [values, setValues] = useState({
     id: null,
     projectId: null,
@@ -16,22 +13,19 @@ export const InternTasks = () => {
     taskTitle: null,
     points: null,
   });
-  // const id = "EZI-23-5-24/7832";
-  const [data, setData] = useState([]);
-  const [filtered, setFiltered] = useState([]);
-  const [searchTerm, setSearchterm] = useState("");
-  const [loader, setLoader] = useState(false);
+  const id = sessionStorage.getItem("eziId");
 
-  const GetTasks = async () => {
+  //   const id = "EZI-23-5-24/7832";
+
+  const GetProjectTask = async () => {
     await axios
-      .get("https://api.ezitech.org/intern-tasks", {
+      .get(`https://api.ezitech.org/get-project-task`, {
         params: {
           id: id,
         },
       })
       .then((res) => {
-        setData(res.data);
-        setFiltered(data);
+        setTaskData(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -39,7 +33,7 @@ export const InternTasks = () => {
   };
 
   useEffect(() => {
-    GetTasks();
+    GetProjectTask();
   });
   return (
     <>
@@ -56,7 +50,7 @@ export const InternTasks = () => {
                 <div className="col-12">
                   <div className="card">
                     <div className="card-header">
-                      <h4 className="card-title">Tasks</h4>
+                      <h4 className="card-title">Project Tasks</h4>
                       {/* <!-- Button trigger modal --> */}
 
                       <select
@@ -73,13 +67,15 @@ export const InternTasks = () => {
                     <section id="complex-header-datatable">
                       <div className="row">
                         <div className="col-12">
-                          <div className="card">
+                          <div className="card-datatable">
                             <div className="card-datatable">
                               <table className="dt-complex-header table table-bordered table-responsive">
                                 <thead>
                                   <tr>
+                                    <th>NAME</th>
                                     <th>TITLE</th>
-                                    <th>START DATE</th>
+                                    <th>PROJECT</th>
+                                    <th>DATE</th>
                                     <th>DURATION</th>
                                     <th>Days</th>
                                     <th>POINTS</th>
@@ -90,40 +86,42 @@ export const InternTasks = () => {
                                 </thead>
 
                                 <tbody>
-                                  {Array.isArray(filtered)
-                                    ? filtered.map((rs) => {
+                                  {Array.isArray(taskData)
+                                    ? taskData.map((res) => {
                                         const {
                                           task_id,
+                                          project_id,
+                                          name,
                                           task_title,
-                                          task_start,
+                                          title,
+                                          t_start_date,
                                           task_duration,
                                           task_days,
-                                          task_points,
+                                          task_mark,
+                                          task_obt_mark,
                                           task_status,
-                                          task_approve,
-                                          task_obt_points,
+                                          approved,
                                           review,
-                                        } = rs;
+                                        } = res;
 
                                         const date = new Date(
-                                          task_start
+                                          t_start_date
                                         ).toLocaleDateString("en-PK");
 
                                         return (
                                           <>
                                             <tr>
+                                              <td>{name}</td>
                                               <td>{task_title}</td>
+                                              <td>{title}</td>
                                               <td>{date}</td>
                                               <td>{task_duration}</td>
                                               <td>{task_days}</td>
                                               <td>
-                                                {task_obt_points} /{" "}
-                                                {task_points}
+                                                {task_obt_mark} / {task_mark}
                                               </td>
-                                              <td>
-                                                {review ? review : <p>---</p>}
-                                              </td>
-                                              {task_approve === null ? (
+                                              <td>{review ? review : "---"}</td>
+                                              {approved === null ? (
                                                 <>
                                                   <td>
                                                     {task_status ===
@@ -149,14 +147,14 @@ export const InternTasks = () => {
                                                     )}
                                                   </td>
                                                 </>
-                                              ) : task_approve === 1 ? (
+                                              ) : approved === 1 ? (
                                                 <td>
                                                   <span className="badge badge-glow badge-success">
                                                     {" "}
                                                     {task_status}{" "}
                                                   </span>
                                                 </td>
-                                              ) : task_approve === 0 ? (
+                                              ) : approved === 0 ? (
                                                 <td>
                                                   <span className="badge badge-glow badge-danger">
                                                     {" "}
@@ -164,64 +162,40 @@ export const InternTasks = () => {
                                                   </span>
                                                 </td>
                                               ) : (
-                                                ""
+                                                <div className="center">
+                                                  <span> No task found!!!</span>
+                                                </div>
                                               )}
 
                                               <td>
-                                                <div className="dropdown">
+                                                {task_status === "Expired" ||
+                                                task_status === "Submitted" ||
+                                                task_status === "Approved" ||
+                                                task_status === "Rejected" ? (
+                                                  <button
+                                                    disabled
+                                                    type="button"
+                                                    className="btn btn-warning dropdown-toggle hide-arrow"
+                                                  >
+                                                    Submit
+                                                  </button>
+                                                ) : (
                                                   <button
                                                     type="button"
                                                     className="btn btn-warning dropdown-toggle hide-arrow"
-                                                    data-toggle="dropdown"
+                                                    data-toggle="modal"
+                                                    data-target="#project-task"
+                                                    onClick={() =>
+                                                      setValues({
+                                                        id: id,
+                                                        taskId: task_id,
+                                                        taskTitle: title,
+                                                      })
+                                                    }
                                                   >
-                                                    Action
+                                                    Submit
                                                   </button>
-                                                  <div className="dropdown-menu">
-                                                    <a
-                                                      className="dropdown-item"
-                                                      href="javascript:void(0);"
-                                                      data-toggle="modal"
-                                                      data-target="#large"
-                                                      onClick={() =>
-                                                        setValues({
-                                                          id: id,
-                                                          taskId: task_id,
-                                                          points: task_points,
-                                                        })
-                                                      }
-                                                    >
-                                                      <span>View Details</span>
-                                                    </a>
-                                                    {task_status !==
-                                                      "Expired" &&
-                                                    task_status !==
-                                                      "Submitted" &&
-                                                    task_status !==
-                                                      "Approved" &&
-                                                    task_status !==
-                                                      "Rejected" ? (
-                                                      <a
-                                                        className="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        data-toggle="modal"
-                                                        data-target="#default2"
-                                                        onClick={() =>
-                                                          setValues({
-                                                            id: id,
-                                                            taskId: task_id,
-                                                            taskTitle:
-                                                              task_title,
-                                                            points: task_points,
-                                                          })
-                                                        }
-                                                      >
-                                                        <span>Submit Task</span>
-                                                      </a>
-                                                    ) : (
-                                                      ""
-                                                    )}
-                                                  </div>
-                                                </div>
+                                                )}
                                               </td>
                                             </tr>
                                           </>
@@ -240,11 +214,8 @@ export const InternTasks = () => {
               </div>
             </section>
 
-            {/* Task Details */}
-            <TaskView data={values} />
-            {/* Upload Task */}
-            <UploadTask values={values} />
-            <Footer />
+            {/* Upload Project Task */}
+            <UploadProjectTask values={values} />
           </div>
         </div>
       </div>

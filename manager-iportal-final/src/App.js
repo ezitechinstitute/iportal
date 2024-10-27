@@ -23,12 +23,12 @@ import InternProjects from "./supervisor/pages/InternProjects";
 import InternTasks from "./supervisor/pages/InternTasks";
 import SupervisorLeave from "./supervisor/pages/SupervisorLeave";
 import SupervisorBalance from "./supervisor/pages/SupervisorBalance";
+import { InternProjTasks } from "./supervisor/pages/InternProjTasks";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-
         <Routes>
           {/* Index Routes */}
 
@@ -61,6 +61,8 @@ function App() {
             element={<SupervisorInterns />}
           />
           <Route exact path="/intern-projects" element={<InternProjects />} />
+          <Route exact path="/project-tasks" element={<InternProjTasks />} />
+
           <Route exact path="/intern-tasks" element={<InternTasks />} />
           <Route exact path="/supervisor-leave" element={<SupervisorLeave />} />
           <Route

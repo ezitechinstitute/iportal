@@ -218,19 +218,29 @@ const CountExpProjects = (req, res) => {
 };
 
 const GetProjects = (req, res) => {
-  // const { supid } = req.params;
-  // const sql =
-  //   "SELECT ip.*, ia.name, ia.email, ia.int_technology, COUNT(it.task_id) as taskCount FROM `intern_projects` ip JOIN `intern_accounts` ia ON ip.eti_id = ia.eti_id LEFT JOIN `intern_tasks` it ON ip.project_id = it.project_id AND it.eti_id = ia.eti_id WHERE ip.assigned_by = ? GROUP BY ip.project_id, ia.eti_id";
-  // connection.query(sql, [supid], (err, data) => {
-  //   if (err) throw err;
-  //   return res.json(data);
-  // });
+  const { supid } = req.params;
+  const sql =
+    "SELECT ip.*, ia.name, ia.email, ia.int_technology, COUNT(pt.task_id) as taskCount FROM `intern_projects` ip JOIN `intern_accounts` ia ON ip.eti_id = ia.eti_id LEFT JOIN `project_tasks` pt ON ip.project_id = pt.project_id AND pt.eti_id = ia.eti_id WHERE ip.assigned_by = ? GROUP BY ip.project_id, ia.eti_id";
+  connection.query(sql, [supid], (err, data) => {
+    if (err) throw err;
+    return res.json(data);
+  });
 };
 
 const GetTasks = (req, res) => {
   const { supid } = req.params;
   const sql =
     "SELECT it.*, ia.name, ia.int_technology FROM intern_tasks it JOIN intern_accounts ia ON it.eti_id = ia.eti_id WHERE it.assigned_by = ?";
+  connection.query(sql, [supid], (err, data) => {
+    if (err) throw err;
+    return res.json(data);
+  });
+};
+
+const GetProjectTasks = (req, res) => {
+  const { supid } = req.params;
+  const sql =
+    "SELECT pt.*, ia.name, ia.int_technology, ip.* FROM project_tasks pt JOIN intern_accounts ia ON pt.eti_id = ia.eti_id JOIN intern_projects ip ON pt.project_id = ip.project_id WHERE pt.assigned_by = ?";
   connection.query(sql, [supid], (err, data) => {
     if (err) throw err;
     return res.json(data);
@@ -363,17 +373,27 @@ const RejectInternLeave = (req, res) => {
 };
 
 const ProjectDayIncrement = (req, res) => {
+  console.log("Project");
   const sql1 =
-    "SELECT project_id, days, duration FROM intern_projects WHERE pstatus = 'Ongoing'";
+    "SELECT project_id, days, duration, end_date FROM intern_projects WHERE pstatus = 'Ongoing'";
   connection.query(sql1, (err, data1) => {
     if (err) {
+      console.log(err);
       return res.json(err);
     } else {
       for (let i = 0; i < data1.length; i++) {
         const project = data1[i];
 
-        if (project.days < project.duration) {
+        const currentDate = DateTime.now()
+          .setZone("Asia/Karachi")
+          .toFormat("yyyy-MM-dd");
+
+        if (project.days < project.duration && project.end_date > currentDate) {
+          console.log("Chal gya");
           const updatedDays = project.days + 1;
+
+          console.log(updatedDays);
+
           const sql2 =
             "UPDATE intern_projects SET days = ? WHERE project_id = ?";
           connection.query(
@@ -390,6 +410,7 @@ const ProjectDayIncrement = (req, res) => {
             }
           );
         } else {
+          console.log("Nahi chala");
           const sql3 =
             "UPDATE intern_projects SET pstatus = 'Expired' WHERE project_id = ?";
           connection.query(sql3, [project.project_id], (err, data3) => {
@@ -417,12 +438,35 @@ const GetSubmittedTasks = (req, res) => {
   });
 };
 
+const GetSubmittedProjTasks = (req, res) => {
+  const { id } = req.params;
+
+  const sql = "SELECT * FROM `project_tasks` WHERE `task_id` = ?";
+  connection.query(sql, [id], (err, data) => {
+    if (err) throw err;
+    return res.json(data);
+  });
+};
+
 const SubmitReview = (req, res) => {
   const { id } = req.params;
   const { points, desc } = req.body.review;
 
   const sql =
     "UPDATE `intern_tasks` SET `task_obt_points`= ?,`review`= ? WHERE `task_id` = ?";
+
+  connection.query(sql, [points, desc, id], (err) => {
+    if (err) throw err;
+    return res.json({ msg: "Review submitted successfully" });
+  });
+};
+
+const SubmitProjReview = (req, res) => {
+  const { id } = req.params;
+  const { points, desc } = req.body.review;
+
+  const sql =
+    "UPDATE `project_tasks` SET `task_obt_mark`= ?,`review`= ? WHERE `task_id` = ?";
 
   connection.query(sql, [points, desc, id], (err) => {
     if (err) throw err;
@@ -441,6 +485,17 @@ const ApproveTask = (req, res) => {
   });
 };
 
+const ApproveProjTask = (req, res) => {
+  const { id } = req.params;
+
+  const sql =
+    "UPDATE `project_tasks` SET `task_status`= 'Approved', `approved` = 1 WHERE `task_id` = ?";
+  connection.query(sql, [id], (err, data) => {
+    if (err) throw err;
+    return res.json({ msg: "Task approved successfully" });
+  });
+};
+
 const RejectTask = (req, res) => {
   const { id } = req.params;
 
@@ -449,6 +504,40 @@ const RejectTask = (req, res) => {
   connection.query(sql, [id], (err, data) => {
     if (err) throw err;
     return res.json({ msg: "Task rejected successfully" });
+  });
+};
+
+const RejectProjTask = (req, res) => {
+  const { id } = req.params;
+
+  const sql =
+    "UPDATE `project_tasks` SET `task_status`= 'Rejected', `approved` = 0 WHERE `task_id` = ?";
+  connection.query(sql, [id], (err, data) => {
+    if (err) throw err;
+    return res.json({ msg: "Task rejected successfully" });
+  });
+};
+
+const MarkProjectComplete = (req, res) => {
+  const { id } = req.params;
+
+  const sql =
+    "SELECT SUM(task_obt_mark) as projectTaskSum FROM `project_tasks` WHERE `approved` = 1 AND `project_id` = ?";
+
+  connection.query(sql, [id], (err, data) => {
+    if (err) throw err;
+    const obtPoints = data[0].projectTaskSum;
+
+    if (obtPoints !== null) {
+      const sql =
+        "UPDATE `intern_projects` SET `obt_marks`= ?, `pstatus`= 'Completed' WHERE `project_id` = ?";
+      connection.query(sql, [obtPoints, id], (err, data) => {
+        if (err) throw err;
+        return res.json({ message: "Project mark as completed" });
+      });
+    } else {
+      return res.json({ message: "Project task not completed!" });
+    }
   });
 };
 
@@ -471,4 +560,10 @@ module.exports = {
   SubmitReview,
   ApproveTask,
   RejectTask,
+  GetProjectTasks,
+  GetSubmittedProjTasks,
+  SubmitProjReview,
+  ApproveProjTask,
+  RejectProjTask,
+  MarkProjectComplete,
 };

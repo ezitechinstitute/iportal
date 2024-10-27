@@ -15,6 +15,7 @@ import Completed from "./components/interns-components/Completed/Completed";
 import { InternLogin } from "./pages/interns-pages/InternLogin";
 import { InternTest } from "./pages/interns-pages/InternTest";
 import { InternTasks } from "./pages/interns-pages/InternTasks";
+import { ProjectTasks } from "./components/interns-components/Projects/ProjectTasks";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/intern-leave" element={<Leave />} />
           <Route path="/intern-attendence" element={<Attendence />} />
           <Route path="/intern-projects" element={<Projects />} />
+          <Route path="/project-tasks" element={<ProjectTasks />} />
           <Route path="/intern-tasks" element={<InternTasks />} />
           <Route path="/intern-leave" element={<Leave />} />
 
