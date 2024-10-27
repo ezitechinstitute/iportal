@@ -309,8 +309,9 @@ const CurrentShift = (req, res) => {
 };
 
 const GetInternAttendance = (req, res) => {
-  const sql = "SELECT * FROM `intern_attendance` WHERE `email` = ?";
-  connection.query(sql, [req.internEmail], (err, data) => {
+  const { id } = req.query;
+  const sql = "SELECT * FROM `intern_attendance` WHERE `eti_id` = ?";
+  connection.query(sql, [id], (err, data) => {
     if (err) throw err;
     return res.json(data);
   });

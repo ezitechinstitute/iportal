@@ -10,12 +10,13 @@ export const Attendence = () => {
   const checkLoggedIn = sessionStorage.getItem("isLoggedIn");
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [attendance, setAttendance] = useState([]);
+  const id = sessionStorage.getItem("eziId");
 
   const GetAttendance = async () => {
     try {
       const res = await axios.get(
-        "https://api.ezitech.org/get-intern-attendance",
-        { headers: { "x-access-token": token } }
+        `https://api.ezitech.org/get-intern-attendance`,
+        { params: { id: id }, headers: { "x-access-token": token } }
       );
       setAttendance(res.data);
     } catch (error) {
