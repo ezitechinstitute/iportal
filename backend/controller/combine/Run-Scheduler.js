@@ -13,7 +13,7 @@ const isMidnightInPakistan = () => {
   const minute = nowInPakistan.minute;
   const seconds = nowInPakistan.second;
 
-  return hour === 0 && minute === 0 && seconds === 0; // Midnight check
+  return hour === 23 && minute === 59 && seconds === 59; // Midnight check
 };
 
 // Function to check if it's midnight in Pakistan (Asia/Karachi)
