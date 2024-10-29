@@ -4,8 +4,10 @@ const moment = require("moment-timezone");
 const { DateTime } = require("luxon"); // Install luxon for better date handling
 
 function checkAttendanceMarked(email, callback) {
-  const startDay = new Date();
-  startDay.setHours(0, 0, 0, 0);
+  const startDay = DateTime.now()
+    .setZone("Asia/Karachi") // Set the time zone to Pakistan Standard Time
+    .startOf("day") // Set the time to the start of the day (midnight)
+    .toJSDate(); // Convert Luxon DateTime to JavaScript Date object
 
   const sql =
     "SELECT COUNT(*) AS count FROM `intern_attendance` WHERE `email` = ? AND start_shift >= ?";

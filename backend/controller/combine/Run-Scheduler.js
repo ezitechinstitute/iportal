@@ -23,7 +23,7 @@ const isBeforeMidnightInPakistan = () => {
   const minute = nowInPakistan.minute;
   const seconds = nowInPakistan.second;
 
-  return hour === 23 && minute === 55 && seconds === 0; // Midnight check
+  return hour === 23 && minute === 55 && seconds === 59; // Midnight check
 };
 
 const RunJob = () => {
