@@ -39,7 +39,7 @@ const Intern = () => {
         },
       })
       .then((res) => {
-        setData(res.data);
+        setData(res.data.data);
         setFilteredData(data);
         settCurrentPage(res.data.meta.page);
         setTotalPages(res.data.meta.totalPages);
