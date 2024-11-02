@@ -2,10 +2,10 @@ const { connection } = require("../../config/connection");
 
 const AdminInterns = (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 500;
+  const limit = parseInt(req.query.limit) || 200;
   const offset = (page - 1) * limit;
 
-  const sql = "SELECT * FROM `intern_table` ORDER BY id ASC LIMIT ? OFFSET ?";
+  const sql = "SELECT * FROM `intern_table` ORDER BY id DESC LIMIT ? OFFSET ?";
 
   connection.query(sql, [limit, offset], (err, data) => {
     if (err) {
