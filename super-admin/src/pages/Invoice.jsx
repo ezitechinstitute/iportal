@@ -86,6 +86,17 @@ const Invoice = () => {
       console.log(error);
     }
   };
+
+  const DeleteInvoice = async (id) => {
+    await axios
+      .delete(`https://api.ezitech.org/delete-invoice/${id}`)
+      .then((res) => {
+        alert(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <ManagerTopbar />
@@ -192,7 +203,8 @@ const Invoice = () => {
                   <th>Date</th>
                   <th>Total</th>
                   <th>Received</th>
-                  <th>Action</th>
+                  <th>Approved</th>
+                  <th>Delete</th>
                 </tr>
               </thead>
 
@@ -228,6 +240,14 @@ const Invoice = () => {
                                 Approved
                               </span>
                             )}
+                          </td>
+                          <td>
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => DeleteInvoice(rs.id)}
+                            >
+                              Delete
+                            </button>
                           </td>
                         </tr>
                       </>

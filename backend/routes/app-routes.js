@@ -67,6 +67,7 @@ const {
   GetTotalAmount,
   GetReceivedAmount,
   GetRemainingAmount,
+  DeleteInvoice,
 } = require("../controller/admin/transaction-controller");
 const {
   GetManagers,
@@ -89,7 +90,14 @@ const {
   EditTech,
   UpdateTech,
 } = require("../controller/admin/tech-controller");
-const { AdminInterns } = require("../controller/admin/get-all-interns");
+const {
+  AdminInterns,
+  UpdateIntern,
+  AdminActiveInterns,
+  UpdateActiveIntern,
+  FreezeInternAccount,
+  DeleteInternAccount,
+} = require("../controller/admin/get-all-interns");
 const {
   AddBalance,
   DebitSum,
@@ -166,6 +174,7 @@ const {
   CountHolidays,
   CountLeaves,
 } = require("../controller/intern/intern-statics-controller");
+const { SubmitLeaveReq } = require("../controller/intern/intern-leave");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -216,6 +225,9 @@ router.post("/create-task", CreateTask);
 router.get("/intern-tasks", GetInternTasks);
 router.post("/upload-task", UploadTask);
 router.post("/submit-project-task", SubmitProjectTask);
+
+// Intern Leave
+router.post("/int-leave-request", SubmitLeaveReq);
 
 // Intern Statics
 router.get("/count-int-proj", CountProjects);
@@ -273,9 +285,14 @@ router.put("/approve-invoice/:email", ApproveInvoice);
 router.get("/get-total-amount", GetTotalAmount);
 router.get("/get-received-amount", GetReceivedAmount);
 router.get("/get-remaining-amount", GetRemainingAmount);
+router.delete("/delete-invoice/:id", DeleteInvoice);
 
 // Admin Inters
 router.get("/get-all-interns", AdminInterns);
+router.put("/update-intern/:id", UpdateIntern);
+router.get("/intern-accounts", AdminActiveInterns);
+router.put("/update-int-account/:id", UpdateActiveIntern);
+// router.delete("/del-int-account/:id", DeleteInternAccount);
 
 // Admin Account Credit Debit Endpoints
 router.get("/all-account-rec", GetAllRecords);
@@ -284,9 +301,9 @@ router.get("/get-debit-total", DebitSum);
 router.get("/get-credit-total", CreditSum);
 
 // Admin Employee Leave Endpoints
-// router.get("/get-employee-leaves", GetEmployeeLeaves);
-// router.put("/approve-leave/:id", LeaveApprove);
-// router.put("/reject-leave/:id", LeaveReject);
+router.get("/get-employee-leaves", GetEmployeeLeaves);
+router.put("/approve-leave/:id", LeaveApprove);
+router.put("/reject-leave/:id", LeaveReject);
 
 // Admin To Manager Endpoints
 router.put("/:id", UpdateManager);

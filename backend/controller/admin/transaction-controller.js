@@ -121,6 +121,16 @@ const ApproveInvoice = (req, res) => {
   }
 };
 
+const DeleteInvoice = (req, re) => {
+  const { id } = req.params;
+
+  const sql = "DELETE FROM `invoices` WHERE `id` = ?";
+  connection.query(sql, [id], (err, data) => {
+    if (err) throw err;
+    return res.json({ message: "Invoice deleted successfuly" });
+  });
+};
+
 module.exports = {
   Transactions,
   Invoices,
@@ -128,4 +138,5 @@ module.exports = {
   GetTotalAmount,
   GetReceivedAmount,
   GetRemainingAmount,
+  DeleteInvoice,
 };

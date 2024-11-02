@@ -20,7 +20,7 @@ const LeaveApprove = (req, res) => {
     if (err) {
       return res.json(err);
     } else {
-      return res.json({ msg: "your leave is approved" });
+      return res.json({ msg: "Your leave is approved" });
     }
   });
 };
@@ -33,7 +33,7 @@ const LeaveReject = (req, res) => {
     if (err) {
       return res.json(err);
     } else {
-      return res.json({ msg: "your leave is rejected" });
+      return res.json({ msg: "Your leave is rejected" });
     }
   });
 };

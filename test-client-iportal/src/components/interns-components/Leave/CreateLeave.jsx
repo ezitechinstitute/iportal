@@ -6,9 +6,9 @@ export const CreateLeave = () => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const name = sessionStorage.getItem("username");
-  const tech = sessionStorage.getItem("tech");
-  const internType = sessionStorage.getItem("internType");
-  const eziId = sessionStorage.getItem("eziId");
+  const email = sessionStorage.getItem("email");
+  // const eziId = sessionStorage.getItem("eziId");
+  const eziId = "EZI-23-5-24/7832";
 
   useEffect(() => {
     if (!check) {
@@ -39,24 +39,23 @@ export const CreateLeave = () => {
     setData({
       ...data,
       intName: name,
-      intTech: tech,
-      intType: internType,
+      intEmail: email,
       id: eziId,
     });
 
     if (
       data.toDate !== undefined &&
       data.fromDate !== undefined &&
+      data.durationDays !== undefined &&
       data.reason !== undefined
     ) {
       if (
         data.intName !== undefined &&
-        data.intTech !== undefined &&
-        data.internType !== undefined &&
+        data.intEmail !== undefined &&
         data.id !== undefined
       ) {
         await axios
-          .post("https://api.ezitech.org/leave-request", { data })
+          .post("http://localhost:8800/int-leave-request", { data })
           .then((res) => {
             alert(res.data.message);
             window.location.reload();

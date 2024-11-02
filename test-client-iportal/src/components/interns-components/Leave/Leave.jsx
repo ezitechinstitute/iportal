@@ -1,17 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AttendaceButton } from "../AttendaceButton";
 import InternTopbar from "../InternTopbar/InternTopbar";
 import InternSidebar from "../InternSidebar";
 import { CreateLeave } from "./CreateLeave";
+import axios from "axios";
 
 const Leave = () => {
   const checkLoggedIn = sessionStorage.getItem("isLoggedIn");
   const navigate = useNavigate();
+  const [leaves, setLeaves] = useState([]);
+  // const eziId = sessionStorage.getItem("eziId");
+  const eziId = "EZI-23-5-24/7832";
 
   if (!checkLoggedIn) {
     navigate("/");
   }
+
+  const GetInterLeaves = async () => {
+    await axios
+      .get(`http://localhost:8800/get-intern-leaves`, {
+        params: {
+          id: eziId,
+        },
+      })
+      .then((res) => {
+        setLeaves(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    GetInterLeaves();
+  }, [GetInterLeaves]);
   return (
     <>
       <InternTopbar />
@@ -37,6 +60,8 @@ const Leave = () => {
               <table className="table table-bordered">
                 <thead>
                   <tr>
+                    <th>ETI-ID</th>
+                    <th>NAME</th>
                     <th>DATE</th>
                     <th>TO</th>
                     <th>FROM</th>
@@ -45,6 +70,11 @@ const Leave = () => {
                   </tr>
                 </thead>
                 <tbody>
+                  {/* {
+                    Array.isArray(leaves) ? leaves.map((res) => {
+                      const {eti_id, name, from_date, to_date, }
+                    })
+                  } */}
                   <tr>
                     <td></td>
                     <td></td>

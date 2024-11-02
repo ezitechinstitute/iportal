@@ -22,6 +22,7 @@ import Withdraw from "./pages/Withdraw";
 import Intern from "./pages/Intern";
 import Supervisor from "./pages/Supervisor";
 import { AdminLogin } from "./pages/AdminLogin";
+import { InternAccounts } from "./pages/InternAccounts";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
           <Route exact path="/setting" element={<Setting />} />
           <Route exact path="/feedback" element={<Feedback />} />
           <Route exact path="/interns" element={<Intern />} />
+          <Route exact path="/intern-accounts" element={<InternAccounts />} />
           <Route exact path="/Completed-Withdraw" element={<CompWithdraw />} />
           <Route exact path="/supervisor" element={<Supervisor />} />
         </Routes>

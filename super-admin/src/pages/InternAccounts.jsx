@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ManagerTopbar } from "../components/ManagerTopbar";
 import { ManagerSidebar } from "../components/ManagerSidebar";
-import "./Intern.css";
+import { ManagerTopbar } from "../components/ManagerTopbar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { EditIntern } from "../components/EditIntern";
+import { EditInternAccount } from "../components/EditInternAccount";
 
-const Intern = () => {
+export const InternAccounts = () => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const [data, setData] = useState([]);
@@ -27,7 +26,7 @@ const Intern = () => {
   const GetData = async () => {
     setLoading(true);
     await axios
-      .get("https://api.ezitech.org/get-all-interns")
+      .get("https://api.ezitech.org/intern-accounts")
       .then((res) => {
         setData(res.data);
         setFilteredData(data);
@@ -49,6 +48,17 @@ const Intern = () => {
     GetData();
   }, [GetData]);
 
+  //   const DeleteAccount = async (id) => {
+  //     await axios
+  //       .delete(`http://localhost:8800/del-int-account/${id}`)
+  //       .then((res) => {
+  //         alert(res.data.message);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   };
+
   return (
     <>
       <ManagerTopbar />
@@ -65,7 +75,7 @@ const Intern = () => {
               <div class="col-12">
                 <div class="card">
                   <div class="card-header border-bottom">
-                    <h2 class="card-title">Interns</h2>
+                    <h2 class="card-title">Intern Accounts</h2>
 
                     <div class="ag-btns d-flex flex-wrap">
                       <div
@@ -88,14 +98,12 @@ const Intern = () => {
                       <thead>
                         <tr>
                           {/* <th>ETI-ID</th> */}
-                          <th>AVATAR</th>
+                          <th>ETI-ID</th>
                           <th>NAME</th>
                           <th>EMAIL</th>
-                          <th>DURATION</th>
-                          <th>JOIN</th>
+                          <th>PASSWORD</th>
                           <th>TECH</th>
                           <th>STATUS</th>
-                          <th>ALLOW</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -104,69 +112,47 @@ const Intern = () => {
                         {Array.isArray(filteredData)
                           ? filteredData.map((rs) => {
                               const {
-                                id,
-                                image,
+                                int_id,
+                                eti_id,
                                 name,
                                 email,
-                                duration,
-                                join_date,
-                                technology,
-                                status,
-                                intern_type,
+                                int_technology,
+                                int_status,
                               } = rs;
 
                               return (
                                 <>
                                   <tr>
                                     <td>
-                                      <img
-                                        src={image}
-                                        alt="avatar"
-                                        width={50}
-                                        height={50}
-                                      />
+                                      <strong>{eti_id}</strong>
                                     </td>
                                     <td>{name}</td>
                                     <td>{email}</td>
-                                    <td>{duration}</td>
-                                    <td>{join_date}</td>
-                                    <td>{technology}</td>
+                                    <td>**********</td>
+                                    <td>{int_technology}</td>
                                     <td>
-                                      {status === "Active" ? (
+                                      {int_status === "Active" ? (
                                         <>
                                           <span className="badge badge-pill badge-glow badge-success">
-                                            {status}
+                                            {int_status}
                                           </span>
                                         </>
-                                      ) : status === "Interview" ? (
+                                      ) : int_status === "Freeze" ? (
                                         <>
-                                          <span className="badge badge-pill badge-glow badge-info">
-                                            {status}
+                                          <span className="badge badge-pill badge-glow badge-danger">
+                                            {int_status}
                                           </span>
                                         </>
-                                      ) : status === "Contact" ? (
+                                      ) : int_status === "Test" ? (
                                         <>
                                           <span className="badge badge-pill badge-glow badge-info">
-                                            {status}
-                                          </span>
-                                        </>
-                                      ) : status === "Test" ? (
-                                        <>
-                                          <span className="badge badge-pill badge-glow badge-info">
-                                            {status}
-                                          </span>
-                                        </>
-                                      ) : status === "Completed" ? (
-                                        <>
-                                          <span className="badge badge-pill badge-glow badge-info">
-                                            Test {status}
+                                            {int_status}
                                           </span>
                                         </>
                                       ) : (
                                         ""
                                       )}
                                     </td>
-                                    <td>{intern_type}</td>
 
                                     <td>
                                       <div className="dropdown">
@@ -185,31 +171,31 @@ const Intern = () => {
                                                 href="#"
                                                 type="button"
                                                 data-toggle="modal"
-                                                data-target="#default1"
+                                                data-target="#defaultAccount"
                                                 onClick={() =>
                                                   setInternData({
-                                                    id: id,
+                                                    id: int_id,
                                                     email: email,
-                                                    technology: technology,
-                                                    status: status,
+                                                    technology: int_technology,
+                                                    status: int_status,
                                                   })
                                                 }
                                               >
                                                 Edit
                                               </a>
                                             </li>
-                                            <li>
+                                            {/* <li>
                                               <a
                                                 className="dropdown-item"
                                                 href="#"
                                                 type="button"
-                                                // onClick={() =>
-                                                //   RemoveOnsite(email)
-                                                // }
+                                                onClick={() =>
+                                                  DeleteAccount(int_id)
+                                                }
                                               >
-                                                Remove
+                                                Delete
                                               </a>
-                                            </li>
+                                            </li> */}
                                           </ul>
                                         </div>
                                       </div>
@@ -228,11 +214,9 @@ const Intern = () => {
           </section>
 
           {/* Edit Inter */}
-          <EditIntern data={internData} />
+          <EditInternAccount data={internData} />
         </div>
       </div>
     </>
   );
 };
-
-export default Intern;
