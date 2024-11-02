@@ -17,7 +17,7 @@ const Intern = () => {
   // Pagination
   const [currentPage, settCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [dataLimit, setDataLimit] = useState(300);
+  const [dataLimit, setDataLimit] = useState(200);
 
   const [internData, setInternData] = useState({
     email: null,
@@ -135,7 +135,9 @@ const Intern = () => {
                               return (
                                 <>
                                   <tr>
-                                    <td>{id}</td>
+                                    <td>
+                                      <strong>{id}</strong>
+                                    </td>
                                     <td>
                                       <img
                                         src={image}
