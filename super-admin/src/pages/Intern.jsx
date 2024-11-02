@@ -5,6 +5,7 @@ import "./Intern.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { EditIntern } from "../components/EditIntern";
+import { Pagination } from "../components/Pagination";
 
 const Intern = () => {
   const navigate = useNavigate();
@@ -13,6 +14,10 @@ const Intern = () => {
   const [loading, setLoading] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  // Pagination
+  const [currentPage, settCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [dataLimit, setDataLimit] = useState(500);
 
   const [internData, setInternData] = useState({
     email: null,
@@ -24,18 +29,29 @@ const Intern = () => {
     navigate("/");
   }
 
-  const GetData = async () => {
+  const GetData = async (page) => {
     setLoading(true);
     await axios
-      .get("https://api.ezitech.org/get-all-interns")
+      .get("https://api.ezitech.org/get-all-interns", {
+        params: {
+          page: page,
+          limit: dataLimit,
+        },
+      })
       .then((res) => {
         setData(res.data);
         setFilteredData(data);
+        settCurrentPage(res.data.meta.page);
+        setTotalPages(res.data.meta.totalPages);
         setLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handlePageChange = (page) => {
+    settCurrentPage(page);
   };
 
   useEffect(() => {
@@ -46,7 +62,7 @@ const Intern = () => {
   }, [searchTerm, data]);
 
   useEffect(() => {
-    GetData();
+    GetData(currentPage);
   }, [GetData]);
 
   return (
@@ -222,6 +238,13 @@ const Intern = () => {
                       </tbody>
                     </table>
                   </div>
+                  <br />
+                  {/* Pagination */}
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                  />
                 </div>
               </div>
             </div>

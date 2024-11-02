@@ -1,11 +1,35 @@
 const { connection } = require("../../config/connection");
 
 const AdminInterns = (req, res) => {
-  const sql = "SELECT * FROM `intern_table`";
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 500;
+  const offset = (page - 1) * limit;
 
-  connection.query(sql, (err, data) => {
-    if (err) throw err;
-    return res.json(data);
+  const sql = "SELECT * FROM `intern_table` ORDER BY id ASC LIMIT ? OFFSET ?";
+
+  connection.query(sql, [limit, offset], (err, data) => {
+    if (err) {
+      return res.json(err);
+    } else {
+      const sql = "SELECT COUNT(*) as count FROM `intern_table`";
+
+      connection.query(sql, (c_err, c_data) => {
+        const totalData = c_data[0].count;
+        const totalPages = Math.ceil(totalData / limit);
+
+        return res.json({
+          data: data,
+          meta: {
+            page,
+            limit,
+            totalData,
+            totalPages,
+          },
+        });
+      });
+    }
+
+    // return res.json(data);
   });
 };
 
