@@ -85,26 +85,14 @@ const Intern = () => {
           <div className="content-body"></div>
 
           <section id="complex-header-datatable">
-            <div class="row">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header border-bottom">
-                    <h2 class="card-title">Interns</h2>
+            <div className="row">
+              <div className="col-12">
+                <div className="card">
+                  <div className="card-header border-bottom">
+                    <h2 className="card-title">Interns</h2>
 
-                    <div class="ag-btns d-flex flex-wrap">
-                      <div
-                        class="btn-export"
-                        style={{
-                          marginRight: "20px",
-                        }}
-                      >
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Search..."
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                        />
-
+                    <div className="ag-btns d-flex flex-wrap">
+                      <div>
                         <select
                           name="byStatus"
                           id=""
@@ -122,10 +110,18 @@ const Intern = () => {
                           <option value="Removed">Removed</option>
                         </select>
                       </div>
+                      <div className="mx-3">
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Search..."
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <div class="card-datatable">
-                    <table class="dt-complex-header table table-bordered table-responsive text-center">
+                  <div className="card-datatable">
+                    <table className="dt-complex-header table table-bordered table-responsive text-center">
                       <thead>
                         <tr>
                           {/* <th>ETI-ID</th> */}
@@ -205,6 +201,12 @@ const Intern = () => {
                                         <>
                                           <span className="badge badge-pill badge-glow badge-info">
                                             Test {status}
+                                          </span>
+                                        </>
+                                      ) : status === "Removed" ? (
+                                        <>
+                                          <span className="badge badge-pill badge-glow badge-danger">
+                                            {status}
                                           </span>
                                         </>
                                       ) : (
