@@ -388,7 +388,7 @@ const ProjectDayIncrement = (req, res) => {
           .setZone("Asia/Karachi")
           .toFormat("yyyy-MM-dd");
 
-        if (project.days < project.duration && project.end_date > currentDate) {
+        if (project.days < project.duration || project.end_date > currentDate) {
           console.log("Chal gya");
           const updatedDays = project.days + 1;
 

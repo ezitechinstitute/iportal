@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const pageNumbers = [];
-  for (let i = 1; i <= totalPages; i++) {
+  for (let i = 1; i <= totalPages; i += 1) {
     pageNumbers.push(i);
   }
 
@@ -13,25 +13,32 @@ export const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   };
   return (
     <>
-      <div className="container overflow-x-scroll">
+      <div
+        className="container overflow-x-auto"
+        style={{ overflowY: "hidden" }}
+      >
         <nav>
           <ul className="pagination">
             {pageNumbers.map((number) => (
-              <li
-                key={number}
-                className={`page-item ${activePage === number ? "active" : ""}`}
-              >
-                <a
-                  className="page-link"
-                  href="#"
-                  onClick={() => {
-                    onPageChange(number);
-                    handlePageClick(number);
-                  }}
+              <>
+                <li
+                  key={number}
+                  className={`page-item ${
+                    activePage === number ? "active" : ""
+                  }`}
                 >
-                  {number}
-                </a>
-              </li>
+                  <a
+                    className="page-link"
+                    href="#"
+                    onClick={() => {
+                      onPageChange(number);
+                      handlePageClick(number);
+                    }}
+                  >
+                    {number}
+                  </a>
+                </li>
+              </>
             ))}
           </ul>
         </nav>

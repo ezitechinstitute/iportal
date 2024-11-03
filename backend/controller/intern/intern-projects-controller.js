@@ -120,7 +120,7 @@ const TaskDayIncrement = (req, res) => {
           .toFormat("yyyy-MM-dd");
 
         if (
-          task.task_days < task.task_duration &&
+          task.task_days < task.task_duration ||
           task.task_end > currentDate
         ) {
           const updatedDays = task.task_days + 1;
@@ -166,7 +166,7 @@ const ProjectTaskDayIncrement = (req, res) => {
           .toFormat("yyyy-MM-dd");
 
         if (
-          task.task_days < task.task_duration &&
+          task.task_days < task.task_duration ||
           task.t_end_date > currentDate
         ) {
           const updatedDays = task.task_days + 1;

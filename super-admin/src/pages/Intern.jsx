@@ -14,6 +14,7 @@ const Intern = () => {
   const [loading, setLoading] = useState(false);
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [statusTerm, setStatusTerm] = useState("");
   // Pagination
   const [currentPage, settCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -40,7 +41,7 @@ const Intern = () => {
       })
       .then((res) => {
         setData(res.data.data);
-        setFilteredData(data);
+        setFilteredData(res.data.data);
         settCurrentPage(res.data.meta.page);
         setTotalPages(res.data.meta.totalPages);
         setLoading(false);
@@ -62,8 +63,15 @@ const Intern = () => {
   }, [searchTerm, data]);
 
   useEffect(() => {
+    const filter = data.filter((item) =>
+      item.status.toLowerCase().includes(statusTerm.toLowerCase())
+    );
+    setFilteredData(filter);
+  }, [statusTerm, data]);
+
+  useEffect(() => {
     GetData(currentPage);
-  }, [GetData]);
+  }, [currentPage]);
 
   return (
     <>
@@ -96,6 +104,23 @@ const Intern = () => {
                           placeholder="Search..."
                           onChange={(e) => setSearchTerm(e.target.value)}
                         />
+
+                        <select
+                          name="byStatus"
+                          id=""
+                          className="form-control"
+                          onChange={(e) => setStatusTerm(e.target.value)}
+                        >
+                          <option selected disabled>
+                            --Select--
+                          </option>
+                          <option value="Interview">Interview</option>
+                          <option value="Contact">Contact</option>
+                          <option value="Test">Test</option>
+                          <option value="Completed">Completed</option>
+                          <option value="Active">Active</option>
+                          <option value="Removed">Removed</option>
+                        </select>
                       </div>
                     </div>
                   </div>
