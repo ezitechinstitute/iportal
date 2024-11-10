@@ -303,7 +303,7 @@ router.delete("/delete-invoice/:id", DeleteInvoice);
 router.get("/get-interview-intern", AdminInterviewInt);
 router.get("/get-contact-intern", AdminContactInt);
 router.get("/get-test-intern", AdminTestInt);
-router.get("/get-tcomp-intern", AdminTestCompInt);
+router.get("/get-tcompl-intern", AdminTestCompInt);
 router.get("/get-active-intern", AdminActiveInt);
 router.get("/get-revmoved-intern", AdminRemovedInt);
 

@@ -46,7 +46,7 @@ export const InternAccounts = () => {
 
   useEffect(() => {
     GetData();
-  }, [GetData]);
+  });
 
   //   const DeleteAccount = async (id) => {
   //     await axios
