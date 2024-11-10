@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { ManagerTopbar } from "../components/ManagerTopbar";
 import { ManagerSidebar } from "../components/ManagerSidebar";
-import "./InternTask.css";
 import { useNavigate } from "react-router-dom";
-import { TaskDetails } from "../components/TaskDetails";
 import axios from "axios";
 import { Pagination } from "../components/Pagination";
+import { AdminProjectTaskDetails } from "../components/AdminProjectTaskDetails";
 
-const InternTask = () => {
+export const IntProjectTasks = () => {
   const navigate = useNavigate();
-  // const [token, setToken] = useState(sessionStorage.getItem("token"));
+  //   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const check = sessionStorage.getItem("isLoggedIn");
   // const supid = sessionStorage.getItem("managerid");
-  // const supid = 11;
+  //   const supid = 11;
 
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -36,7 +35,7 @@ const InternTask = () => {
   const GetTasks = async (page) => {
     // setLoader(true);
     await axios
-      .get("https://api.ezitech.org/admin-int-tasks", {
+      .get("https://api.ezitech.org/admin-int-proj-tasks", {
         params: {
           page: page,
           limit: dataLimit,
@@ -88,7 +87,7 @@ const InternTask = () => {
               <div className="col-12">
                 <div className="card">
                   <div className="card-header">
-                    <h4 className="card-title">Intern Tasks</h4>
+                    <h4 className="card-title">Project Tasks</h4>
                     <div class="ag-btns d-flex flex-wrap">
                       {/* <input
                         type="text"
@@ -143,8 +142,7 @@ const InternTask = () => {
                                 <tr>
                                   <th>Name</th>
                                   <th>Task Title</th>
-                                  {/* <th>Project Title</th> */}
-
+                                  <th>Project Title</th>
                                   <th>Start Date</th>
                                   <th>End Date</th>
                                   <th>Duration</th>
@@ -158,24 +156,23 @@ const InternTask = () => {
                                 {Array.isArray(filteredData)
                                   ? filteredData.map((rs) => {
                                       const {
-                                        eti_id,
                                         task_id,
                                         name,
                                         task_title,
-
-                                        task_start,
-                                        task_end,
+                                        title,
+                                        t_start_date,
+                                        t_end_date,
                                         task_duration,
                                         task_days,
                                         task_status,
-                                        task_approve,
+                                        approved,
                                       } = rs;
-                                      console.log(task_approve);
+
                                       const date = new Date(
-                                        task_start
+                                        t_start_date
                                       ).toLocaleDateString("en-PK");
                                       const endDate = new Date(
-                                        task_end
+                                        t_end_date
                                       ).toLocaleDateString("en-PK");
 
                                       return (
@@ -183,14 +180,13 @@ const InternTask = () => {
                                           <tr>
                                             <td>{name}</td>
                                             <td>{task_title}</td>
-                                            {/* <td>{task_description}</td> */}
+                                            <td>{title}</td>
                                             <td>{date}</td>
                                             <td>{endDate}</td>
-
                                             <td>{task_duration}</td>
                                             <td>{task_days}</td>
 
-                                            {task_approve === null ? (
+                                            {approved === null ? (
                                               <>
                                                 <td>
                                                   {task_status === "Ongoing" ? (
@@ -215,14 +211,14 @@ const InternTask = () => {
                                                   )}
                                                 </td>
                                               </>
-                                            ) : task_approve === 1 ? (
+                                            ) : approved === 1 ? (
                                               <td>
                                                 <span className="badge badge-glow badge-success">
                                                   {" "}
                                                   {task_status}{" "}
                                                 </span>
                                               </td>
-                                            ) : task_approve === 0 ? (
+                                            ) : approved === 0 ? (
                                               <td>
                                                 <span className="badge badge-glow badge-danger">
                                                   {" "}
@@ -277,11 +273,9 @@ const InternTask = () => {
           </section>
 
           {/* Task Details */}
-          <TaskDetails values={taskData} />
+          <AdminProjectTaskDetails values={taskData} />
         </div>
       </div>
     </>
   );
 };
-
-export default InternTask;

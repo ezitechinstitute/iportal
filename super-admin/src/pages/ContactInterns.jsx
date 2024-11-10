@@ -7,7 +7,7 @@ import axios from "axios";
 import { EditIntern } from "../components/EditIntern";
 import { Pagination } from "../components/Pagination";
 
-const Intern = () => {
+const ContactIntern = () => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const [data, setData] = useState([]);
@@ -30,10 +30,21 @@ const Intern = () => {
     navigate("/");
   }
 
+  const RemoveInt = async (id) => {
+    await axios
+      .put(`https://api.ezitech.org/rem-int/${id}`)
+      .then((res) => {
+        alert(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const GetData = async (page) => {
     setLoading(true);
     await axios
-      .get("https://api.ezitech.org/get-all-interns", {
+      .get("https://api.ezitech.org/get-contact-intern", {
         params: {
           page: page,
           limit: dataLimit,
@@ -89,7 +100,7 @@ const Intern = () => {
               <div className="col-12">
                 <div className="card">
                   <div className="card-header border-bottom">
-                    <h2 className="card-title">Interns</h2>
+                    <h2 className="card-title">Contact Interns</h2>
 
                     <div className="ag-btns d-flex flex-wrap">
                       <div>
@@ -129,6 +140,7 @@ const Intern = () => {
                           <th>AVATAR</th>
                           <th>NAME</th>
                           <th>EMAIL</th>
+                          <th>CITY</th>
                           <th>DURATION</th>
                           <th>JOIN</th>
                           <th>TECH</th>
@@ -146,6 +158,7 @@ const Intern = () => {
                                 image,
                                 name,
                                 email,
+                                city,
                                 duration,
                                 join_date,
                                 technology,
@@ -169,50 +182,11 @@ const Intern = () => {
                                     </td>
                                     <td>{name}</td>
                                     <td>{email}</td>
+                                    <td>{city}</td>
                                     <td>{duration}</td>
                                     <td>{join_date}</td>
                                     <td>{technology}</td>
-                                    <td>
-                                      {status === "Active" ? (
-                                        <>
-                                          <span className="badge badge-pill badge-glow badge-success">
-                                            {status}
-                                          </span>
-                                        </>
-                                      ) : status === "Interview" ? (
-                                        <>
-                                          <span className="badge badge-pill badge-glow badge-info">
-                                            {status}
-                                          </span>
-                                        </>
-                                      ) : status === "Contact" ? (
-                                        <>
-                                          <span className="badge badge-pill badge-glow badge-info">
-                                            {status}
-                                          </span>
-                                        </>
-                                      ) : status === "Test" ? (
-                                        <>
-                                          <span className="badge badge-pill badge-glow badge-info">
-                                            {status}
-                                          </span>
-                                        </>
-                                      ) : status === "Completed" ? (
-                                        <>
-                                          <span className="badge badge-pill badge-glow badge-info">
-                                            Test {status}
-                                          </span>
-                                        </>
-                                      ) : status === "Removed" ? (
-                                        <>
-                                          <span className="badge badge-pill badge-glow badge-danger">
-                                            {status}
-                                          </span>
-                                        </>
-                                      ) : (
-                                        ""
-                                      )}
-                                    </td>
+                                    <td>{status}</td>
                                     <td>{intern_type}</td>
 
                                     <td>
@@ -250,9 +224,7 @@ const Intern = () => {
                                                 className="dropdown-item"
                                                 href="#"
                                                 type="button"
-                                                // onClick={() =>
-                                                //   RemoveOnsite(email)
-                                                // }
+                                                onClick={() => RemoveInt(id)}
                                               >
                                                 Remove
                                               </a>
@@ -289,4 +261,4 @@ const Intern = () => {
   );
 };
 
-export default Intern;
+export default ContactIntern;

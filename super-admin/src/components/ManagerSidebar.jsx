@@ -77,20 +77,96 @@ export const ManagerSidebar = () => {
             </li>
 
             <li className={activeLink === "interns" ? "active" : "undefined"}>
-              <NavLink
-                className="d-flex align-items-center"
-                onClick={() => setActive("interns")}
-                id={"2"}
-                to="/interns"
-              >
+              <a className="d-flex align-items-center" href="#" type="button">
                 <i data-feather="users"></i>
-                <span className="menu-item" data-i18n="eCommerce">
-                  Interns
+                <span className="menu-title text-truncate" data-i18n="interns">
+                  All Interns
                 </span>
-              </NavLink>
+              </a>
+              <ul className="menu-content">
+                <li
+                  className={
+                    activeLink === "interview" ? "active" : "undefined"
+                  }
+                >
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("interview")}
+                    to="/int-interview"
+                  >
+                    <i data-feather="briefcase"></i>
+                    <span className="menu-item" data-i18n="List">
+                      Interview
+                    </span>
+                  </NavLink>
+                </li>
+                <li
+                  className={activeLink === "contact" ? "active" : "undefined"}
+                >
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("contact")}
+                    to="/int-contact"
+                  >
+                    <i data-feather="phone"></i>
+                    <span className="menu-item" data-i18n="Preview">
+                      Contact
+                    </span>
+                  </NavLink>
+                </li>
+                <li className={activeLink === "test" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("test")}
+                    to={"/int-test"}
+                  >
+                    <i data-feather="activity"></i>
+                    <span className="menu-item" data-i18n="Edit">
+                      Test
+                    </span>
+                  </NavLink>
+                </li>
+                <li
+                  className={
+                    activeLink === "completed" ? "active" : "undefined"
+                  }
+                >
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("completed")}
+                    to={"/int-completed"}
+                  >
+                    <i data-feather="check-square"></i>
+                    <span className="menu-item" data-i18n="Add">
+                      Completed
+                    </span>
+                  </NavLink>
+                </li>
+
+                <li
+                  className={
+                    activeLink === "activeInt" ? "active" : "undefined"
+                  }
+                >
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("activeInt")}
+                    to={"/int-active"}
+                  >
+                    <i data-feather="user-check"></i>
+                    <span className="menu-item" data-i18n="Add">
+                      Active
+                    </span>
+                  </NavLink>
+                </li>
+              </ul>
             </li>
 
-            <li className={activeLink === "internsAccount" ? "active" : "undefined"}>
+            <li
+              className={
+                activeLink === "internsAccount" ? "active" : "undefined"
+              }
+            >
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("internsAccount")}
@@ -114,6 +190,22 @@ export const ManagerSidebar = () => {
                 <i data-feather="grid"></i>
                 <span className="menu-item" data-i18n="eCommerce">
                   Interns Projects
+                </span>
+              </NavLink>
+            </li>
+
+            <li
+              className={activeLink === "projectTasks" ? "active" : "undefined"}
+            >
+              <NavLink
+                className="d-flex align-items-center"
+                onClick={() => setActive("projectTasks")}
+                id={"3"}
+                to="/int-project-tasks"
+              >
+                <i data-feather="check-circle"></i>
+                <span className="menu-item" data-i18n="eCommerce">
+                  Project Tasks
                 </span>
               </NavLink>
             </li>

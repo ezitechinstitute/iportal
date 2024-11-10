@@ -97,6 +97,13 @@ const {
   UpdateActiveIntern,
   FreezeInternAccount,
   DeleteInternAccount,
+  AdminInterviewInt,
+  AdminContactInt,
+  AdminTestCompInt,
+  AdminTestInt,
+  AdminActiveInt,
+  AdminRemovedInt,
+  RemoveInt,
 } = require("../controller/admin/get-all-interns");
 const {
   AddBalance,
@@ -175,6 +182,11 @@ const {
   CountLeaves,
 } = require("../controller/intern/intern-statics-controller");
 const { SubmitLeaveReq } = require("../controller/intern/intern-leave");
+const {
+  AdminIntProjects,
+  AdminIntProjectTasks,
+  AdminIntTasks,
+} = require("../controller/admin/admin-project-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -288,11 +300,22 @@ router.get("/get-remaining-amount", GetRemainingAmount);
 router.delete("/delete-invoice/:id", DeleteInvoice);
 
 // Admin Inters
-router.get("/get-all-interns", AdminInterns);
+router.get("/get-interview-intern", AdminInterviewInt);
+router.get("/get-contact-intern", AdminContactInt);
+router.get("/get-test-intern", AdminTestInt);
+router.get("/get-tcomp-intern", AdminTestCompInt);
+router.get("/get-active-intern", AdminActiveInt);
+router.get("/get-revmoved-intern", AdminRemovedInt);
+
 router.put("/update-intern/:id", UpdateIntern);
 router.get("/intern-accounts", AdminActiveInterns);
 router.put("/update-int-account/:id", UpdateActiveIntern);
-// router.delete("/del-int-account/:id", DeleteInternAccount);
+router.put("/rem-int/:id", RemoveInt);
+
+// Admin Intern Projects
+router.get("/admin-int-proj", AdminIntProjects);
+router.get("/admin-int-proj-tasks", AdminIntProjectTasks);
+router.get("/admin-int-tasks", AdminIntTasks);
 
 // Admin Account Credit Debit Endpoints
 router.get("/all-account-rec", GetAllRecords);
