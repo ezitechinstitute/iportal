@@ -186,7 +186,11 @@ const InterviewIntern = () => {
                                     <td>{duration}</td>
                                     <td>{join_date}</td>
                                     <td>{technology}</td>
-                                    <td>{status}</td>
+                                    <td>
+                                      <span className="badge badge-pill badge-glow badge-info">
+                                        {status}
+                                      </span>
+                                    </td>
                                     <td>{intern_type}</td>
 
                                     <td>
