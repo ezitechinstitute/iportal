@@ -74,6 +74,7 @@ const AddAmount = (req, res) => {
             intern_name,
             intern_contact,
             intern_email,
+            fullAmount,
             received_amount,
             remaining_amount,
             due_date,
@@ -83,12 +84,13 @@ const AddAmount = (req, res) => {
             // const dueDate = new Date().getDay() + 10;
 
             const invoiceSql =
-              "INSERT INTO invoices (inv_id, name, contact, intern_email, received_amount, remaining_amount, due_date, received_by) VALUES (?,?,?,?,?,?,?,?)";
+              "INSERT INTO invoices (inv_id, name, contact, intern_email, `total_amount`, received_amount, remaining_amount, due_date, received_by) VALUES (?,?,?,?,?,?,?,?)";
             const invoiceData = [
               inv_id,
               intern_name,
               intern_contact,
               intern_email,
+              fullAmount,
               received_amount,
               remaining_amount,
               due_date,
@@ -148,6 +150,7 @@ const AddAmount = (req, res) => {
                   internName,
                   internPhone,
                   internEmail,
+                  fullAmount,
                   paidAmount,
                   remainingAmount,
                   invoiceDue,
@@ -225,6 +228,7 @@ const AddAmount = (req, res) => {
             intern_name,
             intern_contact,
             intern_email,
+            fullAmount,
             received_amount,
             received_by,
             callback
@@ -232,12 +236,13 @@ const AddAmount = (req, res) => {
             // const dueDate = new Date().getDay() + 10;
 
             const invoiceSql =
-              "INSERT INTO invoices (inv_id, name, contact, intern_email, received_amount, received_by) VALUES (?,?,?,?,?,?)";
+              "INSERT INTO invoices (inv_id, name, contact, intern_email, `total_amount`, received_amount, received_by) VALUES (?,?,?,?,?,?)";
             const invoiceData = [
               inv_id,
               intern_name,
               intern_contact,
               intern_email,
+              fullAmount,
               received_amount,
               received_by,
             ];
@@ -264,6 +269,7 @@ const AddAmount = (req, res) => {
             internName,
             internPhone,
             internEmail,
+            fullAmount,
             paidAmount,
             managerMail,
             (err) => {
