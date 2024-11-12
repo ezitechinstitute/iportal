@@ -121,7 +121,7 @@ const ApproveInvoice = (req, res) => {
   }
 };
 
-const DeleteInvoice = (req, re) => {
+const DeleteInvoice = (req, res) => {
   const { id } = req.params;
 
   const sql = "DELETE FROM `invoices` WHERE `id` = ?";
