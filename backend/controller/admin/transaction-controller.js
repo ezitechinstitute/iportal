@@ -68,22 +68,19 @@ const GetRemainingAmount = (req, res) => {
 };
 
 const ActivePortal = (email) => {
-  const sql0 =
-    "UPDATE `intern_table` SET `status`='Active' WHERE `email` = (?)";
+  const sql0 = "UPDATE `intern_table` SET `status`= 'Active' WHERE `email` = ?";
   connection.query(sql0, [email], (err, data) => {
     if (err) {
       return err;
     } else {
       if (data.affectedRows === 1) {
         const sql1 =
-          "UPDATE `intern_accounts` SET `int_status`='Active' WHERE `email` = (?)";
+          "UPDATE `intern_accounts` SET `int_status`= 'Active' WHERE `email` = ?";
         connection.query(sql1, [email], (reject, resolve) => {
           if (reject) {
             return reject;
           } else {
-            if (resolve.affectedRows === 1) {
-              console.log("Portal Activated");
-            }
+            console.log("Portal Activated");
           }
         });
       }

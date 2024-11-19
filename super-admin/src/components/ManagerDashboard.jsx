@@ -1,28 +1,294 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataSet1 } from "../data/manager-data/Data";
 import { ManagerChartOne } from "./ManagerChartOne";
 import { FiRefreshCw } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const ManagerDashboard = () => {
   const navigate = useNavigate();
+  const [token, setToken] = useState(sessionStorage.getItem("token"));
   const check = sessionStorage.getItem("isLoggedIn");
+  const [interviewCount, setInterviewCount] = useState(0);
+  const [contactCount, setContactCount] = useState(0);
+  const [testCount, setTestCount] = useState(0);
+  const [completedCount, setCompletedCount] = useState(0);
+
+  const [allInterCount, setAllInternCount] = useState(0);
+  const [allActiveCount, setAllActiveCount] = useState(0);
+  const [allProjectsCount, setAllProjectsCount] = useState(0);
+  const [allTasksCount, setAllTasksCount] = useState(0);
+
+  const [ongoingCount, setOngoingCount] = useState(0);
+  const [submittedCount, setSubmittedCount] = useState(0);
+  const [compleCount, setCompleCount] = useState(0);
+  const [expiredCount, setExpiredCount] = useState(0);
 
   if (!check) {
     navigate("/");
   }
 
-  const [userData, SetUserData] = useState({
-    labels: DataSet1.map((rs) => rs.Years),
+  // const [userData, SetUserData] = useState({
+  //   labels: DataSet1.map((rs) => rs.Years),
+  //   datasets: [
+  //     {
+  //       label: "This Year Interns",
+  //       data: DataSet1.map((rs) => rs.Visitors),
+  //       backgroundColor: ["#3275db"],
+  //       borderColor: "#3275db",
+  //     },
+  //   ],
+  // });
+
+  useEffect(() => {
+    const InterviewCount = async () => {
+      await axios
+        .get("https://api.ezitech.org/admin-interview-count")
+        .then((res) => {
+          setInterviewCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    InterviewCount();
+
+    const ContactCount = async () => {
+      await axios
+        .get("https://api.ezitech.org/admin-contact-count")
+        .then((res) => {
+          setContactCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    ContactCount();
+
+    const TestCount = async () => {
+      await axios
+        .get("https://api.ezitech.org/admin-test-count")
+        .then((res) => {
+          setTestCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    TestCount();
+
+    const TestCompletedCount = async () => {
+      await axios
+        .get("https://api.ezitech.org/admin-completed-count")
+        .then((res) => {
+          setCompletedCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    TestCompletedCount();
+
+    // Interns Api
+    const AllInternCount = async () => {
+      await axios
+        .get("https://api.ezitech.org/admin-all-intern-count")
+        .then((res) => {
+          setAllInternCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    AllInternCount();
+
+    const AllActiveCount = async () => {
+      await axios
+        .get("https://api.ezitech.org/admin-all-active-count")
+        .then((res) => {
+          setAllActiveCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    AllActiveCount();
+
+    const AllProjectsCount = async () => {
+      await axios
+        .get("https://api.ezitech.org/admin-all-projects-count")
+        .then((res) => {
+          setAllProjectsCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    AllProjectsCount();
+
+    const AllTasksCount = async () => {
+      await axios
+        .get("https://api.ezitech.org/admin-all-tasks-count")
+        .then((res) => {
+          setAllTasksCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    AllTasksCount();
+
+    // Projects
+    const OngoingCount = async () => {
+      await axios
+        .get("https://api.ezitech.org/count-ongoing")
+        .then((res) => {
+          setOngoingCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    OngoingCount();
+
+    const SubmittedCount = async () => {
+      await axios
+        .get("https://api.ezitech.org/count-submitted")
+        .then((res) => {
+          setSubmittedCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    SubmittedCount();
+
+    const CompletedCount = async () => {
+      await axios
+        .get("https://api.ezitech.org/count-completed")
+        .then((res) => {
+          setCompleCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    CompletedCount();
+
+    const ExpiredCount = async () => {
+      await axios
+        .get("https://api.ezitech.org/count-expired")
+        .then((res) => {
+          setExpiredCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    ExpiredCount();
+  });
+
+  const [dataOnsite, setDataOnsite] = useState({
+    labels: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ], // Array of labels (e.g., months)
     datasets: [
       {
-        label: "This Year Interns",
-        data: DataSet1.map((rs) => rs.Visitors),
+        label: "Onsite Interns",
+        data: [], // Array of data points
         backgroundColor: ["#3275db"],
         borderColor: "#3275db",
       },
     ],
   });
+
+  const [dataRemote, setDataRemote] = useState({
+    labels: [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ], // Array of labels (e.g., months)
+    datasets: [
+      {
+        label: "Remote Interns",
+        data: [], // Array of data points
+        backgroundColor: ["#3275db"],
+        borderColor: "#3275db",
+      },
+    ],
+  });
+
+  const GetOnsiteStatics = async () => {
+    try {
+      const res = await axios.get("https://api.ezitech.org/get-statics", {
+        headers: { "x-access-token": token },
+      });
+      const data = res.data;
+
+      setDataOnsite({
+        ...dataOnsite,
+
+        datasets: [
+          {
+            ...dataOnsite.datasets[0],
+            data: data.onsite,
+          },
+        ],
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const GetRemoteStatics = async () => {
+    try {
+      const res = await axios.get("https://api.ezitech.org/get-statics", {
+        headers: { "x-access-token": token },
+      });
+      const data = res.data;
+
+      setDataRemote({
+        ...dataRemote,
+
+        datasets: [
+          {
+            ...dataRemote.datasets[0],
+            data: data.remote,
+          },
+        ],
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    setInterval(() => {
+      GetOnsiteStatics();
+      GetRemoteStatics();
+    }, 1000);
+  }, []);
+
   return (
     <>
       <div className="app-content content ">
@@ -39,44 +305,106 @@ export const ManagerDashboard = () => {
                 </div>
               </div>
               <div className="row match-height">
-                {/* <!-- Medal Card --> */}
-                <div class="col-xl-4 col-md-6 col-12">
-                  <div class="card card-congratulation-medal p-1">
-                    <div class="card-body">
-                      <h5>Congratulations 🎉 John!</h5>
-                      <p class="card-text font-small-3">
-                        You have earn in March
-                      </p>
-                      <h3 class="mb-75 pt-70">
-                        <a href="javascript:void(0);">PKR : 3,499</a>
-                      </h3>
-                      <button
-                        type="button"
-                        class="btn btn-primary"
-                        style={{ marginTop: "20px" }}
-                      >
-                        Withdraw
-                      </button>
-                      <img
-                        src="./images/coin.svg"
-                        class="congratulation-medal"
-                        alt="Medal Pic"
-                        width={100}
-                        style={{ marginTop: "85px" }}
-                      />
+                {/* <!-- Statistics Card --> */}
+                <div class="col-12 col-xl-12 col-md-6">
+                  <div class="card card-statistics">
+                    <div class="card-header">
+                      <h4 class="card-title">Manager Statistics</h4>
+                      <div class="d-flex align-items-center">
+                        <p class="card-text font-small-2 mr-25 mb-0">
+                          Updated 1 seconds ago
+                        </p>
+                      </div>
+                    </div>
+                    <div class="card-body statistics-body">
+                      <div class="row">
+                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
+                          <div class="media">
+                            <div class="avatar bg-light-primary mr-2">
+                              <div class="avatar-content">
+                                <i
+                                  data-feather="briefcase"
+                                  class="avatar-icon"
+                                ></i>
+                              </div>
+                            </div>
+                            <div class="media-body my-auto">
+                              <h4 class="font-weight-bolder mb-0">
+                                {interviewCount !== 0 ? interviewCount : 0}
+                              </h4>
+                              <p class="card-text font-small-3 mb-0">
+                                Interview
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
+                          <div class="media">
+                            <div class="avatar bg-light-danger mr-2">
+                              <div class="avatar-content">
+                                <i data-feather="phone" class="avatar-icon"></i>
+                              </div>
+                            </div>
+                            <div class="media-body my-auto">
+                              <h4 class="font-weight-bolder mb-0">
+                                {" "}
+                                {contactCount !== 0 ? contactCount : 0}
+                              </h4>
+                              <p class="card-text font-small-3 mb-0">Contact</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-sm-0">
+                          <div class="media">
+                            <div class="avatar bg-light-info mr-2">
+                              <div class="avatar-content">
+                                <i
+                                  data-feather="clipboard"
+                                  class="avatar-icon"
+                                ></i>
+                              </div>
+                            </div>
+                            <div class="media-body my-auto">
+                              <h4 class="font-weight-bolder mb-0">
+                                {" "}
+                                {testCount !== 0 ? testCount : 0}
+                              </h4>
+                              <p class="card-text font-small-3 mb-0">Test</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 col-12">
+                          <div class="media">
+                            <div class="avatar bg-light-success mr-2">
+                              <div class="avatar-content">
+                                <i
+                                  data-feather="check-square"
+                                  class="avatar-icon"
+                                ></i>
+                              </div>
+                            </div>
+                            <div class="media-body my-auto">
+                              <h4 class="font-weight-bolder mb-0">
+                                {completedCount !== 0 ? completedCount : 0}
+                              </h4>
+                              <p class="card-text font-small-3 mb-0">
+                                Test Completed
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                {/* <!--/ Medal Card --> */}
 
-                {/* <!-- Statistics Card --> */}
-                <div class="col-12 col-xl-8 col-md-6">
+                <div class="col-12 col-xl-12 col-md-6">
                   <div class="card card-statistics">
                     <div class="card-header">
-                      <h4 class="card-title">Statistics</h4>
+                      <h4 class="card-title">Intern Statistics</h4>
                       <div class="d-flex align-items-center">
                         <p class="card-text font-small-2 mr-25 mb-0">
-                          Updated 1 month ago
+                          Updated 1 seconds ago
                         </p>
                       </div>
                     </div>
@@ -90,8 +418,12 @@ export const ManagerDashboard = () => {
                               </div>
                             </div>
                             <div class="media-body my-auto">
-                              <h4 class="font-weight-bolder mb-0">230k</h4>
-                              <p class="card-text font-small-3 mb-0">Interns</p>
+                              <h4 class="font-weight-bolder mb-0">
+                                {allInterCount !== 0 ? allInterCount : 0}
+                              </h4>
+                              <p class="card-text font-small-3 mb-0">
+                                Total Interns
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -100,14 +432,18 @@ export const ManagerDashboard = () => {
                             <div class="avatar bg-light-danger mr-2">
                               <div class="avatar-content">
                                 <i
-                                  data-feather="clipboard"
+                                  data-feather="loader"
                                   class="avatar-icon"
                                 ></i>
                               </div>
                             </div>
                             <div class="media-body my-auto">
-                              <h4 class="font-weight-bolder mb-0">8.549k</h4>
-                              <p class="card-text font-small-3 mb-0">Test</p>
+                              <h4 class="font-weight-bolder mb-0">
+                                {allActiveCount !== 0 ? allActiveCount : 0}
+                              </h4>
+                              <p class="card-text font-small-3 mb-0">
+                                Active Interns
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -115,16 +451,15 @@ export const ManagerDashboard = () => {
                           <div class="media">
                             <div class="avatar bg-light-info mr-2">
                               <div class="avatar-content">
-                                <i
-                                  data-feather="loader"
-                                  class="avatar-icon"
-                                ></i>
+                                <i data-feather="grid" class="avatar-icon"></i>
                               </div>
                             </div>
                             <div class="media-body my-auto">
-                              <h4 class="font-weight-bolder mb-0">1.423k</h4>
+                              <h4 class="font-weight-bolder mb-0">
+                                {allProjectsCount !== 0 ? allProjectsCount : 0}
+                              </h4>
                               <p class="card-text font-small-3 mb-0">
-                                Progress
+                                All Projects
                               </p>
                             </div>
                           </div>
@@ -140,9 +475,11 @@ export const ManagerDashboard = () => {
                               </div>
                             </div>
                             <div class="media-body my-auto">
-                              <h4 class="font-weight-bolder mb-0">$9745</h4>
+                              <h4 class="font-weight-bolder mb-0">
+                                {allTasksCount !== 0 ? allTasksCount : 0}
+                              </h4>
                               <p class="card-text font-small-3 mb-0">
-                                Completed
+                                All Tasks
                               </p>
                             </div>
                           </div>
@@ -151,53 +488,90 @@ export const ManagerDashboard = () => {
                     </div>
                   </div>
                 </div>
-                {/* <!--/ Statistics Card --> */}
 
-                {/* <div className="col-xl-3 col-md-6 col-12">
-                  <div className="card card-congratulation-medal">
-                    <div className="card-body text-center mt-2">
-                      <i data-feather="users" style={{ color: "#988ff4" }}></i>
-                      <h3 className="roboto mb-75 mt-2 pt-10">9</h3>
-                      <h5 className="roboto mb-75 mt-2 pt-10">Total Interns</h5>
+                <div class="col-12 col-xl-12 col-md-6">
+                  <div class="card card-statistics">
+                    <div class="card-header">
+                      <h4 class="card-title">Project Statistics</h4>
+                      <div class="d-flex align-items-center">
+                        <p class="card-text font-small-2 mr-25 mb-0">
+                          Updated 1 seconds ago
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </div> */}
-
-                {/* <div className="col-xl-3 col-md-6 col-12">
-                  <div className="card card-congratulation-medal">
-                    <div className="card-body text-center mt-2">
-                      <i
-                        data-feather="clipboard"
-                        style={{ color: "#988ff4" }}
-                      ></i>
-                      <h3 className="roboto mb-75 mt-2 pt-10">7</h3>
-                      <h5 className="roboto mb-75 mt-2 pt-10">Test</h5>
-                    </div>
-                  </div>
-                </div> */}
-
-                {/* <div className="col-xl-3 col-md-6 col-12">
-                  <div className="card card-congratulation-medal">
-                    <div className="card-body text-center mt-2">
-                      <i data-feather="loader" style={{ color: "#988ff4" }}></i>
-                      <h3 className="roboto mb-75 mt-2 pt-10">0</h3>
-                      <h5 className="roboto mb-75 mt-2 pt-10">In Progress</h5>
+                    <div class="card-body statistics-body">
+                      <div class="row">
+                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
+                          <div class="media">
+                            <div class="avatar bg-light-primary mr-2">
+                              <div class="avatar-content">
+                                <i
+                                  data-feather="loader"
+                                  class="avatar-icon"
+                                ></i>
+                              </div>
+                            </div>
+                            <div class="media-body my-auto">
+                              <h4 class="font-weight-bolder mb-0">
+                                {ongoingCount !== 0 ? ongoingCount : 0}
+                              </h4>
+                              <p class="card-text font-small-3 mb-0">Ongoing</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
+                          <div class="media">
+                            <div class="avatar bg-light-info mr-2">
+                              <div class="avatar-content">
+                                <i data-feather="check-circle"></i>
+                              </div>
+                            </div>
+                            <div class="media-body my-auto">
+                              <h4 class="font-weight-bolder mb-0">
+                                {submittedCount !== 0 ? submittedCount : 0}
+                              </h4>
+                              <p class="card-text font-small-3 mb-0">
+                                Submitted
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-sm-0">
+                          <div class="media">
+                            <div class="avatar bg-light-success mr-2">
+                              <div class="avatar-content">
+                                <i data-feather="check-square"></i>
+                              </div>
+                            </div>
+                            <div class="media-body my-auto">
+                              <h4 class="font-weight-bolder mb-0">
+                                {compleCount !== 0 ? compleCount : 0}
+                              </h4>
+                              <p class="card-text font-small-3 mb-0">
+                                Completed
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 col-12">
+                          <div class="media">
+                            <div class="avatar bg-light-danger mr-2">
+                              <div class="avatar-content">
+                                <i data-feather="x-circle"></i>
+                              </div>
+                            </div>
+                            <div class="media-body my-auto">
+                              <h4 class="font-weight-bolder mb-0">
+                                {expiredCount !== 0 ? expiredCount : 0}
+                              </h4>
+                              <p class="card-text font-small-3 mb-0">Expired</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="col-xl-3 col-md-6 col-12">
-                  <div className="card card-congratulation-medal">
-                    <div className="card-body text-center mt-2">
-                      <i
-                        data-feather="check-square"
-                        style={{ color: "#988ff4" }}
-                      ></i>
-                      <h3 className="roboto mb-75 mt-2 pt-10">0</h3>
-                      <h5 className="roboto mb-75 mt-2 pt-10">Completed</h5>
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </section>
 
@@ -213,7 +587,7 @@ export const ManagerDashboard = () => {
                       </div>
                     </div>
                     <div className="card-body">
-                      <ManagerChartOne chartData={userData} />
+                      <ManagerChartOne chartData={dataOnsite} />
                     </div>
                   </div>
                 </div>
@@ -228,7 +602,7 @@ export const ManagerDashboard = () => {
                       </div>
                     </div>
                     <div className="card-body">
-                      <ManagerChartOne chartData={userData} />
+                      <ManagerChartOne chartData={dataRemote} />
                     </div>
                   </div>
                 </div>

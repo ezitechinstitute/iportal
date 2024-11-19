@@ -1,4 +1,7 @@
 const { connection } = require("../../config/connection");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv").config();
+const secretKey = process.env.SECRETKEY;
 
 const AdminAuth = (req, res) => {
   const { email, password } = req.body.value;
@@ -13,7 +16,10 @@ const AdminAuth = (req, res) => {
       return res.json(err);
     } else {
       if (data.length > 0) {
-        return res.json({ isLoggedIn: true, user: data });
+        const token = jwt.sign({ email: data[0].email }, secretKey, {
+          expiresIn: 86400,
+        });
+        return res.json({ isLoggedIn: true, user: data, token });
       } else {
         return res.json({ isLoggedIn: false });
       }

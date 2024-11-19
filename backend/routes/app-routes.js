@@ -187,6 +187,20 @@ const {
   AdminIntProjectTasks,
   AdminIntTasks,
 } = require("../controller/admin/admin-project-controller");
+const {
+  AdminInterviewCount,
+  AdminContactCount,
+  AdminTestCount,
+  AdminTestCompletedCount,
+  AdminCountAllInterns,
+  AdminCountAllActive,
+  AdminCountAllProjects,
+  AdminCountAllTasks,
+  CountOngoingProj,
+  CountSubmittedProj,
+  CountCompletedProj,
+  CountExpiredProj,
+} = require("../controller/admin/admin-statics-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -311,6 +325,22 @@ router.put("/update-intern/:id", UpdateIntern);
 router.get("/intern-accounts", AdminActiveInterns);
 router.put("/update-int-account/:id", UpdateActiveIntern);
 router.put("/rem-int/:id", RemoveInt);
+
+// Admin Dashboard Stataics
+router.get("/admin-interview-count", AdminInterviewCount);
+router.get("/admin-contact-count", AdminContactCount);
+router.get("/admin-test-count", AdminTestCount);
+router.get("/admin-completed-count", AdminTestCompletedCount);
+
+router.get("/admin-all-intern-count", AdminCountAllInterns);
+router.get("/admin-all-active-count", AdminCountAllActive);
+router.get("/admin-all-projects-count", AdminCountAllProjects);
+router.get("/admin-all-tasks-count", AdminCountAllTasks);
+
+router.get("/count-ongoing", CountOngoingProj);
+router.get("/count-submitted", CountSubmittedProj);
+router.get("/count-completed", CountCompletedProj);
+router.get("/count-expired", CountExpiredProj);
 
 // Admin Intern Projects
 router.get("/admin-int-proj", AdminIntProjects);

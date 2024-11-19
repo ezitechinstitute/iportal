@@ -21,7 +21,7 @@ export const AdminLogin = () => {
           ) {
             sessionStorage.setItem("username", res.data.user[0].name);
             sessionStorage.setItem("email", res.data.user[0].email);
-            //   sessionStorage.setItem("token", res.data.token);
+              sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("role", res.data.user[0].loginas);
 
             sessionStorage.setItem("isLoggedIn", true);
