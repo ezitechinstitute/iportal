@@ -201,6 +201,7 @@ const {
   CountCompletedProj,
   CountExpiredProj,
 } = require("../controller/admin/admin-statics-controller");
+const { GetUniversities } = require("../controller/admin/uni-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -389,6 +390,9 @@ router.get("/admin-tech", GetAdminTech);
 router.get("/form-tech", GetFormTech);
 router.get("/edit-tech/:id", EditTech);
 router.put("/update-tech/:id", UpdateTech);
+
+// Admin to Universities
+router.get("/admin-get-uni", GetUniversities);
 
 // Supervisor To Interns Controller
 router.post("/supervisor-auth", SupervisorAuth);

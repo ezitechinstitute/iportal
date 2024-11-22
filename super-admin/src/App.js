@@ -29,6 +29,9 @@ import TestIntern from "./pages/TestInter";
 import CompletedIntern from "./pages/CompletedIntern";
 import ActiveIntern from "./pages/ActiveIntern";
 import { IntProjectTasks, IntPrtojectTasks } from "./pages/IntProjectTasks";
+import { UniversityLogin } from "./universties/pages/UniversityLogin";
+import { UniversityDashboard } from "./universties/pages/UniversityDashboard";
+import { UniversityInterns } from "./universties/pages/UniversityInterns";
 
 function App() {
   return (
@@ -69,6 +72,19 @@ function App() {
           <Route exact path="/intern-accounts" element={<InternAccounts />} />
           <Route exact path="/Completed-Withdraw" element={<CompWithdraw />} />
           <Route exact path="/supervisor" element={<Supervisor />} />
+
+          {/* Unversity Routes */}
+          <Route exact path="/university-login" element={<UniversityLogin />} />
+          <Route
+            exact
+            path="/university-dashboard"
+            element={<UniversityDashboard />}
+          />
+          <Route
+            exact
+            path="/university-interns"
+            element={<UniversityInterns />}
+          />
         </Routes>
       </BrowserRouter>
     </>
