@@ -244,6 +244,7 @@ router.get("/test", (req, res) => {
 });
 
 /* Interns Endpoints */
+
 router.post("/register-inters", RegisterInterns);
 router.get("/get-reg-uni", GetRegisterUni);
 router.post("/verification-code", SendVerificationCode);

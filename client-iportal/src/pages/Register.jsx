@@ -37,7 +37,9 @@ export const Register = () => {
   useEffect(() => {
     const GetTech = async () => {
       try {
-        const res = await axios.get("https://api.ezitech.org/form-tech");
+        const res = await axios.get(
+          `${process.env.REACT_APP_API_URL}/form-tech`
+        );
         setTech(res.data);
       } catch (error) {
         console.log(error);
@@ -47,7 +49,7 @@ export const Register = () => {
 
     const GetUniversities = async () => {
       await axios
-        .get("https://api.ezitech.org/get-reg-uni")
+        .get(`${process.env.REACT_APP_API_URL}/get-reg-uni`)
         .then((res) => {
           setUni(res.data);
         })
@@ -106,7 +108,7 @@ export const Register = () => {
 
     try {
       const res = await axios.post(
-        "https://api.ezitech.org/verification-code",
+        `${process.env.REACT_APP_API_URL}/verification-code`,
         {
           email: value.internemail,
           code: verificationCode,
@@ -145,10 +147,9 @@ export const Register = () => {
         value.internType !== undefined
       ) {
         setLoader(true);
-        
 
         axios
-          .post("https://api.ezitech.org/register-inters", { value })
+          .post(`${process.env.REACT_APP_API_URL}/register-inters`, { value })
           .then((res) => {
             console.log(res.data);
 
