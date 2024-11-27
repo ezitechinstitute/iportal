@@ -353,6 +353,152 @@ function SendMailRegister(
   });
 }
 
+// University Account Create Email
+function SendMailUniAccount(name, email, password) {
+  let year = new Date().getFullYear();
+  let transporter = nodeMailer.createTransport({
+    host: process.env.MAILHOST, // Your SMTP server host
+    port: process.env.MAILPORT, // Your SMTP server port (default is usually 587)
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: process.env.REGMAIL, // Your email address
+      pass: process.env.MAILPASS, // Your email password or application-specific password
+    },
+  });
+
+  let mailOptions = {
+    from: process.env.REGMAIL, // Sender email address
+    to: email, // List of recipients
+    subject: "Welcome to Ezitech Internship Portal!", // Subject line
+    // Plain text body
+    // You can also use `html` property to send HTML formatted email
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ezitech University Account Creation</title>
+  <style>
+/*    #3275db*/
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #e9f0f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+    .header {
+      background-color: #3275db;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      border-radius: 8px 8px 0 0;
+    }
+    .body {
+      padding: 20px;
+      color: #333;
+      line-height: 1.6;
+    }
+    .cta-button {
+      display: inline-block;
+      background-color: #3275db;
+      color: white;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 5px;
+      font-size: 16px;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+   /* .cta-button:hover {
+      background-color: #009c8c;
+    }*/
+    .footer {
+      background-color: #f6f6f6;
+      text-align: center;
+      padding: 15px;
+      color: #777;
+      font-size: 14px;
+      border-top: 1px solid #e0e0e0;
+    }
+    .footer a {
+      color: #3275db;
+      text-decoration: none;
+    }
+    .bold-text {
+      font-weight: bold;
+    }
+    .instructions {
+      background-color: #f0f8ff;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 20px;
+      border-left: 5px solid #3275db;
+    }
+    .instructions ol {
+      padding-left: 20px;
+      color: #555;
+    }
+    .instructions li {
+      margin-bottom: 10px;
+    }
+    .footer-logo {
+      width: 150px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      Welcome to Ezitech Internship Portal!
+    </div>
+    <div class="body">
+      <p>Dear <span class="bold-text">${name} Team,</span></p>
+      <p>We are excited to have you onboard! Your university account has been successfully created on the <span class="bold-text">Ezitech Internship Portal</span>. You can now access information related to the students who are currently interning with Ezitech Institute.</p>
+      
+      <p><span class="bold-text">Here are your login details:</span></p>
+      <p><span class="bold-text">Login URL:</span> <a href="https://admin.ezitech.org/university-login" class="cta-button" style="color: white" target="_blank">Login to Your Account</a></p>
+      <p><span class="bold-text">Username:</span> ${email}</p>
+      <p><span class="bold-text">Temporary Password:</span> ${password}</p>
+      
+      <div class="instructions">
+        <p><span class="bold-text">How to Log In:</span></p>
+        <ol>
+          <li>Click the login URL above.</li>
+          <li>Enter your username and temporary password.</li>
+          <li>Once logged in, we recommend changing your password for security.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="footer">
+      <p>If you need any assistance, feel free to contact us at <a href="mailto:help@ezitech.org">help@ezitech.org</a>.</p>
+      <p>Best Regards,<br>Ezitech Institute - Internship Management Team</p>
+    </div>
+  </div>
+</body>
+</html>
+`, // Email Template
+  };
+
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Email Sent");
+    }
+  });
+}
+
 // Send Mail for Assign Test & Portal
 function SendMailAssignPortal(name, email, password) {
   let year = new Date().getFullYear();
@@ -1766,6 +1912,7 @@ function SendMailVerifyCode(email, code) {
 
 module.exports = {
   SendMailRegister,
+  SendMailUniAccount,
   SendMailAssignPortal,
   SendMailInitialInvoice,
   SendMailPartialInvoice,

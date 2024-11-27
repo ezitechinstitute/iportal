@@ -2,6 +2,7 @@ const express = require("express");
 const {
   RegisterInterns,
   SendVerificationCode,
+  GetRegisterUni,
 } = require("../controller/intern/interns-controller");
 const {
   HrAuth,
@@ -201,7 +202,16 @@ const {
   CountCompletedProj,
   CountExpiredProj,
 } = require("../controller/admin/admin-statics-controller");
-const { GetUniversities } = require("../controller/admin/uni-controller");
+const {
+  GetUniversities,
+  CreateUniAccount,
+  ActiveUni,
+  FreezeUni,
+  AddNewUni,
+  UpdateUniData,
+  DeactivateUniAccount,
+  ActivateUniAccount,
+} = require("../controller/admin/uni-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -235,6 +245,7 @@ router.get("/test", (req, res) => {
 
 /* Interns Endpoints */
 router.post("/register-inters", RegisterInterns);
+router.get("/get-reg-uni", GetRegisterUni);
 router.post("/verification-code", SendVerificationCode);
 router.post("/intern-auth", InternAuth);
 router.post("/start-shift", verifyToken, StartShift);
@@ -393,6 +404,13 @@ router.put("/update-tech/:id", UpdateTech);
 
 // Admin to Universities
 router.get("/admin-get-uni", GetUniversities);
+router.post("/add-uni", AddNewUni);
+router.put("/update-uni/:id", UpdateUniData);
+router.put("/create-uni-acount/:id", CreateUniAccount);
+router.put("/deactivate-uni-acc/:id", DeactivateUniAccount);
+router.put("/activate-uni-acc/:id", ActivateUniAccount);
+router.put("/active-uni/:id", ActiveUni);
+router.put("/freeze-uni/:id", FreezeUni);
 
 // Supervisor To Interns Controller
 router.post("/supervisor-auth", SupervisorAuth);

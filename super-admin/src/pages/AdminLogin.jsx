@@ -13,7 +13,7 @@ export const AdminLogin = () => {
   const Login = () => {
     if (value.email !== undefined && value.password !== undefined) {
       axios
-        .post("https://api.ezitech.org/admin-auth", { value })
+        .post("http://localhost:8800/admin-auth", { value })
         .then((res) => {
           if (
             res.data.isLoggedIn === true &&

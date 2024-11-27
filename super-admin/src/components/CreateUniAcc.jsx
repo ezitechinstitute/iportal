@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 export const CreateUniAcc = ({ values }) => {
@@ -8,7 +9,7 @@ export const CreateUniAcc = ({ values }) => {
     setUniData({ ...uniData, [name]: value });
   };
 
-  const CreateAccount = () => {
+  const CreateAccount = async () => {
     const charset =
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+<>?";
     const length = 8;
@@ -24,7 +25,35 @@ export const CreateUniAcc = ({ values }) => {
 
     let EZI_ID = "ETI-" + day + "-" + month + "-" + year.slice(3, 5) + "/" + id;
 
-    alert(EZI_ID);
+    setUniData({
+      ...uniData,
+      etiid: EZI_ID,
+      password: password,
+      name: values.name,
+    });
+
+    if (uniData.etiid !== undefined) {
+      if (
+        uniData.email !== undefined &&
+        uniData.phone !== undefined &&
+        uniData.password !== undefined
+      ) {
+        await axios
+          .put(`https://api.ezitech.org/create-uni-acount/${values.id}`, {
+            uniData,
+          })
+          .then((res) => {
+            alert(res.data.msg);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        alert("Please fill empty fields first!!!");
+      }
+    } else {
+      alert("Are you sure? Please click again on Create");
+    }
   };
   return (
     <>

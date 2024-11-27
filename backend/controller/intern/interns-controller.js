@@ -161,6 +161,14 @@ const RegisterInterns = (req, res) => {
   });
 };
 
+const GetRegisterUni = (req, res) => {
+  const sql = "SELECT `uni_name` FROM `universities` WHERE `uni_status` = 1";
+  connection.query(sql, (err, data) => {
+    if (err) throw err;
+    return res.json(data);
+  });
+};
+
 const SendVerificationCode = (req, res) => {
   const { email, code } = req.body;
 
@@ -231,4 +239,4 @@ function getOtherQueue() {
   return dataOther.pop();
 }
 
-module.exports = { RegisterInterns, SendVerificationCode };
+module.exports = { RegisterInterns, SendVerificationCode, GetRegisterUni };

@@ -32,19 +32,31 @@ export const Register = () => {
   const [loader, setLoader] = useState(false);
 
   const [getTech, setTech] = useState([]);
-
-  const GetTech = async () => {
-    try {
-      const res = await axios.get("https://api.ezitech.org/form-tech");
-      setTech(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const [getUni, setUni] = useState([]);
 
   useEffect(() => {
+    const GetTech = async () => {
+      try {
+        const res = await axios.get("https://api.ezitech.org/form-tech");
+        setTech(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     GetTech();
-  }, [GetTech]);
+
+    const GetUniversities = async () => {
+      await axios
+        .get("https://api.ezitech.org/get-reg-uni")
+        .then((res) => {
+          setUni(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    GetUniversities();
+  });
 
   const handleDateClick = (date) => {
     setValue({ ...value, interviewDate: date.toDateString() });
@@ -87,18 +99,6 @@ export const Register = () => {
     if (tel !== 0) {
       setCheckPhone(isValidPhone(tel));
     }
-
-    // const interviewForm = document.getElementById("interview-form");
-    // const selectOption = document.getElementById("intern-type").value;
-
-    // if (selectOption === "Remote") {
-    //   interviewForm.style.display = "block";
-
-    //   setInterview(true);
-    // } else {
-    //   interviewForm.style.display = "none";
-    //   setInterview(false);
-    // }
   });
 
   const VerifyEmail = async () => {
@@ -145,7 +145,7 @@ export const Register = () => {
         value.internType !== undefined
       ) {
         setLoader(true);
-        // https://api.ezitech.org/register-inters
+        
 
         axios
           .post("https://api.ezitech.org/register-inters", { value })
@@ -267,7 +267,7 @@ export const Register = () => {
                                     borderRight: "0",
                                     borderTopRightRadius: "0",
                                     borderBottomRightRadius: "0",
-                                    height: "52px"
+                                    height: "52px",
                                   }}
                                   type="text"
                                   className="form-control"
@@ -280,18 +280,18 @@ export const Register = () => {
                                   required
                                 />
                                 {/* <span> */}
-                                  <button
-                                    className="btn btn-primary"
-                                    style={{
-                                      borderLeft: "0",
-                                      borderTopLeftRadius: "0",
-                                      borderBottomLeftRadius: "0",
-                                      // height: "38px",
-                                    }}
-                                    onClick={VerifyEmail}
-                                  >
-                                    Send Code
-                                  </button>
+                                <button
+                                  className="btn btn-primary"
+                                  style={{
+                                    borderLeft: "0",
+                                    borderTopLeftRadius: "0",
+                                    borderBottomLeftRadius: "0",
+                                    // height: "38px",
+                                  }}
+                                  onClick={VerifyEmail}
+                                >
+                                  Send Code
+                                </button>
                                 {/* </span> */}
                               </div>
                             </div>
@@ -509,303 +509,11 @@ export const Register = () => {
                                 <option selected disabled>
                                   --Select--
                                 </option>
-                                <option value="Others">Others</option>
-                                <option value="Aga Khan University">
-                                  Aga Khan University
-                                </option>
-                                <option value="Air University">
-                                  Air University
-                                </option>
-                                <option value="Allama Iqbal Open University">
-                                  Allama Iqbal Open University
-                                </option>
-                                <option value="Bahauddin Zakariya University">
-                                  Bahauddin Zakariya University
-                                </option>
-                                <option value="Bahria University">
-                                  Bahria University
-                                </option>
-                                <option value="COMSATS University">
-                                  COMSATS University
-                                </option>
-                                <option value="Dow University of Health Sciences">
-                                  Dow University of Health Sciences
-                                </option>
-                                <option value="Fatima Jinnah Medical University">
-                                  Fatima Jinnah Medical University
-                                </option>
-                                <option value="Federal Urdu University of Arts, Science & Technology">
-                                  Federal Urdu University of Arts, Science &
-                                  Technology
-                                </option>
-                                <option value="Ghulam Ishaq Khan Institute of Engineering Sciences and Technology">
-                                  Ghulam Ishaq Khan Institute of Engineering
-                                  Sciences and Technology
-                                </option>
-                                <option value="Government College University">
-                                  Government College University
-                                </option>
-                                <option value="Hazara University">
-                                  Hazara University
-                                </option>
-                                <option value="Islamia University of Bahawalpur">
-                                  Islamia University of Bahawalpur
-                                </option>
-                                <option value="International Islamic University">
-                                  International Islamic University
-                                </option>
-                                <option value="Karachi University">
-                                  Karachi University
-                                </option>
-                                <option value="Khyber Medical University">
-                                  Khyber Medical University
-                                </option>
-                                <option value="Lahore College for Women University">
-                                  Lahore College for Women University
-                                </option>
-                                <option value="Lahore University of Management Sciences (LUMS)">
-                                  Lahore University of Management Sciences
-                                  (LUMS)
-                                </option>
-                                <option value="National Textile University">
-                                  National Textile University
-                                </option>
-                                <option value="National University of Computer and Emerging Sciences">
-                                  National University of Computer and Emerging
-                                  Sciences
-                                </option>
-                                <option value="National University of Modern Languages">
-                                  National University of Modern Languages
-                                </option>
-                                <option value="National University of Sciences and Technology (NUST)">
-                                  National University of Sciences and Technology
-                                  (NUST)
-                                </option>
-                                <option value="Pakistan Institute of Engineering and Applied Sciences (PIEAS)">
-                                  Pakistan Institute of Engineering and Applied
-                                  Sciences (PIEAS)
-                                </option>
-                                <option value="Pir Mehr Ali Shah Arid Agriculture University">
-                                  Pir Mehr Ali Shah Arid Agriculture University
-                                </option>
-                                <option value="Quaid-i-Azam University">
-                                  Quaid-i-Azam University
-                                </option>
-                                <option value="University of Agriculture">
-                                  University of Agriculture
-                                </option>
-                                <option value="University of Balochistan">
-                                  University of Balochistan
-                                </option>
-                                <option value="University of Education, Lahore">
-                                  University of Education
-                                </option>
-                                <option value="University of Engineering and Technology">
-                                  University of Engineering and Technology,
-                                </option>
-                                <option value="University of Health Sciences">
-                                  University of Health Sciences
-                                </option>
-                                <option value="University of Karachi">
-                                  University of Karachi
-                                </option>
-                                <option value="University of Lahore">
-                                  University of Lahore
-                                </option>
-                                <option value="University of Malakand">
-                                  University of Malakand
-                                </option>
-                                <option value="University of Management and Technology">
-                                  University of Management and Technology
-                                </option>
-                                <option value="University of Peshawar">
-                                  University of Peshawar
-                                </option>
-                                <option value="University of the Punjab">
-                                  University of the Punjab
-                                </option>
-                                <option value="University of Sargodha">
-                                  University of Sargodha
-                                </option>
-                                <option value="University of Science and Technology">
-                                  University of Science and Technology
-                                </option>
-                                <option value="University of Sindh">
-                                  University of Sindh
-                                </option>
-                                <option value="University of Swat">
-                                  University of Swat
-                                </option>
-                                <option value="University of Turbat">
-                                  University of Turbat
-                                </option>
-                                <option value="University of Veterinary and Animal Sciences">
-                                  University of Veterinary and Animal Sciences
-                                </option>
-                                <option value="Virtual University of Pakistan">
-                                  Virtual University of Pakistan
-                                </option>
-                                <option value="Balochistan University of Information Technology, Engineering and Management Sciences">
-                                  Balochistan University of Information
-                                  Technology, Engineering and Management
-                                  Sciences
-                                </option>
-                                <option value="Benazir Bhutto Shaheed University">
-                                  Benazir Bhutto Shaheed University
-                                </option>
-                                <option value="Capital University of Science & Technology">
-                                  Capital University of Science & Technology
-                                </option>
-                                <option value="City University of Science and Information Technology">
-                                  City University of Science and Information
-                                  Technology
-                                </option>
-                                <option value="Dadabhoy Institute of Higher Education">
-                                  Dadabhoy Institute of Higher Education
-                                </option>
-                                <option value="Federal Urdu University">
-                                  Federal Urdu University
-                                </option>
-                                <option value="Foundation University Islamabad">
-                                  Foundation University Islamabad
-                                </option>
-                                <option value="Gandhara University">
-                                  Gandhara University
-                                </option>
-                                <option value="Ghulam Ishaq Khan Institute of Science and Technology">
-                                  Ghulam Ishaq Khan Institute of Science and
-                                  Technology
-                                </option>
-                                <option value="Greenwich University">
-                                  Greenwich University
-                                </option>
-                                <option value="Hamdard University">
-                                  Hamdard University
-                                </option>
-                                <option value="Habib University">
-                                  Habib University
-                                </option>
-                                <option value="HITEC University">
-                                  HITEC University
-                                </option>
-                                <option value="Indus University">
-                                  Indus University
-                                </option>
-                                <option value="Institute of Business Administration">
-                                  Institute of Business Administration
-                                </option>
-                                <option value="Iqra University">
-                                  Iqra University
-                                </option>
-                                <option value="Islamabad Institute of Technology">
-                                  Islamabad Institute of Technology
-                                </option>
-                                <option value="Islamabad School of Law">
-                                  Islamabad School of Law
-                                </option>
-                                <option value="Jinnah University for Women">
-                                  Jinnah University for Women
-                                </option>
-                                <option value="Karachi Institute of Economics & Technology">
-                                  Karachi Institute of Economics & Technology
-                                </option>
-                                <option value="Karachi School for Business & Leadership">
-                                  Karachi School for Business & Leadership
-                                </option>
-                                <option value="KASB Institute of Technology">
-                                  KASB Institute of Technology
-                                </option>
-                                <option value="Lahore Garrison University">
-                                  Lahore Garrison University
-                                </option>
-                                <option value="Lahore Leads University">
-                                  Lahore Leads University
-                                </option>
-                                <option value="Lahore School of Economics">
-                                  Lahore School of Economics
-                                </option>
-                                <option value="Mohammad Ali Jinnah University">
-                                  Mohammad Ali Jinnah University
-                                </option>
-                                <option value="Namal University">
-                                  Namal University
-                                </option>
-                                <option value="National College of Business Administration & Economics">
-                                  National College of Business Administration &
-                                  Economics
-                                </option>
-                                <option value="National University of Computer & Emerging Sciences">
-                                  National University of Computer & Emerging
-                                  Sciences
-                                </option>
-                                <option value="Newports Institute of Communications and Economics">
-                                  Newports Institute of Communications and
-                                  Economics
-                                </option>
-                                <option value="NFC Institute of Engineering & Technology">
-                                  NFC Institute of Engineering & Technology
-                                </option>
-                                <option value="Northern University, Nowshera">
-                                  Northern University, Nowshera
-                                </option>
-                                <option value="Peoples University of Medical & Health Sciences for Women">
-                                  Peoples University of Medical & Health
-                                  Sciences for Women
-                                </option>
-                                <option value="Preston University, Pakistan">
-                                  Preston University, Pakistan
-                                </option>
-                                <option value="Qarshi University">
-                                  Qarshi University
-                                </option>
-                                <option value="Qurtuba University of Science and Information Technology">
-                                  Qurtuba University of Science and Information
-                                  Technology
-                                </option>
-                                <option value="Riphah International University">
-                                  Riphah International University
-                                </option>
-                                <option value="Sarhad University of Science and Information Technology">
-                                  Sarhad University of Science and Information
-                                  Technology
-                                </option>
-                                <option value="Shaheed Benazir Bhutto City University">
-                                  Shaheed Benazir Bhutto City University
-                                </option>
-                                <option value="Shaheed Benazir Bhutto University">
-                                  Shaheed Benazir Bhutto University
-                                </option>
-                                <option value="Sindh Madressatul Islam University">
-                                  Sindh Madressatul Islam University
-                                </option>
-                                <option value="Sukkur IBA University">
-                                  Sukkur IBA University
-                                </option>
-                                <option value="Textile Institute of Pakistan">
-                                  Textile Institute of Pakistan
-                                </option>
-                                <option value="University of Faisalabad">
-                                  University of Faisalabad
-                                </option>
-                                <option value="University of Management and Technology">
-                                  University of Management and Technology
-                                </option>
-                                <option value="University of South Asia">
-                                  University of South Asia
-                                </option>
-                                <option value="University of Wah">
-                                  University of Wah
-                                </option>
-                                <option value="University of Central Punjab">
-                                  University of Central Punjab
-                                </option>
-                                <option value="University of Sialkot">
-                                  University of Sialkot
-                                </option>
-
-                                <option value="Gomal University">
-                                  Gomal University
-                                </option>
+                                {getUni.map((rs) => (
+                                  <option value={rs.uni_name}>
+                                    {rs.uni_name}
+                                  </option>
+                                ))}
                               </select>
                             </div>
                           </div>

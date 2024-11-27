@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CreateUniAcc } from "../components/CreateUniAcc";
 import { AddUniversity } from "../components/AddUniversity";
+import { EditUni } from "../components/EditUni";
 
 const University = () => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const [data, setData] = useState([]);
   const [uniAcc, setUniAcc] = useState({});
+  const [uniData, setUniData] = useState({});
 
   if (!check) {
     navigate("/");
@@ -33,7 +35,7 @@ const University = () => {
 
   const ActiveUni = async (id) => {
     await axios
-      .put(`http://localhost:8800/active-uni/${id}`)
+      .put(`https://api.ezitech.org/active-uni/${id}`)
       .then((res) => {
         alert(res.data.msg);
       })
@@ -44,7 +46,29 @@ const University = () => {
 
   const FreezeUni = async (id) => {
     await axios
-      .put(`http://localhost:8800/freeze-uni/${id}`)
+      .put(`https://api.ezitech.org/freeze-uni/${id}`)
+      .then((res) => {
+        alert(res.data.msg);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const DeactivateAccount = async (id) => {
+    await axios
+      .put(`https://api.ezitech.org/deactivate-uni-acc/${id}`)
+      .then((res) => {
+        alert(res.data.msg);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const ActivateAccount = async (id) => {
+    await axios
+      .put(`https://api.ezitech.org/activate-uni-acc/${id}`)
       .then((res) => {
         alert(res.data.msg);
       })
@@ -120,6 +144,7 @@ const University = () => {
                                     uti,
                                     uni_name,
                                     uni_email,
+                                    uni_password,
                                     uni_phone,
                                     uni_status,
                                     account_status,
@@ -129,7 +154,9 @@ const University = () => {
                                   return (
                                     <>
                                       <tr>
-                                        <td>{uti}</td>
+                                        <td>
+                                          <strong>{uti}</strong>
+                                        </td>
                                         <td>{uni_name}</td>
                                         <td>{uni_email}</td>
                                         <td>{uni_phone}</td>
@@ -146,7 +173,7 @@ const University = () => {
                                           )}
                                         </td>
                                         <td>
-                                          {account_status !== 0 ? (
+                                          {account_status !== null ? (
                                             <span className="badge badge-pill badge-glow badge-success">
                                               Activate
                                             </span>
@@ -177,10 +204,16 @@ const University = () => {
                                                 href="javascript:void(0);"
                                                 type="button"
                                                 data-toggle="modal"
-                                                data-target="#large1"
-                                                // onClick={() =>
-                                                //   EditTech(rs.tech_id)
-                                                // }
+                                                data-target="#large2"
+                                                onClick={() =>
+                                                  setUniData({
+                                                    id: uni_id,
+                                                    name: uni_name,
+                                                    email: uni_email,
+                                                    phone: uni_phone,
+                                                    password: uni_password,
+                                                  })
+                                                }
                                               >
                                                 Edit
                                               </a>
@@ -190,9 +223,9 @@ const University = () => {
                                                   className="dropdown-item"
                                                   href="javascript:void(0);"
                                                   type="button"
-                                                  // onClick={() =>
-                                                  //   FreezeTech(rs.tech_id)
-                                                  // }
+                                                  onClick={() =>
+                                                    FreezeUni(uni_id)
+                                                  }
                                                 >
                                                   Freeze
                                                 </a>
@@ -201,9 +234,9 @@ const University = () => {
                                                   className="dropdown-item"
                                                   href="javascript:void(0);"
                                                   type="button"
-                                                  // onClick={() =>
-                                                  //   ActiveTech(rs.tech_id)
-                                                  // }
+                                                  onClick={() =>
+                                                    ActiveUni(uni_id)
+                                                  }
                                                 >
                                                   Active
                                                 </a>
@@ -214,11 +247,22 @@ const University = () => {
                                                   className="dropdown-item"
                                                   href="javascript:void(0);"
                                                   type="button"
-                                                  // onClick={() =>
-                                                  //   FreezeTech(rs.tech_id)
-                                                  // }
+                                                  onClick={() =>
+                                                    DeactivateAccount(uni_id)
+                                                  }
                                                 >
                                                   Deactivate Account
+                                                </a>
+                                              ) : account_status === 0 ? (
+                                                <a
+                                                  className="dropdown-item"
+                                                  href="javascript:void(0);"
+                                                  type="button"
+                                                  onClick={() =>
+                                                    ActivateAccount(uni_id)
+                                                  }
+                                                >
+                                                  Activate Account
                                                 </a>
                                               ) : (
                                                 <a
@@ -252,6 +296,7 @@ const University = () => {
                     </div>
                   </section>
                   <AddUniversity />
+                  <EditUni values={uniData} />
                   <CreateUniAcc values={uniAcc} />
                 </div>
               </div>
