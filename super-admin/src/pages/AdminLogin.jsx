@@ -13,7 +13,7 @@ export const AdminLogin = () => {
   const Login = () => {
     if (value.email !== undefined && value.password !== undefined) {
       axios
-        .post("http://localhost:8800/admin-auth", { value })
+        .post("https://api.ezitech.org/admin-auth", { value })
         .then((res) => {
           if (
             res.data.isLoggedIn === true &&
@@ -21,7 +21,7 @@ export const AdminLogin = () => {
           ) {
             sessionStorage.setItem("username", res.data.user[0].name);
             sessionStorage.setItem("email", res.data.user[0].email);
-              sessionStorage.setItem("token", res.data.token);
+            sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("role", res.data.user[0].loginas);
 
             sessionStorage.setItem("isLoggedIn", true);
