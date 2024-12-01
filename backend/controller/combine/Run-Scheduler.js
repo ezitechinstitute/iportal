@@ -6,6 +6,7 @@ const {
 } = require("../intern/intern-projects-controller");
 const { ProjectDayIncrement } = require("../supervisor/sup-interns-controller");
 const { MarkAbsentAuto } = require("../intern/internAttendance-controller");
+const { DeleteCodeAtMidNight } = require("./Verify-Email");
 
 const isMidnightInPakistan = () => {
   const nowInPakistan = DateTime.now().setZone("Asia/Karachi");
@@ -34,6 +35,7 @@ const RunJob = () => {
       TaskDayIncrement();
       ProjectDayIncrement();
       ProjectTaskDayIncrement();
+      DeleteCodeAtMidNight();
     }
 
     if (isBeforeMidnightInPakistan()) {

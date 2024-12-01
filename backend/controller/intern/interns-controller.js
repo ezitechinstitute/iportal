@@ -9,6 +9,7 @@ const {
   SendMessageOnsite,
   SendMessageOther,
 } = require("../../whatsapp/whatsapp-api.js");
+const { DeleteVerificationCode } = require("../combine/Verify-Email.js");
 const dotenv = require("dotenv").config();
 
 // const id = process.env.INSTANCEID;
@@ -62,7 +63,7 @@ const RegisterInterns = (req, res) => {
       return res.json(err);
     } else {
       if (data[0].code !== parseInt(internCode)) {
-        ExpireCode(internemail);
+        DeleteVerificationCode(internemail);
         return res.json({ codeMsg: false });
       } else {
         const sql0 = "SELECT * FROM `intern_table` WHERE `email`= (?)";
@@ -148,7 +149,7 @@ const RegisterInterns = (req, res) => {
 
                     //   // SendMailOnsite(internUsername, internemail);
                     // }
-                    ExpireCode(internemail);
+                    DeleteVerificationCode(internemail);
                     return res.json(data.affectedRows);
                   }
                 }
@@ -168,31 +169,6 @@ const GetRegisterUni = (req, res) => {
     return res.json(data);
   });
 };
-
-const SendVerificationCode = (req, res) => {
-  const { email, code } = req.body;
-
-  const sql = "INSERT INTO `verification_code`(`email`, `code`) VALUES (?, ?)";
-  connection.query(sql, [email, code], (err, data) => {
-    if (err) {
-      return res.json({ msg: err.sqlMessage });
-    } else {
-      SendMailVerifyCode(email, code);
-      return res.json({ msg: "Verification code send to your email" });
-    }
-  });
-};
-
-function ExpireCode(email) {
-  const sql = "DELETE FROM `verification_code` WHERE `email` = ?";
-  connection.query(sql, [email], (err, data) => {
-    if (err) {
-      return res.json(err);
-    } else {
-      console.log("Code Deleted");
-    }
-  });
-}
 
 // cron.schedule('0 * * * * *', () => {
 //   console.log('Running a task every 1 minute');
@@ -239,4 +215,4 @@ function getOtherQueue() {
   return dataOther.pop();
 }
 
-module.exports = { RegisterInterns, SendVerificationCode, GetRegisterUni };
+module.exports = { RegisterInterns, GetRegisterUni };

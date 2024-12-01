@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ForgotPassword } from "../components/ForgotPassword";
 
 export const UniversityLogin = () => {
   const navigate = useNavigate();
@@ -180,60 +181,7 @@ export const UniversityLogin = () => {
       </div>
 
       {/* <!-- Modal --> */}
-      <div
-        className="modal fade"
-        id="exampleModalCenter"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalCenterTitle">
-                Forgot Password
-              </h5>
-              <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div className="modal-body">
-              <input
-                className="form-control"
-                type="email"
-                name="email"
-                placeholder="Email"
-                // onChange={handlePassword}
-              />
-
-              <br />
-              <input
-                className="form-control"
-                type="password"
-                name="password"
-                // onChange={handlePassword}
-                placeholder="New Password"
-              />
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-primary"
-                data-dismiss="modal"
-                // onClick={handlePasswordUpdate}
-              >
-                Update
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ForgotPassword />
       {/* </div>
           </div>
         </div> */}

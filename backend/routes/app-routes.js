@@ -212,6 +212,14 @@ const {
   DeactivateUniAccount,
   ActivateUniAccount,
 } = require("../controller/admin/uni-controller");
+const {
+  VerifyEmail,
+  VerifyCode,
+  VerifyUniEmail,
+} = require("../controller/combine/Verify-Email");
+const {
+  ForgotUniPassword,
+} = require("../controller/university/uni-auth-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -243,11 +251,14 @@ router.get("/test", (req, res) => {
   res.send("Hello from NodeJs Server");
 });
 
-/* Interns Endpoints */
+// Combine Routes
+router.post("/verify-email", VerifyUniEmail);
+router.post("/verify-code", VerifyCode);
 
+/* Interns Endpoints */
 router.post("/register-inters", RegisterInterns);
 router.get("/get-reg-uni", GetRegisterUni);
-router.post("/verification-code", SendVerificationCode);
+// router.post("/verification-code", SendVerificationCode); change this in registration form also send code from frontend remove
 router.post("/intern-auth", InternAuth);
 router.post("/start-shift", verifyToken, StartShift);
 router.post("/end-shift", verifyToken, EndShift);
@@ -412,6 +423,9 @@ router.put("/deactivate-uni-acc/:id", DeactivateUniAccount);
 router.put("/activate-uni-acc/:id", ActivateUniAccount);
 router.put("/active-uni/:id", ActiveUni);
 router.put("/freeze-uni/:id", FreezeUni);
+
+// University Endpoints
+router.post("/update-uni-pass", ForgotUniPassword);
 
 // Supervisor To Interns Controller
 router.post("/supervisor-auth", SupervisorAuth);

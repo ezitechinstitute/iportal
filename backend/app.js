@@ -4,6 +4,7 @@ const { DataBase } = require("./config/connection");
 const router = require("./routes/app-routes");
 const bodyParser = require("body-parser");
 const RunJob = require("./controller/combine/Run-Scheduler");
+const { VerifyEmail } = require("./controller/combine/Verify-Email");
 const dotenv = require("dotenv").config();
 const PORT = process.env.PORT;
 
@@ -26,3 +27,4 @@ app.listen(PORT, () => {
 });
 
 RunJob();
+// VerifyEmail()
