@@ -46,8 +46,10 @@ const VerifyUniEmail = (req, res) => {
 const VerifyInternEmail = (req, res) => {
   const { email } = req.body;
 
+  // res.send(req.body);
+
   // Email validation
-  if (!email) {
+  if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
     return res.json({ msg: "Invalid email address" });
   }
 
@@ -57,6 +59,8 @@ const VerifyInternEmail = (req, res) => {
     if (err) throw err;
 
     if (data.length > 0) {
+      return res.status(400).json({ msg: "Email already register" });
+    } else {
       const generateVerificationCode = () =>
         Math.floor(1000 + Math.random() * 9000);
       const verificationCode = generateVerificationCode();
@@ -79,8 +83,6 @@ const VerifyInternEmail = (req, res) => {
           .status(200)
           .json({ msg: "Verification email sent. Check your mailbox." });
       });
-    } else {
-      return res.status(400).json({ msg: "Invalid email address" });
     }
   });
 };
