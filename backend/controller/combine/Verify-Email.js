@@ -47,8 +47,8 @@ const VerifyInternEmail = (req, res) => {
   const { email } = req.body;
 
   // Email validation
-  if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
-    return res.status(400).json({ msg: "Invalid email address" });
+  if (!email) {
+    return res.json({ msg: "Invalid email address" });
   }
 
   const sql = "SELECT * FROM `intern_table` WHERE `email` = ?";

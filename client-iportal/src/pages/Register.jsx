@@ -104,17 +104,16 @@ export const Register = () => {
   });
 
   const VerifyEmail = async () => {
-    try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/verify-int-email`,
-        {
-          email: value.internemail,
-        }
-      );
-      alert(res.data.msg);
-    } catch (error) {
-      console.log(error);
-    }
+    await axios
+      .post(`${process.env.REACT_APP_API_URL}/verify-int-email`, {
+        email: value.internemail,
+      })
+      .then((res) => {
+        alert(res.data.msg);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleImage = (e) => {
@@ -278,7 +277,8 @@ export const Register = () => {
                                   required
                                 />
                                 {/* <span> */}
-                                <button
+                                <a
+                                  type="button"
                                   className="btn btn-primary"
                                   style={{
                                     borderLeft: "0",
@@ -286,10 +286,10 @@ export const Register = () => {
                                     borderBottomLeftRadius: "0",
                                     // height: "38px",
                                   }}
-                                  onClick={() => VerifyEmail()}
+                                  onClick={VerifyEmail}
                                 >
                                   Send Code
-                                </button>
+                                </a>
                                 {/* </span> */}
                               </div>
                             </div>

@@ -262,7 +262,6 @@ router.get("/test", (req, res) => {
 // Combine Routes
 router.post("/verify-email", VerifyUniEmail);
 router.post("/verify-int-email", VerifyInternEmail);
-
 router.post("/verify-code", VerifyCode);
 
 /* Interns Endpoints */
