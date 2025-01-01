@@ -13,25 +13,20 @@ export const UniversityLogin = () => {
   // https://api.ezitech.org
   const Login = () => {
     if (value.email !== undefined && value.password !== undefined) {
-      axios
-        .post("https://api.ezitech.org/admin-auth", { value })
-        .then((res) => {
-          if (
-            res.data.isLoggedIn === true &&
-            res.data.user[0].loginas === "Admin"
-          ) {
-            sessionStorage.setItem("username", res.data.user[0].name);
-            sessionStorage.setItem("email", res.data.user[0].email);
-            sessionStorage.setItem("token", res.data.token);
-            sessionStorage.setItem("role", res.data.user[0].loginas);
+      axios.post("http://localhost:8800/uni-auth", { value }).then((res) => {
+        if (res.data.isLoggedIn === true) {
+          sessionStorage.setItem("uni_id", res.data.uni[0].uti);
+          sessionStorage.setItem("uni_name", res.data.uni[0].uni_name);
+          sessionStorage.setItem("uni_email", res.data.uni[0].uni_email);
+          sessionStorage.setItem("token", res.data.token);
 
-            sessionStorage.setItem("isLoggedIn", true);
-            alert("Login Successfully");
-            navigate("/admin-dashboard");
-          } else {
-            alert("Invalid User!!!");
-          }
-        });
+          sessionStorage.setItem("isLoggedIn", true);
+          alert("Login Successfully");
+          navigate("/university-dashboard");
+        } else {
+          alert("Invalid User!!!");
+        }
+      });
     } else {
       alert("Please empty fields first!!!");
     }

@@ -8,8 +8,10 @@ const { DeleteVerificationCode } = require("../combine/Verify-Email");
 const UniAuth = (req, res) => {
   const { email, password } = req.body.value;
 
+  console.log(req.body);
+
   const sql =
-    "SELECT * FROM `universties` WHERE `uni_email` = ? AND `uni_password`= ? AND `account_status` = 1";
+    "SELECT * FROM `universities` WHERE `uni_email` = ?  AND `account_status` = 1";
 
   connection.query(sql, [email, password], (err, data) => {
     if (err) {
@@ -17,10 +19,20 @@ const UniAuth = (req, res) => {
       return res.json(err);
     } else {
       if (data.length > 0) {
-        const token = jwt.sign({ email: data[0].email }, secretKey, {
-          expiresIn: 86400,
+        bcrypt.compare(password, data[0].uni_password, function (err, result) {
+          if (err) {
+            return res.json({ isLoggedIn: false });
+          } else {
+            if (result) {
+              const token = jwt.sign({ email: data[0].email }, secretKey, {
+                expiresIn: 86400,
+              });
+              return res.json({ isLoggedIn: true, uni: data, token });
+            } else {
+              return res.json({ isLoggedIn: false });
+            }
+          }
         });
-        return res.json({ isLoggedIn: true, uni: data, token });
       } else {
         return res.json({ isLoggedIn: false });
       }
@@ -41,7 +53,7 @@ const ForgotUniPassword = (req, res) => {
       "UPDATE `universities` SET `uni_password`= ? WHERE `uni_email` = ?";
     connection.query(sql, [hashPassword, email], (err, data) => {
       if (err) throw err;
-      DeleteVerificationCode(email)
+      DeleteVerificationCode(email);
       return res.json({ msg: "Password updated" });
     });
   });

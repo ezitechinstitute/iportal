@@ -216,10 +216,18 @@ const {
   VerifyEmail,
   VerifyCode,
   VerifyUniEmail,
+  VerifyInternEmail,
 } = require("../controller/combine/Verify-Email");
 const {
   ForgotUniPassword,
+  UniAuth,
 } = require("../controller/university/uni-auth-controller");
+const {
+  UniCountAllInterns,
+  UniCountAllActive,
+  UniCountAllProjects,
+  UniCountAllTasks,
+} = require("../controller/university/uni-statistics-controller");
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -253,6 +261,8 @@ router.get("/test", (req, res) => {
 
 // Combine Routes
 router.post("/verify-email", VerifyUniEmail);
+router.post("/verify-int-email", VerifyInternEmail);
+
 router.post("/verify-code", VerifyCode);
 
 /* Interns Endpoints */
@@ -425,7 +435,12 @@ router.put("/active-uni/:id", ActiveUni);
 router.put("/freeze-uni/:id", FreezeUni);
 
 // University Endpoints
+router.post("/uni-auth", UniAuth);
 router.post("/update-uni-pass", ForgotUniPassword);
+router.get("/count-all-uni-intern/:uniName", UniCountAllInterns);
+router.get("/count-all-uni-active/:uniName", UniCountAllActive);
+router.get("/count-all-uni-proj/:uniName", UniCountAllProjects);
+router.get("/count-all-uni-tasks/:uniName", UniCountAllTasks);
 
 // Supervisor To Interns Controller
 router.post("/supervisor-auth", SupervisorAuth);

@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UniversityHeader } from "../components/UniversityHeader";
 import { UniversitySidebar } from "../components/UniversitySidebar";
 import { useNavigate } from "react-router-dom";
 import { ManagerChartOne } from "../../components/ManagerChartOne";
+import axios from "axios";
 
 export const UniversityDashboard = () => {
   const navigate = useNavigate();
   const [token, setToken] = useState(sessionStorage.getItem("token"));
+  const uniName = sessionStorage.getItem("uni_name");
   const check = sessionStorage.getItem("isLoggedIn");
-  const [interviewCount, setInterviewCount] = useState(0);
-  const [contactCount, setContactCount] = useState(0);
-  const [testCount, setTestCount] = useState(0);
-  const [completedCount, setCompletedCount] = useState(0);
 
   const [allInterCount, setAllInternCount] = useState(0);
   const [allActiveCount, setAllActiveCount] = useState(0);
@@ -22,6 +20,64 @@ export const UniversityDashboard = () => {
   const [submittedCount, setSubmittedCount] = useState(0);
   const [compleCount, setCompleCount] = useState(0);
   const [expiredCount, setExpiredCount] = useState(0);
+
+  useEffect(() => {
+    if (!check) {
+      navigate("/university-login");
+    }
+  });
+
+  useEffect(() => {
+    const GetAllUniIntern = async () => {
+      await axios
+        .get(`http://localhost:8800/count-all-uni-intern/${uniName}`)
+        .then((res) => {
+          setAllInternCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    GetAllUniIntern();
+
+    const GetAllUniActive = async () => {
+      await axios
+        .get(`http://localhost:8800/count-all-uni-active/${uniName}`)
+        .then((res) => {
+          setAllActiveCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    GetAllUniActive();
+
+    const GetAllUniProj = async () => {
+      await axios
+        .get(`http://localhost:8800/count-all-uni-proj/${uniName}`)
+        .then((res) => {
+          setAllProjectsCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    GetAllUniProj();
+
+    const GetAllUniTasks = async () => {
+      await axios
+        .get(`http://localhost:8800/count-all-uni-tasks/${uniName}`)
+        .then((res) => {
+          setAllTasksCount(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    GetAllUniTasks();
+
+
+  });
 
   const [dataOnsite, setDataOnsite] = useState({
     labels: [
@@ -72,10 +128,6 @@ export const UniversityDashboard = () => {
       },
     ],
   });
-
-  // if (!check) {
-  //   navigate("/");
-  // }
   return (
     <>
       <UniversityHeader />

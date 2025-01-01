@@ -104,14 +104,11 @@ export const Register = () => {
   });
 
   const VerifyEmail = async () => {
-    const verificationCode = Math.floor(1000 + Math.random() * 9000);
-
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/verification-code`,
+        `${process.env.REACT_APP_API_URL}/verify-int-email`,
         {
           email: value.internemail,
-          code: verificationCode,
         }
       );
       alert(res.data.msg);

@@ -43,6 +43,48 @@ const VerifyUniEmail = (req, res) => {
   });
 };
 
+const VerifyInternEmail = (req, res) => {
+  const { email } = req.body;
+
+  // Email validation
+  if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+    return res.status(400).json({ msg: "Invalid email address" });
+  }
+
+  const sql = "SELECT * FROM `intern_table` WHERE `email` = ?";
+
+  connection.query(sql, [email], (err, data) => {
+    if (err) throw err;
+
+    if (data.length > 0) {
+      const generateVerificationCode = () =>
+        Math.floor(1000 + Math.random() * 9000);
+      const verificationCode = generateVerificationCode();
+
+      const sql =
+        "INSERT INTO `verification_code`(`email`, `code`) VALUES (?, ?)";
+      connection.query(sql, [email, verificationCode], (err, data) => {
+        if (err) {
+          if (err.code === "ER_DUP_ENTRY") {
+            return res.status(409).json({
+              msg: "Verification email already sent. Check your mailbox.",
+            });
+          }
+          return res
+            .status(500)
+            .json({ msg: "Database error. Try again later." });
+        }
+        SendMailVerifyCode(email, verificationCode);
+        res
+          .status(200)
+          .json({ msg: "Verification email sent. Check your mailbox." });
+      });
+    } else {
+      return res.status(400).json({ msg: "Invalid email address" });
+    }
+  });
+};
+
 const VerifyCode = (req, res) => {
   const { email, code } = req.body.data;
 
@@ -90,4 +132,5 @@ module.exports = {
   DeleteVerificationCode,
   DeleteCodeAtMidNight,
   VerifyCode,
+  VerifyInternEmail,
 };
