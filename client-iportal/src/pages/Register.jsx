@@ -286,7 +286,7 @@ export const Register = () => {
                                     borderBottomLeftRadius: "0",
                                     // height: "38px",
                                   }}
-                                  onClick={VerifyEmail}
+                                  onClick={() => VerifyEmail()}
                                 >
                                   Send Code
                                 </button>
