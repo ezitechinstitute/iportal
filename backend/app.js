@@ -12,13 +12,20 @@ const app = express();
 app.use(bodyParser.json({ limit: "35mb" })); // Adjust the limit as needed
 app.use(bodyParser.urlencoded({ limit: "35mb", extended: true }));
 app.use(express.json());
-app.use(
-  cors({
-    origin: "*",
-    allowedHeaders: "*",
-    allowMethods: "*",
-  })
-);
+
+// Configure CORS options
+const corsOptions = {
+  origin: [
+    'https://interns.ezitech.org',
+    'https://manager.ezitech.org',
+    'https://admin.ezitech.org',
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Optional: Allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Optional: Allowed headers
+  credentials: true, // Optional: Enable credentials if needed
+};
+
+app.use(cors(corsOptions));
 app.use(router);
 DataBase();
 

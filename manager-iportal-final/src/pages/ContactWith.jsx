@@ -42,6 +42,7 @@ export const ContactWith = () => {
           },
         }
       );
+      console.log(res.data.data)
       setData(res.data.data);
       settCurrentPage(res.data.meta.page);
       setTotalPages(res.data.meta.totalPages);
