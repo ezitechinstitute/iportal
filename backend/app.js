@@ -19,7 +19,8 @@ const corsOptions = {
     "https://interns.ezitech.org",
     "https://manager.ezitech.org",
     "https://admin.ezitech.org",
-    "https://register.ezitech.org"
+    "https://register.ezitech.org",
+    "http://localhost:3000"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"], // Optional: Allowed methods
   // allowedHeaders: ["Content-Type", "Authorization"], // Optional: Allowed headers
