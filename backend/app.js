@@ -16,12 +16,12 @@ app.use(express.json());
 // Configure CORS options
 const corsOptions = {
   origin: [
-    'https://interns.ezitech.org/',
-    'https://manager.ezitech.org/',
-    'https://admin.ezitech.org/',
+    "https://interns.ezitech.org/",
+    "https://manager.ezitech.org/",
+    "https://admin.ezitech.org/",
   ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Optional: Allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Optional: Allowed headers
+  methods: ["GET", "POST", "PUT", "DELETE"], // Optional: Allowed methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Optional: Allowed headers
   credentials: true, // Optional: Enable credentials if needed
 };
 
