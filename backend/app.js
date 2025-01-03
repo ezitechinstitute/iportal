@@ -22,8 +22,8 @@ const corsOptions = {
     "https://register.ezitech.org"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"], // Optional: Allowed methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Optional: Allowed headers
-  credentials: true, // Optional: Enable credentials if needed
+  // allowedHeaders: ["Content-Type", "Authorization"], // Optional: Allowed headers
+  // credentials: true, // Optional: Enable credentials if needed
 };
 
 app.use(cors(corsOptions));
