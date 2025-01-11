@@ -42,7 +42,7 @@ export const ContactWith = () => {
           },
         }
       );
-      console.log(res.data.data)
+      console.log(res.data.meta)
       setData(res.data.data);
       settCurrentPage(res.data.meta.page);
       setTotalPages(res.data.meta.totalPages);
