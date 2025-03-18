@@ -89,14 +89,14 @@ export const InternDashboard = () => {
 
   const CountCompletedProjects = async () => {
     await axios
-      .get(`http://localhost:8088/count-int-comp-proj`, { params: { id } })
+      .get(`https://api.ezitech.org/count-int-comp-proj`, { params: { id } })
       .then((res) => setCompleted(res.data))
       .catch((err) => console.log(err));
   };
 
   const CountAttendance = async () => {
     await axios
-      .get(`http://localhost:8088/count-int-attend`, { params: { id } })
+      .get(`https://api.ezitech.org/count-int-attend`, { params: { id } })
       .then((res) => setAttendance(res.data))
       .catch((err) => console.log(err));
   };
