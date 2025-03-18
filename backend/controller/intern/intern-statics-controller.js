@@ -202,7 +202,7 @@ const calculateInternAverage = (id, callback) => {
       if (err) return callback(err);
 
       const totalWorkingHours = attendanceData[0].total_working_hours || 0;
-      const totalDays = attendanceData[0]?.total_days || 1;
+      const totalDays = attendanceData[0].total_days || 1;
       const expectedTotalHours = totalDays * 3;
       let attendancePercentage = (totalWorkingHours / expectedTotalHours) * 100;
 
