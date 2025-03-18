@@ -194,14 +194,14 @@ const calculateInternAverage = (id, callback) => {
   connection.query(sqlProject, [id], (err, projectData) => {
     if (err) return callback(err);
 
-    const totalObtMarks = projectData[0]?.total_obt_marks || 0;
+    const totalObtMarks = projectData[0].total_obt_marks || 0;
     const totalMarks = projectData[0].total_marks || 1;
     const internProjectAverage = (totalObtMarks / totalMarks) * 100;
 
     connection.query(sqlAttendance, [id], (err, attendanceData) => {
       if (err) return callback(err);
 
-      const totalWorkingHours = attendanceData[0]?.total_working_hours || 0;
+      const totalWorkingHours = attendanceData[0].total_working_hours || 0;
       const totalDays = attendanceData[0]?.total_days || 1;
       const expectedTotalHours = totalDays * 3;
       let attendancePercentage = (totalWorkingHours / expectedTotalHours) * 100;
