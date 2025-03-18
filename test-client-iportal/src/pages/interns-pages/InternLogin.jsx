@@ -35,7 +35,7 @@ export const InternLogin = () => {
     e.preventDefault();
 
     axios
-      .post("http://localhost:8088/intern-auth", { values })
+      .post("https://api.ezitech.org/intern-auth", { values })
       .then((res) => {
         if (
           !res.data.userStatus &&
