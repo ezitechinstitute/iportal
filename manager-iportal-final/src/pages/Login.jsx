@@ -1,175 +1,174 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaFacebookF, FaTwitter, FaEnvelope, FaGithub, FaEye } from "react-icons/fa"; // Import React Icons
+
 export const Login = () => {
   const navigate = useNavigate();
-  const [value, setValue] = useState({});
+  const [value, setValue] = useState({ email: "", password: "" });
 
   const handleInput = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });
   };
-  // https://api.ezitech.org
-  const Login = () => {
-    if (value.email !== undefined && value.password !== undefined) {
-      axios
-        .post("https://api.ezitech.org/manager-auth", { value })
-        .then((res) => {
-          if (
-            res.data.isLoggedIn === true &&
-            res.data.user[0].loginas === "Manager"
-          ) {
-            sessionStorage.setItem("managerid", res.data.user[0].manager_id);
-            sessionStorage.setItem("username", res.data.user[0].name);
-            sessionStorage.setItem("email", res.data.user[0].email);
-            sessionStorage.setItem("token", res.data.token);
-            sessionStorage.setItem("role", res.data.user[0].loginas);
-            sessionStorage.setItem("contact", res.data.user[0].contact);
-            sessionStorage.setItem("isLoggedIn", true);
-            alert("Login Successfully");
-            navigate("/manager-dashboard");
-          } else {
-            alert("Invalid User!!!");
-          }
-        });
-    } else {
-      alert("Please empty fields first!!!");
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (!value.email || !value.password) {
+      alert("Please fill in all fields first!");
+      return;
     }
+
+    axios
+      .post("https://api.ezitech.org/manager-auth", value)
+      .then((res) => {
+        console.log("API Response:", res.data);
+        if (res.data.isLoggedIn === true) {
+          const { user, token } = res.data;
+          sessionStorage.setItem("managerid", user.manager_id);
+          sessionStorage.setItem("etiid", user.eti_id);
+          sessionStorage.setItem("username", user.name);
+          sessionStorage.setItem("email", user.email);
+          sessionStorage.setItem("token", token);
+          sessionStorage.setItem("role", "Manager");
+          sessionStorage.setItem("contact", user.contact);
+          sessionStorage.setItem("isLoggedIn", "true");
+          alert("Login Successful!");
+          navigate("/manager-dashboard");
+        } else {
+          alert(res.data.message || "Invalid User!");
+        }
+      })
+      .catch((err) => {
+        console.error("API Error:", err.response?.data || err.message);
+        const errorMsg = err.response?.data?.error || "Login failed. Please try again.";
+        alert(errorMsg);
+      });
   };
+
   return (
     <>
-      {/* <div className="app-content content ">
-        <div className="content-overlay"></div>
-        <div className="header-navbar-shadow"></div>
-        <div className="content-wrapper">
-          <div className="content-header row"></div>
-          <div className="content-body"> */}
       <div className="auth-wrapper auth-v2">
         <div className="auth-inner row m-0">
-          {/* <!-- Brand logo--> */}
+          {/* Brand Logo */}
           <a className="brand-logo" href="javascript:void(0);">
-            {/* <div className="brand-logo"> */}
-            <img src="./images/logo.png" alt="" width={150} />
-            {/* </div> */}
+            <img src="./images/logo.png" alt="Logo" width={150} />
           </a>
-          {/* <!-- /Brand logo--> */}
-          {/* <!-- Left Text--> */}
+
+          {/* Left Image (hidden on small screens) */}
           <div className="d-none d-lg-flex col-lg-8 align-items-center p-5">
             <div className="w-100 d-lg-flex align-items-center justify-content-center px-5">
               <img
                 className="img-fluid"
                 src="../../../app-assets/images/pages/login-v2.svg"
-                alt="Login V2"
+                alt="Login Illustration"
               />
             </div>
           </div>
-          {/* <!-- /Left Text--> */}
-          {/* <!-- Login--> */}
+
+          {/* Login Form */}
           <div className="d-flex col-lg-4 align-items-center auth-bg px-2 p-lg-5">
             <div className="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
               <h4 className="card-title mb-1">Welcome to Ezitech! 👋</h4>
               <p className="card-text mb-2">
-                Please sign-in to your account and start the adventure
+                Please sign in to your account and start the adventure
               </p>
-              {/* <form className="auth-login-form mt-2" onSubmit={Login}> */}
-              <div className="form-group">
-                <label className="form-label" for="login-email">
-                  Email
-                </label>
-                <input
-                  className="form-control"
-                  id="login-email"
-                  type="text"
-                  name="email"
-                  onChange={handleInput}
-                  placeholder="ezitech@example.com"
-                  aria-describedby="login-email"
-                  autofocus=""
-                  tabindex="1"
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <div className="d-flex justify-content-between">
-                  <label for="login-password">Password</label>
-                  <a
-                    href=""
-                    data-toggle="modal"
-                    data-target="#exampleModalCenter"
-                  >
-                    <small>Forgot Password?</small>
-                  </a>
-                </div>
-                <div className="input-group input-group-merge form-password-toggle">
+
+              <form className="auth-login-form mt-2" onSubmit={handleLogin}>
+                <div className="form-group">
+                  <label className="form-label" htmlFor="login-email">
+                    Email
+                  </label>
                   <input
-                    className="form-control form-control-merge"
-                    id="login-password"
-                    type="password"
-                    name="password"
+                    className="form-control"
+                    id="login-email"
+                    type="email"
+                    name="email"
+                    value={value.email}
                     onChange={handleInput}
-                    placeholder="············"
-                    aria-describedby="login-password"
-                    tabindex="2"
+                    placeholder="ezitech@example.com"
+                    aria-describedby="login-email"
+                    autoFocus
+                    tabIndex="1"
                     required
                   />
-                  <div className="input-group-append">
-                    <span className="input-group-text cursor-pointer">
-                      <i data-feather="eye"></i>
-                    </span>
+                </div>
+
+                <div className="form-group">
+                  <div className="d-flex justify-content-between">
+                    <label htmlFor="login-password">Password</label>
+                    <a href="#" data-toggle="modal" data-target="#exampleModalCenter">
+                      <small>Forgot Password?</small>
+                    </a>
+                  </div>
+                  <div className="input-group input-group-merge form-password-toggle">
+                    <input
+                      className="form-control form-control-merge"
+                      id="login-password"
+                      type="password"
+                      name="password"
+                      value={value.password}
+                      onChange={handleInput}
+                      placeholder="············"
+                      aria-describedby="login-password"
+                      tabIndex="2"
+                      required
+                    />
+                    
                   </div>
                 </div>
-              </div>
-              
-              <div className="form-group">
-                <div className="custom-control custom-checkbox">
-                  <input
-                    className="custom-control-input"
-                    id="remember-me"
-                    type="checkbox"
-                    tabindex="3"
-                  />
-                  <label className="custom-control-label" for="remember-me">
-                    {" "}
-                    Remember Me
-                  </label>
+
+                <div className="form-group">
+                  <div className="custom-control custom-checkbox">
+                    <input
+                      className="custom-control-input"
+                      id="remember-me"
+                      type="checkbox"
+                      tabIndex="3"
+                    />
+                    <label className="custom-control-label" htmlFor="remember-me">
+                      Remember Me
+                    </label>
+                  </div>
                 </div>
-              </div>
-              <button
-                className="btn btn-primary btn-block"
-                tabindex="4"
-                onClick={Login}
-              >
-                Login
-              </button>
-              {/* </form> */}
+
+                <button
+                  className="btn btn-primary btn-block"
+                  type="submit"
+                  tabIndex="4"
+                >
+                  Login
+                </button>
+              </form>
 
               <div className="divider my-2">
                 <div className="divider-text">or</div>
               </div>
+
               <div className="auth-footer-btn d-flex justify-content-center">
                 <a className="btn btn-facebook" href="javascript:void(0)">
-                  <i data-feather="facebook"></i>
+                  <FaFacebookF /> {/* Replaced Feather facebook icon */}
                 </a>
                 <a className="btn btn-twitter white" href="javascript:void(0)">
-                  <i data-feather="twitter"></i>
+                  <FaTwitter /> {/* Replaced Feather twitter icon */}
                 </a>
                 <a className="btn btn-google" href="javascript:void(0)">
-                  <i data-feather="mail"></i>
+                  <FaEnvelope /> {/* Replaced Feather mail icon */}
                 </a>
                 <a className="btn btn-github" href="javascript:void(0)">
-                  <i data-feather="github"></i>
+                  <FaGithub /> {/* Replaced Feather github icon */}
                 </a>
               </div>
             </div>
           </div>
-          {/* <!-- /Login--> */}
+          {/* End Login Form */}
         </div>
       </div>
 
-      {/* <!-- Modal --> */}
+      {/* Forgot Password Modal */}
       <div
         className="modal fade"
         id="exampleModalCenter"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true"
@@ -186,7 +185,7 @@ export const Login = () => {
                 data-dismiss="modal"
                 aria-label="Close"
               >
-                <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true">×</span>
               </button>
             </div>
             <div className="modal-body">
@@ -195,16 +194,15 @@ export const Login = () => {
                 type="email"
                 name="email"
                 placeholder="Email"
-                // onChange={handlePassword}
+                // Add onChange and logic for password reset if needed
               />
-
               <br />
               <input
                 className="form-control"
                 type="password"
                 name="password"
-                // onChange={handlePassword}
                 placeholder="New Password"
+                // Add onChange and logic for password reset if needed
               />
             </div>
             <div className="modal-footer">
@@ -212,7 +210,7 @@ export const Login = () => {
                 type="button"
                 className="btn btn-primary"
                 data-dismiss="modal"
-                // onClick={handlePasswordUpdate}
+                // Add onClick handler for password reset if implemented
               >
                 Update
               </button>
@@ -220,10 +218,6 @@ export const Login = () => {
           </div>
         </div>
       </div>
-      {/* </div>
-        </div>
-      </div> */}
-      {/* <!-- END: Content--> */}
     </>
   );
 };

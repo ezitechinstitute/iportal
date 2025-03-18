@@ -13,7 +13,7 @@ export const AddUniversity = () => {
   const AddUniversity = async () => {
     if (values.uniName !== undefined) {
       await axios
-        .post("http://localhost:8800/add-uni", { values })
+        .post("https://api.ezitech.org/add-uni", { values })
         .then((res) => {
           alert(res.data.msg);
         })

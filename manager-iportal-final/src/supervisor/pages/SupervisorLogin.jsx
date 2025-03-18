@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaFacebookF, FaTwitter, FaEnvelope, FaGithub, FaEye } from "react-icons/fa"; // Import icons
+
 export const SupervisorLogin = () => {
   const navigate = useNavigate();
   const [value, setValue] = useState({});
@@ -8,7 +10,7 @@ export const SupervisorLogin = () => {
   const handleInput = (e) => {
     setValue({ ...value, [e.target.name]: e.target.value });
   };
-  // https://api.ezitech.org
+
   const Login = () => {
     if (value.email !== undefined && value.password !== undefined) {
       axios
@@ -16,38 +18,37 @@ export const SupervisorLogin = () => {
         .then((res) => {
           if (
             res.data.isLoggedIn === true &&
-            res.data.user[0].loginas === "Supervisor"
+            res.data.user.loginas === "Supervisor"
           ) {
-            sessionStorage.setItem("managerid", res.data.user[0].manager_id);
-            sessionStorage.setItem("etiId", res.data.user[0].eti_id);
-            sessionStorage.setItem("username", res.data.user[0].name);
-            sessionStorage.setItem("email", res.data.user[0].email);
+            sessionStorage.setItem("managerid", res.data.user.manager_id);
+            sessionStorage.setItem("etiId", res.data.user.eti_id);
+            sessionStorage.setItem("username", res.data.user.name);
+            sessionStorage.setItem("email", res.data.user.email);
             sessionStorage.setItem("token", res.data.token);
-            sessionStorage.setItem("role", res.data.user[0].loginas);
-
+            sessionStorage.setItem("role", res.data.user.loginas);
             sessionStorage.setItem("isLoggedIn", true);
             alert("Login Successfully");
             navigate("/supervisor-dashboard");
           } else {
             alert("Invalid User!!!");
           }
+        })
+        .catch((err) => {
+          console.error("Login error:", err);
+          alert("An error occurred during login. Please try again.");
         });
     } else {
-      alert("Please empty fields first!!!");
+      alert("Please fill in all fields!!!");
     }
   };
+
   return (
     <>
       <div className="auth-wrapper auth-v2">
         <div className="auth-inner row m-0">
-          {/* <!-- Brand logo--> */}
           <a className="brand-logo" href="javascript:void(0);">
-            {/* <div className="brand-logo"> */}
             <img src="./images/logo.png" alt="" width={150} />
-            {/* </div> */}
           </a>
-          {/* <!-- /Brand logo--> */}
-          {/* <!-- Left Text--> */}
           <div className="d-none d-lg-flex col-lg-8 align-items-center p-5">
             <div className="w-100 d-lg-flex align-items-center justify-content-center px-5">
               <img
@@ -57,17 +58,14 @@ export const SupervisorLogin = () => {
               />
             </div>
           </div>
-          {/* <!-- /Left Text--> */}
-          {/* <!-- Login--> */}
           <div className="d-flex col-lg-4 align-items-center auth-bg px-2 p-lg-5">
             <div className="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
               <h4 className="card-title mb-1">Welcome to Ezitech! 👋</h4>
               <p className="card-text mb-2">
                 Please sign-in to your account and start the adventure
               </p>
-              {/* <form className="auth-login-form mt-2" onSubmit={Login}> */}
               <div className="form-group">
-                <label className="form-label" for="login-email">
+                <label className="form-label" htmlFor="login-email">
                   Email
                 </label>
                 <input
@@ -78,19 +76,15 @@ export const SupervisorLogin = () => {
                   onChange={handleInput}
                   placeholder="ezitech@example.com"
                   aria-describedby="login-email"
-                  autofocus=""
-                  tabindex="1"
+                  autoFocus
+                  tabIndex="1"
                   required
                 />
               </div>
               <div className="form-group">
                 <div className="d-flex justify-content-between">
-                  <label for="login-password">Password</label>
-                  <a
-                    href=""
-                    data-toggle="modal"
-                    data-target="#exampleModalCenter"
-                  >
+                  <label htmlFor="login-password">Password</label>
+                  <a href="#" data-toggle="modal" data-target="#exampleModalCenter">
                     <small>Forgot Password?</small>
                   </a>
                 </div>
@@ -103,68 +97,59 @@ export const SupervisorLogin = () => {
                     onChange={handleInput}
                     placeholder="············"
                     aria-describedby="login-password"
-                    tabindex="2"
+                    tabIndex="2"
                     required
                   />
-                  <div className="input-group-append">
-                    <span className="input-group-text cursor-pointer">
-                      <i data-feather="eye"></i>
-                    </span>
-                  </div>
+                 
                 </div>
               </div>
-
               <div className="form-group">
                 <div className="custom-control custom-checkbox">
                   <input
                     className="custom-control-input"
                     id="remember-me"
                     type="checkbox"
-                    tabindex="3"
+                    tabIndex="3"
                   />
-                  <label className="custom-control-label" for="remember-me">
-                    {" "}
+                  <label className="custom-control-label" htmlFor="remember-me">
                     Remember Me
                   </label>
                 </div>
               </div>
               <button
                 className="btn btn-primary btn-block"
-                tabindex="4"
+                tabIndex="4"
                 onClick={Login}
               >
                 Login
               </button>
-              {/* </form> */}
-
               <div className="divider my-2">
                 <div className="divider-text">or</div>
               </div>
               <div className="auth-footer-btn d-flex justify-content-center">
                 <a className="btn btn-facebook" href="javascript:void(0)">
-                  <i data-feather="facebook"></i>
+                  <FaFacebookF /> {/* Replaced Feather icon */}
                 </a>
                 <a className="btn btn-twitter white" href="javascript:void(0)">
-                  <i data-feather="twitter"></i>
+                  <FaTwitter /> {/* Replaced Feather icon */}
                 </a>
                 <a className="btn btn-google" href="javascript:void(0)">
-                  <i data-feather="mail"></i>
+                  <FaEnvelope /> {/* Replaced Feather mail icon */}
                 </a>
                 <a className="btn btn-github" href="javascript:void(0)">
-                  <i data-feather="github"></i>
+                  <FaGithub /> {/* Replaced Feather icon */}
                 </a>
               </div>
             </div>
           </div>
-          {/* <!-- /Login--> */}
         </div>
       </div>
 
-      {/* <!-- Modal --> */}
+      {/* Forgot Password Modal */}
       <div
         className="modal fade"
         id="exampleModalCenter"
-        tabindex="-1"
+        tabIndex="-1"
         role="dialog"
         aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true"
@@ -181,7 +166,7 @@ export const SupervisorLogin = () => {
                 data-dismiss="modal"
                 aria-label="Close"
               >
-                <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true">×</span>
               </button>
             </div>
             <div className="modal-body">
@@ -192,7 +177,6 @@ export const SupervisorLogin = () => {
                 placeholder="Email"
                 // onChange={handlePassword}
               />
-
               <br />
               <input
                 className="form-control"
@@ -215,10 +199,6 @@ export const SupervisorLogin = () => {
           </div>
         </div>
       </div>
-      {/* </div>
-        </div>
-      </div> */}
-      {/* <!-- END: Content--> */}
     </>
   );
 };

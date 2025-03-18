@@ -16,10 +16,9 @@ export const InternTasks = () => {
     taskTitle: null,
     points: null,
   });
-  // const id = "EZI-23-5-24/7832";
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
-  const [searchTerm, setSearchterm] = useState("");
+  const [taskStatusFilter, setTaskStatusFilter] = useState("All");
   const [loader, setLoader] = useState(false);
 
   const GetTasks = async () => {
@@ -31,7 +30,7 @@ export const InternTasks = () => {
       })
       .then((res) => {
         setData(res.data);
-        setFiltered(data);
+        setFiltered(res.data); // Set initial filtered data
       })
       .catch((err) => {
         console.log(err);
@@ -40,7 +39,17 @@ export const InternTasks = () => {
 
   useEffect(() => {
     GetTasks();
-  });
+  }, []); // Fetch tasks when component mounts
+
+  // Filter tasks based on status selection
+  useEffect(() => {
+    if (taskStatusFilter === "All") {
+      setFiltered(data);
+    } else {
+      setFiltered(data.filter((task) => task.task_status === taskStatusFilter));
+    }
+  }, [taskStatusFilter, data]); // Re-run whenever taskStatusFilter or data changes
+
   return (
     <>
       <InternTopbar />
@@ -50,24 +59,48 @@ export const InternTasks = () => {
         <div className="header-navbar-shadow"></div>
         <div className="content-wrapper">
           <div className="content-header row"></div>
-          <div className="content-body">
+          <div className="content-body mt-3">
             <section id="dashboard-ecommerce">
               <div className="row" id="table-hover-animation">
                 <div className="col-12">
                   <div className="card">
-                    <div className="card-header">
-                      <h4 className="card-title">Tasks</h4>
-                      {/* <!-- Button trigger modal --> */}
+                    <div className="card-header d-flex justify-content-between align-items-center">
+                    <h2 className="card-title mb-3 mt-[-5px] font-weight-bold ml-[-10px]">Tasks</h2>
 
-                      <select
-                        name="pstatus"
-                        id=""
-                        className="form-control w-25"
-                      >
-                        <option value="All">All</option>
-                        <option value="Ongoing">Ongoing</option>
-                        <option value="Completed">Completed</option>
-                      </select>
+                      {/* Status Filter Buttons */}
+                      <div className="btn-group">
+                        <button
+                          className={`btn ${taskStatusFilter === "All" ? "btn-primary" : "btn-outline-primary"}`}
+                          onClick={() => setTaskStatusFilter("All")}
+                        >
+                          <i className="fas fa-list mr-1"></i>
+                          All Tasks
+                        </button>
+
+                        <button
+                          className={`btn ${taskStatusFilter === "Ongoing" ? "btn-info" : "btn-outline-info"} mx-1`}
+                          onClick={() => setTaskStatusFilter("Ongoing")}
+                        >
+                          <i className="fas fa-hourglass mr-1"></i>
+                          Ongoing
+                        </button>
+
+                        <button
+                          className={`btn ${taskStatusFilter === "Approved" ? "btn-success" : "btn-outline-success"} mx-1`}
+                          onClick={() => setTaskStatusFilter("Approved")}
+                        >
+                          <i className="fas fa-check-circle mr-1"></i>
+                          Approved
+                        </button>
+
+                        <button
+                          className={`btn ${taskStatusFilter === "Rejected" ? "btn-danger" : "btn-outline-danger"}`}
+                          onClick={() => setTaskStatusFilter("Rejected")}
+                        >
+                          <i className="fas fa-times-circle mr-1"></i>
+                          Rejected
+                        </button>
+                      </div>
                     </div>
 
                     <section id="complex-header-datatable">
@@ -75,159 +108,119 @@ export const InternTasks = () => {
                         <div className="col-12">
                           <div className="card">
                             <div className="card-datatable">
-                              <table className="dt-complex-header table table-bordered table-responsive">
-                                <thead>
+                              <table className="table table-striped table-hover table-bordered text-center">
+                                <thead className="thead-light">
                                   <tr>
                                     <th>TITLE</th>
                                     <th>START DATE</th>
                                     <th>DURATION</th>
-                                    <th>Days</th>
+                                    <th>DAYS</th>
                                     <th>POINTS</th>
                                     <th>REVIEW</th>
                                     <th>STATUS</th>
-                                    <th>Action</th>
+                                    <th>ACTION</th>
                                   </tr>
                                 </thead>
 
                                 <tbody>
-                                  {Array.isArray(filtered)
-                                    ? filtered.map((rs) => {
-                                        const {
-                                          task_id,
-                                          task_title,
-                                          task_start,
-                                          task_duration,
-                                          task_days,
-                                          task_points,
-                                          task_status,
-                                          task_approve,
-                                          task_obt_points,
-                                          review,
-                                        } = rs;
+                                  {Array.isArray(filtered) &&
+                                    filtered.map((rs) => {
+                                      const {
+                                        task_id,
+                                        task_title,
+                                        task_start,
+                                        task_duration,
+                                        task_days,
+                                        task_points,
+                                        task_status,
+                                        task_approve,
+                                        task_obt_points,
+                                        review,
+                                      } = rs;
 
-                                        const date = new Date(
-                                          task_start
-                                        ).toLocaleDateString("en-PK");
+                                      const date = new Date(task_start).toLocaleDateString("en-PK");
 
-                                        return (
-                                          <>
-                                            <tr>
-                                              <td>{task_title}</td>
-                                              <td>{date}</td>
-                                              <td>{task_duration}</td>
-                                              <td>{task_days}</td>
-                                              <td>
-                                                {task_obt_points} /{" "}
-                                                {task_points}
-                                              </td>
-                                              <td>
-                                                {review ? review : <p>---</p>}
-                                              </td>
-                                              {task_approve === null ? (
-                                                <>
-                                                  <td>
-                                                    {task_status ===
-                                                    "Ongoing" ? (
-                                                      <span className="badge badge-glow badge-info">
-                                                        {" "}
-                                                        {task_status}{" "}
-                                                      </span>
-                                                    ) : task_status ===
-                                                      "Expired" ? (
-                                                      <span className="badge badge-glow badge-danger">
-                                                        {" "}
-                                                        {task_status}{" "}
-                                                      </span>
-                                                    ) : task_status ===
-                                                      "Submitted" ? (
-                                                      <span className="badge badge-glow badge-success">
-                                                        {" "}
-                                                        {task_status}{" "}
-                                                      </span>
-                                                    ) : (
-                                                      " "
-                                                    )}
-                                                  </td>
-                                                </>
-                                              ) : task_approve === 1 ? (
-                                                <td>
-                                                  <span className="badge badge-glow badge-success">
-                                                    {" "}
-                                                    {task_status}{" "}
-                                                  </span>
-                                                </td>
-                                              ) : task_approve === 0 ? (
-                                                <td>
-                                                  <span className="badge badge-glow badge-danger">
-                                                    {" "}
-                                                    {task_status}{" "}
-                                                  </span>
-                                                </td>
-                                              ) : (
-                                                ""
-                                              )}
-
-                                              <td>
-                                                <div className="dropdown">
-                                                  <button
-                                                    type="button"
-                                                    className="btn btn-warning dropdown-toggle hide-arrow"
-                                                    data-toggle="dropdown"
-                                                  >
-                                                    Action
-                                                  </button>
-                                                  <div className="dropdown-menu">
+                                      return (
+                                        <tr key={task_id}>
+                                          <td className="font-weight-bold">{task_title}</td>
+                                          <td>{date}</td>
+                                          <td>{task_duration}</td>
+                                          <td className="text-right">{task_days}</td>
+                                          <td className="text-right">
+                                            <span className="badge badge-pill badge-primary px-2 py-1">
+                                              {task_obt_points} / {task_points}
+                                            </span>
+                                          </td>
+                                          <td>{review ? review : <span className="text-muted">---</span>}</td>
+                                          <td>
+                                            <span
+                                              className={`badge badge-pill px-2 py-1 ${task_approve === null
+                                                  ? task_status === "Ongoing"
+                                                    ? "badge-info"
+                                                    : task_status === "Rejected"
+                                                      ? "badge-danger"
+                                                      : task_status === "Approved"
+                                                        ? "badge-success"
+                                                        : "badge-secondary"
+                                                  : task_approve === 1
+                                                    ? "badge-success"
+                                                    : "badge-danger"
+                                                }`}
+                                            >
+                                              {task_status}
+                                            </span>
+                                          </td>
+                                          <td>
+                                            <div className="dropdown">
+                                              <button
+                                                type="button"
+                                                className="btn btn-sm btn-warning dropdown-toggle"
+                                                data-toggle="dropdown"
+                                              >
+                                                Actions
+                                              </button>
+                                              <div className="dropdown-menu">
+                                                <a
+                                                  className="dropdown-item"
+                                                  href="#!"
+                                                  data-toggle="modal"
+                                                  data-target="#large"
+                                                  onClick={() =>
+                                                    setValues({
+                                                      id: id,
+                                                      taskId: task_id,
+                                                      points: task_points,
+                                                    })
+                                                  }
+                                                >
+                                                  <i className="fas fa-eye mr-2"></i> View Details
+                                                </a>
+                                                {task_status !== "Rejected" &&
+                                                  task_status !== "Approved" &&
+                                                  task_status !== "Rejected" && (
                                                     <a
                                                       className="dropdown-item"
-                                                      href="javascript:void(0);"
+                                                      href="#!"
                                                       data-toggle="modal"
-                                                      data-target="#large"
+                                                      data-target="#default2"
                                                       onClick={() =>
                                                         setValues({
                                                           id: id,
                                                           taskId: task_id,
+                                                          taskTitle: task_title,
                                                           points: task_points,
                                                         })
                                                       }
                                                     >
-                                                      <span>View Details</span>
+                                                      <i className="fas fa-upload mr-2"></i> Submit Task
                                                     </a>
-                                                    {task_status !==
-                                                      "Expired" &&
-                                                    task_status !==
-                                                      "Submitted" &&
-                                                    task_status !==
-                                                      "Approved" &&
-                                                    task_status !==
-                                                      "Rejected" ? (
-                                                      <a
-                                                        className="dropdown-item"
-                                                        href="javascript:void(0);"
-                                                        data-toggle="modal"
-                                                        data-target="#default2"
-                                                        onClick={() =>
-                                                          setValues({
-                                                            id: id,
-                                                            taskId: task_id,
-                                                            taskTitle:
-                                                              task_title,
-                                                            points: task_points,
-                                                          })
-                                                        }
-                                                      >
-                                                        <span>Submit Task</span>
-                                                      </a>
-                                                    ) : (
-                                                      ""
-                                                    )}
-                                                  </div>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                          </>
-                                        );
-                                      })
-                                    : ""}
+                                                  )}
+                                              </div>
+                                            </div>
+                                          </td>
+                                        </tr>
+                                      );
+                                    })}
                                 </tbody>
                               </table>
                             </div>

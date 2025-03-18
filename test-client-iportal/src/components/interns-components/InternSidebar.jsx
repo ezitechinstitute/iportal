@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { FiHome, FiClipboard, FiCheckSquare, FiCalendar, FiMessageSquare, 
+         FiImage, FiUser, FiGrid, FiCheckCircle } from "react-icons/fi";
+import { NavLink } from "react-router-dom";
 
 export const InternSidebar = () => {
   const [user, setUser] = useState({
@@ -17,14 +19,13 @@ export const InternSidebar = () => {
         className="main-menu menu-fixed menu-light menu-accordion menu-shadow"
         data-scroll-to-active="true"
       >
-        <div className="navbar-header mb-3">
+        <div className="navbar-header">
           <ul className="nav navbar-nav flex-row">
             <li className="nav-item mr-auto">
               <a className="navbar-brand" href="/">
                 <span className="brand-logo">
                   <img src="./images/ezitech.png" alt="" />
                 </span>
-
                 <img
                   src="./images/logo.png"
                   style={{
@@ -48,14 +49,13 @@ export const InternSidebar = () => {
                 <i
                   className="d-none d-xl-block collapse-toggle-icon font-medium-4 text-primary"
                   data-feather="disc"
-                  data-ticon="disc"
                 ></i>
               </a>
             </li>
           </ul>
         </div>
         <div className="shadow-bottom"></div>
-        <div className="main-menu-content">
+        <div className="main-menu-content mt-2">
           <ul
             className="navigation navigation-main"
             id="main-menu-navigation"
@@ -63,448 +63,209 @@ export const InternSidebar = () => {
           >
             {user.status === "Test" ? (
               <>
-                <li className="nav-item" style={{ opacity: "0.4" }}>
-                  <a className="d-flex align-items-center">
-                    <Link>
-                      <i data-feather="home"></i>
-                      <span
-                        className="menu-title text-truncate"
-                        data-i18n="Dashboards"
-                      >
-                        Dashboards
-                      </span>
-                    </Link>
-                  </a>
+                <li className={activeLink === "test" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("test")}
+                    to="/intern-test"
+                  >
+                    <FiClipboard />
+                    <span className="menu-title text-truncate" data-i18n="Test">
+                      Test
+                    </span>
+                  </NavLink>
                 </li>
-
-                <li className="nav-item">
-                  <a className="d-flex align-items-center" href="index.html">
-                    <Link to={"/intern-test"}>
-                      <i data-feather="clipboard"></i>
-                      <span
-                        className="menu-title text-truncate"
-                        data-i18n="Dashboards"
-                      >
-                        Test
-                      </span>
-                    </Link>
-                  </a>
+                {/* Disabled items with opacity */}
+                <li className="undefined" style={{ opacity: "0.4" }}>
+                  <NavLink className="d-flex align-items-center" to="#">
+                    <FiHome />
+                    <span
+                      className="menu-title text-truncate"
+                      data-i18n="Dashboards"
+                    >
+                      Dashboards
+                    </span>
+                  </NavLink>
                 </li>
-
-                <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
-                >
-                  <a className="d-flex align-items-center" href="#">
-                    <Link>
-                      <i data-feather="check-square"></i>
-                      <span className="menu-item" data-i18n="eCommerce">
-                        Attendance
-                      </span>
-                    </Link>
-                  </a>
+                <li className="undefined" style={{ opacity: "0.4" }}>
+                  <NavLink className="d-flex align-items-center" to="#">
+                    <FiCheckSquare />
+                    <span className="menu-item" data-i18n="Attendance">
+                      Attendance
+                    </span>
+                  </NavLink>
                 </li>
-
-                <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
-                >
-                  <a className="d-flex align-items-center">
-                    <Link className="d-flex align-items-center">
-                      <i data-feather="calendar"></i>
-                      <span className="menu-item" data-i18n="eCommerce">
-                        Leave
-                      </span>
-                    </Link>
-                  </a>
+                <li className="undefined" style={{ opacity: "0.4" }}>
+                  <NavLink className="d-flex align-items-center" to="#">
+                    <FiCalendar />
+                    <span className="menu-item" data-i18n="Leave">
+                      Leave
+                    </span>
+                  </NavLink>
                 </li>
-
-                {/* <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
-                >
-                  <a className="d-flex align-items-center">
-                    <Link className="d-flex align-items-center">
-                      <i data-feather="shopping-cart"></i>
-                      <span className="menu-item" data-i18n="eCommerce">
-                        Shop
-                      </span>
-                    </Link>
-                  </a>
+                <li className="undefined" style={{ opacity: "0.4" }}>
+                  <NavLink className="d-flex align-items-center" to="#">
+                    <FiMessageSquare />
+                    <span className="menu-item" data-i18n="Feedback">
+                      Feedback
+                    </span>
+                  </NavLink>
                 </li>
-
-                <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
-                >
-                  <a className="d-flex align-items-center">
-                    <Link className="d-flex align-items-center">
-                      <i data-feather="database"></i>
-                      <span className="menu-item" data-i18n="eCommerce">
-                        Points
-                      </span>
-                    </Link>
-                  </a>
-                </li> */}
-
-                <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
-                >
-                  <a className="d-flex align-items-center">
-                    <Link>
-                      <i data-feather="message-square"></i>
-                      <span className="menu-item" data-i18n="Sweet Alert">
-                        Feedback
-                      </span>
-                    </Link>
-                  </a>
+                <li className="undefined" style={{ opacity: "0.4" }}>
+                  <NavLink className="d-flex align-items-center" to="#">
+                    <FiImage />
+                    <span className="menu-item" data-i18n="Post">
+                      Post
+                    </span>
+                  </NavLink>
                 </li>
-
-                <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
-                >
-                  <a className="d-flex align-items-center">
-                    <Link>
-                      <i data-feather="image"></i>
-                      <span className="menu-item" data-i18n="Sweet Alert">
-                        Post
-                      </span>
-                    </Link>
-                  </a>
-                </li>
-
-                <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
-                >
-                  <a className="d-flex align-items-center">
-                    <Link>
-                      <i data-feather="user"></i>
-                      <span
-                        className="menu-title text-truncate"
-                        data-i18n="User"
-                      >
-                        Public Profile
-                      </span>
-                    </Link>
-                  </a>
+                <li className="undefined" style={{ opacity: "0.4" }}>
+                  <NavLink className="d-flex align-items-center" to="#">
+                    <FiUser />
+                    <span
+                      className="menu-title text-truncate"
+                      data-i18n="Profile"
+                    >
+                      Public Profile
+                    </span>
+                  </NavLink>
                 </li>
               </>
             ) : (
               <>
-                <li className="nav-item">
-                  <a
-                    className={
-                      activeLink === "dashboard"
-                        ? "active"
-                        : "d-flex align-items-center"
-                    }
-                    href="#"
+                <li className={activeLink === "dashboard" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("dashboard")}
+                    to="/intern-dashboard"
                   >
-                    <Link
-                     
-                      to={"/intern-dashboard"}
-                      type="button"
-                      onClick={() => setActive("dashboard")}
+                    <FiHome />
+                    <span
+                      className="menu-title text-truncate"
+                      data-i18n="Dashboards"
                     >
-                      <i data-feather="home"></i>
-                      <span
-                        className="menu-title text-truncate"
-                        data-i18n="Dashboards"
-                      >
-                        Dashboards
-                      </span>
-                    </Link>
-                  </a>
+                      Dashboard
+                    </span>
+                  </NavLink>
                 </li>
 
-                <li className="nav-item" style={{ marginTop: "-10px" }}>
-                  <a className="d-flex align-items-center">
-                    <Link to={"/intern-projects"}>
-                      <i data-feather="grid"></i>
-                      <span className="menu-item" data-i18n="eCommerce">
-                        Projects
-                      </span>
-                    </Link>
-                  </a>
+                <li className={activeLink === "projects" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("projects")}
+                    to="/intern-projects"
+                  >
+                    <FiGrid />
+                    <span className="menu-item" data-i18n="Projects">
+                      Projects
+                    </span>
+                  </NavLink>
                 </li>
 
-                <li className="nav-item" style={{ marginTop: "-10px" }}>
-                  <a className="d-flex align-items-center">
-                    <Link to={"/project-tasks"}>
-                      <i data-feather="check-square"></i>
-                      <span className="menu-item" data-i18n="eCommerce">
-                        Project Tasks
-                      </span>
-                    </Link>
-                  </a>
+                <li className={activeLink === "projectTasks" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("projectTasks")}
+                    to="/project-tasks"
+                  >
+                    <FiCheckSquare />
+                    <span className="menu-item" data-i18n="ProjectTasks">
+                      Project Tasks
+                    </span>
+                  </NavLink>
                 </li>
 
-                <li className="nav-item" style={{ marginTop: "-10px" }}>
-                  <a className="d-flex align-items-center">
-                    <Link to={"/intern-tasks"}>
-                    <i data-feather='clipboard'></i>
-                      <span className="menu-item" data-i18n="eCommerce">
-                        Tasks
-                      </span>
-                    </Link>
-                  </a>
+                <li className={activeLink === "tasks" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("tasks")}
+                    to="/intern-tasks"
+                  >
+                    <FiClipboard />
+                    <span className="menu-item" data-i18n="Tasks">
+                      Tasks
+                    </span>
+                  </NavLink>
                 </li>
 
-                <li className="nav-item" style={{ marginTop: "-10px" }}>
-                  <a className="d-flex align-items-center" href="#">
-                    <Link to={"/intern-attendence"}>
-                    <i data-feather='check-circle'></i>
-                      <span className="menu-item" data-i18n="eCommerce">
-                        Attendance
-                      </span>
-                    </Link>
-                  </a>
+                <li className={activeLink === "attendance" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("attendance")}
+                    to="/intern-attendence"
+                  >
+                    <FiCheckCircle />
+                    <span className="menu-item" data-i18n="Attendance">
+                      Attendance
+                    </span>
+                  </NavLink>
                 </li>
 
-                <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px"}}
-                >
-                  <a className="d-flex align-items-center">
-                    <Link className="d-flex align-items-center" to={"/intern-leave"}>
-                      <i data-feather="calendar"></i>
-                      <span className="menu-item" data-i18n="eCommerce">
-                        Leave
-                      </span>
-                    </Link>
-                  </a>
+                <li className={activeLink === "leave" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("leave")}
+                    to="/intern-leave"
+                  >
+                    <FiCalendar />
+                    <span className="menu-item" data-i18n="Leave">
+                      Leave
+                    </span>
+                  </NavLink>
                 </li>
 
-                {/* <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px"}}
-                >
-                  <a className="d-flex align-items-center">
-                    <Link className="d-flex align-items-center">
-                      <i data-feather="shopping-cart"></i>
-                      <span className="menu-item" data-i18n="eCommerce">
-                        Shop
-                      </span>
-                    </Link>
-                  </a>
-                </li> */}
-
-                {/* <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
-                >
-                  <a className="d-flex align-items-center">
-                    <Link className="d-flex align-items-center">
-                      <i data-feather="database"></i>
-                      <span className="menu-item" data-i18n="eCommerce">
-                        Points
-                      </span>
-                    </Link>
-                  </a>
-                </li> */}
-
-                <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px"}}
-                >
-                  <a className="d-flex align-items-center">
-                    <Link>
-                      <i data-feather="message-square"></i>
-                      <span className="menu-item" data-i18n="Sweet Alert">
-                        Feedback
-                      </span>
-                    </Link>
-                  </a>
+                <li className={activeLink === "feedback" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("feedback")}
+                    to="/internFeedback"
+                  >
+                    <FiMessageSquare />
+                    <span className="menu-item" data-i18n="Feedback">
+                      Feedback
+                    </span>
+                  </NavLink>
                 </li>
 
-                <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px"}}
-                >
-                  <a className="d-flex align-items-center">
-                    <Link>
-                      <i data-feather="image"></i>
-                      <span className="menu-item" data-i18n="Sweet Alert">
-                        Post
-                      </span>
-                    </Link>
-                  </a>
+                <li className={activeLink === "post" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("post")}
+                    to="/internPost"
+                  >
+                    <FiImage />
+                    <span className="menu-item" data-i18n="Post">
+                      Post
+                    </span>
+                  </NavLink>
                 </li>
 
-                <li
-                  className="nav-item"
-                  style={{ marginTop: "-10px", opacity: "0.4" }}
-                >
-                  <a className="d-flex align-items-center">
-                    <Link>
-                      <i data-feather="user"></i>
-                      <span
-                        className="menu-title text-truncate"
-                        data-i18n="User"
-                      >
-                        Public Profile
-                      </span>
-                    </Link>
-                  </a>
+                <li className={activeLink === "offerLetter" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("offerLetter")}
+                    to="/offer-letter"
+                  >
+                    <FiUser />
+                    <span className="menu-item" data-i18n="OfferLetter">
+                      Offer Letter
+                    </span>
+                  </NavLink>
+                </li>
+
+                <li className="undefined" style={{ opacity: "0.4" }}>
+                  <NavLink className="d-flex align-items-center" to="#">
+                    <FiUser />
+                    <span
+                      className="menu-title text-truncate"
+                      data-i18n="Profile"
+                    >
+                      Public Profile
+                    </span>
+                  </NavLink>
                 </li>
               </>
             )}
-            {/* <li className="nav-item">
-              <a className="d-flex align-items-center" href="index.html">
-                <Link to={"/internDashboard"}>
-                  <i data-feather="home"></i>
-                  <span
-                    className="menu-title text-truncate"
-                    data-i18n="Dashboards"
-                  >
-                    Dashboards
-                  </span>
-                </Link>
-              </a>
-            </li> */}
-
-            {/* <li className="nav-item">
-              <Link className="d-flex align-items-center" to={"#"}>
-                <i data-feather="grid"></i>
-                <span className="menu-item" data-i18n="eCommerce">
-                  Work
-                </span>
-              </Link>
-            </li> */}
-
-            {/* <li class=" nav-item" style={{marginTop:"-10px"}}><a class="d-flex align-items-center" href="#">
-            
-            <i style={{
-              marginLeft:"15px"
-            }} data-feather="file-text"></i><span class="menu-title text-truncate" data-i18n="Invoice">Work</span>
-           
-            </a>
-              <ul class="menu-content">
-                <li style={{marginTop:"-10px"}}>
-              
-                    <Link to={"/internProjects"} style={{
-                      marginLeft:"40px",
-                      marginBottom:"15px"
-                    }}>
-                      <i data-feather="circle" ></i><span  class="menu-item" data-i18n="List">Project</span>
-                    </Link>
-                 
-                </li>
-                <li style={{marginTop:"-10px"}}>
-              
-                  <Link to={"/internTasks"}>
-                    <i data-feather="circle" style={{
-                      marginLeft:"40px"
-                    }}></i><span class="menu-item" data-i18n="Preview">Task</span>
-                  </Link>
-              
-                </li>
-
-              </ul>
-            </li> */}
-
-            {/* <li className="nav-item" style={{ marginTop: "-10px" }}>
-              <a
-                className="d-flex align-items-center"
-                href="dashboard-ecommerce.html"
-              >
-                <Link to={"/internAttendence"}>
-                  <i data-feather="check-square"></i>
-                  <span className="menu-item" data-i18n="eCommerce">
-                    Attendance
-                  </span>
-                </Link>
-              </a>
-            </li> */}
-
-            {/* <li className=" nav-item" style={{marginTop:"-10px"}}>
-              <a className="d-flex align-items-center" href="app-calendar.html">
-<Link to={"/internLeave"}>
-                <i data-feather="calendar"></i>
-
-                <span className="menu-title text-truncate" data-i18n="Calendar">
-                  Leave
-                </span>
-                </Link>
-              </a>
-            </li> */}
-
-            {/* <li className="nav-item">
-              <a
-                className="d-flex align-items-center"
-                href="ext-component-sweet-alerts.html"
-              >
-                <i data-feather="shopping-cart"></i>
-                <span className="menu-item" data-i18n="Sweet Alert">
-                  Shop
-                </span>
-              </a>
-            </li> */}
-
-            {/* <li className="nav-item">
-              <a
-                className="d-flex align-items-center"
-                href="ext-component-sweet-alerts.html"
-              >
-                <i data-feather="database"></i>
-                <span className="menu-item" data-i18n="Sweet Alert">
-                  Points
-                </span>
-              </a>
-            </li> */}
-            {/* 
-            <li className="nav-item" style={{marginTop:"-10px"}}>
-              <a
-                className="d-flex align-items-center"
-                href="ext-component-sweet-alerts.html"
-              >
-              <Link to={"/internFeedback"}>
-                <i data-feather="message-square"></i>
-                <span className="menu-item" data-i18n="Sweet Alert">
-                  Feedback
-                </span>
-                </Link>
-              </a>
-            </li> */}
-
-            {/* <li className="nav-item" style={{ marginTop: "-10px" }}>
-              <a
-                className="d-flex align-items-center"
-                href="ext-component-sweet-alerts.html"
-              >
-                <Link to={"/internPost"}>
-                  <i data-feather="image"></i>
-                  <span className="menu-item" data-i18n="Sweet Alert">
-                    Post
-                  </span>
-                </Link>
-              </a>
-            </li>
-
-            <li className=" nav-item" style={{ marginTop: "-10px" }}>
-              <a className="d-flex align-items-center" href="#">
-                <Link to={"/internAnnouncement"}>
-                  <i data-feather="info"></i>
-                  <span className="menu-title text-truncate" data-i18n="User">
-                    Announcement
-                  </span>
-                </Link>
-              </a>
-            </li> */}
-
-            {/* <li className=" nav-item" style={{marginTop:"-10px"}}>
-              <a className="profile d-flex align-items-center" href="#">
-              <Link>
-                <i data-feather='user'></i>
-                <span className="menu-title text-truncate" data-i18n="User">
-                  Public Profile
-                </span>
-                </Link>
-              </a>
-            </li> */}
           </ul>
         </div>
       </div>

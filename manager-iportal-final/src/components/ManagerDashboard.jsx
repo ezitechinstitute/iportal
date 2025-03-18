@@ -158,9 +158,9 @@ export const ManagerDashboard = () => {
             {/* <!-- Dashboard --> */}
             <section id="dashboard-ecommerce">
               <div className="card card-congratulation-medal rounded-0">
-                <div className="card-body">
+                {/* <div className="card-body">
                   <h3 className="roboto">Dashboard Statistics</h3>
-                </div>
+                </div> */}
               </div>
               <div className="row match-height">
                 {/* <!-- Medal Card --> */}

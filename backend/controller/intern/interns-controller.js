@@ -170,6 +170,70 @@ const GetRegisterUni = (req, res) => {
   });
 };
 
+const GetInternImage = (req, res) => {
+  const { email } = req.query; // Use req.query for GET requests
+
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  const sql = `
+    SELECT it.image 
+    FROM intern_table it 
+    JOIN intern_accounts ia 
+    ON it.email = ia.email 
+    WHERE it.email = ?`;
+
+  connection.query(sql, [email], (err, data) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    }
+
+    if (data.length > 0) {
+      return res.json({ image: data[0].image }); // Return only the image
+    } else {
+      return res.json({ image: null }); // No image found
+    }
+  });
+};
+
+
+const GetInternPost = (req, res) => {
+  const { email } = req.query; // Use req.query for GET requests
+
+  if (!email) {
+    return res.status(400).json({ error: "Email is required" });
+  }
+
+  const sql = `
+    SELECT it.image, it.name, it.technology, it.join_date
+    FROM intern_table it 
+    JOIN intern_accounts ia 
+    ON it.email = ia.email 
+    WHERE it.email = ?`;
+
+  connection.query(sql, [email], (err, data) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    }
+
+    if (data.length > 0) {
+      // Return the image, name, technology, and join_date
+      return res.json({
+        image: data[0].image,
+        name: data[0].name,
+        technology: data[0].technology,
+        joinDate: data[0].join_date
+      });
+    } else {
+      return res.json({ image: null, name: null, technology: null, joinDate: null }); // No data found
+    }
+  });
+};
+
+
 // cron.schedule('0 * * * * *', () => {
 //   console.log('Running a task every 1 minute');
 
@@ -215,4 +279,4 @@ function getOtherQueue() {
   return dataOther.pop();
 }
 
-module.exports = { RegisterInterns, GetRegisterUni };
+module.exports = { RegisterInterns, GetRegisterUni, GetInternImage , GetInternPost };

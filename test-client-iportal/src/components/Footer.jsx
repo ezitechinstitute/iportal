@@ -1,5 +1,5 @@
 import React from "react";
-
+const currentYear = new Date().getFullYear();
 export const Footer = () => {
   return (
     <>
@@ -19,7 +19,7 @@ export const Footer = () => {
           }}
         >
           <span class=" mt-25">
-            COPYRIGHT &copy; 2024
+            COPYRIGHT &copy; 2016-{currentYear}
             <a
               class="ml-25"
               href="https://ezitech.org/html-css-internship-opportunities/"

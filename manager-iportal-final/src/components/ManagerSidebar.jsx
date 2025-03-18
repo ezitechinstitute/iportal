@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { FiDollarSign } from "react-icons/fi";
+import { FiDollarSign, FiHome, FiUserCheck, FiUsers, FiPhone, FiClipboard, 
+         FiCheckSquare, FiCalendar, FiMonitor, FiFileText } from "react-icons/fi";
+         import { FaBullhorn } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
 // import "../../styles/ManagerStyle.css";
 
 export const ManagerSidebar = () => {
   const [activeLink, setActive] = useState(" ");
 
-  // const setActive = (e) => {
-  //   setActive(e);
-  // };
   return (
     <>
       {/* BEGIN: Main Menu */}
@@ -23,7 +22,6 @@ export const ManagerSidebar = () => {
                 <span className="brand-logo">
                   <img src="./images/ezitech.png" alt="" />
                 </span>
-
                 <img
                   src="./images/logo.png"
                   style={{
@@ -66,7 +64,7 @@ export const ManagerSidebar = () => {
                 onClick={() => setActive("dashboard")}
                 to="/manager-dashboard"
               >
-                <i data-feather="home"></i>
+                <FiHome />
                 <span
                   className="menu-title text-truncate"
                   data-i18n="Dashboards"
@@ -86,7 +84,7 @@ export const ManagerSidebar = () => {
                 onClick={() => setActive("activeInterns")}
                 to={"/active-interns"}
               >
-                <i data-feather="user-check"></i>
+                <FiUserCheck />
                 <span className="menu-title text-truncate" data-i18n="User">
                   Active Interns
                 </span>
@@ -100,7 +98,7 @@ export const ManagerSidebar = () => {
                 id={"2"}
                 to="/manager-interns"
               >
-                <i data-feather="users"></i>
+                <FiUsers />
                 <span className="menu-item" data-i18n="eCommerce">
                   New Interns
                 </span>
@@ -114,7 +112,7 @@ export const ManagerSidebar = () => {
                 id={"3"}
                 to="/remote-interns"
               >
-                <i data-feather="monitor"></i>
+                <FiMonitor />
                 <span className="menu-item" data-i18n="eCommerce">
                   Remote Interns
                 </span>
@@ -128,7 +126,7 @@ export const ManagerSidebar = () => {
                 id={"3"}
                 to="/contact-with"
               >
-                <i data-feather="phone"></i>
+                <FiPhone />
                 <span className="menu-item" data-i18n="eCommerce">
                   Contact With
                 </span>
@@ -142,7 +140,7 @@ export const ManagerSidebar = () => {
                 id={"3"}
                 to="/interview-test"
               >
-                <i data-feather="clipboard"></i>
+                <FiClipboard />
                 <span className="menu-item" data-i18n="eCommerce">
                   Interview Test
                 </span>
@@ -156,7 +154,7 @@ export const ManagerSidebar = () => {
                 id={"3"}
                 to="/test-completed"
               >
-                <i data-feather="check-square"></i>
+                <FiCheckSquare />
                 <span className="menu-item" data-i18n="eCommerce">
                   Test Completed
                 </span>
@@ -173,7 +171,7 @@ export const ManagerSidebar = () => {
                 id={"3"}
                 to="/manager-leave"
               >
-                <i data-feather="calendar"></i>
+                <FiCalendar />
                 <span className="menu-item" data-i18n="eCommerce">
                   Leave
                 </span>
@@ -204,9 +202,51 @@ export const ManagerSidebar = () => {
                 onClick={() => setActive("remaining")}
                 to={"/remaining-amount"}
               >
-                <i data-feather="dollar-sign"></i>
+                <FiDollarSign />
                 <span className="menu-title text-truncate" data-i18n="User">
                   Remaining Amount
+                </span>
+              </NavLink>
+            </li>
+            <li
+              className={activeLink === "remaining" ? "active " : "undefined"}
+            >
+              <NavLink
+                className="d-flex align-items-center"
+                onClick={() => setActive("remaining")}
+                to={"/offer-letter"}
+              >
+                <FiFileText /> {/* Changed from FiDollarSign to FiFileText */}
+                <span className="menu-title text-truncate" data-i18n="User">
+                  Offer Letter Requests
+                </span>
+              </NavLink>
+            </li>
+            <li
+              className={activeLink === "remaining" ? "active " : "undefined"}
+            >
+              <NavLink
+                className="d-flex align-items-center"
+                onClick={() => setActive("remaining")}
+                to={"/payment-recepit"}
+              >
+                <FiDollarSign />
+                <span className="menu-title text-truncate" data-i18n="User">
+                  Payment Recepit
+                </span>
+              </NavLink>
+            </li>
+            <li
+              className={activeLink === "remaining" ? "active " : "undefined"}
+            >
+              <NavLink
+                className="d-flex align-items-center"
+                onClick={() => setActive("remaining")}
+                to={"/manager-announcement"}
+              >
+                <FaBullhorn />
+                <span className="menu-title text-truncate" data-i18n="User">
+                  Announcement
                 </span>
               </NavLink>
             </li>

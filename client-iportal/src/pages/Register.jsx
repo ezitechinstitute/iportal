@@ -38,7 +38,7 @@ export const Register = () => {
     const GetTech = async () => {
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_API_URL}/form-tech`
+          "https://api.ezitech.org/form-tech"
         );
         setTech(res.data);
       } catch (error) {
@@ -49,7 +49,7 @@ export const Register = () => {
 
     const GetUniversities = async () => {
       await axios
-        .get(`${process.env.REACT_APP_API_URL}/get-reg-uni`)
+        .get("https://api.ezitech.org/get-reg-uni")
         .then((res) => {
           setUni(res.data);
         })

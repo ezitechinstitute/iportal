@@ -33,7 +33,7 @@ const StartShift = (req, res) => {
       connection.query(sql, (err, officeLocation) => {
         if (err) throw err;
         console.log(officeLocation);
-        const radius = 0.5; // 0.5 km radius
+        const radius = 0.3; // 0.5 km radius
         const sql =
           "SELECT `start_shift`, `end_shift`, `onsite_remote` FROM `shift_table` WHERE `eti_id` = ? AND `intern_email` = ?";
         connection.query(sql, [id, email], (err, shiftResult) => {

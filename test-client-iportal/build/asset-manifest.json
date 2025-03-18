@@ -1,7 +1,9 @@
 {
   "files": {
-    "main.css": "/static/css/main.58b5a6e4.css",
-    "main.js": "/static/js/main.eed1e12e.js",
+    "main.css": "/static/css/main.ad2a5173.css",
+    "main.js": "/static/js/main.3e2e789e.js",
+    "static/js/213.4bb18f86.chunk.js": "/static/js/213.4bb18f86.chunk.js",
+    "static/js/732.48fc03db.chunk.js": "/static/js/732.48fc03db.chunk.js",
     "static/js/453.10b8bd7b.chunk.js": "/static/js/453.10b8bd7b.chunk.js",
     "static/media/logo19.png": "/static/media/logo19.4ff8eab513df37f9c0ce.png",
     "static/media/logo11.png": "/static/media/logo11.b49f3503e033f44a0681.png",
@@ -15,14 +17,17 @@
     "static/media/logo14.png": "/static/media/logo14.121d2b3ec67a57ea5b5f.png",
     "static/media/logo16.png": "/static/media/logo16.d23941dc5808f3e9f471.png",
     "static/media/logo17.png": "/static/media/logo17.cde71d950818d0442ac2.png",
+    "static/media/offer_letter.jpg": "/static/media/offer_letter.1893bb7e268a92c207f3.jpg",
     "static/media/logo21.png": "/static/media/logo21.00e62f40478dbd872781.png",
     "index.html": "/index.html",
-    "main.58b5a6e4.css.map": "/static/css/main.58b5a6e4.css.map",
-    "main.eed1e12e.js.map": "/static/js/main.eed1e12e.js.map",
+    "main.ad2a5173.css.map": "/static/css/main.ad2a5173.css.map",
+    "main.3e2e789e.js.map": "/static/js/main.3e2e789e.js.map",
+    "213.4bb18f86.chunk.js.map": "/static/js/213.4bb18f86.chunk.js.map",
+    "732.48fc03db.chunk.js.map": "/static/js/732.48fc03db.chunk.js.map",
     "453.10b8bd7b.chunk.js.map": "/static/js/453.10b8bd7b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.58b5a6e4.css",
-    "static/js/main.eed1e12e.js"
+    "static/css/main.ad2a5173.css",
+    "static/js/main.3e2e789e.js"
   ]
 }

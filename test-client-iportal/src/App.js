@@ -12,10 +12,15 @@ import Leave from "./components/interns-components/Leave/Leave";
 import Page_Attendence from "./components/interns-components/Page_Attendence/Page_Attendence";
 import OnGoing from "./components/interns-components/OnGoing/OnGoing";
 import Completed from "./components/interns-components/Completed/Completed";
+import OfferLetter from "./components/interns-components/Offer_Letter/offer_letter";
 import { InternLogin } from "./pages/interns-pages/InternLogin";
 import { InternTest } from "./pages/interns-pages/InternTest";
 import { InternTasks } from "./pages/interns-pages/InternTasks";
 import { ProjectTasks } from "./components/interns-components/Projects/ProjectTasks";
+import Post from "./components/interns-components/Post/Post"
+import Profile from "./components/interns-components/Profile/Profile"
+import {ResetPassword} from "./pages/interns-pages/InternResetPassword";
+import BirthdayWisher from "./components/interns-components/Birthday_wisher/Birthday_wisher";
 
 function App() {
   return (
@@ -32,12 +37,19 @@ function App() {
           <Route path="/intern-tasks" element={<InternTasks />} />
           <Route path="/intern-leave" element={<Leave />} />
 
-          {/* <Route path="/internFeedback" element={<Feedback />} />
+          <Route path="/internFeedback" element={<Feedback />} />
           <Route path="/internAttendence" element={<Attendence />} />
           <Route path="/internTasks" element={<Task />} />
           <Route path="/internAnnouncement" element={<Announcement />} />
           <Route path="/internOngoing" element={<OnGoing />} />
-          <Route path="/internCompleted" element={<Completed />} /> */}
+          <Route path="/internCompleted" element={<Completed />} />
+          <Route path="/internPost" element={<Post/>}/>
+          <Route path="/offer-letter" element={<OfferLetter/>}/>
+          <Route path="/intern-profile" element={<Profile/>}/>
+          <Route path="/intern-reset-password" element={<ResetPassword/>}/>
+          <Route path="/Intern-Birthday-Wisher" element={<BirthdayWisher/>}/>
+         
+
         </Routes>
       </BrowserRouter>
     </>

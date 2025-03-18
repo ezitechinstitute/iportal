@@ -5,6 +5,7 @@ import {
   CountTest,
   CountTestCompleted,
 } from "../data/manager-data/Data";
+import { FiUsers, FiPhone, FiClipboard, FiCheckSquare } from "react-icons/fi"; // Importing Feather icons
 
 export const InternStaticsDashboard = () => {
   const [interview, setInterview] = useState(0);
@@ -49,12 +50,15 @@ export const InternStaticsDashboard = () => {
   };
 
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       GetInterview();
       GetTestIntern();
       GetTestComplete();
       GetContact();
     }, 1000);
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -75,7 +79,7 @@ export const InternStaticsDashboard = () => {
                 <div className="media">
                   <div className="avatar bg-light-primary mr-2">
                     <div className="avatar-content">
-                      <i data-feather="users" className="avatar-icon"></i>
+                      <FiUsers className="avatar-icon" />
                     </div>
                   </div>
                   <div className="media-body my-auto">
@@ -90,10 +94,9 @@ export const InternStaticsDashboard = () => {
                 <div className="media">
                   <div className="avatar bg-light-info mr-2">
                     <div className="avatar-content">
-                      <i data-feather="phone" className="avatar-icon"></i>
+                      <FiPhone className="avatar-icon" />
                     </div>
                   </div>
-
                   <div className="media-body my-auto">
                     <h4 className="font-weight-bolder mb-0">
                       {active > 0 ? active.toLocaleString() : "0"}
@@ -106,7 +109,7 @@ export const InternStaticsDashboard = () => {
                 <div className="media">
                   <div className="avatar bg-light-danger mr-2">
                     <div className="avatar-content">
-                      <i data-feather="clipboard" className="avatar-icon"></i>
+                      <FiClipboard className="avatar-icon" />
                     </div>
                   </div>
                   <div className="media-body my-auto">
@@ -121,10 +124,7 @@ export const InternStaticsDashboard = () => {
                 <div className="media">
                   <div className="avatar bg-light-success mr-2">
                     <div className="avatar-content">
-                      <i
-                        data-feather="check-square"
-                        className="avatar-icon"
-                      ></i>
+                      <FiCheckSquare className="avatar-icon" />
                     </div>
                   </div>
                   <div className="media-body my-auto">

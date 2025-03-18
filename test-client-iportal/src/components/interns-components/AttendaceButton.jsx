@@ -21,7 +21,7 @@ export const AttendaceButton = () => {
       <Link
         type="button"
         className={active === "leave" ? "btn btn-primary" : "btn btn-light"}
-        to={"/internLeave"}
+        to={"/intern-Leave"}
         onClick={() => setActive("leave")}
         style={{
           marginBottom: "30px",

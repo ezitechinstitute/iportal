@@ -19,7 +19,7 @@ export const RemoteInterns = () => {
 
   const GetRemoteInterns = async () => {
     try {
-      const res = await axios.get("http://localhost:8800/get-manager-remote");
+      const res = await axios.get("https://api.ezitech.org/get-manager-remote");
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -56,7 +56,7 @@ export const RemoteInterns = () => {
 
   const GetSingleIntern = async (id) => {
     try {
-      const res = await axios.post("http://localhost:8800/single-remote", {
+      const res = await axios.post("https://api.ezitech.org/single-remote", {
         id,
       });
       setSingleIntern(res.data);

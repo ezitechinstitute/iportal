@@ -24,6 +24,12 @@ import InternTasks from "./supervisor/pages/InternTasks";
 import SupervisorLeave from "./supervisor/pages/SupervisorLeave";
 import SupervisorBalance from "./supervisor/pages/SupervisorBalance";
 import { InternProjTasks } from "./supervisor/pages/InternProjTasks";
+import Profile from "./pages/Profile";
+import Payment_vochar from "./pages/Payment_vochar";
+import { RecipientPaymentVoucher } from "./pages/Recept_payemnt ";
+import Offer_letter from "./pages/Offer_letter";
+import Supervisor_Profile from "./supervisor/pages/Profile"
+import Announcement from "./pages/Announcement"
 
 function App() {
   return (
@@ -43,6 +49,11 @@ function App() {
           <Route exact path="/test-completed" element={<InternCompleted />} />
           <Route exact path="/active-interns" element={<ActiveInterns />} />
           <Route exact path="/remaining-amount" element={<RemainingAmount />} />
+<Route path="/manager-profile" element={<Profile/>}/>
+<Route path="/payment-vochar" element={<Payment_vochar/>}/>
+<Route path="/payment-recepit" element={<RecipientPaymentVoucher/>}/>
+<Route path="/offer-letter" element={<Offer_letter/>}/>
+<Route path="/manager-announcement" element={<Announcement/>}/>
 
           {/* <Route exact path="/manager-leave" element={<ManagerLeave />} /> */}
           {/* <Route exact path="/balance" element={<Balance />} /> */}
@@ -50,6 +61,7 @@ function App() {
 
           {/* Supervisor Routes*/}
           <Route exact path="/supervisor" element={<SupervisorLogin />} />
+          <Route path="/supervisor-profile" element={<Supervisor_Profile/>}/>
           <Route
             exact
             path="/supervisor-dashboard"

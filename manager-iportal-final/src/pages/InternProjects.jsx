@@ -26,7 +26,7 @@ export const InternProjects = () => {
 
   const fetchSuggestions = async (queryFinal) => {
     try {
-      const res = await axios.post("http://localhost:8800/get-emails", {
+      const res = await axios.post("https://api.ezitech.org/get-emails", {
         queryFinal,
       });
       //   const data = await res.json();
@@ -82,7 +82,7 @@ export const InternProjects = () => {
       values.technology !== undefined
     ) {
       axios
-        .post("http://localhost:8800/assign-project", { values })
+        .post("https://api.ezitech.org/assign-project", { values })
         .then((res) => {
           if (res.data === 1) {
             alert("Project Assigned Successfuly");

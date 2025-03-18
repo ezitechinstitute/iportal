@@ -1,157 +1,141 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-export const CreateLeave = () => {
+export const CreateLeave = ({ onClose }) => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const name = sessionStorage.getItem("username");
   const email = sessionStorage.getItem("email");
-  // const eziId = sessionStorage.getItem("eziId");
-  const eziId = "EZI-23-5-24/7832";
+  const eziId = sessionStorage.getItem("eziId");
 
   useEffect(() => {
     if (!check) {
       navigate("/");
     }
-  });
+  }, [check, navigate]);
 
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    fromDate: "",
+    toDate: "",
+    reason: "",
+  });
 
   const handleInput = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
 
-  useEffect(() => {
-    const CalculateDuration = () => {
+  // Calculate leave duration using useMemo to prevent unnecessary re-renders
+  const durationDays = useMemo(() => {
+    if (data.fromDate && data.toDate) {
       const fromDate = new Date(data.fromDate);
       const toDate = new Date(data.toDate);
-      const duration = toDate.getTime() - fromDate.getTime();
-      const days = Math.floor(duration / (1000 * 60 * 60 * 24));
-      setData({ ...data, durationDays: days });
-    };
-
-    CalculateDuration();
+      return Math.max(0, Math.floor((toDate - fromDate) / (1000 * 60 * 60 * 24)));
+    }
+    return 0;
   }, [data.fromDate, data.toDate]);
 
   const SubmitRequest = async () => {
-    setData({
-      ...data,
-      intName: name,
-      intEmail: email,
-      id: eziId,
-    });
+    const leaveData = {
+      data: {
+        ...data,
+        durationDays,
+        intName: name,
+        intEmail: email,
+        id: eziId,
+      },
+    };
 
-    if (
-      data.toDate !== undefined &&
-      data.fromDate !== undefined &&
-      data.durationDays !== undefined &&
-      data.reason !== undefined
-    ) {
-      if (
-        data.intName !== undefined &&
-        data.intEmail !== undefined &&
-        data.id !== undefined
-      ) {
-        await axios
-          .post("http://localhost:8800/int-leave-request", { data })
-          .then((res) => {
-            alert(res.data.message);
-            window.location.reload();
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+    if (leaveData.data.toDate && leaveData.data.fromDate && leaveData.data.durationDays >= 0 && leaveData.data.reason) {
+      try {
+        let attempts = 0;
+        const maxAttempts = 3;
+        let response;
+
+        // Retry logic
+        while (attempts < maxAttempts) {
+          try {
+            response = await axios.post("https://api.ezitech.org/int-leave-request", leaveData);
+            break; // Exit loop if successful
+          } catch (err) {
+            attempts += 1;
+            if (attempts >= maxAttempts) throw err;
+            console.log(`Retrying request... attempt ${attempts}`);
+            await new Promise(resolve => setTimeout(resolve, 2000));  // Wait for 2 seconds before retrying
+          }
+        }
+
+        alert(response.data.message);
+        onClose();  // Close modal after successful request
+      } catch (err) {
+        console.error("Error submitting leave request:", err);
+        alert("Server is temporarily unavailable. Please try again later.");
       }
+    } else {
+      alert("Please fill in all required fields.");
     }
   };
+
   return (
-    <>
-      <div className="basic-modal">
-        {/* <!-- Modal --> */}
-        <div
-          className="modal fade"
-          id="leaveRequest"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="myModalLabel1"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h4 className="modal-title" id="myModalLabel1">
-                  Leave Request
-                </h4>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-sm-6">
-                    <label htmlFor="">From</label>
-                    <input
-                      type="date"
-                      name="fromDate"
-                      onChange={handleInput}
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="col-sm-6">
-                    <label htmlFor="">To</label>
-                    <input
-                      type="date"
-                      name="toDate"
-                      onChange={handleInput}
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="col-sm-12">
-                    <label htmlFor="">Duration</label>
-                    <input
-                      value={data.durationDays !== NaN ? data.durationDays : ""}
-                      type="text"
-                      name="duration"
-                      onChange={handleInput}
-                      className="form-control"
-                    />
-                  </div>
-
-                  <div className="col-sm-12">
-                    <label htmlFor="">Reason</label>
-                    <textarea
-                      name="reason"
-                      id=""
-                      className="form-control"
-                      placeholder="Write reason here..."
-                      onChange={handleInput}
-                    ></textarea>
-                  </div>
-                </div>
-              </div>
-
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-success"
-                  onClick={SubmitRequest}
-                >
-                  Submit Request
-                </button>
-              </div>
+    <div className="modal" tabIndex="-1" role="dialog" style={{ display: 'block' }}>
+      <div className="modal-dialog" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Leave Request</h5>
+            <button type="button" className="close" onClick={onClose}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <div className="form-group">
+              <label htmlFor="fromDate">From</label>
+              <input
+                type="date"
+                name="fromDate"
+                onChange={handleInput}
+                className="form-control"
+                value={data.fromDate}
+              />
             </div>
+            <div className="form-group">
+              <label htmlFor="toDate">To</label>
+              <input
+                type="date"
+                name="toDate"
+                onChange={handleInput}
+                className="form-control"
+                value={data.toDate}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="duration">Duration (Days)</label>
+              <input
+                value={durationDays || ""}
+                type="text"
+                name="duration"
+                className="form-control"
+                readOnly
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="reason">Reason</label>
+              <textarea
+                name="reason"
+                className="form-control"
+                placeholder="Write reason here..."
+                onChange={handleInput}
+                value={data.reason}
+              ></textarea>
+            </div>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-success" onClick={SubmitRequest}>
+              Submit Request
+            </button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };

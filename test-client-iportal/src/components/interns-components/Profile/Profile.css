@@ -1,0 +1,65 @@
+
+.profile-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+  }
+  
+  .avatar-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .avatar-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .avatar-upload-label {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .avatar-upload-label:hover {
+    background: rgba(255, 255, 255, 1);
+  }
+  
+  .avatar-upload-text {
+    font-size: 12px;
+    color: #333;
+  }
+  
+  .detail-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .detail-icon {
+    margin-right: 10px;
+    color: #6a11cb;
+  }
+  
+  .modal-content {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-close-white {
+    filter: invert(1);
+  }

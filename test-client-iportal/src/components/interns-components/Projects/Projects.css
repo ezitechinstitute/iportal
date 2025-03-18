@@ -5,9 +5,10 @@
 
 .card-Ptitle{
     padding-top: 10px;
-    /* padding-left: 10px; */
+
     font-weight: 700;
 }
+
 
 .pro-btns{
     margin-top: 15px;
@@ -24,10 +25,6 @@
     background-color: transparent;
 }
 
-/* .pro-btns .btn1:active{
-
-    background-color: purple;
-} */
 
 .pro-btns .btn2{
     padding: 10px ;

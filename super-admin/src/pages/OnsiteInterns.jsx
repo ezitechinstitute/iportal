@@ -19,7 +19,7 @@ export const OnsiteInterns = () => {
 
   const GetOnsiteInterns = async () => {
     try {
-      const res = await axios.get("http://localhost:8800/get-manager-onsite");
+      const res = await axios.get("https://api.ezitech.org/get-manager-onsite");
       setData(res.data);
     } catch (error) {
       console.log(error);
@@ -56,7 +56,7 @@ export const OnsiteInterns = () => {
 
   const GetSingleIntern = async (id) => {
     try {
-      const res = await axios.post("http://localhost:8800/single-onsite", {
+      const res = await axios.post("https://api.ezitech.org/single-onsite", {
         id,
       });
       setSingleIntern(res.data);

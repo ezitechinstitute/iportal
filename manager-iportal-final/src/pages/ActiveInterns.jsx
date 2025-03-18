@@ -9,18 +9,17 @@ import { InternStatics } from "../components/InternStatics";
 export const ActiveInterns = () => {
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const [invoiceData, setInvoiceData] = useState({});
-
-  //   const userEmail = sessionStorage.getItem("email");
-  //   const managerContact = sessionStorage.getItem("contact");
 
   useEffect(() => {
     if (!check) {
       navigate("/");
     }
-  });
+  }, [check, navigate]);
 
   const GetActiveInterns = async () => {
     try {
@@ -28,6 +27,7 @@ export const ActiveInterns = () => {
         headers: { "x-access-token": token },
       });
       setData(res.data);
+      setFilteredData(res.data); // Initialize filteredData with all data
     } catch (error) {
       console.log(error);
     }
@@ -35,31 +35,29 @@ export const ActiveInterns = () => {
 
   useEffect(() => {
     GetActiveInterns();
-  }, [GetActiveInterns]);
+  }, []);
 
-  // const [currentPage, settCurrentPage] = useState(1);
-  // const recordPerPage = 2;
-  // const lastIndex = currentPage * recordPerPage;
-  // const firstIndex = lastIndex - recordPerPage;
-  // const records = data.slice(firstIndex, lastIndex);
-  // const nPage = Math.ceil(data.length / recordPerPage);
-  // const numbers = [...Array(nPage + 1).keys()].slice(1);
+  // Search functionality
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
 
-  // function prevPage() {
-  //   if (currentPage !== firstIndex) {
-  //     settCurrentPage(currentPage - 1);
-  //   }
-  // }
+    const filtered = data.filter(
+      (intern) =>
+        intern.name.toLowerCase().includes(term) ||
+        intern.eti_id.toLowerCase().includes(term)
+    );
+    setFilteredData(filtered);
+  };
 
-  // function changeCurrentPage(id) {
-  //   settCurrentPage(id);
-  // }
+  // Function to format phone number for WhatsApp
+  const formatPhoneNumberForWhatsApp = (phone) => {
+    // Remove any non-numeric characters
+    const cleaned = phone.replace(/\D/g, "");
+    // Add the international prefix (e.g., +92 for Pakistan)
+    return `+92${cleaned}`;
+  };
 
-  // function nextPage() {
-  //   if (currentPage !== nPage) {
-  //     settCurrentPage(currentPage + 1);
-  //   }
-  // }
   return (
     <>
       <ManagerTopbar />
@@ -71,25 +69,23 @@ export const ActiveInterns = () => {
           <div className="content-header row"></div>
           <div className="content-body">
             <section id="dashboard-ecommerce">
-              {/* <!-- Statistics Card --> */}
-              <InternStatics/>
-              {/* <!--/ Statistics Card --> */}
+              <InternStatics />
 
-              {/* <!-- Table Hover Animation start --> */}
               <div className="row" id="table-hover-animation">
                 <div className="col-12">
                   <div className="card">
                     <div className="card-header">
                       <h4 className="card-title">Active Interns</h4>
-                      {/* <!-- Button trigger modal --> */}
-                      {/* <button
-                        type="button"
-                        className="btn btn-primary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#staticBackdrop"
-                      >
-                        Add Intern
-                      </button> */}
+                      <div className="d-flex align-items-center">
+                        <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Search by Name or ETI-ID"
+                          value={searchTerm}
+                          onChange={handleSearch}
+                          style={{ width: "300px" }}
+                        />
+                      </div>
                     </div>
 
                     <div className="card-body overflow-x-scroll text-center">
@@ -105,136 +101,95 @@ export const ActiveInterns = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {Array.isArray(data)
-                            ? data.map((rs) => {
-                                const {
-                                  eti_id,
-                                  name,
-                                  email,
-                                  phone,
-                                  int_technology,
-                                } = rs;
+                          {Array.isArray(filteredData) && filteredData.length > 0 ? (
+                            filteredData.map((rs) => {
+                              const {
+                                eti_id,
+                                name,
+                                email,
+                                phone,
+                                int_technology,
+                              } = rs;
 
-                                return (
-                                  <>
-                                    <tr>
-                                      <th className="border px-1" scope="row">
-                                        {eti_id}
-                                      </th>
-                                      <td className="border px-1">{name}</td>
-                                      <td className="border px-1">{email}</td>
-                                      <td className="border px-1">{phone}</td>
-                                      <td className="border px-1">{int_technology}</td>
+                              // Format phone number for WhatsApp
+                              const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(phone)}`;
 
-                                      <td className="border px-1">
-                                        <div className="dropdown">
-                                          <button
-                                            type="button"
-                                            className="btn btn-warning dropdown-toggle"
-                                            data-toggle="dropdown"
-                                          >
-                                            Action
-                                            {/* <i data-feather="more-vertical"></i> */}
-                                          </button>
-                                          <div>
-                                            <ul className="dropdown-menu">
-                                              <li>
-                                                <a
-                                                  className="dropdown-item"
-                                                  href="#"
-                                                  type="button"
-                                                  data-toggle="modal"
-                                                  data-target="#default"
-                                                  onClick={() =>
-                                                    setInvoiceData({
-                                                      name: name,
-                                                      email: email,
-                                                      phone: phone,
-                                                    })
-                                                  }
-                                                >
-                                                  Invoice
-                                                </a>
-                                              </li>
-                                              {/* <li>
-                                              <a className="dropdown-item" href="#">
-                                                Send Mail
-                                              </a>
-                                            </li> */}
-                                              {/* <li>
-                                                <a
-                                                  className="dropdown-item"
-                                                  href="#"
-                                                  type="button"
-                                                  onClick={() =>
-                                                    ActivePortal(email)
-                                                  }
-                                                >
-                                                  Active Portal
-                                                </a>
-                                              </li> */}
-                                              <li>
-                                                <a
-                                                  className="dropdown-item"
-                                                  href="#"
-                                                  type="button"
-                                                  //   onClick={() =>
-                                                  //     RemoveCompletedIntern(email)
-                                                  //   }
-                                                >
-                                                  Remove
-                                                </a>
-                                              </li>
-                                            </ul>
-                                          </div>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  </>
-                                );
-                              })
-                            : " "}
+                              return (
+                                <tr key={eti_id}>
+                                  <th className="border px-1" scope="row">
+                                    {eti_id}
+                                  </th>
+                                  <td className="border px-1">{name}</td>
+                                  <td className="border px-1">{email}</td>
+                                  <td className="border px-1">
+                                    <a
+                                      href={whatsappLink}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{ color: "#25D366", textDecoration: "none" }}
+                                    >
+                                      {phone}
+                                    </a>
+                                  </td>
+                                  <td className="border px-1">{int_technology}</td>
+                                  <td className="border px-1">
+                                    <div className="dropdown">
+                                      <button
+                                        type="button"
+                                        className="btn btn-warning dropdown-toggle"
+                                        data-toggle="dropdown"
+                                      >
+                                        Action
+                                      </button>
+                                      <div>
+                                        <ul className="dropdown-menu">
+                                          <li>
+                                            <a
+                                              className="dropdown-item"
+                                              href="#"
+                                              type="button"
+                                              data-toggle="modal"
+                                              data-target="#default"
+                                              onClick={() =>
+                                                setInvoiceData({
+                                                  name: name,
+                                                  email: email,
+                                                  phone: phone,
+                                                })
+                                              }
+                                            >
+                                              Invoice
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a
+                                              className="dropdown-item"
+                                              href="#"
+                                              type="button"
+                                            >
+                                              Remove
+                                            </a>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          ) : (
+                            <tr>
+                              <td colSpan="6">No matching interns found</td>
+                            </tr>
+                          )}
                         </tbody>
                       </table>
                     </div>
                     <br />
-                    {/* Pagination */}
-                    {/* <div>
-                      <nav>
-                      <ul className="pagination">
-                        <li className="page-item">
-                          <a href="#" className="page-link" onClick={prevPage}>
-                            Prev
-                          </a>
-                        </li>
-                        {numbers.map((n, i) => (
-                          <li
-                            className={`page-item ${
-                              currentPage === n ? "active" : "   "
-                            }`}
-                            key={i}
-                          >
-                            <a
-                              href="#"
-                              className="page-link"
-                              onClick={changeCurrentPage}
-                            >
-                              {n}
-                            </a>
-                          </li>
-                        ))}
-                        <li className="page-item">
-                          <a href="#" className="page-link" onClick={nextPage}>
-                            Next
-                          </a>
-                        </li>
-                      </ul>
-                      </nav>
-                    </div> */}
                   </div>
                 </div>
               </div>
-              <InvoiceModal invoiceData={invoiceData}/>
+              <InvoiceModal invoiceData={invoiceData} />
             </section>
           </div>
         </div>

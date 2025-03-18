@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import "./InternTopbar.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { FiMenu, FiBell, FiUser, FiPower, FiClock, FiFileText, FiCode, FiCheckCircle } from "react-icons/fi";
 
 export const InternTopbar = () => {
   const navigate = useNavigate();
   const [shiftStarted, setShiftStarted] = useState("checkin");
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [message, setMessage] = useState("");
+  const [avatar, setAvatar] = useState(null);
   const [user, setUser] = useState({
     username: sessionStorage.getItem("username"),
     email: sessionStorage.getItem("email"),
@@ -29,9 +31,6 @@ export const InternTopbar = () => {
           setShiftStarted("marked");
           setMessage("Attendance Marked");
         }
-        // else if(res.data.notMarked){
-        // setShiftStarted("checkin")
-        // }
       });
   }, []);
 
@@ -96,6 +95,28 @@ export const InternTopbar = () => {
       });
   };
 
+  useEffect(() => {
+    if (user.email) {
+      axios
+        .get(`https://api.ezitech.org/get-int-image?email=${user.email}`, {
+          headers: { "x-access-token": token },
+        })
+        .then((res) => {
+          console.log("Image Response:", res.data);
+          const image = res.data.image;
+          if (image && image.startsWith("data:image")) {
+            setAvatar(image);
+          } else {
+            setAvatar("./app-assets/images/portrait/small/avatar-s-11.jpg");
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching avatar:", err);
+          setAvatar("./app-assets/images/portrait/small/avatar-s-11.jpg");
+        });
+    }
+  }, [user.email, token]);
+
   const Logout = () => {
     sessionStorage.clear();
     alert("Logged Out");
@@ -111,47 +132,18 @@ export const InternTopbar = () => {
             <ul className="nav navbar-nav d-xl-none">
               <li className="nav-item">
                 <a className="nav-link menu-toggle" href="javascript:void(0);">
-                  <i className="ficon" data-feather="menu"></i>
+                  <FiMenu className="ficon" /> {/* Menu icon */}
                 </a>
               </li>
             </ul>
           </div>
-          {/* <ul className="nav navbar-nav align-items-center ml-auto">
-            <li className="nav-item mr-25 timer">
-              <a
-                className="nav-link"
-                href="javascript:void(0);"
-                data-toggle="dropdown"
-              >
-                <button className="btn btn-light" disabled>
-                  <i className="clock" data-feather="clock"></i>
-                  &nbsp;
-                  <span className="timer-text">{Number(timer)}</span>
-                </button>
-              </a>
-            </li>
-          </ul> */}
           <ul className="nav navbar-nav align-items-center ml-auto">
-            {/* <div className="timer"> */}
-
-            {/* </div> */}
-
             <li className="nav-item dropdown dropdown-notification mr-25">
               <a
                 className="nav-link"
                 href="javascript:void(0);"
                 data-toggle="dropdown"
               >
-                {/* <i className="ficon" data-feather="bell"></i> */}
-                {/* {shiftStarted ? (
-                  <button className="btn btn-danger" onClick={EndShift}>
-                    Check Out
-                  </button>
-                ) : (
-                  <button className="btn btn-success" onClick={StartShift}>
-                    Check In
-                  </button>
-                )} */}
                 {user.status === "Test" ? (
                   <Link to={"/intern-test"}>
                     <button className="btn btn-warning">{user.status}</button>
@@ -176,32 +168,12 @@ export const InternTopbar = () => {
               </a>
             </li>
             <li className="nav-item dropdown dropdown-notification mr-25 show-profile">
-              {/* <div className="clock d-flex" style={{ marginRight: "680px" }}>
-                <i
-                  data-feather="clock"
-                  style={{
-                    // marginRight: "10px",
-                    fontSize: "5px",
-                  }}
-                ></i>
-                <p
-                  className="clock-para"
-                  style={{
-                    alignItems: "end",
-                    paddingTop: "13px",
-                    fontSize: "16px",
-                  }}
-                >
-                  00:00:00
-                </p>
-              </div> */}
-
               <a
                 className="nav-link"
                 href="javascript:void(0);"
                 data-toggle="dropdown"
               >
-                <i className="ficon" data-feather="bell"></i>
+                <FiBell className="ficon" /> {/* Notification bell */}
                 <span className="badge badge-pill badge-danger badge-up">
                   5
                 </span>
@@ -226,10 +198,11 @@ export const InternTopbar = () => {
                 <span className="avatar">
                   <img
                     className="round"
-                    src="./app-assets/images/portrait/small/avatar-s-11.jpg"
-                    alt="avatar"
+                    src={avatar || "./app-assets/images/portrait/small/avatar-s-11.jpg"}
+                    alt="User Avatar"
                     height="40"
                     width="40"
+                    onError={() => setAvatar("./app-assets/images/portrait/small/avatar-s-11.jpg")}
                   />
                   <span className="avatar-status-online"></span>
                 </span>
@@ -238,54 +211,37 @@ export const InternTopbar = () => {
                 className="dropdown-menu dropdown-menu-right"
                 aria-labelledby="dropdown-user"
               >
-                {/* <a className="dropdown-item" href="page-profile.html">
-                  <i className="mr-50" data-feather="user"></i> Profile
-                </a>
-                <a className="dropdown-item" href="app-email.html">
-                  <i className="mr-50" data-feather="mail"></i> Inbox
-                </a>
-                <a className="dropdown-item" href="app-todo.html">
-                  <i className="mr-50" data-feather="check-square"></i> Task
-                </a>
-                <a className="dropdown-item" href="app-chat.html">
-                  <i className="mr-50" data-feather="message-square"></i> Chats
-                </a>
-                <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="page-account-settings.html">
-                  <i className="mr-50" data-feather="settings"></i> Settings
-                </a>
-                <a className="dropdown-item" href="page-pricing.html">
-                  <i className="mr-50" data-feather="credit-card"></i> Pricing
-                </a>
-                <a className="dropdown-item" href="page-faq.html">
-                  <i className="mr-50" data-feather="help-circle"></i> FAQ
-                </a> */}
-                <small>
-                  {user.status === "Test" ? (
-                    ""
+                {/* <small> */}
+                  {/* {user.status === "Test" ? ( */}
+                    {/* ""
                   ) : (
-                    <a className="dropdown-item">
-                      <i className="mr-0"></i>ID <br /> {user.ezi_id}
+                    <a className="dropdown-item"> */}
+                      {/* <FiFileText className="mr-50" /> Replaced FiIdCard with FiFileText for ID */}
+                      {/* ID <br /> {user.ezi_id}
                     </a>
                   )}
-
                   <a className="dropdown-item">
-                    <i className="mr-0"></i>Tech <br /> {user.tech}
+                    <FiCode className="mr-50" /> Technology icon 
+                    Tech <br /> {user.tech}
+                  </a> */}
+                  {/* <a className="dropdown-item">
+                    <FiCheckCircle className="mr-50" /> Status icon */}
+                    {/* Status <br /> {user.status}
                   </a>
-                  <a className="dropdown-item">
-                    <i className="mr-0"></i>Status <br /> {user.status}
-                  </a>
-                </small>
-
+                </small> */}
+                <Link className="dropdown-item" type="button" to="/intern-profile">
+                  <FiUser className="mr-50" /> 
+                  Profile
+                </Link>
                 <a className="dropdown-item" type="button" onClick={Logout}>
-                  <i className="mr-50" data-feather="power"></i> Logout
+                  <FiPower className="mr-50" /> {/* Logout icon */}
+                  Logout
                 </a>
               </div>
             </li>
           </ul>
         </div>
       </nav>
-
       {/* End Header */}
     </>
   );

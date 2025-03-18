@@ -44,6 +44,7 @@ const SupervisorLeave = () => {
       })
       .then((res) => {
         setData(res.data.data);
+       
         setFilteredData(data);
         settCurrentPage(res.data.meta.page);
         setTotalPages(res.data.meta.totalPages);
@@ -75,7 +76,7 @@ const SupervisorLeave = () => {
 
   const ApproveLeave = async (id) => {
     await axios
-      .put(`http://localhost:8800/approve-int-leave/${id}`)
+      .put(`https://api.ezitech.org/approve-int-leave/${id}`)
       .then((res) => {
         alert(res.data.msg);
       })
@@ -86,7 +87,7 @@ const SupervisorLeave = () => {
 
   const RejectLeave = async (id) => {
     await axios
-      .put(`http://localhost:8800/reject-int-leave/${id}`)
+      .put(`https://api.ezitech.org/reject-int-leave/${id}`)
       .then((res) => {
         alert(res.data.msg);
       })

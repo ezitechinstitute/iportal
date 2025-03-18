@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import { FiDollarSign } from "react-icons/fi";
+import { FiDollarSign, FiHome, FiUsers, FiGrid, FiCheckSquare, FiClipboard, FiCalendar } from "react-icons/fi";
 import { Link, NavLink } from "react-router-dom";
 // import "../../styles/ManagerStyle.css";
 
 export const SupervisorSidebar = () => {
   const [activeLink, setActive] = useState(" ");
 
-  // const setActive = (e) => {
-  //   setActive(e);
-  // };
   return (
     <>
       {/* BEGIN: Main Menu */}
@@ -23,7 +20,6 @@ export const SupervisorSidebar = () => {
                 <span className="brand-logo">
                   <img src="./images/ezitech.png" alt="" />
                 </span>
-
                 <img
                   src="./images/logo.png"
                   style={{
@@ -66,7 +62,7 @@ export const SupervisorSidebar = () => {
                 onClick={() => setActive("dashboard")}
                 to="/supervisor-dashboard"
               >
-                <i data-feather="home"></i>
+                <FiHome /> {/* Replaced data-feather="home" */}
                 <span
                   className="menu-title text-truncate"
                   data-i18n="Dashboards"
@@ -83,7 +79,7 @@ export const SupervisorSidebar = () => {
                 id={"2"}
                 to="/supervisor-interns"
               >
-                <i data-feather="users"></i>
+                <FiUsers /> {/* Replaced data-feather="users" */}
                 <span className="menu-item" data-i18n="eCommerce">
                   Interns
                 </span>
@@ -97,11 +93,11 @@ export const SupervisorSidebar = () => {
             >
               <NavLink
                 className="d-flex align-items-center"
-                onClick={() => setActive("remote")}
+                onClick={() => setActive("intern-projects")} // Fixed onClick to match activeLink
                 id={"3"}
                 to="/intern-projects"
               >
-                <i data-feather="grid"></i>
+                <FiGrid /> {/* Replaced data-feather="grid" */}
                 <span className="menu-item" data-i18n="eCommerce">
                   Intern Projects
                 </span>
@@ -115,11 +111,11 @@ export const SupervisorSidebar = () => {
             >
               <NavLink
                 className="d-flex align-items-center"
-                onClick={() => setActive("remote")}
+                onClick={() => setActive("project-tasks")} // Fixed onClick to match activeLink
                 id={"3"}
                 to="/project-tasks"
               >
-                <i data-feather="check-square"></i>
+                <FiCheckSquare /> {/* Replaced data-feather="check-square" */}
                 <span className="menu-item" data-i18n="eCommerce">
                   Project Tasks
                 </span>
@@ -131,11 +127,11 @@ export const SupervisorSidebar = () => {
             >
               <NavLink
                 className="d-flex align-items-center"
-                onClick={() => setActive("projects")}
+                onClick={() => setActive("intern-tasks")} // Fixed onClick to match activeLink
                 id={"3"}
                 to="/intern-tasks"
               >
-                <i data-feather="clipboard"></i>
+                <FiClipboard /> {/* Replaced data-feather="clipboard" */}
                 <span className="menu-item" data-i18n="eCommerce">
                   Intern Tasks
                 </span>
@@ -149,7 +145,7 @@ export const SupervisorSidebar = () => {
                 id={"3"}
                 to="/supervisor-leave"
               >
-                <i data-feather="calendar"></i>
+                <FiCalendar /> {/* Replaced data-feather="calendar" */}
                 <span className="menu-item" data-i18n="eCommerce">
                   Leave
                 </span>
@@ -162,7 +158,7 @@ export const SupervisorSidebar = () => {
                 onClick={() => setActive("balance")}
                 to={"/supervisor-balance"}
               >
-                <FiDollarSign />
+                <FiDollarSign /> {/* Already using FiDollarSign */}
                 <span className="menu-title text-truncate" data-i18n="User">
                   Balance
                 </span>

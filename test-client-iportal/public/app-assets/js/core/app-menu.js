@@ -78,15 +78,15 @@
             var start = menu.scrollTop,
               change = activeElHeight - start - parseInt(menu.clientHeight / 2);
           }
-          setTimeout(function () {
-            $.app.menu.container.stop().animate(
-              {
-                scrollTop: change
-              },
-              300
-            );
-            $('.main-menu').data('scroll-to-active', 'false');
-          }, 300);
+          // setTimeout(function () {
+          //   $.app.menu.container.stop().animate(
+          //     {
+          //       scrollTop: change
+          //     },
+          //     300
+          //   );
+          //   $('.main-menu').data('scroll-to-active', 'false');
+          // }, 300);
         }
         // this.obj.update();
         // }

@@ -4,22 +4,20 @@ import { SupervisorSidebar } from "../components/SupervisorSidebar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../components/Pagination";
-import { TaskDetails } from "../components/TaskDetails";
 import { ProjectTaskDetails } from "../components/ProjectTaskDetails";
 
 export const InternProjTasks = () => {
   const navigate = useNavigate();
-  const [token, setToken] = useState(sessionStorage.getItem("token"));
+  const [token] = useState(sessionStorage.getItem("token"));
   const check = sessionStorage.getItem("isLoggedIn");
   const supid = sessionStorage.getItem("managerid");
-  //   const supid = 11;
 
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   // Pagination
-  const [currentPage, settCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [dataLimit, setDataLimit] = useState(50);
 
@@ -31,10 +29,9 @@ export const InternProjTasks = () => {
     if (!check) {
       navigate("/supervisor");
     }
-  });
+  }, [check, navigate]);
 
   const GetTasks = async (page) => {
-    // setLoader(true);
     await axios
       .get(`https://api.ezitech.org/get-projects-tasks/${supid}`, {
         params: {
@@ -45,10 +42,9 @@ export const InternProjTasks = () => {
       })
       .then((res) => {
         setData(res.data);
-        setFilteredData(data);
-        settCurrentPage(res.data.meta.page);
+        setFilteredData(res.data); // Initial filtered data should be full data
+        setCurrentPage(res.data.meta.page);
         setTotalPages(res.data.meta.totalPages);
-        // setLoader(false);
       })
       .catch((err) => {
         console.log(err);
@@ -59,104 +55,95 @@ export const InternProjTasks = () => {
     const filter = data.filter((item) =>
       item.task_status.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
     setFilteredData(filter);
   }, [searchTerm, data]);
 
   const handlePageChange = (page) => {
-    settCurrentPage(page);
+    setCurrentPage(page);
   };
 
   useEffect(() => {
-    // console.log(data);
-    // setInterval(() => {
     GetTasks(currentPage);
-    // }, 2000);
   }, [currentPage, dataLimit]);
+
   return (
     <>
       <SupervisorTopbar />
       <SupervisorSidebar />
 
-      <div className="app-content content ">
+      <div className="app-content content">
         <div className="content-overlay"></div>
         <div className="header-navbar-shadow"></div>
         <div className="content-wrapper">
           <div className="content-header row"></div>
-          <div className="content-body"></div>
-          <section id="dashboard-ecommerce">
-            <div className="row" id="table-hover-animation">
-              <div className="col-12">
-                <div className="card">
-                  <div className="card-header">
-                    <h4 className="card-title">Project Tasks</h4>
-                    <div class="ag-btns d-flex flex-wrap">
-                      {/* <input
-                        type="text"
-                        class="ag-grid-filter form-control w-50 mr-1 mb-1 mb-sm-0 btn1"
-                        id="filter-text-box"
-                        placeholder="Search...."
-                      /> */}
-                      <label htmlFor="" style={{ marginTop: "8px" }}>
-                        Select Rows
-                      </label>
-                      &nbsp;
-                      <select
-                        className="form-control w-25"
-                        name=""
-                        id=""
-                        onChange={(e) => setDataLimit(e.target.value)}
-                      >
-                        <option value={50}>50</option>
-                        <option value={100}>100</option>
-                        <option value={200}>200</option>
-                        <option value={300}>300</option>
-                        <option value={500}>500</option>
-                      </select>
-                      &nbsp; &nbsp;
-                      <label htmlFor="" style={{ marginTop: "8px" }}>
-                        Show By Status
-                      </label>
-                      &nbsp;
-                      <select
-                        name="pStatus"
-                        id=""
-                        className="ag-grid-filter form-control w-25"
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                      >
-                        <option selected disabled>
-                          All
-                        </option>
-                        <option value="Ongoing">Ongoing</option>
-                        <option value="Expired">Expired</option>
-                        <option value="Completed">Completed</option>
-                      </select>
+          <div className="content-body">
+            <section id="dashboard-ecommerce">
+              <div className="row" id="table-hover-animation">
+                <div className="col-12">
+                  <div className="card">
+                    <div className="card-header">
+                      <h4 className="card-title">Project Tasks</h4>
+                      <div className="ag-btns d-flex flex-wrap">
+                        <label htmlFor="dataLimit" style={{ marginTop: "8px" }}>
+                          Select Rows
+                        </label>
+                         
+                        <select
+                          className="form-control w-25"
+                          name="dataLimit"
+                          id="dataLimit"
+                          onChange={(e) => setDataLimit(e.target.value)}
+                        >
+                          <option value={50}>50</option>
+                          <option value={100}>100</option>
+                          <option value={200}>200</option>
+                          <option value={300}>300</option>
+                          <option value={500}>500</option>
+                        </select>
+                           
+                        <label htmlFor="pStatus" style={{ marginTop: "8px" }}>
+                          Show By Status
+                        </label>
+                         
+                        <select
+                          name="pStatus"
+                          id="pStatus"
+                          className="ag-grid-filter form-control w-25"
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                        >
+                          <option value="">All</option>
+                          <option value="Ongoing">Ongoing</option>
+                          <option value="Expired">Expired</option>
+                          <option value="Completed">Completed</option>
+                        </select>
+                      </div>
                     </div>
-                  </div>
 
-                  <section id="complex-header-datatable">
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="card">
-                          <div class="card-datatable">
-                            <table class="dt-complex-header table table-bordered table-responsive">
-                              <thead>
-                                <tr>
-                                  <th>Name</th>
-                                  <th>Task Title</th>
-                                  <th>Project Title</th>
-                                  <th>Start Date</th>
-                                  <th>End Date</th>
-                                  <th>Duration</th>
-                                  <th>Days</th>
-                                  <th>Status</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
+                    <section id="complex-header-datatable">
+                      <div className="row">
+                        <div className="col-12">
+                          <div className="card">
+                            <div className="card-datatable table-responsive">
+                              <table
+                                className="dt-complex-header table table-bordered w-100" // Added w-100 for full width
+                              >
+                                <thead>
+                                  <tr>
+                                    <th>Name</th>
+                                    <th>Task Title</th>
+                                    <th>Project Title</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Duration</th>
+                                    <th>Days</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
 
-                              <tbody>
-                                {Array.isArray(filteredData)
-                                  ? filteredData.map((rs) => {
+                                <tbody>
+                                  {Array.isArray(filteredData) &&
+                                    filteredData.map((rs) => {
                                       const {
                                         task_id,
                                         name,
@@ -170,112 +157,86 @@ export const InternProjTasks = () => {
                                         approved,
                                       } = rs;
 
-                                      const date = new Date(
-                                        t_start_date
-                                      ).toLocaleDateString("en-PK");
-                                      const endDate = new Date(
-                                        t_end_date
-                                      ).toLocaleDateString("en-PK");
+                                      const date = new Date(t_start_date).toLocaleDateString("en-PK");
+                                      const endDate = new Date(t_end_date).toLocaleDateString("en-PK");
 
                                       return (
-                                        <>
-                                          <tr>
-                                            <td>{name}</td>
-                                            <td>{task_title}</td>
-                                            <td>{title}</td>
-                                            <td>{date}</td>
-                                            <td>{endDate}</td>
-                                            <td>{task_duration}</td>
-                                            <td>{task_days}</td>
-
+                                        <tr key={task_id}>
+                                          <td>{name}</td>
+                                          <td>{task_title}</td>
+                                          <td>{title}</td>
+                                          <td>{date}</td>
+                                          <td>{endDate}</td>
+                                          <td>{task_duration}</td>
+                                          <td>{task_days}</td>
+                                          <td>
                                             {approved === null ? (
-                                              <>
-                                                <td>
-                                                  {task_status === "Ongoing" ? (
-                                                    <span className="badge badge-glow badge-info">
-                                                      {" "}
-                                                      {task_status}{" "}
-                                                    </span>
-                                                  ) : task_status ===
-                                                    "Expired" ? (
-                                                    <span className="badge badge-glow badge-danger">
-                                                      {" "}
-                                                      {task_status}{" "}
-                                                    </span>
-                                                  ) : task_status ===
-                                                    "Submitted" ? (
-                                                    <span className="badge badge-glow badge-success">
-                                                      {" "}
-                                                      {task_status}{" "}
-                                                    </span>
-                                                  ) : (
-                                                    " "
-                                                  )}
-                                                </td>
-                                              </>
-                                            ) : approved === 1 ? (
-                                              <td>
-                                                <span className="badge badge-glow badge-success">
-                                                  {" "}
-                                                  {task_status}{" "}
+                                              task_status === "Ongoing" ? (
+                                                <span className="badge badge-glow badge-info">
+                                                  {task_status}
                                                 </span>
-                                              </td>
-                                            ) : approved === 0 ? (
-                                              <td>
+                                              ) : task_status === "Expired" ? (
                                                 <span className="badge badge-glow badge-danger">
-                                                  {" "}
-                                                  {task_status}{" "}
+                                                  {task_status}
                                                 </span>
-                                              </td>
+                                              ) : task_status === "Submitted" ? (
+                                                <span className="badge badge-glow badge-success">
+                                                  {task_status}
+                                                </span>
+                                              ) : (
+                                                " "
+                                              )
+                                            ) : approved === 1 ? (
+                                              <span className="badge badge-glow badge-success">
+                                                {task_status}
+                                              </span>
+                                            ) : approved === 0 ? (
+                                              <span className="badge badge-glow badge-danger">
+                                                {task_status}
+                                              </span>
                                             ) : (
                                               ""
                                             )}
-
-                                            <td>
-                                              <div class="btn-group">
-                                                <button
-                                                  class="btn btn-warning"
-                                                  type="button"
-                                                  aria-haspopup="true"
-                                                  aria-expanded="false"
-                                                  data-toggle="modal"
-                                                  data-target="#xlarge"
-                                                  onClick={() =>
-                                                    setTaskData({
-                                                      taskId: task_id,
-                                                    })
-                                                  }
-                                                >
-                                                  View
-                                                </button>
-                                              </div>
-                                            </td>
-                                          </tr>
-                                        </>
+                                          </td>
+                                          <td>
+                                            <div className="btn-group">
+                                              <button
+                                                className="btn btn-warning"
+                                                type="button"
+                                                data-toggle="modal"
+                                                data-target="#xlarge"
+                                                onClick={() =>
+                                                  setTaskData({ taskId: task_id })
+                                                }
+                                              >
+                                                View
+                                              </button>
+                                            </div>
+                                          </td>
+                                        </tr>
                                       );
-                                    })
-                                  : ""}
-                              </tbody>
-                            </table>
+                                    })}
+                                </tbody>
+                              </table>
+                            </div>
+                            <br />
+                            <Pagination
+                              currentPage={currentPage}
+                              totalPages={totalPages}
+                              onPageChange={handlePageChange}
+                            />
                           </div>
-                          <br />
-                          {/* Pagination */}
-                          <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            onPageChange={handlePageChange}
-                          />
                         </div>
                       </div>
-                    </div>
-                  </section>
+                    </section>
+                  </div>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          {/* Task Details */}
-          <ProjectTaskDetails values={taskData} />
+            {/* Task Details */}
+            <ProjectTaskDetails values={taskData} />
+          </div>
         </div>
       </div>
     </>

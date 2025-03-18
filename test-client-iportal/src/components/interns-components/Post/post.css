@@ -1,0 +1,109 @@
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    position: relative;
+    margin-bottom: 0%;
+  
+}
+
+.profile-header h2 {
+    font-size: 20px;
+    font-weight: bold;
+    background: rgba(30, 136, 229, 0.9); 
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.profile-image {
+    display: flex;
+    position: absolute;
+    margin-top: 180px;
+    margin-left: 120px;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+.profile-image img {
+   width: 50%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    
+}
+
+
+
+
+.profile-details {
+    margin-top: 390px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.profile-details h2 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+}
+
+.technology {
+    font-size: 16px;
+    color: #555;
+    font-weight: bold;
+}
+
+
+.join-date {
+    margin-top: 130px;
+    margin-left: -30px;
+    
+    font-size: 10px;
+    color: black;
+    padding: 5px 15px;
+    display: inline-block;
+}
+
+.join-date p {
+    color: white;
+    font-weight: 500;
+    margin: 0;
+}
+
+
+.download-btn-container {
+    display: flex;
+    justify-content: center;
+    
+    gap: 15px;
+}
+
+.download-btn {
+    background-color: #1E88E5;
+    color: white;
+    padding: 12px 18px;
+    font-size: 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.download-btn:hover {
+    background-color: #1565C0;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #f8f9fc;
+    font-size: 12px;
+}
