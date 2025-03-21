@@ -58,7 +58,7 @@ export const Register = () => {
         });
     };
     GetUniversities();
-  });
+  }, [2000]);
 
   const handleDateClick = (date) => {
     setValue({ ...value, interviewDate: date.toDateString() });
