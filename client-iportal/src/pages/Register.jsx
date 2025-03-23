@@ -37,9 +37,7 @@ export const Register = () => {
   useEffect(() => {
     const GetTech = async () => {
       try {
-        const res = await axios.get(
-          "https://api.ezitech.org/form-tech"
-        );
+        const res = await axios.get("https://api.ezitech.org/form-tech");
         setTech(res.data);
       } catch (error) {
         console.log(error);
@@ -81,11 +79,11 @@ export const Register = () => {
     });
   };
 
-  const isValidCNIC = (id) => {
-    const cnicPattern = /^[0-9]{5}-[0-9]{7}-[0-9]{1}$/;
+  // const isValidCNIC = (id) => {
+  //   const cnicPattern = /^[0-9]{5}-[0-9]{7}-[0-9]{1}$/;
 
-    return cnicPattern.test(id);
-  };
+  //   return cnicPattern.test(id);
+  // };
 
   const isValidPhone = (cell) => {
     const phonePattern = /^\+(?:[0-9] ?){6,14}[0-9]$/;
@@ -94,14 +92,17 @@ export const Register = () => {
   };
 
   useEffect(() => {
-    if (value.internCnic !== " ") {
-      setCheckCnic(isValidCNIC(value.internCnic));
-    }
+    // if (value.internCnic !== " ") {
+    //   setCheckCnic(isValidCNIC(value.internCnic));
+    // }
 
     if (tel !== 0) {
       setCheckPhone(isValidPhone(tel));
     }
   });
+
+  const [uid, setUid] = useState(" ");
+  const [message, setMessage] = useState({ verified: null });
 
   const VerifyEmail = async () => {
     await axios
@@ -109,12 +110,32 @@ export const Register = () => {
         email: value.internemail,
       })
       .then((res) => {
+        setUid(res.data.uid);
         alert(res.data.msg);
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  const CheckStatus = async (id) => {
+    try {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/verify-email-status/${id}`
+      );
+      if (res.data.isVerified) {
+        setMessage({ verified: res.data.isVerified });
+      } else {
+        setMessage({ verified: res.data.isVerified });
+      }
+    } catch (error) {
+      // console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    CheckStatus(uid);
+  });
 
   const handleImage = (e) => {
     const file = e.target.files[0];
@@ -132,7 +153,6 @@ export const Register = () => {
 
     if (value.internPhone !== " ") {
       if (
-        value.internCode !== undefined &&
         value.internCity !== undefined &&
         value.internGender !== undefined &&
         value.internUniversity !== undefined &&
@@ -157,13 +177,13 @@ export const Register = () => {
               }, 2000);
             }
 
-            if (res.data.codeMsg === false) {
-              setErrorMsg("Email Verification Failed!!!");
-              setTimeout(() => {
-                setLoader(false);
-                window.location.reload();
-              }, 2000);
-            }
+            // if (res.data.codeMsg === false) {
+            //   setErrorMsg("Email Verification Failed!!!");
+            //   setTimeout(() => {
+            //     setLoader(false);
+            //     window.location.reload();
+            //   }, 2000);
+            // }
 
             if (res.data.exist === true) {
               setErrorMsg("You Already Registered");
@@ -288,38 +308,18 @@ export const Register = () => {
                                   }}
                                   onClick={VerifyEmail}
                                 >
-                                  Send Code
+                                  Click to Verify
                                 </a>
-                                {/* </span> */}
                               </div>
+                              {message.verified === null && ""}
+                              {message.verified && (
+                                <p className="text-success">Verified</p>
+                              )}
                             </div>
                           </div>
                         </div>
 
                         <div className="row">
-                          <div className="col-sm-6">
-                            <div className="form-group">
-                              <label
-                                for="register-username"
-                                className="form-label"
-                              >
-                                Verification Code
-                              </label>
-                              <input
-                                type="number"
-                                className="form-control"
-                                id="register-username"
-                                name="internCode"
-                                placeholder="Verification Code"
-                                aria-describedby="register-username"
-                                tabindex="1"
-                                autofocus
-                                onChange={handleInput}
-                                required
-                              />
-                            </div>
-                          </div>
-
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label
@@ -342,9 +342,7 @@ export const Register = () => {
                               />
                             </div>
                           </div>
-                        </div>
 
-                        <div className="row">
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label
@@ -372,7 +370,9 @@ export const Register = () => {
                               )}
                             </div>
                           </div>
+                        </div>
 
+                        {/* <div className="row">
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label
@@ -400,7 +400,7 @@ export const Register = () => {
                               )}
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                         <div className="row">
                           <div className="col-sm-6">
                             <div className="form-group">
@@ -898,13 +898,25 @@ export const Register = () => {
                             " "
                           )}
                         </div>
-                        <button
-                          className="btn btn-primary btn-block mt-2"
-                          tabindex="5"
-                          type="submit"
-                        >
-                          Register
-                        </button>
+
+                        {message.verified ? (
+                          <button
+                            className="btn btn-primary btn-block mt-2"
+                            tabindex="5"
+                            type="submit"
+                          >
+                            Register
+                          </button>
+                        ) : (
+                          <button
+                            disabled
+                            className="btn btn-primary btn-block mt-2"
+                            tabindex="5"
+                            type="submit"
+                          >
+                            Register
+                          </button>
+                        )}
 
                         {/* <input
                           type="submit"

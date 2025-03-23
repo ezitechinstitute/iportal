@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "ezitech-iportal-ab7bd",
+  "private_key_id": "832bd3ef2544eff0a0d3ff3ed4befa1193d849f1",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC3gB9ptWYa4GOZ\nX89eDik6pBDbLMSiFEry97EomH8t9kx0AogVQmm/MKq0G/Ut4I4l7Tg58NXwPqrE\nNZyy0NALNxG25DvSHY6JDP3FO1TM0qCaMGLFZ0Or02BMBeORY3GvtbNTQQBHu1nN\nXVALKuG4TZ5MedMXfkETjXNu8CzCalqRICaV9/DcQ+1jTUcOi1JI5MDYhZJVKMzV\nJKtWqDYS0Cr9e+oTrCLdn4FWSSvqhMNYs2Ka/w+KuDIB+ltt/YEJ1kbXx6PkWhov\nUT+9Of4Je2ZGci7qS3wrUAWSZoROJ+a2ea5DT9R156bLu0e2jmEk9scy2FGbEqNn\nFYTzHJONAgMBAAECggEAHhuei9ignS5OCT9IJfWK3D1JKr0IslNEDOOJJNEIpQDx\ngGNd8qcH9L/GcnDX5KQgjqaCgDc80wNlP3ZQdKKAUCbD+E8wZYRF+8Su6qqWeljg\n0wu3WQ5dcxbmiPK6aQN5Bsx4VOOoaRybWm/CD2ME0BmkLIYclZE4mj2uP/iWT3ue\npNt1st1Y4aMfYo9Gm9v0tillgzi40xJN6RCY1fQZi27117YGZtfOyvdRXv08i/s9\n8lpJ/AfB62HyQFwxtzPAXkcAsT2txdMLr4R2vXm6o0Ym22dMlSdqWtBuV5HOHJjx\nxGbFC32GMYbREGVnHYr+siTj0sEVRXmp1oz6ZRpRYQKBgQDeTkK9JMCC+c1F1jwo\neW7Q9VUxe8pj0NpMJUEmelHUI8Zdp18AACERK7xSJWTt/g/b0vRufe2t1aMyTFTp\nHcHCZkazIWsGWv6+QiE3qiOdoNUv12GXo9Mb9M6LzyyPubyYJ1EWNBmqtby+dV1Q\ngTV2g6zdMsUN+uAHM53W7zp69QKBgQDTUCuzbXpJRPRI/vgYDlk5Wqcc+inQLGIY\ntjWb5J+4lGRPmA/14038/ObRnvZMgyl18ooqLB7JUDzKIsS0J62sQkyVffor/M2G\n3IryDeLg8cK09NuxAAxZlsmhwkVFfcDWfZ+kykafGH4ThM3S835iL+Fsr+T7bcBm\nJ0I7z0CHOQKBgQDPUPDQb7vQ6aFTpa1ImaaM3J5snWNrntRV+tA9UAmL6ykNIg9o\ncrZjywO/H/x2Ll8fxCYL/Qhw+zFMsP7mv8d4weThHSMwNCAp0oYj4VmBoQHvsc7j\nmfZAthcBL14BU1fcFZ57NG9TUlUI0W8KqtTvB3Fof/ZhSTsvvCVQ0p0ZGQKBgCmo\njHT7CDiZl28slMxpR72+2WMlDkkz9sLYaQkqsTI6TuxCFiNrhFxzny2EIRpEYVAX\nWJWnzQny/4j6Ab1idSKYj3CJPWCengYQRHQjuK6P+sqh2w2x7L1ctLNnETD58aJX\ncbmTBwkmUvSWId2Mk0XYGqDKrGHE6UE6TBxuZ1JBAoGABGNdXl96V5etHzW9RX+S\nTIMPf8qgfLl7c4fEW+Gn7poUE98b1bJPK1u6/azZKgzLKzVtwEkCpeCOjxIOzSy9\nqsm+HHV3yhdeoPt/5AWZbhYeky1XcstPvnYWZG40f6gD3PgoCGW/6OiPDbtDnHtG\n/nHXP3swvBgnoTDu7xtA2lA=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@ezitech-iportal-ab7bd.iam.gserviceaccount.com",
+  "client_id": "108305173820574726338",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40ezitech-iportal-ab7bd.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
