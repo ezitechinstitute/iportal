@@ -4,7 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
-ezitech-iportal-firebase.json
+/ezitech-iportal-firebase.json
 
 
 # testing
