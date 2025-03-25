@@ -7,7 +7,7 @@ import EmailVerified from "./components/EmailVerified";
 function App() {
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename="/">
         <Routes>
           <Route index path="/" element={<Register />} />
           <Route path="/email-verified" element={<EmailVerified />} />
