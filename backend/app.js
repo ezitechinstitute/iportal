@@ -13,7 +13,7 @@ app.use(bodyParser.json({ limit: "35mb" })); // Adjust the limit as needed
 app.use(bodyParser.urlencoded({ limit: "35mb", extended: true }));
 app.use(express.json());
 
-// Configure CORS options check
+// Configure CORS options
 const corsOptions = {
   origin: [
     "https://interns.ezitech.org",
