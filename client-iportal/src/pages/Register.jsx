@@ -303,7 +303,7 @@ export const Register = () => {
                               {!verified ? (
                                 <button
                                   className="btn btn-primary"
-                                  onClick={VerifyEmail}
+                                  onClick={() => VerifyEmail()}
                                   style={{
                                     padding: "10px 15px",
                                     marginTop: "10px",
