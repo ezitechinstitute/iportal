@@ -101,8 +101,7 @@ export const Register = () => {
     }
   });
 
-  const [uid, setUid] = useState(" ");
-  const [message, setMessage] = useState({ verified: null });
+  const [verified, setVerified] = useState(false);
 
   const VerifyEmail = async () => {
     await axios
@@ -110,7 +109,6 @@ export const Register = () => {
         email: value.internemail,
       })
       .then((res) => {
-        setUid(res.data.uid);
         alert(res.data.msg);
       })
       .catch((error) => {
@@ -118,24 +116,19 @@ export const Register = () => {
       });
   };
 
-  const CheckStatus = async (id) => {
-    try {
-      const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/verify-email-status/${id}`
-      );
-      if (res.data.isVerified) {
-        setMessage({ verified: res.data.isVerified });
-      } else {
-        setMessage({ verified: res.data.isVerified });
-      }
-    } catch (error) {
-      // console.log(error);
-    }
-  };
-
   useEffect(() => {
-    CheckStatus(uid);
-  });
+    const checkVerificationStatus = () => {
+      const isVerified = localStorage.getItem("emailVerified");
+      if (isVerified === "true") {
+        setVerified(true);
+      }
+    };
+
+    // Check every 2 seconds
+    const interval = setInterval(checkVerificationStatus, 2000);
+
+    return () => clearInterval(interval); // Cleanup when component unmounts
+  }, []);
 
   const handleImage = (e) => {
     const file = e.target.files[0];
@@ -172,6 +165,7 @@ export const Register = () => {
             if (res.data === 1) {
               setRegisterMsg("Register Successfully! Please Check Your Email");
               setTimeout(() => {
+                localStorage.removeItem("emailVerified");
                 setLoader(false);
                 window.location.reload();
               }, 2000);
@@ -188,6 +182,7 @@ export const Register = () => {
             if (res.data.exist === true) {
               setErrorMsg("You Already Registered");
               setTimeout(() => {
+                localStorage.removeItem("emailVerified");
                 setLoader(false);
                 window.location.reload();
               }, 2000);
@@ -280,12 +275,6 @@ export const Register = () => {
                               </label>
                               <div className="d-flex">
                                 <input
-                                  style={{
-                                    borderRight: "0",
-                                    borderTopRightRadius: "0",
-                                    borderBottomRightRadius: "0",
-                                    height: "52px",
-                                  }}
                                   type="text"
                                   className="form-control"
                                   id="internEmail"
@@ -297,7 +286,7 @@ export const Register = () => {
                                   required
                                 />
                                 {/* <span> */}
-                                <a
+                                {/* <a
                                   type="button"
                                   className="btn btn-primary"
                                   style={{
@@ -309,11 +298,24 @@ export const Register = () => {
                                   onClick={VerifyEmail}
                                 >
                                   Click to Verify
-                                </a>
+                                </a> */}
                               </div>
-                              {message.verified === null && ""}
-                              {message.verified && (
-                                <p className="text-success">Verified</p>
+                              {!verified ? (
+                                <button
+                                  className="btn btn-primary"
+                                  onClick={VerifyEmail}
+                                  style={{
+                                    padding: "10px 15px",
+                                    marginTop: "10px",
+                                    cursor: "pointer",
+                                  }}
+                                >
+                                  Send Verification Email
+                                </button>
+                              ) : (
+                                <p style={{ color: "green" }}>
+                                  ✅ Email Verified!
+                                </p>
                               )}
                             </div>
                           </div>
@@ -899,7 +901,7 @@ export const Register = () => {
                           )}
                         </div>
 
-                        {message.verified ? (
+                        {verified ? (
                           <button
                             className="btn btn-primary btn-block mt-2"
                             tabindex="5"

@@ -1436,7 +1436,7 @@ function SendMailVerifyCode(email, link) {
       
       <p><span class="bold-text">Your Verification Link:</span></p>
       <div class="verification-code">
-        ${link}
+        <a href="${link}" type="button" target="_blank"> Click to Verify </a>
       </div>
 
       <p>If you didn’t request this change or suspect any unauthorized activity, please contact us immediately.</p>

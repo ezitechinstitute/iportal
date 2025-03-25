@@ -1,18 +1,22 @@
-const { auth } = require("./firebaseAdmin");
+// const { auth } = require("./firebaseAdmin");
+const jwt = require("jsonwebtoken");
+require("dotenv").config;
 
 const CheckMailVerified = async (req, res) => {
-  const { uid } = req.params; // User ID from frontend
-  //   const uid = "pw6ezp3HdsRX5hLv8nYYFhxT6XI2";
-
   try {
-    const user = await auth.getUser(uid);
-    if (user.emailVerified) {
-      res.json({ isVerified: true });
-    } else {
-      res.json({ isVerified: false });
-    }
+    const { token } = req.query;
+    if (!token)
+      return res.json({ success: false, message: "Token is required" });
+
+    // Verify JWT token
+    const decoded = jwt.verify(token, process.env.SECRETKEY);
+    res.json({
+      success: true,
+      message: "Email verified successfully!",
+      email: decoded.email,
+    });
   } catch (error) {
-    res.json("Error checking email verification");
+    res.json({ success: false, message: "Invalid or expired token" });
   }
 };
 
