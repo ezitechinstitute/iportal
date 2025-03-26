@@ -4,12 +4,12 @@ const {
   SendVerificationCode,
   GetRegisterUni,
   GetInternImage,
-  GetInternPost
+  GetInternPost,
 } = require("../controller/intern/interns-controller");
 const {
   GetOfferLetterRequest,
   InsertOfferLetterRequest,
-  GetManagerDetails
+  GetManagerDetails,
 } = require("../controller/intern/offer-letter");
 const {
   HrAuth,
@@ -39,9 +39,9 @@ const {
   GetInternStats
 } = require("../controller/hr/get-interns-controller");
 const {
-  GetAllOfferLetterRequests, 
-  UpdateOfferLetterStatus 
-}= require("../controller/hr/intern-offer-letter")
+  GetAllOfferLetterRequests,
+  UpdateOfferLetterStatus,
+} = require("../controller/hr/intern-offer-letter");
 const {
   AssignPortal,
   ActivePortal,
@@ -192,9 +192,11 @@ const {
   AssignShift,
   UpdateShift,
 } = require("../controller/supervisor/shift-controller");
-const{
-  SupervisorGetProfile, SupervisorAvatar, SupervisorUpdateProfile
-}= require("../controller/supervisor/supervisor-auth")
+const {
+  SupervisorGetProfile,
+  SupervisorAvatar,
+  SupervisorUpdateProfile,
+} = require("../controller/supervisor/supervisor-auth");
 const {
   CountProjects,
   CountInPorgressProjects,
@@ -206,9 +208,12 @@ const {
   CountTasksInProgress,
   CountTotalTasks,
   GetInternAverage,
-  GetTopInternByAverage
+  GetTopInternByAverage,
 } = require("../controller/intern/intern-statics-controller");
-const { SubmitLeaveReq, GetLeaves } = require("../controller/intern/intern-leave");
+const {
+  SubmitLeaveReq,
+  GetLeaves,
+} = require("../controller/intern/intern-leave");
 const {
   AdminIntProjects,
   AdminIntProjectTasks,
@@ -257,11 +262,15 @@ const {
 const {
   GetFeedback,
   InsertFeedback,
+<<<<<<< HEAD
   ManagerComplaint, 
   SupervisorComplaint,
   GetManagerComplaints,
   GetSupervisorComplaints
 } =require("../controller/intern/intern-feedback");
+=======
+} = require("../controller/intern/intern-feedback");
+>>>>>>> 848ad3c8e53c71d6561555b77ddf6425503cbe27
 
 const {
   AddPayment,
@@ -269,9 +278,10 @@ const {
   GetPaymentByRecipientId,
   EditPayment,
   EditPaymentByRecipientId,
-  DeletePayment
-}=require("../controller/hr/hr_payment_controller");
+  DeletePayment,
+} = require("../controller/hr/hr_payment_controller");
 
+<<<<<<< HEAD
 const { AddAnnouncement, GetAnnouncements, GetAnnouncementById, EditAnnouncement, DeleteAnnouncement } = require('../controller/hr/hr_announcement');
 const {GetInternAnnouncements} = require('../controller/intern/intern_announcements')
 
@@ -295,6 +305,20 @@ const {
   GetRemoteInterns
 } = require("../controller/supervisor/sup_interns_stats_controller")
 
+=======
+const {
+  AddAnnouncement,
+  GetAnnouncements,
+  GetAnnouncementById,
+  EditAnnouncement,
+  DeleteAnnouncement,
+} = require("../controller/hr/hr_announcement");
+const {
+  GetInternAnnouncements,
+} = require("../controller/intern/intern_announcements");
+const GetVerificationLink = require("../services/GetLink");
+const CheckMailVerified = require("../services/CheckMailVerified");
+>>>>>>> 848ad3c8e53c71d6561555b77ddf6425503cbe27
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -322,15 +346,14 @@ function verifyToken(req, res, next) {
   }
 }
 
-
-
 router.get("/test", (req, res) => {
   res.send("Hello from NodeJs Server");
 });
 
 // Combine Routes
 router.post("/verify-email", VerifyUniEmail);
-router.post("/verify-int-email", VerifyInternEmail);
+router.post("/verify-int-email", GetVerificationLink);
+router.get("/verify-email-status", CheckMailVerified);
 router.post("/verify-code", VerifyCode);
 
 //intern-review
@@ -344,12 +367,12 @@ router.put("/update-review-status", UpdateReviewStatus)
 /* Interns Endpoints */
 router.post("/register-inters", RegisterInterns);
 router.get("/get-reg-uni", GetRegisterUni);
-router.get("/get-int-image",GetInternImage);
-router.get("/get-int-post",GetInternPost);
+router.get("/get-int-image", GetInternImage);
+router.get("/get-int-post", GetInternPost);
 // router.post("/verification-code", SendVerificationCode); change this in registration form also send code from frontend remove
 router.post("/intern-auth", InternAuth);
 router.post("/intern-forget-password", ForgotInternPassword);
-router.post("/intern-reset-password",ResetInternPassword);
+router.post("/intern-reset-password", ResetInternPassword);
 router.post("/intern-update-image", GetAndUpdateInternImage); // Route to update intern image
 router.post("/intern-details", GetInternDetails); // Route to get intern details
 router.post("/intern-update-details", UpdateInternDetails); // Route to update intern details
@@ -375,18 +398,27 @@ router.post("/int-leave-request", SubmitLeaveReq);
 router.get("/get-intern-leaves", GetLeaves);
 
 // Intern Feedback
+<<<<<<< HEAD
 router.post("/intern-feedback",InsertFeedback);
 router.get("/get-intern-feedback",GetFeedback);
 router.post("/intern-manager-complaint", ManagerComplaint);
 router.post("/intern-supervisor-complaint", SupervisorComplaint);
 router.get('/manager-complaints', GetManagerComplaints);
 router.get('/supervisor-complaints', GetSupervisorComplaints);
+=======
+router.post("/intern-feedback", InsertFeedback);
+router.get("/get-intern-feedback", GetFeedback);
+>>>>>>> 848ad3c8e53c71d6561555b77ddf6425503cbe27
 
 //offer Letter
 router.post("/intern-offer-letter", InsertOfferLetterRequest);
 router.get("/get-intern-offer-letter/:id", GetOfferLetterRequest);
+<<<<<<< HEAD
 router.get("/get-manager", GetManagerDetails)
 
+=======
+router.get("/get-manager", GetManagerDetails);
+>>>>>>> 848ad3c8e53c71d6561555b77ddf6425503cbe27
 //intern_announcement
 router.get("/get-intern-announcement", GetInternAnnouncements);
 // Intern Statics
@@ -399,15 +431,15 @@ router.get("/count-int-leaves", CountLeaves);
 router.get("/count-tasks-in-progress", CountTasksInProgress);
 router.get("/count-tasks-complete", CountTasksComplete);
 router.get("/count-total-tasks", CountTotalTasks);
-router.get("/get-int-avg", GetInternAverage)
-router.get('/top-intern-by-average', GetTopInternByAverage);
+router.get("/get-int-avg", GetInternAverage);
+router.get("/top-intern-by-average", GetTopInternByAverage);
 
 /* Manager Auth Endpoints */
 router.post("/manager-auth", HrAuth);
-router.put("/manager-avatar/:managerId",  HrAvatar);
+router.put("/manager-avatar/:managerId", HrAvatar);
 // router.post("/manager-forgot-password", ManagerForgotPassword);
-router.get('/manager/profile/:managerId', HrGetProfile);
-router.put('/manager/profile/:managerId', HrUpdateProfile);
+router.get("/manager/profile/:managerId", HrGetProfile);
+router.put("/manager/profile/:managerId", HrUpdateProfile);
 
 //offer-letter
 router.get("/offer-letter-request", GetAllOfferLetterRequests);
@@ -458,12 +490,12 @@ router.get("/pending-amount", verifyToken, GetPendingAmount);
 router.get("/get-statics", verifyToken, CountInterns);
 router.post("/assign-portal", verifyToken, AssignPortal);
 
-// Hr announcement 
-router.post('/announcements', AddAnnouncement);
-router.get('/announcements', GetAnnouncements);
-router.get('/announcements/:author_id', GetAnnouncementById);
-router.put('/announcements/:id', EditAnnouncement);
-router.delete('/announcements/:id', DeleteAnnouncement);
+// Hr announcement
+router.post("/announcements", AddAnnouncement);
+router.get("/announcements", GetAnnouncements);
+router.get("/announcements/:author_id", GetAnnouncementById);
+router.put("/announcements/:id", EditAnnouncement);
+router.delete("/announcements/:id", DeleteAnnouncement);
 
 /* Admin Endpoint */
 router.post("/admin-auth", AdminAuth);
@@ -575,8 +607,8 @@ router.get("/count-all-uni-tasks/:uniName", UniCountAllTasks);
 // Supervisor To Interns Controller
 router.post("/supervisor-auth", SupervisorAuth);
 router.put("/supervisor-avatar/:managerId", SupervisorAvatar);
-router.get('/supervisor/profile/:managerId', SupervisorGetProfile);
-router.put('/supervisor/profile/:managerId', SupervisorUpdateProfile);
+router.get("/supervisor/profile/:managerId", SupervisorGetProfile);
+router.put("/supervisor/profile/:managerId", SupervisorUpdateProfile);
 router.get("/get-sup-interns/:supid", verifyToken, GetSupervisorsInterns);
 router.post("/assign-project", verifyToken, AssignProject);
 router.post("/assign-task", verifyToken, AssignTask);
