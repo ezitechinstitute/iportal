@@ -71,9 +71,9 @@ export const RecipientPaymentVoucher = () => {
         <div className="header-navbar-shadow"></div>
         <div className="content-wrapper">
           <div className="content-header row">
-            <h1 className="content-header-title">
-              Payment Vouchers for Manager ID: {eti_id}
-            </h1>
+            {/* <h1 className="content-header-title ml-2">
+              Payment Vouchers 
+            </h1> */}
           </div>
           <div className="content-body">
             <section id="dashboard-ecommerce">

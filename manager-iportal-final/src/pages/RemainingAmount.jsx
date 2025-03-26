@@ -45,6 +45,13 @@ export const RemainingAmount = () => {
     GetRemainingAmount(searchTerm);
   }, []); // Initial fetch without search term
 
+  // Function to format phone number for WhatsApp
+  const formatPhoneNumberForWhatsApp = (phone) => {
+    // Remove any non-numeric characters
+    const cleaned = phone.replace(/\D/g, "");
+    // Add the international prefix (e.g., +92 for Pakistan)
+    return `+${cleaned}`;
+  };
   return (
     <>
       <ManagerTopbar />
@@ -107,12 +114,22 @@ export const RemainingAmount = () => {
                                 contact,
                                 remaining_amount,
                               } = rs;
-
+// Format phone number for WhatsApp
+const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(contact)}`;
                               return (
                                 <tr key={id}>
                                   <td className="border px-1">{name}</td>
                                   <td className="border px-1">{email}</td>
-                                  <td className="border px-1">{contact}</td>
+                                  <td className="border px-1">
+                                    <a
+                                      href={whatsappLink}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      style={{ color: "#25D366", textDecoration: "none" }}
+                                    >
+                                      {contact}
+                                    </a>
+                                  </td>
                                   <td className="border px-1">
                                     {remaining_amount}
                                   </td>

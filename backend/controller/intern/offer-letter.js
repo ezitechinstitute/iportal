@@ -28,7 +28,7 @@ const GetOfferLetterRequest = (req, res) => {
 
 // Insert Offer Letter Request
 const InsertOfferLetterRequest = (req, res) => {
-    const { username, email, ezi_id, intern_status, tech, reason } = req.body;
+    const { offer_letter_id,username, email, ezi_id, intern_status, tech, reason } = req.body;
 
     // Validation
     if (!username || !email || !ezi_id || !reason) {
@@ -40,11 +40,12 @@ const InsertOfferLetterRequest = (req, res) => {
 
     const sql = `
         INSERT INTO \`offer_letter_requests\` 
-        (\`username\`, \`email\`, \`ezi_id\`, \`intern_status\`, \`tech\`, \`reason\`, \`status\`) 
-        VALUES (?, ?, ?, ?, ?, ?, 'pending')
+        (\`offer_letter_id\`,\`username\`, \`email\`, \`ezi_id\`, \`intern_status\`, \`tech\`, \`reason\`, \`status\`) 
+        VALUES (?,?,?, ?, ?, ?, ?, 'pending')
     `;
     
     const values = [
+        offer_letter_id,
         username,
         email,
         ezi_id,

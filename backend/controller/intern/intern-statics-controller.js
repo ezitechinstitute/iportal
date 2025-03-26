@@ -155,8 +155,8 @@ const GetInternAverage = (req, res) => {
         return res.status(500).json({ message: 'Error querying attendance data', error: err.message });
       }
 
-      const totalWorkingHours = attendanceData[0].total_working_hours || 0;
-      const totalDays = attendanceData[0].total_days || 1; 
+      const totalWorkingHours = attendanceData[0]?.total_working_hours || 0;
+      const totalDays = attendanceData[0]?.total_days || 1; 
       const expectedTotalHours = totalDays * 3;
       let attendancePercentage = (totalWorkingHours / expectedTotalHours) * 100;
 
@@ -194,15 +194,15 @@ const calculateInternAverage = (id, callback) => {
   connection.query(sqlProject, [id], (err, projectData) => {
     if (err) return callback(err);
 
-    const totalObtMarks = projectData[0].total_obt_marks || 0;
-    const totalMarks = projectData[0].total_marks || 1;
+    const totalObtMarks = projectData[0]?.total_obt_marks || 0;
+    const totalMarks = projectData[0]?.total_marks || 1;
     const internProjectAverage = (totalObtMarks / totalMarks) * 100;
 
     connection.query(sqlAttendance, [id], (err, attendanceData) => {
       if (err) return callback(err);
 
-      const totalWorkingHours = attendanceData[0].total_working_hours || 0;
-      const totalDays = attendanceData[0].total_days || 1;
+      const totalWorkingHours = attendanceData[0]?.total_working_hours || 0;
+      const totalDays = attendanceData[0]?.total_days || 1;
       const expectedTotalHours = totalDays * 3;
       let attendancePercentage = (totalWorkingHours / expectedTotalHours) * 100;
 
@@ -218,7 +218,7 @@ const calculateInternAverage = (id, callback) => {
 
 // Modified controller
 const GetTopInternByAverage = (req, res) => {
-  // Join intern_table and intern_account on email to get eti_id and required fields
+  
   const sqlInterns = `
     SELECT 
       ia.eti_id,
@@ -227,8 +227,10 @@ const GetTopInternByAverage = (req, res) => {
       it.technology,
       it.email
     FROM intern_table it
-    INNER JOIN intern_accounts ia ON it.email = ia.email
+    INNER JOIN intern_accounts ia ON it.email = ia.email 
+    WHERE ia.int_status = 'Active'
   `;
+
 
   connection.query(sqlInterns, (err, interns) => {
     if (err) {

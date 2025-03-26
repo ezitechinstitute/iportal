@@ -52,7 +52,7 @@ const ApexChart = () => {
 
   const getInternAverage = async () => {
     try {
-      const response = await axios.get(`http://localhost:8088/get-int-avg`, { params: { id } });
+      const response = await axios.get(`https://api.ezitech.org/get-int-avg`, { params: { id } });
       const finalAvg = response.data?.final_average ?? 0; // Ensure a valid value
       setAverage(finalAvg);
     } catch (error) {

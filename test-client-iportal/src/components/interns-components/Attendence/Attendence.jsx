@@ -4,6 +4,7 @@ import { AttendaceButton } from "../AttendaceButton";
 import InternTopbar from "../InternTopbar/InternTopbar";
 import InternSidebar from "../InternSidebar";
 import axios from "axios";
+import {Footer} from '../../Footer';
 
 export const Attendence = () => {
   const [attendance, setAttendance] = useState([]);
@@ -96,20 +97,8 @@ export const Attendence = () => {
                 </tbody>
               </table>
             </div>
+            <Footer/>
           </div>
-
-          <footer className="footer footer-static footer-light" style={{ padding: "0px", margin: "0px", marginTop: "154px" }}>
-            <div></div>
-            <p className="clearfix mb-0" style={{ marginLeft: "10px" }}>
-              <span className="mt-25">
-                COPYRIGHT &copy; 2016-{currentYear}
-                <a className="ml-25" href="https://ezitech.org/html-css-internship-opportunities/" target="_blank" rel="noopener noreferrer">
-                  Ezitech Institute
-                </a>
-                <span className="d-none d-sm-inline-block">, All rights Reserved</span>
-              </span>
-            </p>
-          </footer>
         </div>
       </div>
     </>

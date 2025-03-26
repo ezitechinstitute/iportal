@@ -643,6 +643,54 @@ const GetTestCompleteInternsFrameWork = (req, res) => {
   });
 };
 
+
+
+const GetInternStats = (req, res) => {
+  const sql = `
+    SELECT 
+      it.intern_type, 
+      MONTH(it.created_at) as month, 
+      COUNT(*) as count 
+    FROM 
+      intern_table it
+    INNER JOIN 
+      intern_accounts ia 
+    ON 
+      it.email = ia.email
+    WHERE 
+      YEAR(it.created_at) = YEAR(CURDATE()) 
+      AND ia.int_status = 'Active'
+    GROUP BY 
+      it.intern_type, MONTH(it.created_at) 
+    ORDER BY 
+      MONTH(it.created_at);
+  `;
+
+  connection.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: "Database query error", details: err });
+    } else {
+      // Initialize data for onsite and remote interns
+      const data = {
+        onsite: Array(12).fill(0),
+        remote: Array(12).fill(0),
+      };
+
+      // Process the query results
+      results.forEach((row) => {
+        if (row.intern_type === "Onsite") {
+          data.onsite[row.month - 1] = row.count;
+        } else if (row.intern_type === "Remote") {
+          data.remote[row.month - 1] = row.count;
+        }
+      });
+
+      // Return the processed data
+      return res.status(200).json(data);
+    }
+  });
+};
+
 module.exports = {
  
   GetActiveInterns,
@@ -655,4 +703,5 @@ module.exports = {
   GetTestInternsFrameWork,
   GetContactInternsFrameWork,
   GetTestCompleteInternsFrameWork,
+  GetInternStats
 };

@@ -65,7 +65,7 @@ export const InternTasks = () => {
                 <div className="col-12">
                   <div className="card">
                     <div className="card-header d-flex justify-content-between align-items-center">
-                    <h2 className="card-title mb-3 mt-[-5px] font-weight-bold ml-[-10px]">Tasks</h2>
+                      <h2 className="card-title mb-3 mt-[-5px] font-weight-bold ml-[-10px]">Tasks</h2>
 
                       {/* Status Filter Buttons */}
                       <div className="btn-group">
@@ -108,121 +108,124 @@ export const InternTasks = () => {
                         <div className="col-12">
                           <div className="card">
                             <div className="card-datatable">
-                              <table className="table table-striped table-hover table-bordered text-center">
-                                <thead className="thead-light">
-                                  <tr>
-                                    <th>TITLE</th>
-                                    <th>START DATE</th>
-                                    <th>DURATION</th>
-                                    <th>DAYS</th>
-                                    <th>POINTS</th>
-                                    <th>REVIEW</th>
-                                    <th>STATUS</th>
-                                    <th>ACTION</th>
-                                  </tr>
-                                </thead>
+                              {/* Wrapper for horizontal scrolling */}
+                              <div style={{ overflowX: "auto" }}>
+                                <table className="table table-striped table-hover table-bordered text-center">
+                                  <thead className="thead-light">
+                                    <tr>
+                                      <th>TITLE</th>
+                                      <th>START DATE</th>
+                                      <th>DURATION</th>
+                                      <th>DAYS</th>
+                                      <th>POINTS</th>
+                                      <th>REVIEW</th>
+                                      <th>STATUS</th>
+                                      <th>ACTION</th>
+                                    </tr>
+                                  </thead>
 
-                                <tbody>
-                                  {Array.isArray(filtered) &&
-                                    filtered.map((rs) => {
-                                      const {
-                                        task_id,
-                                        task_title,
-                                        task_start,
-                                        task_duration,
-                                        task_days,
-                                        task_points,
-                                        task_status,
-                                        task_approve,
-                                        task_obt_points,
-                                        review,
-                                      } = rs;
+                                  <tbody>
+                                    {Array.isArray(filtered) &&
+                                      filtered.map((rs) => {
+                                        const {
+                                          task_id,
+                                          task_title,
+                                          task_start,
+                                          task_duration,
+                                          task_days,
+                                          task_points,
+                                          task_status,
+                                          task_approve,
+                                          task_obt_points,
+                                          review,
+                                        } = rs;
 
-                                      const date = new Date(task_start).toLocaleDateString("en-PK");
+                                        const date = new Date(task_start).toLocaleDateString("en-PK");
 
-                                      return (
-                                        <tr key={task_id}>
-                                          <td className="font-weight-bold">{task_title}</td>
-                                          <td>{date}</td>
-                                          <td>{task_duration}</td>
-                                          <td className="text-right">{task_days}</td>
-                                          <td className="text-right">
-                                            <span className="badge badge-pill badge-primary px-2 py-1">
-                                              {task_obt_points} / {task_points}
-                                            </span>
-                                          </td>
-                                          <td>{review ? review : <span className="text-muted">---</span>}</td>
-                                          <td>
-                                            <span
-                                              className={`badge badge-pill px-2 py-1 ${task_approve === null
-                                                  ? task_status === "Ongoing"
-                                                    ? "badge-info"
-                                                    : task_status === "Rejected"
-                                                      ? "badge-danger"
-                                                      : task_status === "Approved"
-                                                        ? "badge-success"
-                                                        : "badge-secondary"
-                                                  : task_approve === 1
-                                                    ? "badge-success"
-                                                    : "badge-danger"
-                                                }`}
-                                            >
-                                              {task_status}
-                                            </span>
-                                          </td>
-                                          <td>
-                                            <div className="dropdown">
-                                              <button
-                                                type="button"
-                                                className="btn btn-sm btn-warning dropdown-toggle"
-                                                data-toggle="dropdown"
+                                        return (
+                                          <tr key={task_id}>
+                                            <td className="font-weight-bold">{task_title}</td>
+                                            <td>{date}</td>
+                                            <td>{task_duration}</td>
+                                            <td className="text-right">{task_days}</td>
+                                            <td className="text-right">
+                                              <span className="badge badge-pill badge-primary px-2 py-1">
+                                                {task_obt_points} / {task_points}
+                                              </span>
+                                            </td>
+                                            <td>{review ? review : <span className="text-muted">---</span>}</td>
+                                            <td>
+                                              <span
+                                                className={`badge badge-pill px-2 py-1 ${task_approve === null
+                                                    ? task_status === "Ongoing"
+                                                      ? "badge-info"
+                                                      : task_status === "Rejected"
+                                                        ? "badge-danger"
+                                                        : task_status === "Approved"
+                                                          ? "badge-success"
+                                                          : "badge-secondary"
+                                                    : task_approve === 1
+                                                      ? "badge-success"
+                                                      : "badge-danger"
+                                                  }`}
                                               >
-                                                Actions
-                                              </button>
-                                              <div className="dropdown-menu">
-                                                <a
-                                                  className="dropdown-item"
-                                                  href="#!"
-                                                  data-toggle="modal"
-                                                  data-target="#large"
-                                                  onClick={() =>
-                                                    setValues({
-                                                      id: id,
-                                                      taskId: task_id,
-                                                      points: task_points,
-                                                    })
-                                                  }
+                                                {task_status}
+                                              </span>
+                                            </td>
+                                            <td>
+                                              <div className="dropdown">
+                                                <button
+                                                  type="button"
+                                                  className="btn btn-sm btn-warning dropdown-toggle"
+                                                  data-toggle="dropdown"
                                                 >
-                                                  <i className="fas fa-eye mr-2"></i> View Details
-                                                </a>
-                                                {task_status !== "Rejected" &&
-                                                  task_status !== "Approved" &&
-                                                  task_status !== "Rejected" && (
-                                                    <a
-                                                      className="dropdown-item"
-                                                      href="#!"
-                                                      data-toggle="modal"
-                                                      data-target="#default2"
-                                                      onClick={() =>
-                                                        setValues({
-                                                          id: id,
-                                                          taskId: task_id,
-                                                          taskTitle: task_title,
-                                                          points: task_points,
-                                                        })
-                                                      }
-                                                    >
-                                                      <i className="fas fa-upload mr-2"></i> Submit Task
-                                                    </a>
-                                                  )}
+                                                  Actions
+                                                </button>
+                                                <div className="dropdown-menu">
+                                                  <a
+                                                    className="dropdown-item"
+                                                    href="#!"
+                                                    data-toggle="modal"
+                                                    data-target="#large"
+                                                    onClick={() =>
+                                                      setValues({
+                                                        id: id,
+                                                        taskId: task_id,
+                                                        points: task_points,
+                                                      })
+                                                    }
+                                                  >
+                                                    <i className="fas fa-eye mr-2"></i> View Details
+                                                  </a>
+                                                  {task_status !== "Rejected" &&
+                                                    task_status !== "Approved" &&
+                                                    task_status !== "Rejected" && (
+                                                      <a
+                                                        className="dropdown-item"
+                                                        href="#!"
+                                                        data-toggle="modal"
+                                                        data-target="#default2"
+                                                        onClick={() =>
+                                                          setValues({
+                                                            id: id,
+                                                            taskId: task_id,
+                                                            taskTitle: task_title,
+                                                            points: task_points,
+                                                          })
+                                                        }
+                                                      >
+                                                        <i className="fas fa-upload mr-2"></i> Submit Task
+                                                      </a>
+                                                    )}
+                                                </div>
                                               </div>
-                                            </div>
-                                          </td>
-                                        </tr>
-                                      );
-                                    })}
-                                </tbody>
-                              </table>
+                                            </td>
+                                          </tr>
+                                        );
+                                      })}
+                                  </tbody>
+                                </table>
+                              </div>
                             </div>
                           </div>
                         </div>

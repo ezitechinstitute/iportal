@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FiHome, FiClipboard, FiCheckSquare, FiCalendar, FiMessageSquare, 
-         FiImage, FiUser, FiGrid, FiCheckCircle } from "react-icons/fi";
+         FiImage, FiUser, FiGrid, FiCheckCircle, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 
 export const InternSidebar = () => {
@@ -11,6 +11,7 @@ export const InternSidebar = () => {
     tech: sessionStorage.getItem("technology"),
   });
   const [activeLink, setActive] = useState(" ");
+  const [isComplaintsOpen, setComplaintsOpen] = useState(false); // State to manage dropdown
 
   return (
     <>
@@ -103,14 +104,14 @@ export const InternSidebar = () => {
                     </span>
                   </NavLink>
                 </li>
-                <li className="undefined" style={{ opacity: "0.4" }}>
+                {/* <li className="undefined" style={{ opacity: "0.4" }}>
                   <NavLink className="d-flex align-items-center" to="#">
                     <FiMessageSquare />
                     <span className="menu-item" data-i18n="Feedback">
                       Feedback
                     </span>
                   </NavLink>
-                </li>
+                </li> */}
                 <li className="undefined" style={{ opacity: "0.4" }}>
                   <NavLink className="d-flex align-items-center" to="#">
                     <FiImage />
@@ -214,17 +215,48 @@ export const InternSidebar = () => {
                   </NavLink>
                 </li>
 
-                <li className={activeLink === "feedback" ? "active" : "undefined"}>
-                  <NavLink
+                {/* Feedback Dropdown */}
+                <li className={`nav-item has-sub ${isComplaintsOpen ? "open" : ""}`}>
+                  <a
                     className="d-flex align-items-center"
-                    onClick={() => setActive("feedback")}
-                    to="/internFeedback"
+                    onClick={() => setComplaintsOpen(!isComplaintsOpen)}
                   >
                     <FiMessageSquare />
+                    <span className="menu-item pr-3" data-i18n="Feedback">
+                      Complaints
+                    </span>
+                    {isComplaintsOpen ? <FiChevronUp /> : <FiChevronDown />}
+                  </a>
+                  <ul className="menu-content">
+                    <li>
+                      <NavLink
+                        className="d-flex align-items-center"
+                        to="/manager-complaint"
+                      >
+                        <span className="menu-item" data-i18n="ManagerComplaint">
+                          Manager Complaint
+                        </span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        className="d-flex align-items-center"
+                        to="/supervisor-complaint"
+                      >
+                        <span className="menu-item" data-i18n="SupervisorComplaint">
+                          Supervisor Complaint
+                        </span>
+                      </NavLink>
+                    </li>
+                    {/* <li>
+                  <NavLink className="d-flex align-items-center" to="/internFeedback">
+        
                     <span className="menu-item" data-i18n="Feedback">
                       Feedback
                     </span>
                   </NavLink>
+                </li> */}
+                  </ul>
                 </li>
 
                 <li className={activeLink === "post" ? "active" : "undefined"}>
@@ -253,7 +285,7 @@ export const InternSidebar = () => {
                   </NavLink>
                 </li>
 
-                <li className="undefined" style={{ opacity: "0.4" }}>
+                <li className="undefined" style={{ opacity: "0.1" }}>
                   <NavLink className="d-flex align-items-center" to="#">
                     <FiUser />
                     <span

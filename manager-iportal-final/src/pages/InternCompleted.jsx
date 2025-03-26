@@ -92,7 +92,7 @@ export const InternCompleted = () => {
     // Remove any non-numeric characters
     const cleaned = phone.replace(/\D/g, "");
     // Add the international prefix (e.g., +92 for Pakistan)
-    return `+92${cleaned}`;
+    return `+${cleaned}`;
   };
 
   return (

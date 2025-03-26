@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DataSet1 } from "../data/manager-data/Data";
 import { SupervisorChartOne } from "./SupervisorChartOne";
-import { FiRefreshCw, FiUsers, FiClipboard, FiLoader, FiCheckSquare, FiX } from "react-icons/fi"; // Added relevant icons
+import { FiRefreshCw, FiUsers, FiClipboard, FiLoader, FiCheckSquare, FiX } from "react-icons/fi";
+import axios from "axios";
 
 export const SupervisorDashboard = () => {
   const username = sessionStorage.getItem("username");
-  const [userData, SetUserData] = useState({
+  const managerid = sessionStorage.getItem("managerid");
+  const [stats, setStats] = useState({
+    active: 0,
+    test: 0,
+    progress: 0,
+    completed: 0
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [userData] = useState({
     labels: DataSet1.map((rs) => rs.Years),
     datasets: [
       {
@@ -16,6 +27,132 @@ export const SupervisorDashboard = () => {
       },
     ],
   });
+
+  const fetchStats = async () => {
+    try {
+      setLoading(true);
+      const baseUrl = "https://api.ezitech.org";
+      
+      const [activeRes, testRes, progressRes, completedRes] = await Promise.all([
+        axios.get(`${baseUrl}/active-interns/${managerid}`),
+        axios.get(`${baseUrl}/test-interns/${managerid}`),
+        axios.get(`${baseUrl}/progress-interns/${managerid}`),
+        axios.get(`${baseUrl}/completed-interns/${managerid}`)
+      ]);
+
+      setStats({
+        active: activeRes.data.active_interns_count || 0,
+        test: testRes.data.test_interns_count || 0,
+        progress: progressRes.data.progress_interns_count || 0,
+        completed: completedRes.data.completed_interns_count || 0
+      });
+    } catch (err) {
+      console.error("Error fetching stats:", err);
+      setError("Failed to load statistics");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (managerid) {
+      fetchStats();
+    }
+  }, [managerid]);
+
+  const refreshStats = () => {
+    setError(null);
+    fetchStats();
+  };
+
+  const [chartData, setChartData] = useState({
+    onsite: {
+        labels: [],
+        datasets: [{
+            label: 'Onsite Interns',
+            data: [],
+            backgroundColor: '#3275db',
+            borderColor: '#3275db'
+        }]
+    },
+    remote: {
+        labels: [],
+        datasets: [{
+            label: 'Remote Interns',
+            data: [],
+            backgroundColor: '#6c757d',
+            borderColor: '#6c757d'
+        }]
+    }
+});
+
+// Add this to your fetchStats function
+const fetchChartData = async () => {
+  const baseUrl = "https://api.ezitech.org";
+    try {
+        const [onsiteRes, remoteRes] = await Promise.all([
+            axios.get(`${baseUrl}/onsite-interns/${managerid}`),
+            axios.get(`${baseUrl}/remote-interns/${managerid}`)
+        ]);
+
+        setChartData({
+            onsite: {
+                labels: onsiteRes.data.data.labels,
+                datasets: [{
+                    ...chartData.onsite.datasets[0],
+                    data: onsiteRes.data.data.data
+                }]
+            },
+            remote: {
+                labels: remoteRes.data.data.labels,
+                datasets: [{
+                    ...chartData.remote.datasets[0],
+                    data: remoteRes.data.data.data
+                }]
+            }
+        });
+    } catch (err) {
+        console.error("Error fetching chart data:", err);
+    }
+};
+
+// Call it in your useEffect
+useEffect(() => {
+    if (managerid) {
+        fetchStats();
+        fetchChartData();
+    }
+}, [managerid]);
+
+  if (loading) {
+    return (
+      <div className="app-content content">
+        <div className="content-body">
+          <div className="text-center py-5">
+            <div className="spinner-border text-primary" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="app-content content">
+        <div className="content-body">
+          <div className="alert alert-danger">
+            {error}
+            <button className="btn btn-sm btn-primary ml-2" onClick={refreshStats}>
+              <FiRefreshCw className="mr-1" /> Retry
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="app-content content ">
@@ -24,7 +161,6 @@ export const SupervisorDashboard = () => {
         <div className="content-wrapper">
           <div className="content-header row"></div>
           <div className="content-body">
-            {/* <!-- Dashboard --> */}
             <section id="dashboard-ecommerce">
               <div className="card card-congratulation-medal rounded-0">
                 <div className="card-body">
@@ -32,27 +168,27 @@ export const SupervisorDashboard = () => {
                 </div>
               </div>
               <div className="row match-height">
-                {/* <!-- Medal Card --> */}
-                <div class="col-xl-4 col-md-6 col-12">
-                  <div class="card card-congratulation-medal p-1">
-                    <div class="card-body">
+                {/* Medal Card */}
+                <div className="col-xl-4 col-md-6 col-12">
+                  <div className="card card-congratulation-medal p-1">
+                    <div className="card-body">
                       <h5>Congratulations 🎉 {username}!</h5>
-                      <p class="card-text font-small-3">
+                      <p className="card-text font-small-3">
                         You have earn in March
                       </p>
-                      <h3 class="mb-75 pt-70">
+                      <h3 className="mb-75 pt-70">
                         <a href="javascript:void(0);">PKR : 3,499</a>
                       </h3>
                       <button
                         type="button"
-                        class="btn btn-primary"
+                        className="btn btn-primary"
                         style={{ marginTop: "20px" }}
                       >
                         Withdraw
                       </button>
                       <img
                         src="./images/coin.svg"
-                        class="congratulation-medal"
+                        className="congratulation-medal"
                         alt="Medal Pic"
                         width={100}
                         style={{ marginTop: "85px" }}
@@ -60,72 +196,77 @@ export const SupervisorDashboard = () => {
                     </div>
                   </div>
                 </div>
-                {/* <!--/ Medal Card --> */}
 
-                {/* <!-- Statistics Card --> */}
-                <div class="col-12 col-xl-8 col-md-6">
-                  <div class="card card-statistics">
-                    <div class="card-header">
-                      <h4 class="card-title">Statistics</h4>
-                      <div class="d-flex align-items-center">
-                        <p class="card-text font-small-2 mr-25 mb-0">
-                          Updated 1 month ago
+                {/* Statistics Card */}
+                <div className="col-12 col-xl-8 col-md-6">
+                  <div className="card card-statistics">
+                    <div className="card-header">
+                      <h4 className="card-title">Statistics</h4>
+                      <div className="d-flex align-items-center">
+                        <p className="card-text font-small-2 mr-25 mb-0">
+                          Updated just now
                         </p>
+                        <button 
+                          className="btn btn-sm btn-outline-primary ml-auto"
+                          onClick={refreshStats}
+                        >
+                          <FiRefreshCw size={14} />
+                        </button>
                       </div>
                     </div>
-                    <div class="card-body statistics-body">
-                      <div class="row">
-                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                          <div class="media">
-                            <div class="avatar bg-light-primary mr-2">
-                              <div class="avatar-content">
-                                <FiUsers className="avatar-icon" /> {/* Replaced data-feather="users" */}
+                    <div className="card-body statistics-body">
+                      <div className="row">
+                        <div className="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
+                          <div className="media">
+                            <div className="avatar bg-light-primary mr-2">
+                              <div className="avatar-content">
+                                <FiUsers className="avatar-icon" />
                               </div>
                             </div>
-                            <div class="media-body my-auto">
-                              <h4 class="font-weight-bolder mb-0">230k</h4>
-                              <p class="card-text font-small-3 mb-0">Interns</p>
+                            <div className="media-body my-auto">
+                              <h4 className="font-weight-bolder mb-0">{stats.active}</h4>
+                              <p className="card-text font-small-3 mb-0">Active Interns</p>
                             </div>
                           </div>
                         </div>
-                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
-                          <div class="media">
-                            <div class="avatar bg-light-info mr-2">
-                              <div class="avatar-content">
-                                <FiClipboard className="avatar-icon" /> {/* Replaced data-feather="clipboard" */}
+                        <div className="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
+                          <div className="media">
+                            <div className="avatar bg-light-info mr-2">
+                              <div className="avatar-content">
+                                <FiClipboard className="avatar-icon" />
                               </div>
                             </div>
-                            <div class="media-body my-auto">
-                              <h4 class="font-weight-bolder mb-0">8.549k</h4>
-                              <p class="card-text font-small-3 mb-0">Test</p>
+                            <div className="media-body my-auto">
+                              <h4 className="font-weight-bolder mb-0">{stats.test}</h4>
+                              <p className="card-text font-small-3 mb-0">Test</p>
                             </div>
                           </div>
                         </div>
-                        <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-sm-0">
-                          <div class="media">
-                            <div class="avatar bg-light-danger mr-2">
-                              <div class="avatar-content">
-                                <FiLoader className="avatar-icon" /> {/* Replaced data-feather="loader" */}
+                        <div className="col-xl-3 col-sm-6 col-12 mb-2 mb-sm-0">
+                          <div className="media">
+                            <div className="avatar bg-light-danger mr-2">
+                              <div className="avatar-content">
+                                <FiLoader className="avatar-icon" />
                               </div>
                             </div>
-                            <div class="media-body my-auto">
-                              <h4 class="font-weight-bolder mb-0">1.423k</h4>
-                              <p class="card-text font-small-3 mb-0">
+                            <div className="media-body my-auto">
+                              <h4 className="font-weight-bolder mb-0">{stats.progress}</h4>
+                              <p className="card-text font-small-3 mb-0">
                                 Progress
                               </p>
                             </div>
                           </div>
                         </div>
-                        <div class="col-xl-3 col-sm-6 col-12">
-                          <div class="media">
-                            <div class="avatar bg-light-success mr-2">
-                              <div class="avatar-content">
-                                <FiCheckSquare className="avatar-icon" /> {/* Replaced data-feather="check-square" */}
+                        <div className="col-xl-3 col-sm-6 col-12">
+                          <div className="media">
+                            <div className="avatar bg-light-success mr-2">
+                              <div className="avatar-content">
+                                <FiCheckSquare className="avatar-icon" />
                               </div>
                             </div>
-                            <div class="media-body my-auto">
-                              <h4 class="font-weight-bolder mb-0">9745k</h4>
-                              <p class="card-text font-small-3 mb-0">
+                            <div className="media-body my-auto">
+                              <h4 className="font-weight-bolder mb-0">{stats.completed}</h4>
+                              <p className="card-text font-small-3 mb-0">
                                 Completed
                               </p>
                             </div>
@@ -135,53 +276,10 @@ export const SupervisorDashboard = () => {
                     </div>
                   </div>
                 </div>
-                {/* <!--/ Statistics Card --> */}
-
-                {/* Commented Section with Replaced Icons */}
-                {/* <div className="col-xl-3 col-md-6 col-12">
-                  <div className="card card-congratulation-medal">
-                    <div className="card-body text-center mt-2">
-                      <FiUsers style={{ color: "#988ff4" }} /> {/* Replaced data-feather="users" *}
-                      <h3 className="roboto mb-75 mt-2 pt-10">9</h3>
-                      <h5 className="roboto mb-75 mt-2 pt-10">Total Interns</h5>
-                    </div>
-                  </div>
-                </div> */}
-
-                {/* <div className="col-xl-3 col-md-6 col-12">
-                  <div className="card card-congratulation-medal">
-                    <div className="card-body text-center mt-2">
-                      <FiClipboard style={{ color: "#988ff4" }} /> {/* Replaced data-feather="clipboard" *}
-                      <h3 className="roboto mb-75 mt-2 pt-10">7</h3>
-                      <h5 className="roboto mb-75 mt-2 pt-10">Test</h5>
-                    </div>
-                  </div>
-                </div> */}
-
-                {/* <div className="col-xl-3 col-md-6 col-12">
-                  <div className="card card-congratulation-medal">
-                    <div className="card-body text-center mt-2">
-                      <FiLoader style={{ color: "#988ff4" }} /> {/* Replaced data-feather="loader" *}
-                      <h3 className="roboto mb-75 mt-2 pt-10">0</h3>
-                      <h5 className="roboto mb-75 mt-2 pt-10">In Progress</h5>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-xl-3 col-md-6 col-12">
-                  <div className="card card-congratulation-medal">
-                    <div className="card-body text-center mt-2">
-                      <FiCheckSquare style={{ color: "#988ff4" }} /> {/* Replaced data-feather="check-square" *}
-                      <h3 className="roboto mb-75 mt-2 pt-10">0</h3>
-                      <h5 className="roboto mb-75 mt-2 pt-10">Completed</h5>
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </section>
-
-            {/* <!-- ChartJS section start --> */}
-            <section id="chartjs-chart">
+{/* <!-- ChartJS section start --> */}
+<section id="chartjs-chart">
               <div className="row">
                 {/* <!--Bar Chart Start --> */}
                 <div className="col-xl-6 col-12">
@@ -192,7 +290,8 @@ export const SupervisorDashboard = () => {
                       </div>
                     </div>
                     <div className="card-body">
-                      <SupervisorChartOne chartData={userData} />
+                    <SupervisorChartOne chartData={chartData.onsite} />
+                   
                     </div>
                   </div>
                 </div>
@@ -207,7 +306,7 @@ export const SupervisorDashboard = () => {
                       </div>
                     </div>
                     <div className="card-body">
-                      <SupervisorChartOne chartData={userData} />
+                    <SupervisorChartOne chartData={chartData.remote} />
                     </div>
                   </div>
                 </div>
@@ -215,6 +314,7 @@ export const SupervisorDashboard = () => {
               </div>
             </section>
 
+            
             <section id="chartjs-chart">
               <div className="row match-height">
                 

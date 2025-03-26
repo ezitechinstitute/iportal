@@ -1,6 +1,7 @@
 
 .app-content.content {
     padding: 0 15px;
+    overflow: hidden;
   }
   
  
@@ -49,3 +50,49 @@
     white-space: nowrap; 
   }
   
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Two columns: stats on the left, chart on the right */
+    gap: 20px; /* Space between columns */
+    align-items: start; /* Align items to the top */
+  }
+  
+  .stats-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between stat items */
+  }
+  
+  .chart-column {
+    width: 100%;
+  }
+  
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+  }
+  
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .grid-container {
+      grid-template-columns: 1fr; /* Stack columns on smaller screens */
+    }
+  
+    .stats-column {
+      order: 1; /* Move stats below the chart on mobile */
+    }
+  
+    .chart-column {
+      order: 1; /* Move chart above the stats on mobile */
+      transform: translateX(-20px); 
+      margin-left: -50px;
+    }
+  }

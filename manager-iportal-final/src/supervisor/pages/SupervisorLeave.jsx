@@ -8,99 +8,114 @@ import { Pagination } from "../../components/Pagination";
 const SupervisorLeave = () => {
   const navigate = useNavigate();
   const [token, setToken] = useState(sessionStorage.getItem("token"));
-  // headers: { "x-access-token": token }
   const check = sessionStorage.getItem("isLoggedIn");
   const supid = sessionStorage.getItem("managerid");
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
 
   // Pagination
-  const [currentPage, settCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [dataLimit, setDataLimit] = useState(50);
-
-  const [taskData, setTaskData] = useState({
-    etiId: null,
-    taskNo: null,
-    projectId: null,
-  });
 
   useEffect(() => {
     if (!check) {
       navigate("/supervisor");
     }
-  });
+  }, [check, navigate]);
 
   const GetInternLeaves = async (page) => {
-    // setLoader(true);
-    await axios
-      .get(`https://api.ezitech.org/get-intern-leaves/${supid}`, {
-        params: {
-          page: page,
-          limit: dataLimit,
-        },
-        headers: { "x-access-token": token },
-      })
-      .then((res) => {
-        setData(res.data.data);
-       
-        setFilteredData(data);
-        settCurrentPage(res.data.meta.page);
-        setTotalPages(res.data.meta.totalPages);
-        // setLoader(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  // useEffect(() => {
-  //   const filter = data.filter((item) =>
-  //     item.leave_status.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-
-  //   setFilteredData(filter);
-  // }, [searchTerm, data]);
-
-  const handlePageChange = (page) => {
-    settCurrentPage(page);
+    try {
+      const response = await axios.get(
+        `https://api.ezitech.org/get-intern-leaves/${supid}`,
+        {
+          params: {
+            page: page,
+            limit: dataLimit,
+          },
+          headers: { "x-access-token": token },
+        }
+      );
+      
+      console.log(response.data); // Debugging
+      setData(response.data.data || response.data);
+      setFilteredData(response.data.data || response.data);
+      
+      if (response.data.meta) {
+        setCurrentPage(response.data.meta.page || 1);
+        setTotalPages(response.data.meta.totalPages || 1);
+      }
+    } catch (err) {
+      console.error(err);
+      setData([]);
+      setFilteredData([]);
+    }
   };
 
   useEffect(() => {
-    // console.log(data);
-    // setInterval(() => {
+    if (statusFilter === "All") {
+      setFilteredData(data);
+    } else {
+      setFilteredData(
+        data.filter((item) => {
+          if (statusFilter === "Pending") {
+            return item.leave_status === null;
+          } else if (statusFilter === "Approved") {
+            return item.leave_status === 1;
+          } else if (statusFilter === "Rejected") {
+            return item.leave_status === 0;
+          }
+          return true;
+        })
+      );
+    }
+  }, [statusFilter, data]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  useEffect(() => {
     GetInternLeaves(currentPage);
-    // }, 2000);
   }, [currentPage, dataLimit]);
 
   const ApproveLeave = async (id) => {
-    await axios
-      .put(`https://api.ezitech.org/approve-int-leave/${id}`)
-      .then((res) => {
-        alert(res.data.msg);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const res = await axios.put(
+        `https://api.ezitech.org/approve-int-leave/${id}`,
+        {},
+        { headers: { "x-access-token": token } }
+      );
+      alert(res.data.msg || "Leave approved successfully");
+      GetInternLeaves(currentPage);
+    } catch (err) {
+      console.error(err);
+      alert("Error approving leave: " + (err.response?.data?.error || err.message));
+    }
+  };
+  
+  const RejectLeave = async (id) => {
+    try {
+      const res = await axios.put(
+        `https://api.ezitech.org/reject-int-leave/${id}`,
+        {},
+        { headers: { "x-access-token": token } }
+      );
+      alert(res.data.msg || "Leave rejected successfully");
+      GetInternLeaves(currentPage);
+    } catch (err) {
+      console.error(err);
+      alert("Error rejecting leave: " + (err.response?.data?.error || err.message));
+    }
   };
 
-  const RejectLeave = async (id) => {
-    await axios
-      .put(`https://api.ezitech.org/reject-int-leave/${id}`)
-      .then((res) => {
-        alert(res.data.msg);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   return (
     <>
       <SupervisorTopbar />
       <SupervisorSidebar />
 
-      <div className="app-content content ">
+      <div className="app-content content">
         <div className="content-overlay"></div>
         <div className="header-navbar-shadow"></div>
         <div className="content-wrapper">
@@ -110,179 +125,200 @@ const SupervisorLeave = () => {
               <div className="row" id="table-hover-animation">
                 <div className="col-12">
                   <div className="card">
-                    <div className="card-header">
-                      <h4 className="card-title">Leave</h4>
+                    <div className="card-header d-flex justify-content-between align-items-center flex-wrap">
+                      <h4 className="card-title mb-2 mb-md-0">Intern Leaves</h4>
 
-                      <div class="ag-btns d-flex flex-wrap">
-                        {/* <input
-                        type="text"
-                        class="ag-grid-filter form-control w-50 mr-1 mb-1 mb-sm-0 btn1"
-                        id="filter-text-box"
-                        placeholder="Search...."
-                      /> */}
-                        <label htmlFor="" style={{ marginTop: "8px" }}>
-                          Select Rows
-                        </label>
-                        &nbsp;
-                        <select
-                          className="form-control w-25"
-                          name=""
-                          id=""
-                          onChange={(e) => setDataLimit(e.target.value)}
-                        >
-                          <option value={50}>50</option>
-                          <option value={100}>100</option>
-                          <option value={200}>200</option>
-                          <option value={300}>300</option>
-                          <option value={500}>500</option>
-                        </select>
-                        &nbsp; &nbsp;
-                        <label htmlFor="" style={{ marginTop: "8px" }}>
-                          By Status
-                        </label>
-                        &nbsp;
-                        <select
-                          name="pStatus"
-                          id=""
-                          className="ag-grid-filter form-control w-25"
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                        >
-                          <option selected disabled>
+                      <div className="d-flex align-items-center flex-wrap">
+                        {/* Rows per page selector */}
+                        <div className="btn-group mr-2 mb-2 mb-md-0">
+                          <button
+                            className={`btn ${
+                              dataLimit === 50 ? "btn-primary" : "btn-outline-primary"
+                            }`}
+                            onClick={() => setDataLimit(50)}
+                          >
+                            50
+                          </button>
+                          <button
+                            className={`btn ${
+                              dataLimit === 100 ? "btn-primary" : "btn-outline-primary"
+                            }`}
+                            onClick={() => setDataLimit(100)}
+                          >
+                            100
+                          </button>
+                          <button
+                            className={`btn ${
+                              dataLimit === 200 ? "btn-primary" : "btn-outline-primary"
+                            }`}
+                            onClick={() => setDataLimit(200)}
+                          >
+                            200
+                          </button>
+                        </div>
+
+                        {/* Status filter buttons */}
+                        <div className="btn-group">
+                          <button
+                            className={`btn ${
+                              statusFilter === "All" ? "btn-info" : "btn-outline-info"
+                            }`}
+                            onClick={() => setStatusFilter("All")}
+                          >
                             All
-                          </option>
-                          <option value={null}>Pending</option>
-                          <option value={0}>Rejected</option>
-                          <option value={1}>Approved</option>
-                        </select>
+                          </button>
+                          <button
+                            className={`btn ${
+                              statusFilter === "Pending" ? "btn-info" : "btn-outline-info"
+                            }`}
+                            onClick={() => setStatusFilter("Pending")}
+                          >
+                            Pending
+                          </button>
+                          <button
+                            className={`btn ${
+                              statusFilter === "Approved" ? "btn-info" : "btn-outline-info"
+                            }`}
+                            onClick={() => setStatusFilter("Approved")}
+                          >
+                            Approved
+                          </button>
+                          <button
+                            className={`btn ${
+                              statusFilter === "Rejected" ? "btn-info" : "btn-outline-info"
+                            }`}
+                            onClick={() => setStatusFilter("Rejected")}
+                          >
+                            Rejected
+                          </button>
+                        </div>
                       </div>
                     </div>
 
-                    <section id="complex-header-datatable">
-                      <div class="row">
-                        <div class="col-12">
-                          <div class="card">
-                            <div class="card-datatable">
-                              <table class="dt-complex-header table table-bordered table-responsive text-center">
-                                <thead>
-                                  <tr>
-                                    <th>ETI_ID</th>
-                                    <th>Name</th>
-                                    <th>From-Date</th>
-                                    <th>To-Date</th>
-                                    <th class="cell-fit">Reason</th>
-                                    <th>Days</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {Array.isArray(data)
-                                    ? data.map((rs) => {
-                                        const {
-                                          leave_id,
-                                          eti_id,
-                                          name,
-                                          from_date,
-                                          to_date,
-                                          reason,
-                                          days,
-                                          leave_status,
-                                        } = rs;
+                    <div className="card-content">
+                      <div className="card-body">
+                        <div className="table-responsive">
+                          <table className="table table-bordered table-hover text-center">
+                            <thead>
+                              <tr>
+                                <th>ETI_ID</th>
+                                <th>Name</th>
+                                <th>From-Date</th>
+                                <th>To-Date</th>
+                                <th className="cell-fit">Reason</th>
+                                <th>Days</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {filteredData.length > 0 ? (
+                                filteredData.map((rs) => {
+                                  const {
+                                    leave_id,
+                                    eti_id,
+                                    name,
+                                    from_date,
+                                    to_date,
+                                    reason,
+                                    days,
+                                    leave_status,
+                                  } = rs;
 
-                                        const fromDate = new Date(
-                                          from_date
-                                        ).toLocaleDateString();
-                                        const toDate = new Date(
-                                          to_date
-                                        ).toLocaleDateString();
+                                  const fromDate = from_date
+                                    ? new Date(from_date).toLocaleDateString()
+                                    : "N/A";
+                                  const toDate = to_date
+                                    ? new Date(to_date).toLocaleDateString()
+                                    : "N/A";
 
-                                        return (
-                                          <>
-                                            <tr>
-                                              <td>
-                                                <strong>{eti_id}</strong>
-                                              </td>
-                                              <td>{name}</td>
-                                              <td>{fromDate}</td>
-                                              <td>{toDate}</td>
-                                              <td>{reason}</td>
-                                              <td>{days}</td>
-                                              <td>
-                                                {leave_status === null ? (
-                                                  <span className="badge badge-pill badge-glow badge-primary">
-                                                    Pending
-                                                  </span>
-                                                ) : leave_status === 0 ? (
-                                                  <span className="badge badge-pill badge-glow badge-danger">
-                                                    Rejected
-                                                  </span>
-                                                ) : leave_status === 1 ? (
-                                                  <span className="badge badge-pill badge-glow badge-success">
-                                                    Approved
-                                                  </span>
-                                                ) : (
-                                                  ""
-                                                )}
-                                              </td>
-                                              <td>
-                                                <div class="btn-group">
-                                                  <button
-                                                    class="btn btn-warning dropdown-toggle"
-                                                    type="button"
-                                                    id="dropdownMenuButton5"
-                                                    data-toggle="dropdown"
-                                                    aria-haspopup="true"
-                                                    aria-expanded="false"
-                                                  >
-                                                    Action
-                                                  </button>
-                                                  <div
-                                                    class="dropdown-menu"
-                                                    aria-labelledby="dropdownMenuButton5"
-                                                  >
-                                                    <a
-                                                      type="button"
-                                                      class="dropdown-item"
-                                                      href="javascript:void(0);"
-                                                      onClick={() =>
-                                                        ApproveLeave(leave_id)
-                                                      }
-                                                    >
-                                                      Approve
-                                                    </a>
-                                                    <a
-                                                      type="button"
-                                                      class="dropdown-item"
-                                                      href="javascript:void(0);"
-                                                      onClick={() =>
-                                                        RejectLeave(leave_id)
-                                                      }
-                                                    >
-                                                      Reject
-                                                    </a>
-                                                  </div>
-                                                </div>
-                                              </td>
-                                            </tr>
-                                          </>
-                                        );
-                                      })
-                                    : ""}
-                                  <tr></tr>
-                                </tbody>
-                              </table>
-                            </div>
-                            <br />
-                            {/* Pagination */}
+                                  return (
+                                    <tr key={leave_id}>
+                                      <td>
+                                        <strong>{eti_id}</strong>
+                                      </td>
+                                      <td>{name}</td>
+                                      <td>{fromDate}</td>
+                                      <td>{toDate}</td>
+                                      <td>{reason}</td>
+                                      <td>{days}</td>
+                                      <td>
+                                        {leave_status === null ? (
+                                          <span className="badge badge-pill badge-glow badge-primary">
+                                            Pending
+                                          </span>
+                                        ) : leave_status === 0 ? (
+                                          <span className="badge badge-pill badge-glow badge-danger">
+                                            Rejected
+                                          </span>
+                                        ) : leave_status === 1 ? (
+                                          <span className="badge badge-pill badge-glow badge-success">
+                                            Approved
+                                          </span>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </td>
+                                      <td>
+                                        <div className="btn-group">
+                                          <button
+                                            className="btn btn-warning dropdown-toggle"
+                                            type="button"
+                                            id="dropdownMenuButton5"
+                                            data-toggle="dropdown"
+                                            aria-haspopup="true"
+                                            aria-expanded="false"
+                                          >
+                                            Action
+                                          </button>
+                                          <div
+                                            className="dropdown-menu"
+                                            aria-labelledby="dropdownMenuButton5"
+                                          >
+                                            <a
+                                              type="button"
+                                              className="dropdown-item"
+                                              href="javascript:void(0);"
+                                              onClick={() => ApproveLeave(leave_id)}
+                                            >
+                                              Approve
+                                            </a>
+                                            <a
+                                              type="button"
+                                              className="dropdown-item"
+                                              href="javascript:void(0);"
+                                              onClick={() => RejectLeave(leave_id)}
+                                            >
+                                              Reject
+                                            </a>
+                                          </div>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  );
+                                })
+                              ) : (
+                                <tr>
+                                  <td colSpan="8" className="text-center py-4">
+                                    No leaves found matching your criteria
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {filteredData.length > 0 && (
+                          <div className="d-flex justify-content-center mt-2">
                             <Pagination
                               currentPage={currentPage}
                               totalPages={totalPages}
                               onPageChange={handlePageChange}
                             />
                           </div>
-                        </div>
+                        )}
                       </div>
-                    </section>
+                    </div>
                   </div>
                 </div>
               </div>

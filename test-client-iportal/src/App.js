@@ -21,6 +21,8 @@ import Post from "./components/interns-components/Post/Post"
 import Profile from "./components/interns-components/Profile/Profile"
 import {ResetPassword} from "./pages/interns-pages/InternResetPassword";
 import BirthdayWisher from "./components/interns-components/Birthday_wisher/Birthday_wisher";
+import Supervisor_compliant from "./components/interns-components/Feedback/Supervisor_compaliant";
+import Manager_compliant from "./components/interns-components/Feedback/Manager_compliant";
 
 function App() {
   return (
@@ -48,7 +50,8 @@ function App() {
           <Route path="/intern-profile" element={<Profile/>}/>
           <Route path="/intern-reset-password" element={<ResetPassword/>}/>
           <Route path="/Intern-Birthday-Wisher" element={<BirthdayWisher/>}/>
-         
+          <Route path="/supervisor-complaint" element={<Supervisor_compliant/>}/>
+          <Route path="/manager-complaint" element={<Manager_compliant/>}/>
 
         </Routes>
       </BrowserRouter>

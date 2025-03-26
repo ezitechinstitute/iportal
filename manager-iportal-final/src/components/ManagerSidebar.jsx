@@ -236,7 +236,7 @@ export const ManagerSidebar = () => {
                 </span>
               </NavLink>
             </li>
-            <li
+            {/* <li
               className={activeLink === "remaining" ? "active " : "undefined"}
             >
               <NavLink
@@ -249,7 +249,7 @@ export const ManagerSidebar = () => {
                   Announcement
                 </span>
               </NavLink>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>

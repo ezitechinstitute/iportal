@@ -36,6 +36,7 @@ const {
   GetContactInternsFrameWork,
   GetTestInternsFrameWork,
   GetTestCompleteInternsFrameWork,
+  GetInternStats
 } = require("../controller/hr/get-interns-controller");
 const {
   GetAllOfferLetterRequests, 
@@ -255,7 +256,11 @@ const {
 } = require("../controller/university/uni-statistics-controller");
 const {
   GetFeedback,
-  InsertFeedback
+  InsertFeedback,
+  ManagerComplaint, 
+  SupervisorComplaint,
+  GetManagerComplaints,
+  GetSupervisorComplaints
 } =require("../controller/intern/intern-feedback");
 
 const {
@@ -269,6 +274,27 @@ const {
 
 const { AddAnnouncement, GetAnnouncements, GetAnnouncementById, EditAnnouncement, DeleteAnnouncement } = require('../controller/hr/hr_announcement');
 const {GetInternAnnouncements} = require('../controller/intern/intern_announcements')
+
+//intern-review
+const {
+  GetReviewInterns,
+  GetNonReviewInterns,
+  CountReviewInterns,
+  CountNonReviewInterns,
+  UpdateReviewStatus
+} = require("../controller/review/intern-review");
+
+//supervisor-intern-stats
+
+const {
+  GetActiveInternSup,
+  GetTestInternSup,
+  GetCompletedInternSup,
+  GetProgressInternSup,
+  GetOnsiteInterns,
+  GetRemoteInterns
+} = require("../controller/supervisor/sup_interns_stats_controller")
+
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -307,6 +333,14 @@ router.post("/verify-email", VerifyUniEmail);
 router.post("/verify-int-email", VerifyInternEmail);
 router.post("/verify-code", VerifyCode);
 
+//intern-review
+router.get("/review-interns", GetReviewInterns);
+router.get("/non-review-interns", GetNonReviewInterns);
+router.get("/count-review-interns", CountReviewInterns);
+router.get("/count-non-review-interns", CountNonReviewInterns);
+router.put("/update-review-status", UpdateReviewStatus)
+
+
 /* Interns Endpoints */
 router.post("/register-inters", RegisterInterns);
 router.get("/get-reg-uni", GetRegisterUni);
@@ -343,12 +377,16 @@ router.get("/get-intern-leaves", GetLeaves);
 // Intern Feedback
 router.post("/intern-feedback",InsertFeedback);
 router.get("/get-intern-feedback",GetFeedback);
+router.post("/intern-manager-complaint", ManagerComplaint);
+router.post("/intern-supervisor-complaint", SupervisorComplaint);
+router.get('/manager-complaints', GetManagerComplaints);
+router.get('/supervisor-complaints', GetSupervisorComplaints);
 
-//Intern Feedback
-router.post("/intern-offer-letter", InsertOfferLetterRequest);
 //offer Letter
+router.post("/intern-offer-letter", InsertOfferLetterRequest);
 router.get("/get-intern-offer-letter/:id", GetOfferLetterRequest);
 router.get("/get-manager", GetManagerDetails)
+
 //intern_announcement
 router.get("/get-intern-announcement", GetInternAnnouncements);
 // Intern Statics
@@ -403,6 +441,7 @@ router.get(
   verifyToken,
   GetContactInternsFrameWork
 );
+router.get("/get-statics", GetInternStats);
 router.get(
   "/get-test-interns/:managerid",
   verifyToken,
@@ -553,8 +592,16 @@ router.get("/get-task-details", verifyToken, GetSupTaskDetails);
 router.get("/task-details/:id", GetTaskDetail);
 router.get("/get-project-task", GetInternProjectTask);
 router.get("/get-intern-leaves/:supid", verifyToken, GetInterLeaves);
-router.put("/approve-int-leave/:intId", verifyToken, ApproveInternLeave);
-router.put("/reject-int-leave/:intId", verifyToken, RejectInternLeave);
+router.put("/approve-int-leave/:leave_id", verifyToken, ApproveInternLeave);
+router.put("/reject-int-leave/:leave_id", verifyToken, RejectInternLeave);
+
+//supervisor-intern-stats
+router.get("/active-interns/:manager_id", GetActiveInternSup);
+router.get("/progress-interns/:manager_id", GetProgressInternSup);
+router.get("/completed-interns/:manager_id", GetCompletedInternSup);
+router.get("/test-interns/:manager_id", GetTestInternSup);
+router.get("/onsite-interns/:manager_id", GetOnsiteInterns);
+router.get("/remote-interns/:manager_id", GetRemoteInterns);
 
 // Get Submitted Task
 router.get("/get-submit-task/:id", GetSubmittedTasks);

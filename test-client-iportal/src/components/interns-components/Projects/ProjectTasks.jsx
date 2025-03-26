@@ -3,7 +3,7 @@ import InternTopbar from "../InternTopbar/InternTopbar";
 import InternSidebar from "../InternSidebar";
 import axios from "axios";
 import { UploadProjectTask } from "./UploadProjectTask";
-
+import {Footer} from '../../Footer';
 export const ProjectTasks = () => {
   const [taskData, setTaskData] = useState([]);
   const [filteredTaskData, setFilteredTaskData] = useState([]);
@@ -239,6 +239,7 @@ export const ProjectTasks = () => {
 
             {/* Upload Project Task */}
             <UploadProjectTask values={values} />
+            <Footer/>
           </div>
         </div>
       </div>

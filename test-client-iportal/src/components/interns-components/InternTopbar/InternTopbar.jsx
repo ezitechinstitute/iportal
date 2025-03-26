@@ -167,18 +167,18 @@ export const InternTopbar = () => {
                 )}
               </a>
             </li>
-            <li className="nav-item dropdown dropdown-notification mr-25 show-profile">
+            {/* <li className="nav-item dropdown dropdown-notification mr-25 show-profile">
               <a
                 className="nav-link"
                 href="javascript:void(0);"
                 data-toggle="dropdown"
               >
                 <FiBell className="ficon" /> {/* Notification bell */}
-                <span className="badge badge-pill badge-danger badge-up">
+                {/* <span className="badge badge-pill badge-danger badge-up">
                   5
                 </span>
               </a>
-            </li>
+            </li>  */}
 
             <li className="nav-item dropdown dropdown-user">
               <a
@@ -198,11 +198,11 @@ export const InternTopbar = () => {
                 <span className="avatar">
                   <img
                     className="round"
-                    src={avatar || "./app-assets/images/portrait/small/avatar-s-11.jpg"}
+                    src={avatar || "./app-assets/images/portrait/small/avatar-001.jpeg"}
                     alt="User Avatar"
                     height="40"
                     width="40"
-                    onError={() => setAvatar("./app-assets/images/portrait/small/avatar-s-11.jpg")}
+                    onError={() => setAvatar("./app-assets/images/portrait/small/avatar-001.jpeg")}
                   />
                   <span className="avatar-status-online"></span>
                 </span>

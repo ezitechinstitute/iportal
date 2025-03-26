@@ -18,6 +18,7 @@ export const InternLogin = () => {
     interntype: sessionStorage.getItem("intern_type"),
     duration: sessionStorage.getItem("duration"),
     join_date: sessionStorage.getItem("join_date"),
+    int_id: sessionStorage.getItem("int_id")
   });
   const [formData, setFormData] = useState({
     email: "",
@@ -52,7 +53,8 @@ export const InternLogin = () => {
               tech: res.data.intern.int_technology,
               duration: res.data.intern.duration,
               interntype: res.data.intern.intern_type,
-              join_date: res.data.intern.join_date
+              join_date: res.data.intern.join_date,
+              int_id: res.data.intern.int_id
             });
             sessionStorage.setItem("isLoggedIn", true);
             sessionStorage.setItem("token", res.data.token);
@@ -63,7 +65,8 @@ export const InternLogin = () => {
             sessionStorage.setItem("technology", res.data.intern.int_technology);
             sessionStorage.setItem("duration", res.data.intern.duration);
             sessionStorage.setItem("interntype",res.data.intern.intern_type);
-            sessionStorage.setItem("join_date",res.data.intern.join_date)
+            sessionStorage.setItem("join_date",res.data.intern.join_date);
+            sessionStorage.setItem("int_id",res.data.intern.int_id)
             alert("Login Successfully");
             navigate("/intern-dashboard");
           }
@@ -79,7 +82,8 @@ export const InternLogin = () => {
               tech: res.data.intern.int_technology,
               interntype: res.data.intern.intern_type,
               duration: res.data.intern.duration,
-              join_date: res.data.intern.join_date
+              join_date: res.data.intern.join_date,
+              int_id: res.data.intern.int_id
             });
             sessionStorage.setItem("isLoggedIn", true);
             sessionStorage.setItem("token", res.data.token);
@@ -90,7 +94,8 @@ export const InternLogin = () => {
             sessionStorage.setItem("interntype", res.data.intern.intern_type);
             sessionStorage.setItem("internStatus", res.data.intern.int_status);
             sessionStorage.setItem("duration", res.data.intern.duration);
-            sessionStorage.setItem("join_date",res.data.intern.join_date)
+            sessionStorage.setItem("join_date",res.data.intern.join_date);
+            sessionStorage.setItem("int_id",res.data.intern.int_id)
             alert("Login Successfully");
             navigate("/intern-dashboard");
           }

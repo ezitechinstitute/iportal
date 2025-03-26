@@ -3,6 +3,7 @@ import InternTopbar from "../InternTopbar/InternTopbar";
 import InternSidebar from "../InternSidebar";
 import { jsPDF } from "jspdf";
 import letterheadImage from '../../../assets/offer_letter.jpg';
+import {Footer} from '../../Footer';
 
 const OfferLetter = () => {
     const [user, setUser] = useState({
@@ -14,13 +15,22 @@ const OfferLetter = () => {
         duration: sessionStorage.getItem("duration"),
         interntype: sessionStorage.getItem("interntype"),
         join_date: sessionStorage.getItem("join_date"),
-        
     });
     
     const [reason, setReason] = useState('');
     const [requestData, setRequestData] = useState(null);
     const [requestManagerData, setRequestManagerData] = useState([]);
     const [error, setError] = useState(null);
+    const [lastOfferLetterId, setLastOfferLetterId] = useState(null);
+
+    // Function to generate the next offer letter ID
+    const generateNextOfferLetterId = () => {
+        if (lastOfferLetterId) {
+            const num = parseInt(lastOfferLetterId.split('_')[2]) + 1;
+            return `off_lett_${num.toString().padStart(4, '0')}`;
+        }
+        return 'off_lett_0001'; // Default starting ID
+    };
 
     useEffect(() => {
         const fetchRequestData = async () => {
@@ -28,19 +38,17 @@ const OfferLetter = () => {
                 const encodedEziId = encodeURIComponent(user.ezi_id);
                 const response = await fetch(`https://api.ezitech.org/get-intern-offer-letter/${encodedEziId}`);
                 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Server returned ${response.status}: ${errorText}`);
-                }
-
                 const result = await response.json();
                 
                 if (result.data) {
                     setRequestData(result.data);
+                    // Extract the highest offer_letter_id from existing records if available
+                    if (result.data.offer_letter_id) {
+                        setLastOfferLetterId(result.data.offer_letter_id);
+                    }
                     setError(null);
                 } else {
                     setRequestData(null);
-                    setError(result.message || 'No data returned');
                 }
             } catch (error) {
                 console.error('Error fetching request data:', error.message);
@@ -61,11 +69,9 @@ const OfferLetter = () => {
                 return;
             }
 
-            // setLoading(true);
             try {
                 const url = new URL(`https://api.ezitech.org/get-manager`);
                 url.searchParams.append("interview_type", encodeURIComponent(user.interntype));
-                console.log('Fetching manager from:', url.toString());
                 const response = await fetch(url);
                 
                 if (!response.ok) {
@@ -80,16 +86,12 @@ const OfferLetter = () => {
                 }
 
                 const result = await response.json();
-                console.log('Raw manager response:', result);
                 setRequestManagerData(result.data || []);
-                console.log('Set requestManagerData:', result.data || []);
                 setError(result.data.length > 0 ? null : 'No manager data found in response');
             } catch (error) {
                 console.error('Error fetching manager data:', error.message);
                 setError(error.message);
                 setRequestManagerData([]);
-            } finally {
-                // setLoading(false);
             }
         };
         
@@ -99,13 +101,16 @@ const OfferLetter = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
+        const offer_letter_id = generateNextOfferLetterId();
+        
         const requestDataToSend = {
             username: user.username,
             email: user.email,
             ezi_id: user.ezi_id,
             intern_status: user.status,
             tech: user.tech,
-            reason: reason
+            reason: reason,
+            offer_letter_id: offer_letter_id // Add the generated offer letter ID
         };
 
         try {
@@ -123,8 +128,10 @@ const OfferLetter = () => {
                     ...requestDataToSend,
                     status: 'pending',
                     created_at: new Date().toISOString(),
-                    id: data.request_id
+                    id: data.request_id,
+                    offer_letter_id: offer_letter_id // Include the offer letter ID in the local state
                 });
+                setLastOfferLetterId(offer_letter_id); // Update the last used ID
                 setError(null);
             } else {
                 console.error('Error submitting request:', data.message);
@@ -137,17 +144,21 @@ const OfferLetter = () => {
     };
 
     const generatePDF = () => {
-        if (!requestData) return; // Prevent PDF generation if requestData is null
+        if (!requestData) return;
 
         const doc = new jsPDF();
         doc.addImage(letterheadImage, 'PNG', 0, 0, 210, 297);
 
         doc.setFont("helvetica");
 
-        // Starting Y position to match modal's marginTop: 150px
-        let y = 50; // Adjusted to align with modal content visually
+        let y = 50;
         const managerName = requestManagerData.length > 0 ? requestManagerData[0].name : "Manager Name Not Available";
         const managerContact = requestManagerData.length > 0 ? requestManagerData[0].contact : "N/A";
+        
+        // Add offer letter ID to the PDF
+        doc.setFontSize(10);
+        doc.text(`Offer Letter ID: ${requestData.offer_letter_id || 'N/A'}`, 190, 30, { align: 'right' });
+
         // From Section
         doc.setFontSize(12);
         doc.setFont("helvetica", "normal");
@@ -165,6 +176,7 @@ const OfferLetter = () => {
         doc.text("To Whom It May Concern", 105, y, { align: 'center' });
         y += 10;
 
+        // Rest of the PDF generation remains the same...
         // Intern Details
         doc.text(requestData?.username || "", 20, y);
         y += 5;
@@ -223,7 +235,7 @@ const OfferLetter = () => {
         y += 5;
         doc.text("Ezitech Institute", 20, y);
 
-        doc.save(`Offer_Letter_${requestData?.ezi_id || "unknown"}.pdf`);
+        doc.save(`Offer_Letter_${requestData?.offer_letter_id || requestData?.ezi_id || "unknown"}.pdf`);
     };
 
     return (
@@ -249,6 +261,7 @@ const OfferLetter = () => {
                                 <table className="table table-bordered table-striped">
                                     <thead className="thead-light">
                                         <tr>
+                                            <th>Offer Letter ID</th>
                                             <th>Username</th>
                                             <th>Email</th>
                                             <th>EZI ID</th>
@@ -262,6 +275,7 @@ const OfferLetter = () => {
                                     </thead>
                                     <tbody>
                                         <tr>
+                                            <td>{requestData.offer_letter_id || 'N/A'}</td>
                                             <td>{requestData.username}</td>
                                             <td>{requestData.email}</td>
                                             <td>{requestData.ezi_id}</td>
@@ -294,7 +308,7 @@ const OfferLetter = () => {
                                 </table>
                             </div>
                         ) : (
-                            !error && <p>No offer letter request found.</p>
+                            <p>No offer letter request found.</p>
                         )}
 
                         <form onSubmit={handleSubmit}>
@@ -364,6 +378,10 @@ const OfferLetter = () => {
                                     >
                                         {requestData && (
                                             <>
+                                                <div style={{ position: 'absolute', top: 15, right: 20, fontSize: '10px' }}>
+                                                    Offer Letter ID: {requestData.offer_letter_id || 'N/A'}
+                                                </div>
+                                                
                                                 <div style={{ marginTop: '150px', marginLeft:'20px' }}>
                                                     <p style={{margin:0}}>From</p>
                                                     <p style={{margin:0, fontWeight: 'bold'}}>M/S Ezitech Institute</p>
@@ -425,7 +443,7 @@ const OfferLetter = () => {
                                             type="button"
                                             className="btn btn-primary"
                                             onClick={generatePDF}
-                                            disabled={!requestData} // Disable button if no requestData
+                                            disabled={!requestData}
                                         >
                                             Download as PDF
                                         </button>
@@ -433,6 +451,7 @@ const OfferLetter = () => {
                                 </div>
                             </div>
                         </div>
+                        <Footer/>
                     </div>
                 </div>
             </div>

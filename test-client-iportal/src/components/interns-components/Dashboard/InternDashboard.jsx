@@ -18,6 +18,7 @@ import logo23 from "./mediaa/logo23.png";
 import InternTopbar from "../InternTopbar/InternTopbar";
 import InternSidebar from "../InternSidebar";
 import { useNavigate } from "react-router-dom";
+
 import axios from "axios";
 import {
   FaFolderPlus,
@@ -374,66 +375,71 @@ export const InternDashboard = () => {
                 </div>
 
                 <div className="row md-col">
-                  <div className="col-lg-8">
-                    <div className="tracker" style={{ marginLeft: "-14px" }}>
-                      <div className="col-lg-12 col-12">
-                        <div className="card">
-                          <div className="card-header d-flex justify-content-between pb-0">
-                            <div className="title-container">
-                              <h2 className="card-title font-weight-bolder font-large-1">Project Tracker</h2>
-                            </div>
-                            <div className="dropdown chart-dropdown"></div>
-                          </div>
-                          <div className="card-body">
-                            <div className="d-flex justify-content-between align-items-start">
-                              <div className="column">
-                                <div className="col-sm-2 col-12 d-flex flex-column flex-wrap text-center">
-                                  <h1 className="font-large-2 font-weight-bolder mt-2 mb-0">{completed !== 0 ? completed : 0}</h1>
-                                  <h4><span>Total Projects</span></h4>
-                                </div>
-                                <div className="d-flex mt-2 ml-2">
-                                  <div className="icon mr-2 mt-1">
-                                    <div className="icon1 px-1 mr-1" style={{ color: "#776cf0", backgroundColor: "#eae8fd", padding: "11px 5px", borderRadius: "10px" }}>
-                                      <FaFolderPlus size={20} />
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <h4 className="font-weight-bolder">Total Tasks</h4>
-                                    <p>{totalTasks !== 0 ? totalTasks : 0}</p>
-                                  </div>
-                                </div>
-                                <div className="d-flex mt-2 ml-2">
-                                  <div className="icon mr-2 mt-1">
-                                    <div className="icon2 px-1 mr-1" style={{ color: "#ffa146", backgroundColor: "#fff1e3", padding: "11px 5px", borderRadius: "10px" }}>
-                                      <FaSpinner size={20} />
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <h4 className="font-weight-bolder">In Progress</h4>
-                                    <p>{tasksInProgress !== 0 ? tasksInProgress : 0}</p>
-                                  </div>
-                                </div>
-                                <div className="d-flex mt-2 ml-2 mb-2">
-                                  <div className="icon mr-2 mt-1">
-                                    <div className="icon3 px-1 mr-1" style={{ color: "#ec6566", backgroundColor: "#fce5e6", padding: "11px 5px", borderRadius: "10px" }}>
-                                      <FaCheckSquare size={20} />
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <h4 className="font-weight-bolder">Completed Tasks</h4>
-                                    <p>{tasksComplete !== 0 ? tasksComplete : 0}</p>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="chart-container" style={{ width: "70%", marginRight: '15px' }}>
-                                {showChart ? <ApexChart /> : <p>Loading...</p>}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+  <div className="col-lg-8">
+    <div className="tracker" style={{ marginLeft: "-14px" }}>
+      <div className="col-lg-12 col-12">
+        <div className="card">
+          <div className="card-header d-flex justify-content-between pb-0">
+            <div className="title-container">
+              <h2 className="card-title font-weight-bolder font-large-1">Project Tracker</h2>
+            </div>
+            <div className="dropdown chart-dropdown"></div>
+          </div>
+          <div className="card-body">
+            <div className="grid-container">
+              {/* Left Column */}
+              <div className="stats-column ml-2">
+                <div className="stat-item">
+                  <h1 className="font-large-2 font-weight-bolder mt-2  mb-0">{completed !== 0 ? completed : 0}</h1>
+                  <h4><span>Total Projects</span></h4>
+                </div>
+                <div className="stat-item">
+                  <div className="icon">
+                    <div className="icon1" style={{ color: "#776cf0", backgroundColor: "#eae8fd", padding: "11px 5px", borderRadius: "10px" }}>
+                      <FaFolderPlus size={20} />
                     </div>
                   </div>
+                  <div>
+                    <h4 className="font-weight-bolder">Total Tasks</h4>
+                    <p>{totalTasks !== 0 ? totalTasks : 0}</p>
+                  </div>
+                </div>
+                <div className="stat-item">
+                  <div className="icon">
+                    <div className="icon2" style={{ color: "#ffa146", backgroundColor: "#fff1e3", padding: "11px 5px", borderRadius: "10px" }}>
+                      <FaSpinner size={20} />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-weight-bolder">In Progress</h4>
+                    <p>{tasksInProgress !== 0 ? tasksInProgress : 0}</p>
+                  </div>
+                </div>
+                <div className="stat-item">
+                  <div className="icon">
+                    <div className="icon3" style={{ color: "#ec6566", backgroundColor: "#fce5e6", padding: "11px 5px", borderRadius: "10px" }}>
+                      <FaCheckSquare size={20} />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-weight-bolder">Completed Tasks</h4>
+                    <p>{tasksComplete !== 0 ? tasksComplete : 0}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column (Chart) */}
+              <div className="chart-column">
+                {showChart ? <ApexChart /> : <p>Loading...</p>}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
                   {/* Modified Leadership Section */}
                   <div className="col-lg-4">
@@ -450,8 +456,8 @@ export const InternDashboard = () => {
                                   <tr style={{ height: "40px" }}>
                                     <th>Image</th>
                                     <th>Name</th>
-                                    <th>Technology</th>
-                                    <th>Average</th>
+                                    <th>Tech</th>
+                                    <th>Avg</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -461,17 +467,17 @@ export const InternDashboard = () => {
                                         <img
                                           src={topIntern.image}
                                           alt="Top Intern"
-                                          style={{ width: "40px", height: "40px", borderRadius: "20%", marginRight: "10px" }}
+                                          style={{ width: "35px", height: "35px", borderRadius: "20%", marginRight: "7px" }}
                                         />
 
                                       </td>
-                                      <td>{topIntern.name}</td>
-                                      <td>{topIntern.technology}</td>
-                                      <td>{topIntern.average}%</td>
+                                      <td style={{fontSize:"13px"}}>{topIntern.name}</td>
+                                      <td style={{fontSize:"13px"}}>{topIntern.technology}</td>
+                                      <td style={{fontSize:"13px"}}>{topIntern.average}%</td>
                                     </tr>
                                   ) : (
                                     <tr>
-                                      <td colSpan="4">Loading top intern data...</td>
+                                      <td colSpan="4">Loading ...</td>
                                     </tr>
                                   )}
                                 </tbody>
@@ -499,9 +505,13 @@ export const InternDashboard = () => {
                     </div>
                   </div>
                 </marquee>
-                <footer className="footer footer-static footer-light" style={{ padding: "0px", margin: "0px" }}>
-                  <p className="clearfix mb-0" style={{ marginLeft: "10px" }}>
-                    <span className="mt-25">
+                
+              </div>
+            </section>
+            <footer className="footer footer-static footer-light" style={{ padding: "0px", marginTop: "0px", marginBottom:"10px" }}>
+                  <p className="clearfix mb-0 " style={{ marginLeft: "10px"  }}>
+                    <br />
+                    <span className="mt-25 ">
                       COPYRIGHT © 2016-{currentYear}
                       <a className="ml-25" href="https://ezitech.org/html-css-internship-opportunities/" target="_blank" rel="noopener noreferrer">
                         Ezitech Institute
@@ -524,8 +534,6 @@ export const InternDashboard = () => {
                     </span>
                   </p>
                 </footer>
-              </div>
-            </section>
           </div>
         </div>
       </div>

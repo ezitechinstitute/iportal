@@ -5,8 +5,6 @@ import axios from "axios";
 import { ManagerChartTwo } from "./ManagerChartTwo";
 import { InternStaticsDashboard } from "./InternStaticsDashboard";
 
-
-
 export const ManagerDashboard = () => {
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [amount, setAmount] = useState(0);
@@ -29,23 +27,20 @@ export const ManagerDashboard = () => {
   const managerEmail = sessionStorage.getItem("email");
   const username = sessionStorage.getItem("username");
 
+  // Fetch manager's balance
   const GetManagerAmount = async () => {
     try {
       const res = await axios.get(
         `https://api.ezitech.org/get-manager-amount/${managerEmail}`,
         { headers: { "x-access-token": token } }
       );
-      console.log(res.data[0].balance);
       setAmount(res.data[0].balance);
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    GetManagerAmount();
-  }, [GetManagerAmount]);
-
+  // Fetch chart data for onsite and remote interns
   const [dataOnsite, setDataOnsite] = useState({
     labels: [
       "Jan",
@@ -60,11 +55,11 @@ export const ManagerDashboard = () => {
       "Oct",
       "Nov",
       "Dec",
-    ], // Array of labels (e.g., months)
+    ],
     datasets: [
       {
         label: "Onsite Interns",
-        data: [], // Array of data points
+        data: [],
         backgroundColor: ["#3275db"],
         borderColor: "#3275db",
       },
@@ -85,53 +80,41 @@ export const ManagerDashboard = () => {
       "Oct",
       "Nov",
       "Dec",
-    ], // Array of labels (e.g., months)
+    ],
     datasets: [
       {
         label: "Remote Interns",
-        data: [], // Array of data points
+        data: [],
         backgroundColor: ["#3275db"],
         borderColor: "#3275db",
       },
     ],
   });
 
-  const GetOnsiteStatics = async () => {
+  // Fetch chart data from the API
+  const GetChartData = async () => {
     try {
       const res = await axios.get("https://api.ezitech.org/get-statics", {
         headers: { "x-access-token": token },
       });
-      const data = res.data;
-
+      const { onsite, remote } = res.data;
+  
       setDataOnsite({
         ...dataOnsite,
-
         datasets: [
           {
             ...dataOnsite.datasets[0],
-            data: data.onsite,
+            data: onsite,
           },
         ],
       });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const GetRemoteStatics = async () => {
-    try {
-      const res = await axios.get("https://api.ezitech.org/get-statics", {
-        headers: { "x-access-token": token },
-      });
-      const data = res.data;
-
+  
       setDataRemote({
         ...dataRemote,
-
         datasets: [
           {
             ...dataRemote.datasets[0],
-            data: data.remote,
+            data: remote,
           },
         ],
       });
@@ -140,11 +123,10 @@ export const ManagerDashboard = () => {
     }
   };
 
+  // Fetch data on component mount
   useEffect(() => {
-    setInterval(() => {
-      GetOnsiteStatics();
-      GetRemoteStatics();
-    }, 1000);
+    GetManagerAmount();
+    GetChartData();
   }, []);
 
   return (
@@ -169,7 +151,7 @@ export const ManagerDashboard = () => {
                     <div className="card-body">
                       <h5>Congratulations 🎉 {username} !</h5>
                       <p className="card-text font-small-3">
-                        You have earn in {months[localDate.getMonth()]}
+                        You have earned in {months[localDate.getMonth()]}
                       </p>
                       <h3 className="mb-75 pt-70">
                         <a href="javascript:void(0);">
@@ -196,7 +178,7 @@ export const ManagerDashboard = () => {
                 {/* <!--/ Medal Card --> */}
 
                 {/* <!-- Statistics Card --> */}
-               <InternStaticsDashboard/>
+                <InternStaticsDashboard />
               </div>
             </section>
 

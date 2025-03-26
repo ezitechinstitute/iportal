@@ -20,7 +20,6 @@ const Projects = () => {
   const [data, setData] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
-  
 
   const GetProjects = async () => {
     try {
@@ -36,16 +35,15 @@ const Projects = () => {
 
   useEffect(() => {
     GetProjects();
-  }, [id]); // Fetch only when ID changes
+  }, [id]);
 
-  // Filter projects based on status selection
   useEffect(() => {
     if (statusFilter === "All") {
       setFiltered(data);
     } else {
       setFiltered(data.filter((project) => project.pstatus === statusFilter));
     }
-  }, [statusFilter, data]); // Run whenever statusFilter or data changes
+  }, [statusFilter, data]);
 
   return (
     <>
@@ -61,44 +59,50 @@ const Projects = () => {
               <div className="row" id="table-hover-animation">
                 <div className="col-12">
                   <div className="card">
-                  <div className="card-header d-flex justify-content-between align-items-center">
-                  <h2 className="card-title mb-3 mt-[-5px] font-weight-bold ml-[-10px]">Projects</h2>
+                    <div className="card-header d-flex justify-content-between align-items-center">
+                      <h2 className="card-title mb-3 mt-[-5px] font-weight-bold ml-[-10px]">Projects</h2>
 
+                      <div className="btn-group">
+                        <button
+                          className={`btn ${statusFilter === "All" ? "btn-primary" : "btn-outaline-primary"}`}
+                          onClick={() => setStatusFilter("All")}
+                        >
+                          <i className="fas fa-list mr-1"></i>
+                          All Projects
+                        </button>
 
-  {/* Status Filter Buttons */}
-  <div className="btn-group">
-    <button 
-      className={`btn ${statusFilter === "All" ? "btn-primary" : "btn-outline-primary"} `} 
-      style={{ border: 'none' }}
-      onClick={() => setStatusFilter("All")}
-    >
-      <i className="fas fa-list"></i> Total Projects ({data.length})
-    </button>
+                        <button
+                          className={`btn ${statusFilter === "Ongoing" ? "btn-info" : "btn-outline-info"} mx-1`}
+                          onClick={() => setStatusFilter("Ongoing")}
+                        >
+                          <i className="fas fa-hourglass-half mr-1"></i>
+                          Ongoing
+                        </button>
 
-    <button 
-      className={`btn ${statusFilter === "Ongoing" ? "btn-success" : "btn-outline-success"} mx-1`} 
-      style={{ border: 'none' }}
-      onClick={() => setStatusFilter("Ongoing")}
-    >
-      <i className="fas fa-spinner fa-spin"></i> Ongoing
-    </button>
+                        <button
+                          className={`btn ${statusFilter === "Completed" ? "btn-success" : "btn-outline-success"} mx-1`}
+                          onClick={() => setStatusFilter("Completed")}
+                        >
+                          <i className="fas fa-check-circle mr-1"></i>
+                          Completed
+                        </button>
 
-    <button 
-      className={`btn ${statusFilter === "Completed" ? "btn-info" : "btn-outline-info"} `} 
-      style={{ border: 'none' }}
-      onClick={() => setStatusFilter("Completed")}
-    >
-      <i className="fas fa-check"></i> Completed
-    </button>
-  </div>
-</div>
+                        <button
+                          className={`btn ${statusFilter === "Expired" ? "btn-danger" : "btn-outline-danger"}`}
+                          onClick={() => setStatusFilter("Expired")}
+                        >
+                          <i className="fas fa-times-circle mr-1"></i>
+                          Expired
+                        </button>
+                      </div>
+                    </div>
 
                     <section id="complex-header-datatable">
                       <div className="row">
                         <div className="col-12">
-                          <div className="card-datatable">
-                            <table className="table table-striped table-hover table-bordered text-center">
-                              <thead className="thead-light">
+                          <div className="table-responsive">
+                            <table className="table table-bordered table-hover text-center">
+                              <thead>
                                 <tr>
                                   <th>TITLE</th>
                                   <th>START DATE</th>
@@ -125,36 +129,34 @@ const Projects = () => {
                                       assigned_by,
                                     } = rs;
 
+                                    const date = new Date(start_date).toLocaleDateString("en-PK");
+
                                     return (
                                       <tr key={project_id}>
                                         <td className="font-weight-bold">{title}</td>
-                                        <td>{start_date}</td>
+                                        <td>{date}</td>
                                         <td>{duration}</td>
-                                        <td className="text-right">{days}</td>
-                                        <td className="text-right">
-                                          <span className="badge badge-pill badge-primary px-2 py-1">
-                                            {obt_marks} / {project_marks}
-                                          </span>
+                                        <td>{days}</td>
+                                        <td>{obt_marks} / {project_marks}</td>
+                                        <td>
+                                          {pstatus === "Ongoing" ? (
+                                            <span className="badge badge-glow badge-info">
+                                              {pstatus}
+                                            </span>
+                                          ) : pstatus === "Completed" ? (
+                                            <span className="badge badge-glow badge-success">
+                                              {pstatus}
+                                            </span>
+                                          ) : pstatus === "Expired" ? (
+                                            <span className="badge badge-glow badge-danger">
+                                              {pstatus}
+                                            </span>
+                                          ) : (
+                                            " "
+                                          )}
                                         </td>
                                         <td>
-                                          <span
-                                            className={`badge badge-pill px-2 py-1 ${
-                                              pstatus === "Ongoing"
-                                                ? "badge-info"
-                                                : pstatus === "Completed"
-                                                ? "badge-success"
-                                                : pstatus === "Expired"
-                                                ? "badge-danger"
-                                                : "badge-secondary"
-                                            }`}
-                                          >
-                                            {pstatus}
-                                          </span>
-                                        </td>
-                                        <td>
-                                          {/* Action Icons in a Row */}
-                                          <div className="d-flex justify-content-center">
-                                            {/* View Details Icon */}
+                                          <div className="d-flex justify-content-center align-items-center">
                                             <button
                                               className="btn btn-info btn-sm mx-1"
                                               data-toggle="modal"
@@ -170,23 +172,30 @@ const Projects = () => {
                                               <i className="fas fa-eye"></i>
                                             </button>
 
-                                            {/* Create Task Icon (Disabled for Expired Projects) */}
-                                            <button
-                                              className="btn btn-danger btn-sm "
-                                              data-toggle="modal"
-                                              data-target="#default2"
-                                              onClick={() =>
-                                                setValues({
-                                                  id: id,
-                                                  projectId: project_id,
-                                                  points: project_marks,
-                                                  supid: assigned_by,
-                                                })
-                                              }
-                                              disabled={pstatus === "Expired"}
-                                            >
-                                              <i className="fas fa-tasks px-1/2 py-1"></i>
-                                            </button>
+                                            {pstatus === "Expired" || pstatus === "Completed" ? (
+                                              <button
+                                                disabled
+                                                className="btn btn-danger btn-sm mx-1"
+                                              >
+                                                <i className="fas fa-tasks"></i>
+                                              </button>
+                                            ) : (
+                                              <button
+                                                className="btn btn-danger btn-sm mx-1"
+                                                data-toggle="modal"
+                                                data-target="#default2"
+                                                onClick={() =>
+                                                  setValues({
+                                                    id: id,
+                                                    projectId: project_id,
+                                                    points: project_marks,
+                                                    supid: assigned_by,
+                                                  })
+                                                }
+                                              >
+                                                <i className="fas fa-tasks"></i>
+                                              </button>
+                                            )}
                                           </div>
                                         </td>
                                       </tr>
@@ -208,11 +217,8 @@ const Projects = () => {
               </div>
             </section>
 
-            {/* View Project Details */}
             <ViewProject data={values} />
-            {/* Create Task */}
             <CreateTask data={values} />
-            {/* Footer */}
             <Footer />
           </div>
         </div>

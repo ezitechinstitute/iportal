@@ -257,117 +257,104 @@ const GetSupTaskDetails = (req, res) => {
     return res.json(data);
   });
 };
-
+//Get leave
 const GetInterLeaves = (req, res) => {
   const { supid } = req.params;
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = (page - 1) * limit;
 
-  const sql_0 =
-    "SELECT DISTINCT technologies.technology, supervisor_permissions.internship_type FROM `intern_table` JOIN supervisor_permissions ON supervisor_permissions.internship_type = intern_table.intern_type JOIN technologies ON supervisor_permissions.tech_id = technologies.tech_id WHERE supervisor_permissions.manager_id = ?";
-  connection.query(sql_0, [supid], (err, data) => {
+  const query = `
+    SELECT 
+      il.leave_id,
+      il.eti_id,
+      il.name,
+      il.from_date,
+      il.to_date,
+      il.reason,
+      il.days,
+      il.leave_status,
+      il.email
+    FROM 
+      intern_leaves il
+    LEFT JOIN 
+      intern_accounts ia ON il.eti_id = ia.eti_id
+    LEFT JOIN 
+      supervisor_permissions sp ON sp.tech_id = (SELECT tech_id FROM technologies WHERE technology = ia.int_technology)
+    WHERE 
+      sp.manager_id = ?
+    ORDER BY 
+      il.leave_id DESC
+    LIMIT ? OFFSET ?;
+  `;
+
+  connection.query(query, [supid, limit, offset], (err, data) => {
     if (err) {
-      return res.json(err);
-    } else {
-      const superTech = [];
-      const superInternship = [];
-      for (let i = 0; i < data.length; i++) {
-        superTech.push(data[i].technology);
-        superInternship.push(data[i].internship_type);
-      }
-
-      let query =
-        "SELECT il.*, ia.name, it.technology, it.intern_type FROM intern_leaves il LEFT JOIN intern_accounts ia ON il.eti_id = ia.eti_id LEFT JOIN intern_table it ON ia.email = it.email WHERE 1 = 1";
-      const techFilter = superTech.map((t) => t).join("','");
-
-      if (techFilter.length > 0) {
-        query += ` AND technology IN ('${techFilter}')`;
-      }
-
-      const iship_type = [...new Set(superInternship.map((i) => i))];
-
-      if (iship_type.length > 0) {
-        query += ` AND intern_type IN ('${iship_type.join("','")}')`;
-      }
-
-      // Status filter
-      const statusFilter = "Active"; // Assume 'status' is a variable holding the desired status value
-
-      if (statusFilter && statusFilter.length > 0) {
-        query += ` AND status = '${statusFilter}' ORDER BY id DESC LIMIT ? OFFSET ?`;
-      }
-
-      if (superTech.length > 0 && superInternship.length > 0) {
-        // console.log(query);
-
-        connection.query(query, [limit, offset], (reject, resolve) => {
-          if (reject) {
-            console.log(reject);
-            return res.json(reject);
-          } else {
-            let countquery =
-              "SELECT COUNT(*) as count FROM intern_table WHERE 1= 1";
-
-            if (techFilter.length > 0) {
-              countquery += ` AND technology IN ('${techFilter}')`;
-            }
-
-            if (iship_type.length > 0) {
-              countquery += ` AND intern_type IN ('${iship_type.join("','")}')`;
-            }
-
-            if (statusFilter && statusFilter.length > 0) {
-              countquery += ` AND status = '${statusFilter}'`;
-            }
-
-            connection.query(countquery, (countError, countResult) => {
-              if (countError) {
-                return res.json(countError);
-              } else {
-                const totalData = countResult[0].count;
-                const totalPages = Math.ceil(totalData / limit);
-
-                return res.json({
-                  data: resolve,
-                  meta: {
-                    page,
-                    limit,
-                    totalData,
-                    totalPages,
-                  },
-                });
-              }
-            });
-          }
-        });
-      } else {
-        return res.json("Something Went Wrong!!!");
-      }
+      console.error(err);
+      return res.status(500).json({ error: "Database error" });
     }
+
+    // Count total records for pagination
+    const countQuery = `
+      SELECT COUNT(*) AS totalData 
+      FROM intern_leaves il
+      LEFT JOIN intern_accounts ia ON il.eti_id = ia.eti_id
+      LEFT JOIN supervisor_permissions sp ON sp.tech_id = (SELECT tech_id FROM technologies WHERE technology = ia.int_technology)
+      WHERE sp.manager_id = ?;
+    `;
+
+    connection.query(countQuery, [supid], (countErr, countResult) => {
+      if (countErr) {
+        console.error(countErr);
+        return res.status(500).json({ error: "Database error" });
+      }
+
+      const totalData = countResult[0].totalData;
+      const totalPages = Math.ceil(totalData / limit);
+
+      return res.json({
+        data,
+        meta: {
+          page,
+          limit,
+          totalData,
+          totalPages,
+        },
+      });
+    });
   });
 };
 
+// ApproveInternLeave
 const ApproveInternLeave = (req, res) => {
-  const { intId } = req.params;
+  const { leave_id } = req.params; // Changed from intId to leave_id
 
-  console.log(intId);
+  console.log(leave_id);
 
   const sql =
     "UPDATE `intern_leaves` SET `leave_status`= 1 WHERE `leave_id` = ?";
-  connection.query(sql, [intId], (err, data) => {
-    if (err) throw err;
+  connection.query(sql, [leave_id], (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Database error" });
+    }
     return res.json({ msg: "Leave Approved", data: data });
   });
 };
+
+// RejectInternLeave
 const RejectInternLeave = (req, res) => {
-  const { intId } = req.params;
-  console.log(intId);
+  const { leave_id } = req.params; // Changed from intId to leave_id
+
+  console.log(leave_id);
 
   const sql =
     "UPDATE `intern_leaves` SET `leave_status`= 0 WHERE `leave_id` = ?";
-  connection.query(sql, [intId], (err, data) => {
-    if (err) throw err;
+  connection.query(sql, [leave_id], (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Database error" });
+    }
     return res.json({ msg: "Leave Rejected", data: data });
   });
 };

@@ -25,66 +25,69 @@ const SupervisorInterns = () => {
   const [projVal, setProjVal] = useState({
     intEmail: null,
   });
-
   const [shiftData, setShiftData] = useState({
     email: null,
     etiId: null,
   });
-
   const [data, setData] = useState([]);
+
+  // Pagination and filtering
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [dataLimit, setDataLimit] = useState(50);
+  const [loading, setLoading] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
+  const [internTypeFilter, setInternTypeFilter] = useState("All");
+  const [rowsPerPage, setRowsPerPage] = useState(50);
 
   useEffect(() => {
     if (!check) {
       navigate("/supervisor");
     }
-  });
+  }, [check, navigate]);
 
-  // Pagination
-  const [currentPage, settCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [dataLimit, setDataLimit] = useState(50);
-  const [loading, setLoading] = useState(false);
-  const [filteredData, setFilteredData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const GetInterns = async (page) => {
     setLoading(true);
-    await axios
-      .get(`https://api.ezitech.org/get-sup-interns/${managerid}`, {
-        params: {
-          page: page,
-          limit: dataLimit,
-        },
-        headers: { "x-access-token": token },
-      })
-      .then((res) => {
-        setData(res.data.data);
-        setFilteredData(data);
-        settCurrentPage(res.data.meta.page);
-        setTotalPages(res.data.meta.totalPages);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const response = await axios.get(
+        `https://api.ezitech.org/get-sup-interns/${managerid}`,
+        {
+          params: {
+            page: page,
+            limit: dataLimit,
+          },
+          headers: { "x-access-token": token },
+        }
+      );
+      setData(response.data.data || []);
+      setFilteredData(response.data.data || []);
+      setCurrentPage(response.data.meta?.page || 1);
+      setTotalPages(response.data.meta?.totalPages || 1);
+    } catch (err) {
+      console.error("Error fetching interns:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePageChange = (page) => {
-    settCurrentPage(page);
+    setCurrentPage(page);
   };
 
   useEffect(() => {
-    const filter = data.filter((item) =>
-      item.intern_type.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    setFilteredData(filter);
-  }, [searchTerm, data]);
+    if (internTypeFilter === "All") {
+      setFilteredData(data);
+    } else {
+      setFilteredData(
+        data.filter((item) =>
+          item.intern_type.toLowerCase().includes(internTypeFilter.toLowerCase())
+        )
+      );
+    }
+  }, [internTypeFilter, data]);
 
   useEffect(() => {
     GetInterns(currentPage);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPage, dataLimit]);
 
   return (
@@ -92,256 +95,287 @@ const SupervisorInterns = () => {
       <SupervisorTopbar />
       <SupervisorSidebar />
 
-      <div className="app-content content ">
+      <div className="app-content content">
         <div className="content-overlay"></div>
         <div className="header-navbar-shadow"></div>
         <div className="content-wrapper">
           <div className="content-header row"></div>
-          <div className="content-body"></div>
-          <section id="complex-header-datatable">
-            <div class="row">
-              <div class="col-12">
-                <div class="card">
-                  <div class="card-header border-bottom">
-                    <h2 class="card-title">Interns</h2>
-                    <select
-                      className="form-control w-25"
-                      name=""
-                      id=""
-                      onChange={(e) => setDataLimit(e.target.value)}
-                    >
-                      <option value={50}>50</option>
-                      <option value={100}>100</option>
-                      <option value={200}>200</option>
-                      <option value={300}>300</option>
-                      <option value={500}>500</option>
-                    </select>
+          <div className="content-body">
+            <section id="complex-header-datatable">
+              <div className="row">
+                <div className="col-12">
+                  <div className="card">
+                    <div className="card-header border-bottom d-flex justify-content-between align-items-center flex-wrap">
+                      <h2 className="card-title mb-2 mb-md-0">Interns</h2>
 
-                    <select
-                      name="interView"
-                      id=""
-                      className="form-control w-25"
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    >
-                      <option selected disabled>
-                        --Select Remote/Onsite--
-                      </option>
-                      <option value="Remote">Remote</option>
-                      <option value="Onsite">Onsite</option>
-                    </select>
-                  </div>
-                  <div class="card-datatable">
-                    <table class="dt-complex-header table table-bordered table-responsive text-center">
-                      <thead>
-                        <tr>
-                          <th colSpan={2}>ETI-ID</th>
-                          <th>Name</th>
-                          <th>Image</th>
-                          <th>Email</th>
-                          <th>Duration</th>
-                          <th>Join</th>
-                          <th>Technology</th>
-                          <th>Allow</th>
-                          <th>Status</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
+                      <div className="d-flex align-items-center flex-wrap">
+                        {/* Rows per page selector */}
+                        <div className="btn-group mr-2 mb-2 mb-md-0">
+                          <button
+                            className={`btn ${
+                              rowsPerPage === 50 ? "btn-primary" : "btn-outline-primary"
+                            }`}
+                            onClick={() => {
+                              setDataLimit(50);
+                              setRowsPerPage(50);
+                            }}
+                          >
+                            50
+                          </button>
+                          <button
+                            className={`btn ${
+                              rowsPerPage === 100 ? "btn-primary" : "btn-outline-primary"
+                            }`}
+                            onClick={() => {
+                              setDataLimit(100);
+                              setRowsPerPage(100);
+                            }}
+                          >
+                            100
+                          </button>
+                          <button
+                            className={`btn ${
+                              rowsPerPage === 200 ? "btn-primary" : "btn-outline-primary"
+                            }`}
+                            onClick={() => {
+                              setDataLimit(200);
+                              setRowsPerPage(200);
+                            }}
+                          >
+                            200
+                          </button>
+                        </div>
 
-                      <tbody>
-                        {loading ? (
-                          <>
-                            <div className="text-center">
-                              <h3>Loading...</h3>
-                            </div>
-                          </>
-                        ) : Array.isArray(filteredData) ? (
-                          filteredData.map((rs) => {
-                            const {
-                              eti_id,
-                              name,
-                              email,
-                              image,
-                              duration,
-                              join_date,
-                              technology,
-                              intern_type,
-                              status,
-                            } = rs;
-                            let intMonth = 0;
-                            if (duration === "1 Month") {
-                              intMonth = 1;
-                            } else if (duration === "2 Month") {
-                              intMonth = 2;
-                            } else if (duration === "3 Month") {
-                              intMonth = 3;
-                            } else if (duration === "6 Month") {
-                              intMonth = 6;
-                            }
+                        {/* Intern type filter */}
+                        <div className="btn-group">
+                          <button
+                            className={`btn ${
+                              internTypeFilter === "All" ? "btn-info" : "btn-outline-info"
+                            }`}
+                            onClick={() => setInternTypeFilter("All")}
+                          >
+                            All
+                          </button>
+                          <button
+                            className={`btn ${
+                              internTypeFilter === "Remote" ? "btn-info" : "btn-outline-info"
+                            }`}
+                            onClick={() => setInternTypeFilter("Remote")}
+                          >
+                            Remote
+                          </button>
+                          <button
+                            className={`btn ${
+                              internTypeFilter === "Onsite" ? "btn-info" : "btn-outline-info"
+                            }`}
+                            onClick={() => setInternTypeFilter("Onsite")}
+                          >
+                            Onsite
+                          </button>
+                        </div>
+                      </div>
+                    </div>
 
-                            return (
-                              <>
-                                <tr>
-                                  <td colSpan={2}>
-                                    <strong>{eti_id}</strong>
-                                  </td>
-                                  <td>{name}</td>
-                                  <td>
-                                    <img
-                                      src={image}
-                                      alt="avatar"
-                                      width={50}
-                                      height={50}
-                                      className="rounded"
-                                    />
-                                  </td>
-                                  <td>{email}</td>
-                                  <td>{duration}</td>
-                                  <td>{join_date}</td>
-                                  <td>{technology}</td>
+                    <div className="card-datatable">
+                      <div className="table-responsive">
+                        <table className="table table-bordered text-center">
+                          <thead>
+                            <tr>
+                              <th colSpan={2}>ETI-ID</th>
+                              <th>Name</th>
+                              <th>Image</th>
+                              <th>Email</th>
+                              <th>Duration</th>
+                              <th>Join</th>
+                              <th>Technology</th>
+                              <th>Type</th>
+                              <th>Status</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
 
-                                  <td>{intern_type}</td>
-                                  <td>
-                                    {status === "Active" ? (
-                                      <>
+                          <tbody>
+                            {loading ? (
+                              <tr>
+                                <td colSpan="11" className="text-center py-4">
+                                  <div className="spinner-border text-primary" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                  </div>
+                                </td>
+                              </tr>
+                            ) : filteredData.length > 0 ? (
+                              filteredData.map((rs) => {
+                                const {
+                                  eti_id,
+                                  name,
+                                  email,
+                                  image,
+                                  duration,
+                                  join_date,
+                                  technology,
+                                  intern_type,
+                                  status,
+                                } = rs;
+                                const intMonth =
+                                  duration === "1 Month"
+                                    ? 1
+                                    : duration === "2 Month"
+                                    ? 2
+                                    : duration === "3 Month"
+                                    ? 3
+                                    : duration === "6 Month"
+                                    ? 6
+                                    : 0;
+
+                                return (
+                                  <tr key={eti_id}>
+                                    <td colSpan={2}>
+                                      <strong>{eti_id}</strong>
+                                    </td>
+                                    <td>{name}</td>
+                                    <td>
+                                      <img
+                                        src={image}
+                                        alt="avatar"
+                                        width={50}
+                                        height={50}
+                                        className="rounded"
+                                      />
+                                    </td>
+                                    <td>{email}</td>
+                                    <td>{duration}</td>
+                                    <td>{join_date}</td>
+                                    <td>{technology}</td>
+                                    <td>{intern_type}</td>
+                                    <td>
+                                      {status === "Active" ? (
                                         <span className="badge badge-pill badge-glow badge-success">
                                           {status}
                                         </span>
-                                      </>
-                                    ) : (
-                                      ""
-                                    )}
-                                  </td>
-                                  <td>
-                                    <div className="dropdown">
-                                      <button
-                                        type="button"
-                                        className="btn btn-warning dropdown-toggle"
-                                        data-toggle="dropdown"
-                                      >
-                                        Action
-                                        {/* <i data-feather="more-vertical"></i> */}
-                                      </button>
-                                      <div>
-                                        <ul className="dropdown-menu">
-                                          <li>
-                                            <a
-                                              className="dropdown-item"
-                                              href="#"
-                                              type="button"
-                                              data-toggle="modal"
-                                              data-target="#shiftModal"
-                                              onClick={() =>
-                                                setShiftData({
-                                                  email: email,
-                                                  etiId: eti_id,
-                                                })
-                                              }
-                                            >
-                                              Assign Shift
-                                            </a>
-                                          </li>
-                                          <li>
-                                            <a
-                                              className="dropdown-item"
-                                              href="#"
-                                              type="button"
-                                              data-toggle="modal"
-                                              data-target="#default2"
-                                              onClick={() =>
-                                                setIntId({
-                                                  intEmail: email,
-                                                  idInt: eti_id,
-                                                  idMan: managerid,
-                                                })
-                                              }
-                                            >
-                                              Assign Project
-                                            </a>
-                                          </li>
-                                          <li>
-                                            <a
-                                              className="dropdown-item"
-                                              href="#"
-                                              type="button"
-                                              data-toggle="modal"
-                                              data-target="#taskModal"
-                                              onClick={() =>
-                                                setIntId({
-                                                  intEmail: email,
-                                                  idInt: eti_id,
-                                                  idMan: managerid,
-                                                })
-                                              }
-                                            >
-                                              Assign Task
-                                            </a>
-                                          </li>
-                                          <li>
-                                            <a
-                                              className="dropdown-item"
-                                              href="#"
-                                              type="button"
-                                              data-toggle="modal"
-                                              data-target="#default"
-                                              onClick={() =>
-                                                setAttendVal({
-                                                  join: join_date,
-                                                  duration:
-                                                    intMonth !== 0
-                                                      ? intMonth
-                                                      : "",
-                                                  intEmail: email,
-                                                })
-                                              }
-                                            >
-                                              Attendance
-                                            </a>
-                                          </li>
-                                          <li>
-                                            <a
-                                              className="dropdown-item"
-                                              href="#"
-                                              type="button"
-                                              data-toggle="modal"
-                                              data-target="#default1"
-                                              onClick={() =>
-                                                setProjVal({ intEmail: email })
-                                              }
-                                            >
-                                              Projects
-                                            </a>
-                                          </li>
-                                        </ul>
+                                      ) : (
+                                        <span className="badge badge-pill badge-glow badge-secondary">
+                                          {status}
+                                        </span>
+                                      )}
+                                    </td>
+                                    <td>
+                                      <div className="dropdown">
+                                        <button
+                                          type="button"
+                                          className="btn btn-warning dropdown-toggle"
+                                          data-toggle="dropdown"
+                                        >
+                                          Action
+                                        </button>
+                                        <div className="dropdown-menu">
+                                          <button
+                                            className="dropdown-item"
+                                            type="button"
+                                            data-toggle="modal"
+                                            data-target="#shiftModal"
+                                            onClick={() =>
+                                              setShiftData({
+                                                email: email,
+                                                etiId: eti_id,
+                                              })
+                                            }
+                                          >
+                                            Assign Shift
+                                          </button>
+                                          <button
+                                            className="dropdown-item"
+                                            type="button"
+                                            data-toggle="modal"
+                                            data-target="#default2"
+                                            onClick={() =>
+                                              setIntId({
+                                                intEmail: email,
+                                                idInt: eti_id,
+                                                idMan: managerid,
+                                              })
+                                            }
+                                          >
+                                            Assign Project
+                                          </button>
+                                          <button
+                                            className="dropdown-item"
+                                            type="button"
+                                            data-toggle="modal"
+                                            data-target="#taskModal"
+                                            onClick={() =>
+                                              setIntId({
+                                                intEmail: email,
+                                                idInt: eti_id,
+                                                idMan: managerid,
+                                              })
+                                            }
+                                          >
+                                            Assign Task
+                                          </button>
+                                          <button
+                                            className="dropdown-item"
+                                            type="button"
+                                            data-toggle="modal"
+                                            data-target="#default"
+                                            onClick={() =>
+                                              setAttendVal({
+                                                join: join_date,
+                                                duration: intMonth,
+                                                intEmail: email,
+                                              })
+                                            }
+                                          >
+                                            Attendance
+                                          </button>
+                                          <button
+                                            className="dropdown-item"
+                                            type="button"
+                                            data-toggle="modal"
+                                            data-target="#default1"
+                                            onClick={() =>
+                                              setProjVal({ intEmail: email })
+                                            }
+                                          >
+                                            Projects
+                                          </button>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              </>
-                            );
-                          })
-                        ) : (
-                          ""
-                        )}
-                      </tbody>
-                    </table>
+                                    </td>
+                                  </tr>
+                                );
+                              })
+                            ) : (
+                              <tr>
+                                <td colSpan="11" className="text-center py-4">
+                                  No interns found matching your criteria
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {!loading && filteredData.length > 0 && (
+                      <div className="card-footer">
+                        <Pagination
+                          currentPage={currentPage}
+                          totalPages={totalPages}
+                          onPageChange={handlePageChange}
+                        />
+                      </div>
+                    )}
                   </div>
-                  <br />
-                  {/* Pagination */}
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                  />
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <AssignShift values={shiftData} />
-          <AssignProject id={intId} />
-          <AssignTask id={intId} />
-          <AttendanceReport values={attendVal} />
-          <ProjectReport values={projVal} />
+            <AssignShift values={shiftData} />
+            <AssignProject id={intId} />
+            <AssignTask id={intId} />
+            <AttendanceReport values={attendVal} />
+            <ProjectReport values={projVal} />
+          </div>
         </div>
       </div>
     </>

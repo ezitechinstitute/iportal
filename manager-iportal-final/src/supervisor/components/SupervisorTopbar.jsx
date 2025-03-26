@@ -60,18 +60,18 @@ export const SupervisorTopbar = () => {
             </ul>
           </div>
           <ul className="nav navbar-nav align-items-center ml-auto">
-            <li className="nav-item dropdown dropdown-notification mr-25">
+            {/* <li className="nav-item dropdown dropdown-notification mr-25">
               <a
                 className="nav-link"
                 href="javascript:void(0);"
                 data-toggle="dropdown"
               >
                 <FiBell className="ficon" /> {/* Replaced data-feather="bell" */}
-                <span className="badge badge-pill badge-danger badge-up">
+                {/* <span className="badge badge-pill badge-danger badge-up">
                   5
                 </span>
               </a>
-            </li>
+            </li> */} 
 
             <li className="nav-item dropdown dropdown-user">
               <a
