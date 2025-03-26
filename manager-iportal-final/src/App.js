@@ -30,6 +30,10 @@ import { RecipientPaymentVoucher } from "./pages/Recept_payemnt ";
 import Offer_letter from "./pages/Offer_letter";
 import Supervisor_Profile from "./supervisor/pages/Profile"
 // import Announcement from "./pages/Announcement"
+import ReviewLogin from "./review/pages/Login";
+import Home from './review/pages/Home';
+import Review_intern from './review/pages/Review_intern';
+import NonReview_intern from './review/pages/NonReview_intern';
 
 function App() {
   return (
@@ -82,6 +86,12 @@ function App() {
             path="/supervisor-balance"
             element={<SupervisorBalance />}
           />
+
+          {/* review */}
+          <Route path="/review" element={<ReviewLogin/>} />
+          <Route path="/review-dashboard" element={<Home/>} />
+          <Route path='/review-interns' element={<Review_intern/>}/>
+          <Route path='/non-review-interns' element={<NonReview_intern/>}/>
         </Routes>
       </BrowserRouter>
     </>
