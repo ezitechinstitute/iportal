@@ -278,16 +278,16 @@ const {
   DeletePayment,
 } = require("../controller/hr/hr_payment_controller");
 
-const {
-  AddAnnouncement,
-  GetAnnouncements,
-  GetAnnouncementById,
-  EditAnnouncement,
-  DeleteAnnouncement,
-} = require("../controller/hr/hr_announcement");
-const {
-  GetInternAnnouncements,
-} = require("../controller/intern/intern_announcements");
+// const {
+//   AddAnnouncement,
+//   GetAnnouncements,
+//   GetAnnouncementById,
+//   EditAnnouncement,
+//   DeleteAnnouncement,
+// } = require("../controller/hr/hr_announcement");
+// const {
+//   GetInternAnnouncements,
+// } = require("../controller/intern/intern_announcements");
 
 //intern-review
 const {
