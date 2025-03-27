@@ -195,7 +195,7 @@ const calculateInternAverage = (id, callback) => {
     if (err) return callback(err);
 
     const totalObtMarks = projectData[0].total_obt_marks || 0;
-    const totalMarks = projectData[0]?.total_marks || 1;
+    const totalMarks = projectData[0].total_marks || 1;
     const internProjectAverage = (totalObtMarks / totalMarks) * 100;
 
     connection.query(sqlAttendance, [id], (err, attendanceData) => {
