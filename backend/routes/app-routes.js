@@ -36,7 +36,7 @@ const {
   GetContactInternsFrameWork,
   GetTestInternsFrameWork,
   GetTestCompleteInternsFrameWork,
-  GetInternStats
+  GetInternStats,
 } = require("../controller/hr/get-interns-controller");
 const {
   GetAllOfferLetterRequests,
@@ -262,15 +262,12 @@ const {
 const {
   GetFeedback,
   InsertFeedback,
-<<<<<<< HEAD
-  ManagerComplaint, 
+
+  ManagerComplaint,
   SupervisorComplaint,
   GetManagerComplaints,
-  GetSupervisorComplaints
-} =require("../controller/intern/intern-feedback");
-=======
+  GetSupervisorComplaints,
 } = require("../controller/intern/intern-feedback");
->>>>>>> 848ad3c8e53c71d6561555b77ddf6425503cbe27
 
 const {
   AddPayment,
@@ -281,9 +278,16 @@ const {
   DeletePayment,
 } = require("../controller/hr/hr_payment_controller");
 
-<<<<<<< HEAD
-const { AddAnnouncement, GetAnnouncements, GetAnnouncementById, EditAnnouncement, DeleteAnnouncement } = require('../controller/hr/hr_announcement');
-const {GetInternAnnouncements} = require('../controller/intern/intern_announcements')
+const {
+  AddAnnouncement,
+  GetAnnouncements,
+  GetAnnouncementById,
+  EditAnnouncement,
+  DeleteAnnouncement,
+} = require("../controller/hr/hr_announcement");
+const {
+  GetInternAnnouncements,
+} = require("../controller/intern/intern_announcements");
 
 //intern-review
 const {
@@ -291,7 +295,7 @@ const {
   GetNonReviewInterns,
   CountReviewInterns,
   CountNonReviewInterns,
-  UpdateReviewStatus
+  UpdateReviewStatus,
 } = require("../controller/review/intern-review");
 
 //supervisor-intern-stats
@@ -302,10 +306,9 @@ const {
   GetCompletedInternSup,
   GetProgressInternSup,
   GetOnsiteInterns,
-  GetRemoteInterns
-} = require("../controller/supervisor/sup_interns_stats_controller")
+  GetRemoteInterns,
+} = require("../controller/supervisor/sup_interns_stats_controller");
 
-=======
 const {
   AddAnnouncement,
   GetAnnouncements,
@@ -318,7 +321,7 @@ const {
 } = require("../controller/intern/intern_announcements");
 const GetVerificationLink = require("../services/GetLink");
 const CheckMailVerified = require("../services/CheckMailVerified");
->>>>>>> 848ad3c8e53c71d6561555b77ddf6425503cbe27
+
 const dotenv = require("dotenv").config();
 const router = express.Router();
 const secretKey = process.env.SECRETKEY;
@@ -361,8 +364,7 @@ router.get("/review-interns", GetReviewInterns);
 router.get("/non-review-interns", GetNonReviewInterns);
 router.get("/count-review-interns", CountReviewInterns);
 router.get("/count-non-review-interns", CountNonReviewInterns);
-router.put("/update-review-status", UpdateReviewStatus)
-
+router.put("/update-review-status", UpdateReviewStatus);
 
 /* Interns Endpoints */
 router.post("/register-inters", RegisterInterns);
@@ -398,27 +400,22 @@ router.post("/int-leave-request", SubmitLeaveReq);
 router.get("/get-intern-leaves", GetLeaves);
 
 // Intern Feedback
-<<<<<<< HEAD
-router.post("/intern-feedback",InsertFeedback);
-router.get("/get-intern-feedback",GetFeedback);
-router.post("/intern-manager-complaint", ManagerComplaint);
-router.post("/intern-supervisor-complaint", SupervisorComplaint);
-router.get('/manager-complaints', GetManagerComplaints);
-router.get('/supervisor-complaints', GetSupervisorComplaints);
-=======
+
 router.post("/intern-feedback", InsertFeedback);
 router.get("/get-intern-feedback", GetFeedback);
->>>>>>> 848ad3c8e53c71d6561555b77ddf6425503cbe27
+router.post("/intern-manager-complaint", ManagerComplaint);
+router.post("/intern-supervisor-complaint", SupervisorComplaint);
+router.get("/manager-complaints", GetManagerComplaints);
+router.get("/supervisor-complaints", GetSupervisorComplaints);
+router.post("/intern-feedback", InsertFeedback);
+router.get("/get-intern-feedback", GetFeedback);
 
 //offer Letter
 router.post("/intern-offer-letter", InsertOfferLetterRequest);
 router.get("/get-intern-offer-letter/:id", GetOfferLetterRequest);
-<<<<<<< HEAD
-router.get("/get-manager", GetManagerDetails)
 
-=======
 router.get("/get-manager", GetManagerDetails);
->>>>>>> 848ad3c8e53c71d6561555b77ddf6425503cbe27
+router.get("/get-manager", GetManagerDetails);
 //intern_announcement
 router.get("/get-intern-announcement", GetInternAnnouncements);
 // Intern Statics
