@@ -155,8 +155,8 @@ const GetInternAverage = (req, res) => {
         return res.status(500).json({ message: 'Error querying attendance data', error: err.message });
       }
 
-      const totalWorkingHours = attendanceData[0]?.total_working_hours || 0;
-      const totalDays = attendanceData[0]?.total_days || 1; 
+      const totalWorkingHours = attendanceData[0].total_working_hours || 0;
+      const totalDays = attendanceData[0].total_days || 1; 
       const expectedTotalHours = totalDays * 3;
       let attendancePercentage = (totalWorkingHours / expectedTotalHours) * 100;
 
@@ -201,8 +201,8 @@ const calculateInternAverage = (id, callback) => {
     connection.query(sqlAttendance, [id], (err, attendanceData) => {
       if (err) return callback(err);
 
-      const totalWorkingHours = attendanceData[0]?.total_working_hours || 0;
-      const totalDays = attendanceData[0]?.total_days || 1;
+      const totalWorkingHours = attendanceData[0].total_working_hours || 0;
+      const totalDays = attendanceData[0].total_days || 1;
       const expectedTotalHours = totalDays * 3;
       let attendancePercentage = (totalWorkingHours / expectedTotalHours) * 100;
 
