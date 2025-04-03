@@ -52,16 +52,11 @@ export const InternStatics = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      GetInterview();
-      GetTestIntern();
-      GetTestComplete();
-      GetContactWith();
-    }, 1000);
-
-    // Cleanup interval on component unmount
-    return () => clearInterval(interval);
-  }, []);
+    GetInterview();
+    GetTestIntern();
+    GetTestComplete();
+    GetContactWith();
+  }, [2000]);
 
   return (
     <>
