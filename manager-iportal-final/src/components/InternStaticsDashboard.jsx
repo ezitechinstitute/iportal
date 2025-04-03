@@ -50,16 +50,11 @@ export const InternStaticsDashboard = () => {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      GetInterview();
-      GetTestIntern();
-      GetTestComplete();
-      GetContact();
-    }, 1000);
-
-    // Cleanup interval on component unmount
-    return () => clearInterval(interval);
-  }, []);
+    GetInterview();
+    GetTestIntern();
+    GetTestComplete();
+    GetContact();
+  }, [2000]);
 
   return (
     <>
