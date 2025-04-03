@@ -283,11 +283,9 @@ export const ManagerDashboard = () => {
   };
 
   useEffect(() => {
-    setInterval(() => {
-      GetOnsiteStatics();
-      GetRemoteStatics();
-    }, 1000);
-  }, []);
+    GetOnsiteStatics();
+    GetRemoteStatics();
+  }, [2000]);
 
   return (
     <>
