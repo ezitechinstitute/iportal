@@ -186,7 +186,7 @@ export const ManagerDashboard = () => {
         });
     };
     ExpiredCount();
-  });
+  }, [2000]);
 
   const [dataOnsite, setDataOnsite] = useState({
     labels: [

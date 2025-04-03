@@ -88,10 +88,10 @@ function App() {
           />
 
           {/* review */}
-          <Route exact path="/review" element={<ReviewLogin/>} />
+          {/* <Route exact path="/review" element={<ReviewLogin/>} />
           <Route exact path="/review-dashboard" element={<Home/>} />
           <Route exact path='/review-interns' element={<Review_intern/>}/>
-          <Route exact path='/non-review-interns' element={<NonReview_intern/>}/>
+          <Route exact path='/non-review-interns' element={<NonReview_intern/>}/> */}
         </Routes>
       </BrowserRouter>
     </>
