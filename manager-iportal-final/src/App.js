@@ -28,12 +28,12 @@ import Profile from "./pages/Profile";
 import Payment_vochar from "./pages/Payment_vochar";
 import { RecipientPaymentVoucher } from "./pages/Recept_payemnt ";
 import Offer_letter from "./pages/Offer_letter";
-import Supervisor_Profile from "./supervisor/pages/Profile"
+import Supervisor_Profile from "./supervisor/pages/Profile";
 // import Announcement from "./pages/Announcement"
 import ReviewLogin from "./review/pages/Login";
-import Home from './review/pages/Home';
-import Review_intern from './review/pages/Review_intern';
-import NonReview_intern from './review/pages/NonReview_intern';
+import Home from "./review/pages/Home";
+import Review_intern from "./review/pages/Review_intern";
+import NonReview_intern from "./review/pages/NonReview_intern";
 
 function App() {
   return (
@@ -53,11 +53,14 @@ function App() {
           <Route exact path="/test-completed" element={<InternCompleted />} />
           <Route exact path="/active-interns" element={<ActiveInterns />} />
           <Route exact path="/remaining-amount" element={<RemainingAmount />} />
-<Route path="/manager-profile" element={<Profile/>}/>
-<Route path="/payment-vochar" element={<Payment_vochar/>}/>
-<Route path="/payment-recepit" element={<RecipientPaymentVoucher/>}/>
-<Route path="/offer-letter" element={<Offer_letter/>}/>
-{/* <Route path="/manager-announcement" element={<Announcement/>}/> */}
+          <Route path="/manager-profile" element={<Profile />} />
+          <Route path="/payment-vochar" element={<Payment_vochar />} />
+          <Route
+            path="/payment-recepit"
+            element={<RecipientPaymentVoucher />}
+          />
+          <Route path="/offer-letter" element={<Offer_letter />} />
+          {/* <Route path="/manager-announcement" element={<Announcement/>}/> */}
 
           {/* <Route exact path="/manager-leave" element={<ManagerLeave />} /> */}
           {/* <Route exact path="/balance" element={<Balance />} /> */}
@@ -65,7 +68,7 @@ function App() {
 
           {/* Supervisor Routes*/}
           <Route exact path="/supervisor" element={<SupervisorLogin />} />
-          <Route path="/supervisor-profile" element={<Supervisor_Profile/>}/>
+          <Route path="/supervisor-profile" element={<Supervisor_Profile />} />
           <Route
             exact
             path="/supervisor-dashboard"
@@ -88,10 +91,14 @@ function App() {
           />
 
           {/* review */}
-          {/* <Route exact path="/review" element={<ReviewLogin/>} />
-          <Route exact path="/review-dashboard" element={<Home/>} />
-          <Route exact path='/review-interns' element={<Review_intern/>}/>
-          <Route exact path='/non-review-interns' element={<NonReview_intern/>}/> */}
+          <Route exact path="/review" element={<ReviewLogin />} />
+          <Route exact path="/review-dashboard" element={<Home />} />
+          <Route exact path="/review-interns" element={<Review_intern />} />
+          <Route
+            exact
+            path="/non-review-interns"
+            element={<NonReview_intern />}
+          />
         </Routes>
       </BrowserRouter>
     </>
