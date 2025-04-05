@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const {
   RegisterInterns,
   SendVerificationCode,
@@ -348,6 +349,11 @@ function verifyToken(req, res, next) {
     });
   }
 }
+
+// Server-side (Express) fallback
+router.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "build", "index.html"));
+});
 
 router.get("/test", (req, res) => {
   res.send("Hello from NodeJs Server");
