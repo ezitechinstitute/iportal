@@ -7,7 +7,7 @@ const RunJob = require("./controller/combine/Run-Scheduler");
 const { VerifyEmail } = require("./controller/combine/Verify-Email");
 const dotenv = require("dotenv").config();
 const PORT = 8088;
-const path = require('path')
+// const path = require('path')
 
 const app = express();
 app.use(bodyParser.json({ limit: "35mb" })); // Adjust the limit as needed
@@ -24,7 +24,7 @@ const corsOptions = {
     "http://localhost:3000",
     "http://localhost:3001",
     "http://localhost:3002",
-    "http://localhost:3003"
+    "http://localhost:3003",
   ],
   methods: ["GET", "POST", "PUT", "DELETE"], // Optional: Allowed methods
   // allowedHeaders: ["Content-Type", "Authorization"], // Optional: Allowed headers
@@ -40,10 +40,9 @@ app.listen(PORT, () => {
 });
 
 // Server-side (Express) fallback
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
-});
-
+// app.get('*', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, 'repositories/iportal/super-admin/build', 'index.html'));
+// });
 
 RunJob();
 // VerifyEmail()
