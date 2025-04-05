@@ -103,32 +103,32 @@ export const Register = () => {
 
   const [verified, setVerified] = useState(false);
 
-  // const VerifyEmail = async () => {
-  //   await axios
-  //     .post(`${process.env.REACT_APP_API_URL}/verify-int-email`, {
-  //       email: value.internemail,
-  //     })
-  //     .then((res) => {
-  //       alert(res.data.msg);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
+  const VerifyEmail = async () => {
+    await axios
+      .post(`${process.env.REACT_APP_API_URL}/verify-int-email`, {
+        email: value.internemail,
+      })
+      .then((res) => {
+        alert(res.data.msg);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-  // useEffect(() => {
-  //   const checkVerificationStatus = () => {
-  //     const isVerified = localStorage.getItem("emailVerified");
-  //     if (isVerified === "true") {
-  //       setVerified(true);
-  //     }
-  //   };
+  useEffect(() => {
+    const checkVerificationStatus = () => {
+      const isVerified = localStorage.getItem("emailVerified");
+      if (isVerified === "true") {
+        setVerified(true);
+      }
+    };
 
-  //   // Check every 2 seconds
-  //   const interval = setInterval(checkVerificationStatus, 2000);
+    // Check every 2 seconds
+    const interval = setInterval(checkVerificationStatus, 2000);
 
-  //   return () => clearInterval(interval); // Cleanup when component unmounts
-  // }, []);
+    return () => clearInterval(interval); // Cleanup when component unmounts
+  }, []);
 
   const handleImage = (e) => {
     const file = e.target.files[0];
@@ -300,7 +300,7 @@ export const Register = () => {
                                   Click to Verify
                                 </a> */}
                               </div>
-                              {/* {!verified ? (
+                              {!verified ? (
                                 <button
                                   className="btn btn-primary"
                                   onClick={() => VerifyEmail()}
@@ -316,7 +316,7 @@ export const Register = () => {
                                 <p style={{ color: "green" }}>
                                   ✅ Email Verified!
                                 </p>
-                              )} */}
+                              )}
                             </div>
                           </div>
                         </div>
@@ -901,7 +901,7 @@ export const Register = () => {
                           )}
                         </div>
 
-                        {/* {verified ? (
+                        {verified ? (
                           <button
                             className="btn btn-primary btn-block mt-2"
                             tabindex="5"
@@ -918,15 +918,15 @@ export const Register = () => {
                           >
                             Register
                           </button>
-                        )} */}
+                        )}
 
-                        <input
+                        {/* <input
                           type="submit"
                           className="btn btn-primary btn-block"
                           name=""
                           id=""
                           value={"Register"}
-                        />
+                        /> */}
                       </form>
                       {/* </section> */}
 
