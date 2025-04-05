@@ -7,7 +7,7 @@ const GetReviewInterns = (req, res) => {
     FROM intern_table it 
     JOIN intern_accounts ia 
     ON it.email = ia.email 
-    WHERE ia.review = 'Review'`;
+    WHERE ia.review = 'Review' AND ia.int_status = 'Active'`;
 
   connection.query(sql, (err, data) => {
     if (err) {
@@ -39,7 +39,7 @@ const GetNonReviewInterns = (req, res) => {
     FROM intern_table it 
     JOIN intern_accounts ia 
     ON it.email = ia.email 
-    WHERE ia.review = 'Non-Review'`;
+    WHERE ia.review = 'Non-Review' AND ia.int_status = 'Active'`;
 
   connection.query(sql, (err, data) => {
     if (err) {
@@ -71,7 +71,7 @@ const CountReviewInterns = (req, res) => {
     FROM intern_table it 
     JOIN intern_accounts ia 
     ON it.email = ia.email 
-    WHERE ia.review = 'Review'`;
+    WHERE ia.review = 'Review' AND ia.int_status = 'Active'`;
 
   connection.query(sql, (err, data) => {
     if (err) {
@@ -91,7 +91,7 @@ const CountNonReviewInterns = (req, res) => {
     FROM intern_table it 
     JOIN intern_accounts ia 
     ON it.email = ia.email 
-    WHERE ia.review = 'Non-Review'`;
+    WHERE ia.review = 'Non-Review' AND ia.int_status = 'Active'`;
 
   connection.query(sql, (err, data) => {
     if (err) {
