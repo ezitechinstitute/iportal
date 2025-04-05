@@ -7,7 +7,7 @@ const RunJob = require("./controller/combine/Run-Scheduler");
 const { VerifyEmail } = require("./controller/combine/Verify-Email");
 const dotenv = require("dotenv").config();
 const PORT = 8088;
-// const path = require('path')
+const path = require('path')
 
 const app = express();
 app.use(bodyParser.json({ limit: "35mb" })); // Adjust the limit as needed
@@ -39,7 +39,10 @@ app.listen(PORT, () => {
   console.log(`Server Running on: ${PORT}`);
 });
 
-
+// Server-side (Express) fallback
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+});
 
 
 RunJob();
