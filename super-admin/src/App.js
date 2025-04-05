@@ -1,4 +1,4 @@
-import { HashRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ManagerHome } from "./pages/ManagerHome";
 import { OnsiteInterns } from "./pages/OnsiteInterns";
 import { RemoteInterns } from "./pages/RemoteInterns";
@@ -36,7 +36,7 @@ import { UniversityInterns } from "./universties/pages/UniversityInterns";
 function App() {
   return (
     <>
-      <Router>
+      <BrowserRouter>
         <Routes>
           {/* Index Routes */}
 
@@ -86,7 +86,7 @@ function App() {
             element={<UniversityInterns />}
           />
         </Routes>
-      </Router>
+      </BrowserRouter>
     </>
   );
 }
