@@ -42,7 +42,7 @@ function App() {
 
           {/* Manager Routes */}
           <Route index path="/" element={<AdminLogin />} />
-          <Route exact path="/admin-dashboard" element={<ManagerHome />} />
+          <Route path="/admin-dashboard" element={<ManagerHome />} />
           <Route exact path="/onsite-interns" element={<OnsiteInterns />} />
           <Route exact path="/intern-projects" element={<InternProjects />} />
           <Route

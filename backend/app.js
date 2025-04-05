@@ -7,7 +7,7 @@ const RunJob = require("./controller/combine/Run-Scheduler");
 const { VerifyEmail } = require("./controller/combine/Verify-Email");
 const dotenv = require("dotenv").config();
 const PORT = 8088;
-const path = require('path')
+// const path = require('path')
 
 const app = express();
 app.use(bodyParser.json({ limit: "35mb" })); // Adjust the limit as needed
@@ -40,12 +40,12 @@ app.listen(PORT, () => {
 });
 
 // Serve static assets from the build folder
-app.use(express.static(path.join(__dirname, "build")));
+// app.use(express.static(path.join(__dirname, "build")));
 
-// Fallback route to handle React routes on refresh
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "build", "index.html"));
-});
+// // Fallback route to handle React routes on refresh
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "build", "index.html"));
+// });
 
 RunJob();
 // VerifyEmail()
