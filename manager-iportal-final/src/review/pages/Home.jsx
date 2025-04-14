@@ -50,9 +50,9 @@ const Home = () => {
     }, []); // Empty dependency array to run only once on mount
 
     // Display loading state
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    // if (loading) {
+    //     return <div>Loading...</div>;
+    // }
 
     // // Display error message if there's an error
     // if (error) {

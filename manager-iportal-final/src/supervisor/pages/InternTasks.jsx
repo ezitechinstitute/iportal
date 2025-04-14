@@ -15,15 +15,14 @@ const InternTasks = () => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
+  const [loader, setLoader] = useState(false);
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [dataLimit, setDataLimit] = useState(50);
 
-  const [taskData, setTaskData] = useState({
-    taskId: null,
-  });
+  const [taskData, setTaskData] = useState({ taskId: null });
 
   useEffect(() => {
     if (!check) {
@@ -32,6 +31,7 @@ const InternTasks = () => {
   }, [check, navigate]);
 
   const GetTasks = async (page) => {
+    setLoader(true);
     try {
       const response = await axios.get(
         `https://api.ezitech.org/get-sup-tasks/${supid}`,
@@ -43,10 +43,21 @@ const InternTasks = () => {
           headers: { "x-access-token": token },
         }
       );
-      
-      setData(response.data.data || response.data);
-      setFilteredData(response.data.data || response.data);
-      
+
+      console.log("API Response:", response.data); // Debugging
+
+      // Handle response structure
+      const tasksData = response.data.data || response.data;
+      const formattedData = tasksData.map((item) => ({
+        ...item,
+        formatted_start_date: new Date(item.task_start).toLocaleDateString("en-PK"),
+        formatted_end_date: new Date(item.task_end).toLocaleDateString("en-PK"),
+      }));
+
+      setData(formattedData);
+      setFilteredData(formattedData);
+
+      // Handle pagination metadata
       if (response.data.meta) {
         setCurrentPage(response.data.meta.page || 1);
         setTotalPages(response.data.meta.totalPages || 1);
@@ -55,6 +66,8 @@ const InternTasks = () => {
       console.error("Error fetching tasks:", err);
       setData([]);
       setFilteredData([]);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -66,10 +79,13 @@ const InternTasks = () => {
         data.filter((item) => {
           if (statusFilter === "Approved") {
             return item.task_approve === 1;
-          } else {
-            return item.task_status && 
-              item.task_status.toLowerCase() === statusFilter.toLowerCase();
+          } else if (statusFilter === "Rejected") {
+            return item.task_approve === 0;
           }
+          return (
+            item.task_status &&
+            item.task_status.toLowerCase() === statusFilter.toLowerCase()
+          );
         })
       );
     }
@@ -172,6 +188,14 @@ const InternTasks = () => {
                           >
                             Approved
                           </button>
+                          <button
+                            className={`btn ${
+                              statusFilter === "Rejected" ? "btn-info" : "btn-outline-info"
+                            }`}
+                            onClick={() => setStatusFilter("Rejected")}
+                          >
+                            Rejected
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -193,78 +217,69 @@ const InternTasks = () => {
                               </tr>
                             </thead>
                             <tbody>
-                              {filteredData.length > 0 ? (
-                                filteredData.map((rs) => {
-                                  const {
-                                    task_id,
-                                    name,
-                                    task_title,
-                                    task_start,
-                                    task_end,
-                                    task_duration,
-                                    task_days,
-                                    task_status,
-                                    task_approve,
-                                  } = rs;
-
-                                  const date = new Date(task_start).toLocaleDateString("en-PK");
-                                  const endDate = new Date(task_end).toLocaleDateString("en-PK");
-
-                                  return (
-                                    <tr key={task_id}>
-                                      <td>{name}</td>
-                                      <td>{task_title}</td>
-                                      <td>{date}</td>
-                                      <td>{endDate}</td>
-                                      <td>{task_duration}</td>
-                                      <td>{task_days}</td>
-                                      <td>
-                                        {task_approve === null ? (
-                                          task_status === "Ongoing" ? (
-                                            <span className="badge badge-glow badge-info">
-                                              {task_status}
-                                            </span>
-                                          ) : task_status === "Expired" ? (
-                                            <span className="badge badge-glow badge-danger">
-                                              {task_status}
-                                            </span>
-                                          ) : task_status === "Submitted" ? (
-                                            <span className="badge badge-glow badge-success">
-                                              {task_status}
-                                            </span>
-                                          ) : (
-                                            " "
-                                          )
-                                        ) : task_approve === 1 ? (
-                                          <span className="badge badge-glow badge-success">
-                                            Approved
+                              {loader ? (
+                                <tr>
+                                  <td colSpan="8" className="text-center py-4">
+                                    <div className="spinner-border text-primary" role="status">
+                                      <span className="sr-only">Loading...</span>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ) : filteredData.length > 0 ? (
+                                filteredData.map((rs) => (
+                                  <tr key={rs.task_id}>
+                                    <td>{rs.name}</td>
+                                    <td>{rs.task_title}</td>
+                                    <td>{rs.formatted_start_date}</td>
+                                    <td>{rs.formatted_end_date}</td>
+                                    <td>{rs.task_duration}</td>
+                                    <td>{rs.task_days}</td>
+                                    <td>
+                                      {rs.task_approve === null ? (
+                                        rs.task_status === "Ongoing" ? (
+                                          <span className="badge badge-glow badge-info">
+                                            {rs.task_status}
                                           </span>
-                                        ) : task_approve === 0 ? (
+                                        ) : rs.task_status === "Expired" ? (
                                           <span className="badge badge-glow badge-danger">
-                                            Rejected
+                                            {rs.task_status}
+                                          </span>
+                                        ) : rs.task_status === "Submitted" ? (
+                                          <span className="badge badge-glow badge-success">
+                                            {rs.task_status}
                                           </span>
                                         ) : (
-                                          ""
-                                        )}
-                                      </td>
-                                      <td>
-                                        <div className="btn-group">
-                                          <button
-                                            className="btn btn-warning"
-                                            type="button"
-                                            data-toggle="modal"
-                                            data-target="#xlarge"
-                                            onClick={() =>
-                                              setTaskData({ taskId: task_id })
-                                            }
-                                          >
-                                            View
-                                          </button>
-                                        </div>
-                                      </td>
-                                    </tr>
-                                  );
-                                })
+                                          " "
+                                        )
+                                      ) : rs.task_approve === 1 ? (
+                                        <span className="badge badge-glow badge-success">
+                                          Approved
+                                        </span>
+                                      ) : rs.task_approve === 0 ? (
+                                        <span className="badge badge-glow badge-danger">
+                                          Rejected
+                                        </span>
+                                      ) : (
+                                        ""
+                                      )}
+                                    </td>
+                                    <td>
+                                      <div className="btn-group">
+                                        <button
+                                          className="btn btn-warning"
+                                          type="button"
+                                          data-toggle="modal"
+                                          data-target="#xlarge"
+                                          onClick={() =>
+                                            setTaskData({ taskId: rs.task_id })
+                                          }
+                                        >
+                                          View
+                                        </button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ))
                               ) : (
                                 <tr>
                                   <td colSpan="8" className="text-center py-4">
@@ -276,7 +291,7 @@ const InternTasks = () => {
                           </table>
                         </div>
 
-                        {filteredData.length > 0 && (
+                        {!loader && filteredData.length > 0 && (
                           <div className="d-flex justify-content-center mt-2">
                             <Pagination
                               currentPage={currentPage}

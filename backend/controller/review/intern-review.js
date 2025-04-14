@@ -2,20 +2,60 @@ const { connection } = require("../../config/connection");
 
 // Get interns with review status 'Review'
 const GetReviewInterns = (req, res) => {
-  const sql = `
+  // Get pagination parameters from query string
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  // Get search term if provided
+  const searchTerm = req.query.search || '';
+
+  // Base SQL query
+  let sql = `
     SELECT it.image, it.name, it.technology, it.email, it.join_date, it.phone, it.intern_type
     FROM intern_table it 
     JOIN intern_accounts ia 
     ON it.email = ia.email 
-    WHERE ia.review = 'Review' AND ia.int_status = 'Active'`;
+    WHERE ia.review = 'Review' AND ia.int_status = 'Active'
+  `;
 
-  connection.query(sql, (err, data) => {
+  // Add search filter if search term exists
+  if (searchTerm) {
+    sql += ` AND it.name LIKE '%${connection.escape(searchTerm).replace(/'/g, '')}%'`;
+  }
+
+  // Add pagination
+  sql += ` LIMIT ${limit} OFFSET ${offset}`;
+
+  // Query for total count (for pagination metadata)
+  let countSql = `
+    SELECT COUNT(*) as total
+    FROM intern_table it 
+    JOIN intern_accounts ia 
+    ON it.email = ia.email 
+    WHERE ia.review = 'Review' AND ia.int_status = 'Active'
+  `;
+
+  if (searchTerm) {
+    countSql += ` AND it.name LIKE '%${connection.escape(searchTerm).replace(/'/g, '')}%'`;
+  }
+
+  // Execute both queries
+  connection.query(countSql, (err, countResult) => {
     if (err) {
-      console.error("Database error:", err);
+      console.error("Count query error:", err);
       return res.status(500).json({ error: "Database query failed" });
     }
 
-    if (data.length > 0) {
+    const total = countResult[0].total;
+    const totalPages = Math.ceil(total / limit);
+
+    connection.query(sql, (err, data) => {
+      if (err) {
+        console.error("Data query error:", err);
+        return res.status(500).json({ error: "Database query failed" });
+      }
+
       const results = data.map(row => ({
         image: row.image,
         name: row.name,
@@ -25,29 +65,76 @@ const GetReviewInterns = (req, res) => {
         internType: row.intern_type,
         email: row.email
       }));
-      return res.json(results);
-    } else {
-      return res.json([]);
-    }
+
+      return res.json({
+        data: results,
+        pagination: {
+          currentPage: page,
+          totalPages: totalPages,
+          totalItems: total,
+          itemsPerPage: limit
+        }
+      });
+    });
   });
 };
 
 // Get interns with review status 'Non-Review'
 const GetNonReviewInterns = (req, res) => {
-  const sql = `
+  // Get pagination parameters from query string
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  // Get search term if provided
+  const searchTerm = req.query.search || '';
+
+  // Base SQL query
+  let sql = `
     SELECT it.image, it.name, it.email, it.technology, it.join_date, it.phone, it.intern_type
     FROM intern_table it 
     JOIN intern_accounts ia 
     ON it.email = ia.email 
-    WHERE ia.review = 'Non-Review' AND ia.int_status = 'Active'`;
+    WHERE ia.review = 'Non-Review' AND ia.int_status = 'Active'
+  `;
 
-  connection.query(sql, (err, data) => {
+  // Add search filter if search term exists
+  if (searchTerm) {
+    sql += ` AND it.name LIKE '%${connection.escape(searchTerm).replace(/'/g, '')}%'`;
+  }
+
+  // Add pagination
+  sql += ` LIMIT ${limit} OFFSET ${offset}`;
+
+  // Query for total count (for pagination metadata)
+  let countSql = `
+    SELECT COUNT(*) as total
+    FROM intern_table it 
+    JOIN intern_accounts ia 
+    ON it.email = ia.email 
+    WHERE ia.review = 'Non-Review' AND ia.int_status = 'Active'
+  `;
+
+  if (searchTerm) {
+    countSql += ` AND it.name LIKE '%${connection.escape(searchTerm).replace(/'/g, '')}%'`;
+  }
+
+  // Execute both queries
+  connection.query(countSql, (err, countResult) => {
     if (err) {
-      console.error("Database error:", err);
+      console.error("Count query error:", err);
       return res.status(500).json({ error: "Database query failed" });
     }
 
-    if (data.length > 0) {
+    const total = countResult[0].total;
+    const totalPages = Math.ceil(total / limit);
+
+    connection.query(sql, (err, data) => {
+      if (err) {
+        console.error("Data query error:", err);
+        return res.status(500).json({ error: "Database query failed" });
+      }
+
       const results = data.map(row => ({
         image: row.image,
         name: row.name,
@@ -57,13 +144,19 @@ const GetNonReviewInterns = (req, res) => {
         internType: row.intern_type,
         email: row.email
       }));
-      return res.json(results);
-    } else {
-      return res.json([]);
-    }
+
+      return res.json({
+        data: results,
+        pagination: {
+          currentPage: page,
+          totalPages: totalPages,
+          totalItems: total,
+          itemsPerPage: limit
+        }
+      });
+    });
   });
 };
-
 // Count total interns with review status 'Review'
 const CountReviewInterns = (req, res) => {
   const sql = `

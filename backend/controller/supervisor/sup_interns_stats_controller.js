@@ -68,7 +68,7 @@ const GetProgressInternSup = (req, res) => {
         FROM intern_accounts ia
         JOIN technologies t ON ia.int_technology = t.technology
         JOIN supervisor_permissions sp ON t.tech_id = sp.tech_id
-        WHERE sp.manager_id = ? AND ia.int_status = 'Progress'
+        WHERE sp.manager_id = ? AND ia.int_status = 'Active'
     `;
     
     connection.query(sql, [manager_id], (err, data) => {
@@ -95,6 +95,7 @@ const GetOnsiteInterns = (req, res) => {
         WHERE sp.manager_id = ? 
           AND it.status = 'Active'
           AND it.intern_type = 'Onsite'
+          AND YEAR(it.created_at) = YEAR(CURDATE())
         GROUP BY MONTH(it.created_at)
         ORDER BY month
     `;
@@ -127,7 +128,6 @@ const GetOnsiteInterns = (req, res) => {
     });
 };
 
-// Get Remote Interns Data
 const GetRemoteInterns = (req, res) => {
     const manager_id = req.params.manager_id;
     
@@ -139,7 +139,9 @@ const GetRemoteInterns = (req, res) => {
         JOIN technologies t ON it.technology = t.technology
         JOIN supervisor_permissions sp ON t.tech_id = sp.tech_id
         WHERE sp.manager_id = ? 
-          AND it.status = 'Active' AND it.intern_type = 'Remote'
+          AND it.status = 'Active'
+          AND it.intern_type = 'Remote'
+          AND YEAR(it.created_at) = YEAR(CURDATE())
         GROUP BY MONTH(it.created_at)
         ORDER BY month
     `;
@@ -181,7 +183,6 @@ function getMonthName(monthNumber) {
     ];
     return months[monthNumber - 1];
 }
-
 
 module.exports = {
     GetActiveInternSup,

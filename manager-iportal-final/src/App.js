@@ -23,7 +23,7 @@ import InternProjects from "./supervisor/pages/InternProjects";
 import InternTasks from "./supervisor/pages/InternTasks";
 import SupervisorLeave from "./supervisor/pages/SupervisorLeave";
 import SupervisorBalance from "./supervisor/pages/SupervisorBalance";
-import { InternProjTasks } from "./supervisor/pages/InternProjTasks";
+import  InternProjTasks  from "./supervisor/pages/InternProjTasks";
 import Profile from "./pages/Profile";
 import Payment_vochar from "./pages/Payment_vochar";
 import { RecipientPaymentVoucher } from "./pages/Recept_payemnt ";
