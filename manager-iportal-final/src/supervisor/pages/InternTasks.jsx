@@ -47,11 +47,22 @@ const InternTasks = () => {
       console.log("API Response:", response.data); // Debugging
 
       // Handle response structure
-      const tasksData = response.data.data || response.data;
+      let tasksData = response.data.data || response.data;
+
+      // Ensure tasksData is an array
+      if (!Array.isArray(tasksData)) {
+        console.warn("tasksData is not an array:", tasksData);
+        tasksData = []; // Fallback to empty array
+      }
+
       const formattedData = tasksData.map((item) => ({
         ...item,
-        formatted_start_date: new Date(item.task_start).toLocaleDateString("en-PK"),
-        formatted_end_date: new Date(item.task_end).toLocaleDateString("en-PK"),
+        formatted_start_date: item.task_start
+          ? new Date(item.task_start).toLocaleDateString("en-PK")
+          : "N/A",
+        formatted_end_date: item.task_end
+          ? new Date(item.task_end).toLocaleDateString("en-PK")
+          : "N/A",
       }));
 
       setData(formattedData);

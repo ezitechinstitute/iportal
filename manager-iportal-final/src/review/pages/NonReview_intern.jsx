@@ -8,12 +8,9 @@ const NonReview_intern = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [pagination, setPagination] = useState({
-        currentPage: 1,
-        totalPages: 1,
-        totalItems: 0,
-        itemsPerPage: 10
-    });
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [dataLimit, setDataLimit] = useState(10);
     const navigate = useNavigate();
 
     // Check if the user is logged in
@@ -29,8 +26,8 @@ const NonReview_intern = () => {
         const fetchNonReviewInterns = async () => {
             try {
                 const url = new URL('https://api.ezitech.org/non-review-interns');
-                url.searchParams.append('page', pagination.currentPage);
-                url.searchParams.append('limit', pagination.itemsPerPage);
+                url.searchParams.append('page', currentPage);
+                url.searchParams.append('limit', dataLimit);
                 if (searchTerm) {
                     url.searchParams.append('search', searchTerm);
                 }
@@ -41,7 +38,8 @@ const NonReview_intern = () => {
                 }
                 const { data, pagination: paginationData } = await response.json();
                 setNonReviewInterns(data);
-                setPagination(paginationData);
+                setCurrentPage(paginationData.currentPage);
+                setTotalPages(paginationData.totalPages);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -50,15 +48,14 @@ const NonReview_intern = () => {
         };
 
         const delayDebounceFn = setTimeout(() => {
-            // Reset to first page when searching
             if (searchTerm) {
-                setPagination(prev => ({ ...prev, currentPage: 1 }));
+                setCurrentPage(1);
             }
             fetchNonReviewInterns();
-        }, 500); // Debounce delay
+        }, 500);
 
         return () => clearTimeout(delayDebounceFn);
-    }, [pagination.currentPage, searchTerm]);
+    }, [currentPage, searchTerm, dataLimit]);
 
     // Function to format phone number for WhatsApp
     const formatPhoneNumberForWhatsApp = (phone) => {
@@ -81,10 +78,9 @@ const NonReview_intern = () => {
                 throw new Error('Failed to update review status');
             }
 
-            // Refresh the current page after updating
             const url = new URL('https://api.ezitech.org/non-review-interns');
-            url.searchParams.append('page', pagination.currentPage);
-            url.searchParams.append('limit', pagination.itemsPerPage);
+            url.searchParams.append('page', currentPage);
+            url.searchParams.append('limit', dataLimit);
             if (searchTerm) {
                 url.searchParams.append('search', searchTerm);
             }
@@ -92,184 +88,270 @@ const NonReview_intern = () => {
             const updatedResponse = await fetch(url);
             const { data, pagination: paginationData } = await updatedResponse.json();
             setNonReviewInterns(data);
-            setPagination(paginationData);
+            setCurrentPage(paginationData.currentPage);
+            setTotalPages(paginationData.totalPages);
         } catch (err) {
             console.error('Error updating review status:', err);
             setError(err.message);
         }
     };
 
-    // Change page
-    const paginate = (pageNumber) => {
-        setPagination(prev => ({ ...prev, currentPage: pageNumber }));
+    const handlePageChange = (page) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
+    // Function to render pagination buttons dynamically
+    const renderPagination = () => {
+        const maxButtons = window.innerWidth < 768 ? 5 : 7; // Show fewer buttons on mobile
+        const pages = [];
+        const startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+        const endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            pages.push(
+                <li key={i} className={`page-item ${currentPage === i ? 'active' : ''}`}>
+                    <button
+                        className="page-link"
+                        onClick={() => handlePageChange(i)}
+                        aria-current={currentPage === i ? 'page' : undefined}
+                    >
+                        {i}
+                    </button>
+                </li>
+            );
+        }
+
+        return (
+            <>
+                <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                    <button
+                        className="page-link"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        aria-label="Previous page"
+                    >
+                        <span aria-hidden="true">&laquo;</span>
+                    </button>
+                </li>
+                {startPage > 1 && (
+                    <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                    </li>
+                )}
+                {pages}
+                {endPage < totalPages && (
+                    <li className="page-item disabled">
+                        <span className="page-link">...</span>
+                    </li>
+                )}
+                <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                    <button
+                        className="page-link"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        aria-label="Next page"
+                    >
+                        <span aria-hidden="true">&raquo;</span>
+                    </button>
+                </li>
+            </>
+        );
     };
 
     return (
-        <div>
+        <>
             <ReviewSidebar />
             <ReviewTopbar />
             <div className="app-content content">
                 <div className="content-overlay"></div>
                 <div className="header-navbar-shadow"></div>
                 <div className="content-wrapper">
-                    <div className="content-header row">
-                        {/* Search Input Field */}
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%', padding: '10px' }}>
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Search by name..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                style={{ width: '300px' }}
-                            />
-                        </div>
-                    </div>
+                    <div className="content-header row"></div>
                     <div className="content-body">
-                        {/* Loading state */}
-                        {loading && (
-                            <div className="text-center">
-                                <div className="spinner-border text-primary" role="status">
-                                    <span className="sr-only">Loading...</span>
-                                </div>
-                            </div>
-                        )}
+                        <section id="dashboard-ecommerce">
+                            <div className="row" id="table-hover-animation">
+                                <div className="col-12">
+                                    <div className="card">
+                                        <div className="card-header d-flex justify-content-between align-items-center flex-wrap">
+                                            <h4 className="card-title">Non-Review Interns</h4>
+                                            <div className="d-flex align-items-center gap-3 flex-wrap">
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    placeholder="Search by Name"
+                                                    value={searchTerm}
+                                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                                    style={{ width: '300px', maxWidth: '100%', marginRight:'5px' }}
+                                                />
 
-                        {/* Error state */}
-                        {error && (
-                            <div className="alert alert-danger">
-                                Error: {error}
-                            </div>
-                        )}
+                                                <select
+                                                    className="form-control"
+                                                    style={{ width: '100px' }}
+                                                    value={dataLimit}
+                                                    onChange={(e) => setDataLimit(Number(e.target.value))}
+                                                >
+                                                    <option value={10}>10</option>
+                                                    <option value={25}>25</option>
+                                                    <option value={50}>50</option>
+                                                    <option value={100}>100</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                        {/* Table to display non-review interns data */}
-                        {!loading && !error && (
-                            <>
-                                <div className="table-responsive">
-                                    <table className="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Image</th>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Technology</th>
-                                                <th>Join Date</th>
-                                                <th>Phone</th>
-                                                <th>Intern Type</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {nonReviewInterns.map((intern, index) => {
-                                                const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(intern.phone)}`;
-                                                return (
-                                                    <tr key={index}>
-                                                        <td className="border px-1">
-                                                            <img
-                                                                src={intern.image || 'https://via.placeholder.com/50'}
-                                                                alt={intern.name}
-                                                                style={{ width: '50px', height: '50px', borderRadius: '50%' }}
-                                                            />
-                                                        </td>
-                                                        <td className="border px-1">{intern.name}</td>
-                                                        <td className="border px-1">{intern.email}</td>
-                                                        <td className="border px-1">{intern.technology}</td>
-                                                        <td className="border px-1">{intern.joinDate}</td>
-                                                        <td className="border px-1">
-                                                            <a
-                                                                href={whatsappLink}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                style={{ color: '#25D366', textDecoration: 'none' }}
-                                                            >
-                                                                {intern.phone}
-                                                            </a>
-                                                        </td>
-                                                        <td className="border px-1">{intern.internType}</td>
-                                                        <td className="border px-1">
-                                                            <div className="dropdown">
-                                                                <button
-                                                                    className="btn btn-secondary dropdown-toggle"
-                                                                    type="button"
-                                                                    id="dropdownMenuButton"
-                                                                    data-toggle="dropdown"
-                                                                    aria-haspopup="true"
-                                                                    aria-expanded="false"
-                                                                >
-                                                                    Action
-                                                                </button>
-                                                                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                                    <button
-                                                                        className="dropdown-item"
-                                                                        onClick={() => updateReviewStatus(intern.email)}
-                                                                    >
-                                                                        Move to Review
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </td>
+                                        <div className="card-body overflow-x-auto text-center">
+                                            <table className="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Image</th>
+                                                        <th scope="col">Name</th>
+                                                        <th scope="col">Email</th>
+                                                        <th scope="col">Technology</th>
+                                                        <th scope="col">Join Date</th>
+                                                        <th scope="col">Phone</th>
+                                                        <th scope="col">Intern Type</th>
+                                                        <th scope="col">Action</th>
                                                     </tr>
-                                                );
-                                            })}
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                {/* Pagination */}
-                                {pagination.totalPages > 1 && (
-                                    <div className="d-flex justify-content-center mt-3">
-                                        <nav>
-                                            <ul className="pagination">
-                                                {/* Previous button */}
-                                                <li className={`page-item ${pagination.currentPage === 1 ? 'disabled' : ''}`}>
-                                                    <button
-                                                        className="page-link"
-                                                        onClick={() => paginate(pagination.currentPage - 1)}
-                                                        disabled={pagination.currentPage === 1}
-                                                    >
-                                                        &laquo;
-                                                    </button>
-                                                </li>
-
-                                                {/* Page numbers */}
-                                                {Array.from({ length: pagination.totalPages }, (_, i) => (
-                                                    <li key={i + 1} className={`page-item ${pagination.currentPage === i + 1 ? 'active' : ''}`}>
-                                                        <button
-                                                            className="page-link"
-                                                            onClick={() => paginate(i + 1)}
-                                                        >
-                                                            {i + 1}
-                                                        </button>
-                                                    </li>
-                                                ))}
-
-                                                {/* Next button */}
-                                                <li className={`page-item ${pagination.currentPage === pagination.totalPages ? 'disabled' : ''}`}>
-                                                    <button
-                                                        className="page-link"
-                                                        onClick={() => paginate(pagination.currentPage + 1)}
-                                                        disabled={pagination.currentPage === pagination.totalPages}
-                                                    >
-                                                        &raquo;
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                                </thead>
+                                                <tbody>
+                                                    {loading ? (
+                                                        <tr>
+                                                            <td colSpan="8">
+                                                                <h3 className="text-center">Loading...</h3>
+                                                            </td>
+                                                        </tr>
+                                                    ) : error ? (
+                                                        <tr>
+                                                            <td colSpan="8">
+                                                                <div className="alert alert-danger">
+                                                                    Error: {error}
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ) : nonReviewInterns.length > 0 ? (
+                                                        nonReviewInterns.map((intern, index) => {
+                                                            const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(intern.phone)}`;
+                                                            return (
+                                                                <tr key={index}>
+                                                                    <td className="border px-1">
+                                                                        <img
+                                                                            src={intern.image || 'https://via.placeholder.com/50'}
+                                                                            alt={intern.name}
+                                                                            style={{ width: '50px', height: '50px', borderRadius: '50%' }}
+                                                                        />
+                                                                    </td>
+                                                                    <td className="border px-1">{intern.name}</td>
+                                                                    <td className="border px-1">{intern.email}</td>
+                                                                    <td className="border px-1">{intern.technology}</td>
+                                                                    <td className="border px-1">{intern.joinDate}</td>
+                                                                    <td className="border px-1">
+                                                                        <a
+                                                                            href={whatsappLink}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            style={{ color: '#25D366', textDecoration: 'none' }}
+                                                                        >
+                                                                            {intern.phone}
+                                                                        </a>
+                                                                    </td>
+                                                                    <td className="border px-1">{intern.internType}</td>
+                                                                    <td className="border px-1">
+                                                                        <div className="dropdown">
+                                                                            <button
+                                                                                className="btn btn-secondary dropdown-toggle"
+                                                                                type="button"
+                                                                                id="dropdownMenuButton"
+                                                                                data-toggle="dropdown"
+                                                                                aria-haspopup="true"
+                                                                                aria-expanded="false"
+                                                                            >
+                                                                                Action
+                                                                            </button>
+                                                                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                                                <button
+                                                                                    className="dropdown-item"
+                                                                                    onClick={() => updateReviewStatus(intern.email)}
+                                                                                >
+                                                                                    Move to Review
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            );
+                                                        })
+                                                    ) : (
+                                                        <tr>
+                                                            <td colSpan="8">No interns found</td>
+                                                        </tr>
+                                                    )}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <br />
+                                        {totalPages > 1 && (
+                                            <div className="d-flex justify-content-center">
+                                                <nav aria-label="Page navigation">
+                                                    <ul className="pagination flex-wrap">
+                                                        {renderPagination()}
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-
-                                {/* Pagination info */}
-                                <div className="text-center mt-2">
-                                    Showing {(pagination.currentPage - 1) * pagination.itemsPerPage + 1} to{' '}
-                                    {Math.min(pagination.currentPage * pagination.itemsPerPage, pagination.totalItems)} of{' '}
-                                    {pagination.totalItems} entries
                                 </div>
-                            </>
-                        )}
+                            </div>
+                        </section>
                     </div>
                 </div>
             </div>
-        </div>
+
+            {/* Inline CSS for responsive pagination */}
+            <style>{`
+                .pagination {
+                    margin: 20px 0;
+                    gap: 5px;
+                }
+                .page-item {
+                    margin: 0 2px;
+                }
+                .page-link {
+                    padding: 8px 12px;
+                    font-size: 1rem;
+                    line-height: 1.5;
+                    border-radius: 4px;
+                    min-width: 40px;
+                    text-align: center;
+                    transition: all 0.2s ease;
+                }
+                .page-item.active .page-link {
+                    z-index: 1;
+                }
+                .page-item.disabled .page-link {
+                    cursor: not-allowed;
+                    opacity: 0.6;
+                }
+                @media (max-width: 768px) {
+                    .pagination {
+                        justify-content: center;
+                        gap: 3px;
+                    }
+                    .page-link {
+                        padding: 6px 10px;
+                        font-size: 0.9rem;
+                        min-width: 36px;
+                    }
+                }
+                @media (max-width: 576px) {
+                    .page-link {
+                        padding: 5px 8px;
+                        font-size: 0.85rem;
+                        min-width: 32px;
+                    }
+                }
+            `}</style>
+        </>
     );
 };
 
