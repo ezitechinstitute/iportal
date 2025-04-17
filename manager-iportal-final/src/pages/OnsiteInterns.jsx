@@ -37,12 +37,10 @@ export const OnsiteInterns = () => {
           params: {
             page: currentPage,
             limit: dataLimit,
-            interview_type: interviewType,
           },
         }
       );
       setData(res.data.data);
-      setFilteredData(res.data.data); // Initialize filteredData
       setTotalPages(res.data.meta.totalPages);
       setLoading(false);
     } catch (error) {
@@ -51,30 +49,52 @@ export const OnsiteInterns = () => {
     }
   };
 
-  // Search functionality
+  // Enhanced search and filter functionality
+  const applyFilters = () => {
+    let result = [...data];
+
+    // Apply interview type filter
+    if (interviewType) {
+      result = result.filter(
+        (intern) => intern.interview_type === interviewType
+      );
+    }
+
+    // Apply search filter
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      result = result.filter(
+        (intern) =>
+          (intern.name && intern.name.toLowerCase().includes(term)) ||
+          (intern.email && intern.email.toLowerCase().includes(term)) ||
+          (intern.phone && intern.phone.toLowerCase().includes(term)) ||
+          (intern.technology && intern.technology.toLowerCase().includes(term))
+      );
+    }
+
+    setFilteredData(result);
+  };
+
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
-
-    const filtered = data.filter(
-      (intern) =>
-        intern.name.toLowerCase().includes(term) ||
-        intern.email.toLowerCase().includes(term) ||
-        intern.phone.toLowerCase().includes(term) ||
-        intern.technology.toLowerCase().includes(term)
-    );
-    setFilteredData(filtered);
   };
 
   const handleInterviewTypeChange = (e) => {
     const value = e.target.value;
     setInterviewType(value);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to first page when filter changes
   };
 
+  // Fetch data when page or limit changes
   useEffect(() => {
     getOnsiteRegister();
-  }, [currentPage, dataLimit, interviewType]);
+  }, [currentPage, dataLimit]);
+
+  // Apply filters whenever data, searchTerm, or interviewType changes
+  useEffect(() => {
+    applyFilters();
+  }, [data, searchTerm, interviewType]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -145,26 +165,41 @@ export const OnsiteInterns = () => {
                     <div className="card-header d-flex justify-content-between align-items-center">
                       <h4 className="card-title">New Interns</h4>
                       <div className="d-flex align-items-center">
-                        <input
-                          type="text"
-                          className="form-control mr-2"
-                          placeholder="Search by name, email, phone or technology..."
-                          value={searchTerm}
-                          onChange={handleSearch}
-                          style={{ width: "300px" }}
-                        />
+                        <div className="input-group" style={{ width: "300px" }}>
+                          {/* <span className="input-group-text">
+                            <i className="fas fa-search"></i>
+                          </span> */}
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Search by name, email, phone or technology..."
+                            value={searchTerm}
+                            onChange={handleSearch}
+                          />
+                          {searchTerm && (
+                            <button
+                              className="btn btn-outline-secondary"
+                              type="button"
+                              onClick={() => {
+                                setSearchTerm("");
+                              }}
+                            >
+                              <i className="fas fa-times"></i>
+                            </button>
+                          )}
+                        </div>
                         <select
-                          className="form-control mr-2"
+                          className="form-control mx-2"
                           value={interviewType}
                           onChange={handleInterviewTypeChange}
                           style={{ width: "150px" }}
                         >
-                          <option value="">All</option>
+                          <option value="">All Types</option>
                           <option value="Onsite">Onsite</option>
                           <option value="Remote">Remote</option>
                         </select>
                         <select
-                          className="form-control mr-2"
+                          className="form-control mx-2"
                           style={{ width: "100px" }}
                           value={dataLimit}
                           onChange={(e) => {
@@ -190,8 +225,8 @@ export const OnsiteInterns = () => {
                     </div>
 
                     <div className="card-body overflow-x-scroll text-center">
-                      <table className="table">
-                        <thead>
+                      <table className="table table-hover">
+                        <thead className="table-light">
                           <tr>
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
@@ -204,13 +239,13 @@ export const OnsiteInterns = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {loading ? (
+                        {loading ? (
                             <tr>
                               <td colSpan="8" className="text-center">
                                 <h3>Loading...</h3>
                               </td>
                             </tr>
-                          ) : Array.isArray(filteredData) && filteredData.length > 0 ? (
+                          ) : filteredData.length > 0 ? (
                             filteredData.map((rs, index) => {
                               const {
                                 id,
@@ -224,51 +259,56 @@ export const OnsiteInterns = () => {
                               const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(phone)}`;
                               return (
                                 <tr key={id}>
-                                  <th className="border px-1" scope="row">
+                                  <th scope="row">
                                     {(currentPage - 1) * dataLimit + index + 1}
                                   </th>
-                                  <td className="border px-1">{name}</td>
-                                  <td className="border px-1">{email}</td>
-                                  <td className="border px-1">
+                                  <td>{name}</td>
+                                  <td>{email}</td>
+                                  <td>
                                     <a
                                       href={whatsappLink}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      style={{ color: "#25D366", textDecoration: "none" }}
+                                      className="text-success"
                                     >
                                       {phone}
                                     </a>
                                   </td>
-                                  <td className="border px-1">{technology}</td>
-                                  <td className="border px-1">
-                                    {interview_type}
-                                  </td>
-                                  <td className="border px-1">{status}</td>
-                                  <td className="border px-1">
+                                  <td>{technology}</td>
+                                  <td>{interview_type}</td>
+                                  <td>{status}</td>
+                                  <td>
                                     <div className="dropdown">
                                       <button
+                                        className="btn btn-sm btn-warning dropdown-toggle"
                                         type="button"
-                                        className="btn btn-warning dropdown-toggle"
-                                        data-toggle="dropdown"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
                                       >
-                                        Action
+                                        Actions
                                       </button>
-                                      <div className="dropdown-menu">
-                                        <button
-                                          className="dropdown-item"
-                                          type="button"
-                                          onClick={() => ContactWith(email)}
-                                        >
-                                          Contact With
-                                        </button>
-                                        <button
-                                          className="dropdown-item"
-                                          type="button"
-                                          onClick={() => RemoveOnsite(email)}
-                                        >
-                                          Remove
-                                        </button>
-                                      </div>
+                                      <ul className="dropdown-menu">
+                                        <li>
+                                          <button
+                                            className="dropdown-item"
+                                            type="button"
+                                            onClick={() => ContactWith(email)}
+                                          >
+                                            <i className="fas fa-phone me-2"></i>
+                                            Contact With
+                                          </button>
+                                        </li>
+                                        <li>
+                                          <button
+                                            className="dropdown-item text-danger"
+                                            type="button"
+                                            onClick={() => RemoveOnsite(email)}
+                                          >
+                                            <i className="fas fa-trash me-2"></i>
+                                            Remove
+                                          </button>
+                                        </li>
+                                      </ul>
                                     </div>
                                   </td>
                                 </tr>
@@ -276,8 +316,27 @@ export const OnsiteInterns = () => {
                             })
                           ) : (
                             <tr>
-                              <td colSpan="8" className="text-center">
-                                {searchTerm ? "No matching interns found" : "No data found"}
+                              <td colSpan="8" className="text-center py-4">
+                                {searchTerm || interviewType ? (
+                                  <>
+                                    <i className="fas fa-search fa-2x text-muted mb-2"></i>
+                                    <p>No interns found matching your filters</p>
+                                    <button
+                                      className="btn btn-sm btn-outline-primary"
+                                      onClick={() => {
+                                        setSearchTerm("");
+                                        setInterviewType("");
+                                      }}
+                                    >
+                                      Clear filters
+                                    </button>
+                                  </>
+                                ) : (
+                                  <>
+                                    <i className="fas fa-users fa-2x text-muted mb-2"></i>
+                                    <p>No interns found</p>
+                                  </>
+                                )}
                               </td>
                             </tr>
                           )}

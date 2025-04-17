@@ -4,7 +4,6 @@ import { SupervisorTopbar } from "../components/SupervisorTopbar";
 import { SupervisorSidebar } from "../components/SupervisorSidebar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Pagination } from "../../components/Pagination";
 import { AttendanceReport } from "../components/AttendanceReport";
 import { ProjectReport } from "../components/ProjectReport";
 import { AssignProject } from "../components/AssignProject";
@@ -13,7 +12,7 @@ import { AssignTask } from "../components/AssignTask";
 
 const SupervisorInterns = () => {
   const navigate = useNavigate();
-  const [token, setToken] = useState(sessionStorage.getItem("token"));
+  const [token] = useState(sessionStorage.getItem("token"));
   const check = sessionStorage.getItem("isLoggedIn");
   const managerid = sessionStorage.getItem("managerid");
   const [intId, setIntId] = useState({});
@@ -59,19 +58,33 @@ const SupervisorInterns = () => {
           headers: { "x-access-token": token },
         }
       );
+      console.log("API Response:", response.data); // Debug API response
       setData(response.data.data || []);
       setFilteredData(response.data.data || []);
-      setCurrentPage(response.data.meta?.page || 1);
-      setTotalPages(response.data.meta?.totalPages || 1);
+      setCurrentPage(Number(response.data.meta?.page) || 1);
+      setTotalPages(Number(response.data.meta?.totalPages) || 1);
     } catch (err) {
       console.error("Error fetching interns:", err);
+      setData([]);
+      setFilteredData([]);
+      setTotalPages(1);
     } finally {
       setLoading(false);
     }
   };
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    console.log("handlePageChange called with page:", page); // Debug page change
+    if (page >= 1 && page <= totalPages && page !== currentPage) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleRowsPerPageChange = (limit) => {
+    console.log("handleRowsPerPageChange called with limit:", limit); // Debug rows change
+    setDataLimit(limit);
+    setRowsPerPage(limit);
+    setCurrentPage(1); // Reset to first page
   };
 
   useEffect(() => {
@@ -86,9 +99,54 @@ const SupervisorInterns = () => {
     }
   }, [internTypeFilter, data]);
 
+  // Fetch interns when currentPage or dataLimit changes
   useEffect(() => {
+    console.log("Fetching interns for page:", currentPage, "limit:", dataLimit); // Debug fetch
     GetInterns(currentPage);
   }, [currentPage, dataLimit]);
+
+  // Simple Pagination Component
+  const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    return (
+      <nav>
+        <ul className="pagination justify-content-center">
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+            <button
+              className="page-link"
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+          </li>
+          {pageNumbers.map((page) => (
+            <li
+              key={page}
+              className={`page-item ${currentPage === page ? "active" : ""}`}
+            >
+              <button
+                className="page-link"
+                onClick={() => onPageChange(page)}
+              >
+                {page}
+              </button>
+            </li>
+          ))}
+          <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+            <button
+              className="page-link"
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
+    );
+  };
 
   return (
     <>
@@ -115,10 +173,7 @@ const SupervisorInterns = () => {
                             className={`btn ${
                               rowsPerPage === 50 ? "btn-primary" : "btn-outline-primary"
                             }`}
-                            onClick={() => {
-                              setDataLimit(50);
-                              setRowsPerPage(50);
-                            }}
+                            onClick={() => handleRowsPerPageChange(50)}
                           >
                             50
                           </button>
@@ -126,10 +181,7 @@ const SupervisorInterns = () => {
                             className={`btn ${
                               rowsPerPage === 100 ? "btn-primary" : "btn-outline-primary"
                             }`}
-                            onClick={() => {
-                              setDataLimit(100);
-                              setRowsPerPage(100);
-                            }}
+                            onClick={() => handleRowsPerPageChange(100)}
                           >
                             100
                           </button>
@@ -137,10 +189,7 @@ const SupervisorInterns = () => {
                             className={`btn ${
                               rowsPerPage === 200 ? "btn-primary" : "btn-outline-primary"
                             }`}
-                            onClick={() => {
-                              setDataLimit(200);
-                              setRowsPerPage(200);
-                            }}
+                            onClick={() => handleRowsPerPageChange(200)}
                           >
                             200
                           </button>
@@ -356,7 +405,7 @@ const SupervisorInterns = () => {
                       </div>
                     </div>
 
-                    {!loading && filteredData.length > 0 && (
+                    {!loading && totalPages > 0 && (
                       <div className="card-footer">
                         <Pagination
                           currentPage={currentPage}

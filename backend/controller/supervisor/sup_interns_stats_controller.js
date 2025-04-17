@@ -45,10 +45,10 @@ const GetCompletedInternSup = (req, res) => {
     
     const sql = `
         SELECT COUNT(*) as completed_interns_count
-        FROM intern_accounts ia
-        JOIN technologies t ON ia.int_technology = t.technology
+        FROM intern_table it
+        JOIN technologies t ON it.technology = t.technology
         JOIN supervisor_permissions sp ON t.tech_id = sp.tech_id
-        WHERE sp.manager_id = ? AND ia.int_status = 'Completed'
+        WHERE sp.manager_id = ? AND it.status = 'Completed'
     `;
     
     connection.query(sql, [manager_id], (err, data) => {

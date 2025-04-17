@@ -3,7 +3,6 @@ import { SupervisorTopbar } from "../components/SupervisorTopbar";
 import { SupervisorSidebar } from "../components/SupervisorSidebar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Pagination } from "../../components/Pagination";
 import { TaskDetails } from "../components/TaskDetails";
 
 const InternTasks = () => {
@@ -13,7 +12,6 @@ const InternTasks = () => {
   const supid = sessionStorage.getItem("managerid");
 
   const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
   const [loader, setLoader] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -22,6 +20,7 @@ const InternTasks = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [dataLimit, setDataLimit] = useState(50);
+  const [rowsPerPage, setRowsPerPage] = useState(50); // Track rows per page for UI
 
   // Task Details Modal
   const [showTaskDetails, setShowTaskDetails] = useState(false);
@@ -43,11 +42,13 @@ const InternTasks = () => {
             page: page,
             limit: dataLimit,
             status: statusFilter === "All" ? null : statusFilter,
-            search: searchTerm || null
+            search: searchTerm || null,
           },
           headers: { "x-access-token": token },
         }
       );
+
+      console.log("API Response:", response.data); // Debug API response
 
       const { data: tasksData, pagination } = response.data;
 
@@ -62,20 +63,29 @@ const InternTasks = () => {
       }));
 
       setData(formattedData);
-      setFilteredData(formattedData);
-      setCurrentPage(pagination.currentPage || 1);
-      setTotalPages(pagination.totalPages || 1);
+      setCurrentPage(Number(pagination.currentPage) || 1);
+      setTotalPages(Number(pagination.totalPages) || 1);
     } catch (err) {
       console.error("Error fetching tasks:", err);
       setData([]);
-      setFilteredData([]);
+      setTotalPages(1);
     } finally {
       setLoader(false);
     }
   };
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    console.log("handlePageChange called with page:", page); // Debug page change
+    if (page >= 1 && page <= totalPages && page !== currentPage) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleRowsPerPageChange = (limit) => {
+    console.log("handleRowsPerPageChange called with limit:", limit); // Debug rows change
+    setDataLimit(limit);
+    setRowsPerPage(limit);
+    setCurrentPage(1); // Reset to first page
   };
 
   const handleViewTask = (taskId) => {
@@ -85,14 +95,63 @@ const InternTasks = () => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      if (searchTerm) {
-        setCurrentPage(1);
-      }
+      console.log(
+        "Fetching tasks for page:",
+        currentPage,
+        "limit:",
+        dataLimit,
+        "status:",
+        statusFilter,
+        "search:",
+        searchTerm
+      ); // Debug fetch
       GetTasks(currentPage);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
   }, [currentPage, dataLimit, statusFilter, searchTerm]);
+
+  // Simple Pagination Component
+  const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    return (
+      <nav>
+        <ul className="pagination justify-content-center">
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+            <button
+              className="page-link"
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+          </li>
+          {pageNumbers.map((page) => (
+            <li
+              key={page}
+              className={`page-item ${currentPage === page ? "active" : ""}`}
+            >
+              <button className="page-link" onClick={() => onPageChange(page)}>
+                {page}
+              </button>
+            </li>
+          ))}
+          <li
+            className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
+          >
+            <button
+              className="page-link"
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
+    );
+  };
 
   return (
     <>
@@ -113,37 +172,46 @@ const InternTasks = () => {
                       <h4 className="card-title mb-2 mb-md-0">Intern Tasks</h4>
 
                       <div className="d-flex align-items-center flex-wrap gap-2">
-                        {/* <input
+                        {/* Search input */}
+                        {/* Uncomment if needed
+                        <input
                           type="text"
                           className="form-control"
                           placeholder="Search by name or title"
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          style={{ width: '250px' }}
-                        /> */}
+                          style={{ width: "250px" }}
+                        />
+                        */}
 
                         <div className="btn-group mr-2 mb-2 mb-md-0">
                           <button
                             className={`btn ${
-                              dataLimit === 50 ? "btn-primary" : "btn-outline-primary"
+                              rowsPerPage === 50
+                                ? "btn-primary"
+                                : "btn-outline-primary"
                             }`}
-                            onClick={() => setDataLimit(50)}
+                            onClick={() => handleRowsPerPageChange(50)}
                           >
                             50
                           </button>
                           <button
                             className={`btn ${
-                              dataLimit === 100 ? "btn-primary" : "btn-outline-primary"
+                              rowsPerPage === 100
+                                ? "btn-primary"
+                                : "btn-outline-primary"
                             }`}
-                            onClick={() => setDataLimit(100)}
+                            onClick={() => handleRowsPerPageChange(100)}
                           >
                             100
                           </button>
                           <button
                             className={`btn ${
-                              dataLimit === 200 ? "btn-primary" : "btn-outline-primary"
+                              rowsPerPage === 200
+                                ? "btn-primary"
+                                : "btn-outline-primary"
                             }`}
-                            onClick={() => setDataLimit(200)}
+                            onClick={() => handleRowsPerPageChange(200)}
                           >
                             200
                           </button>
@@ -152,7 +220,9 @@ const InternTasks = () => {
                         <div className="btn-group">
                           <button
                             className={`btn ${
-                              statusFilter === "All" ? "btn-info" : "btn-outline-info"
+                              statusFilter === "All"
+                                ? "btn-info"
+                                : "btn-outline-info"
                             }`}
                             onClick={() => setStatusFilter("All")}
                           >
@@ -160,7 +230,9 @@ const InternTasks = () => {
                           </button>
                           <button
                             className={`btn ${
-                              statusFilter === "Ongoing" ? "btn-info" : "btn-outline-info"
+                              statusFilter === "Ongoing"
+                                ? "btn-info"
+                                : "btn-outline-info"
                             }`}
                             onClick={() => setStatusFilter("Ongoing")}
                           >
@@ -168,7 +240,9 @@ const InternTasks = () => {
                           </button>
                           <button
                             className={`btn ${
-                              statusFilter === "Submitted" ? "btn-info" : "btn-outline-info"
+                              statusFilter === "Submitted"
+                                ? "btn-info"
+                                : "btn-outline-info"
                             }`}
                             onClick={() => setStatusFilter("Submitted")}
                           >
@@ -176,7 +250,9 @@ const InternTasks = () => {
                           </button>
                           <button
                             className={`btn ${
-                              statusFilter === "Expired" ? "btn-info" : "btn-outline-info"
+                              statusFilter === "Expired"
+                                ? "btn-info"
+                                : "btn-outline-info"
                             }`}
                             onClick={() => setStatusFilter("Expired")}
                           >
@@ -184,7 +260,9 @@ const InternTasks = () => {
                           </button>
                           <button
                             className={`btn ${
-                              statusFilter === "Approved" ? "btn-info" : "btn-outline-info"
+                              statusFilter === "Approved"
+                                ? "btn-info"
+                                : "btn-outline-info"
                             }`}
                             onClick={() => setStatusFilter("Approved")}
                           >
@@ -192,7 +270,9 @@ const InternTasks = () => {
                           </button>
                           <button
                             className={`btn ${
-                              statusFilter === "Rejected" ? "btn-info" : "btn-outline-info"
+                              statusFilter === "Rejected"
+                                ? "btn-info"
+                                : "btn-outline-info"
                             }`}
                             onClick={() => setStatusFilter("Rejected")}
                           >
@@ -222,13 +302,16 @@ const InternTasks = () => {
                               {loader ? (
                                 <tr>
                                   <td colSpan="8" className="text-center py-4">
-                                    <div className="spinner-border text-primary" role="status">
+                                    <div
+                                      className="spinner-border text-primary"
+                                      role="status"
+                                    >
                                       <span className="sr-only">Loading...</span>
                                     </div>
                                   </td>
                                 </tr>
-                              ) : filteredData.length > 0 ? (
-                                filteredData.map((rs) => (
+                              ) : data.length > 0 ? (
+                                data.map((rs) => (
                                   <tr key={rs.task_id}>
                                     <td>{rs.name}</td>
                                     <td>{rs.task_title}</td>
@@ -291,7 +374,7 @@ const InternTasks = () => {
                           </table>
                         </div>
 
-                        {!loader && totalPages > 1 && (
+                        {!loader && totalPages > 0 && (
                           <div className="d-flex justify-content-center mt-2">
                             <Pagination
                               currentPage={currentPage}

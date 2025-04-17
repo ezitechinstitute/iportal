@@ -3,11 +3,10 @@ import { SupervisorTopbar } from "../components/SupervisorTopbar";
 import { SupervisorSidebar } from "../components/SupervisorSidebar";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Pagination } from "../../components/Pagination";
 
 const InternProjects = () => {
   const navigate = useNavigate();
-  const [token, setToken] = useState(sessionStorage.getItem("token"));
+  const [token] = useState(sessionStorage.getItem("token"));
   const check = sessionStorage.getItem("isLoggedIn");
   const supid = sessionStorage.getItem("managerid");
   const [data, setData] = useState([]);
@@ -19,6 +18,7 @@ const InternProjects = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [dataLimit, setDataLimit] = useState(50);
+  const [rowsPerPage, setRowsPerPage] = useState(50); // Track rows per page for UI
 
   useEffect(() => {
     if (!check) {
@@ -39,36 +39,53 @@ const InternProjects = () => {
           headers: { "x-access-token": token },
         }
       );
-      
-      // Check the actual response structure first
-      console.log("API Response:", response.data);
-      
-      // Adjust according to actual response structure
-      const projectsData = response.data.data || response.data;
+      console.log("API Response:", response.data); // Debug API response
+
+      const projectsData = response.data.data || response.data || [];
       setData(projectsData);
-      setFilteredData(projectsData); // Initialize with all data
-      
-      // Handle pagination meta data carefully
+      setFilteredData(projectsData);
+
       if (response.data.meta) {
-        setCurrentPage(response.data.meta.page || 1);
-        setTotalPages(response.data.meta.totalPages || 1);
+        setCurrentPage(Number(response.data.meta.page) || 1);
+        setTotalPages(Number(response.data.meta.totalPages) || 1);
+      } else {
+        setTotalPages(1);
       }
     } catch (err) {
       console.error("Error fetching projects:", err);
       setData([]);
       setFilteredData([]);
+      setTotalPages(1);
     } finally {
       setLoader(false);
     }
   };
-  
+
+  const handlePageChange = (page) => {
+    console.log("handlePageChange called with page:", page); // Debug page change
+    if (page >= 1 && page <= totalPages && page !== currentPage) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handleRowsPerPageChange = (limit) => {
+    console.log("handleRowsPerPageChange called with limit:", limit); // Debug rows change
+    setDataLimit(limit);
+    setRowsPerPage(limit);
+    setCurrentPage(1); // Reset to first page
+  };
+
   useEffect(() => {
     if (statusFilter === "All") {
       setFilteredData(data);
     } else {
-      setFilteredData(data.filter((item) => 
-        item.pstatus && item.pstatus.toLowerCase() === statusFilter.toLowerCase()
-      ));
+      setFilteredData(
+        data.filter(
+          (item) =>
+            item.pstatus &&
+            item.pstatus.toLowerCase() === statusFilter.toLowerCase()
+        )
+      );
     }
   }, [statusFilter, data]);
 
@@ -88,22 +105,51 @@ const InternProjects = () => {
   };
 
   useEffect(() => {
-    if (statusFilter === "All") {
-      setFilteredData(data);
-    } else {
-      setFilteredData(data.filter((item) => item.pstatus === statusFilter));
-    }
-  }, [statusFilter, data]);
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  useEffect(() => {
+    console.log("Fetching projects for page:", currentPage, "limit:", dataLimit); // Debug fetch
     GetProjects(currentPage);
-    console.log(currentPage)
-    console.log(dataLimit)
   }, [currentPage, dataLimit]);
+
+  // Simple Pagination Component
+  const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    return (
+      <nav>
+        <ul className="pagination justify-content-center">
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+            <button
+              className="page-link"
+              onClick={() => onPageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+          </li>
+          {pageNumbers.map((page) => (
+            <li
+              key={page}
+              className={`page-item ${currentPage === page ? "active" : ""}`}
+            >
+              <button className="page-link" onClick={() => onPageChange(page)}>
+                {page}
+              </button>
+            </li>
+          ))}
+          <li
+            className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}
+          >
+            <button
+              className="page-link"
+              onClick={() => onPageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+          </li>
+        </ul>
+      </nav>
+    );
+  };
 
   return (
     <>
@@ -128,25 +174,31 @@ const InternProjects = () => {
                         <div className="btn-group mr-2 mb-2 mb-md-0">
                           <button
                             className={`btn ${
-                              dataLimit === 50 ? "btn-primary" : "btn-outline-primary"
+                              rowsPerPage === 50
+                                ? "btn-primary"
+                                : "btn-outline-primary"
                             }`}
-                            onClick={() => setDataLimit(50)}
+                            onClick={() => handleRowsPerPageChange(50)}
                           >
                             50
                           </button>
                           <button
                             className={`btn ${
-                              dataLimit === 100 ? "btn-primary" : "btn-outline-primary"
+                              rowsPerPage === 100
+                                ? "btn-primary"
+                                : "btn-outline-primary"
                             }`}
-                            onClick={() => setDataLimit(100)}
+                            onClick={() => handleRowsPerPageChange(100)}
                           >
                             100
                           </button>
                           <button
                             className={`btn ${
-                              dataLimit === 200 ? "btn-primary" : "btn-outline-primary"
+                              rowsPerPage === 200
+                                ? "btn-primary"
+                                : "btn-outline-primary"
                             }`}
-                            onClick={() => setDataLimit(200)}
+                            onClick={() => handleRowsPerPageChange(200)}
                           >
                             200
                           </button>
@@ -156,7 +208,9 @@ const InternProjects = () => {
                         <div className="btn-group">
                           <button
                             className={`btn ${
-                              statusFilter === "All" ? "btn-info" : "btn-outline-info"
+                              statusFilter === "All"
+                                ? "btn-info"
+                                : "btn-outline-info"
                             }`}
                             onClick={() => setStatusFilter("All")}
                           >
@@ -164,7 +218,9 @@ const InternProjects = () => {
                           </button>
                           <button
                             className={`btn ${
-                              statusFilter === "Ongoing" ? "btn-info" : "btn-outline-info"
+                              statusFilter === "Ongoing"
+                                ? "btn-info"
+                                : "btn-outline-info"
                             }`}
                             onClick={() => setStatusFilter("Ongoing")}
                           >
@@ -172,7 +228,9 @@ const InternProjects = () => {
                           </button>
                           <button
                             className={`btn ${
-                              statusFilter === "Completed" ? "btn-info" : "btn-outline-info"
+                              statusFilter === "Completed"
+                                ? "btn-info"
+                                : "btn-outline-info"
                             }`}
                             onClick={() => setStatusFilter("Completed")}
                           >
@@ -180,7 +238,9 @@ const InternProjects = () => {
                           </button>
                           <button
                             className={`btn ${
-                              statusFilter === "Expired" ? "btn-info" : "btn-outline-info"
+                              statusFilter === "Expired"
+                                ? "btn-info"
+                                : "btn-outline-info"
                             }`}
                             onClick={() => setStatusFilter("Expired")}
                           >
@@ -212,7 +272,10 @@ const InternProjects = () => {
                               {loader ? (
                                 <tr>
                                   <td colSpan="10" className="text-center py-4">
-                                    <div className="spinner-border text-primary" role="status">
+                                    <div
+                                      className="spinner-border text-primary"
+                                      role="status"
+                                    >
                                       <span className="sr-only">Loading...</span>
                                     </div>
                                   </td>
@@ -227,7 +290,8 @@ const InternProjects = () => {
                                     <td>{project.duration}</td>
                                     <td>{project.days}</td>
                                     <td>
-                                      {project.obt_marks} / {project.project_marks}
+                                      {project.obt_marks} /{" "}
+                                      {project.project_marks}
                                     </td>
                                     <td>
                                       {project.pstatus === "Ongoing" ? (
@@ -267,7 +331,8 @@ const InternProjects = () => {
                                               /* Edit functionality */
                                             }}
                                           >
-                                            <i className="fas fa-edit mr-1"></i> Edit
+                                            <i className="fas fa-edit mr-1"></i>{" "}
+                                            Edit
                                           </button>
                                           <button
                                             className="dropdown-item"
@@ -275,14 +340,20 @@ const InternProjects = () => {
                                               /* Freeze functionality */
                                             }}
                                           >
-                                            <i className="fas fa-snowflake mr-1"></i> Freeze
+                                            <i className="fas fa-snowflake mr-1"></i>{" "}
+                                            Freeze
                                           </button>
                                           <button
                                             className="dropdown-item"
-                                            onClick={() => MarkasCompleted(project.project_id)}
-                                            disabled={project.pstatus === "Completed"}
+                                            onClick={() =>
+                                              MarkasCompleted(project.project_id)
+                                            }
+                                            disabled={
+                                              project.pstatus === "Completed"
+                                            }
                                           >
-                                            <i className="fas fa-check-circle mr-1"></i> Mark Complete
+                                            <i className="fas fa-check-circle mr-1"></i>{" "}
+                                            Mark Complete
                                           </button>
                                         </div>
                                       </div>
@@ -300,7 +371,7 @@ const InternProjects = () => {
                           </table>
                         </div>
 
-                        {!loader && filteredData.length > 0 && (
+                        {!loader && totalPages > 0 && (
                           <div className="d-flex justify-content-center mt-2">
                             <Pagination
                               currentPage={currentPage}
