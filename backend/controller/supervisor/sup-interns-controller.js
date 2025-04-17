@@ -229,21 +229,221 @@ const GetProjects = (req, res) => {
 
 const GetTasks = (req, res) => {
   const { supid } = req.params;
-  const sql =
-    "SELECT it.*, ia.name, ia.int_technology FROM intern_tasks it JOIN intern_accounts ia ON it.eti_id = ia.eti_id WHERE it.assigned_by = ?";
-  connection.query(sql, [supid], (err, data) => {
-    if (err) throw err;
-    return res.json(data);
+  
+  // Get pagination parameters
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 50;
+  const offset = (page - 1) * limit;
+  
+  // Get filters
+  const status = req.query.status || null;
+  const search = req.query.search || null;
+
+  // Base SQL query
+  let sql = `
+    SELECT it.*, ia.name, ia.int_technology 
+    FROM intern_tasks it 
+    JOIN intern_accounts ia ON it.eti_id = ia.eti_id 
+    WHERE it.assigned_by = ?
+  `;
+
+  // Add status filter if provided
+  if (status) {
+    if (status === 'Approved') {
+      sql += ` AND it.task_approve = 1`;
+    } else if (status === 'Rejected') {
+      sql += ` AND it.task_approve = 0`;
+    } else {
+      sql += ` AND it.task_status = ?`;
+    }
+  }
+
+  // Add search filter if provided
+  if (search) {
+    sql += ` AND (ia.name LIKE ? OR it.task_title LIKE ?)`;
+  }
+
+  // Add pagination
+  sql += ` LIMIT ? OFFSET ?`;
+
+  // Prepare parameters for query
+  let params = [supid];
+  
+  if (status && status !== 'Approved' && status !== 'Rejected') {
+    params.push(status);
+  }
+  
+  if (search) {
+    const searchParam = `%${search}%`;
+    params.push(searchParam, searchParam);
+  }
+  
+  params.push(limit, offset);
+
+  // Count query for pagination
+  let countSql = `
+    SELECT COUNT(*) as total
+    FROM intern_tasks it 
+    JOIN intern_accounts ia ON it.eti_id = ia.eti_id 
+    WHERE it.assigned_by = ?
+  `;
+
+  let countParams = [supid];
+
+  if (status) {
+    if (status === 'Approved') {
+      countSql += ` AND it.task_approve = 1`;
+    } else if (status === 'Rejected') {
+      countSql += ` AND it.task_approve = 0`;
+    } else {
+      countSql += ` AND it.task_status = ?`;
+      countParams.push(status);
+    }
+  }
+
+  if (search) {
+    const searchParam = `%${search}%`;
+    countSql += ` AND (ia.name LIKE ? OR it.task_title LIKE ?)`;
+    countParams.push(searchParam, searchParam);
+  }
+
+  // Execute both queries
+  connection.query(countSql, countParams, (err, countResult) => {
+    if (err) {
+      console.error("Count query error:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    }
+
+    const total = countResult[0].total;
+    const totalPages = Math.ceil(total / limit);
+
+    connection.query(sql, params, (err, data) => {
+      if (err) {
+        console.error("Data query error:", err);
+        return res.status(500).json({ error: "Database query failed" });
+      }
+
+      return res.json({
+        data: data,
+        pagination: {
+          currentPage: page,
+          totalPages: totalPages,
+          totalItems: total,
+          itemsPerPage: limit
+        }
+      });
+    });
   });
 };
 
 const GetProjectTasks = (req, res) => {
   const { supid } = req.params;
-  const sql =
-    "SELECT pt.*, ia.name, ia.int_technology, ip.* FROM project_tasks pt JOIN intern_accounts ia ON pt.eti_id = ia.eti_id JOIN intern_projects ip ON pt.project_id = ip.project_id WHERE pt.assigned_by = ?";
-  connection.query(sql, [supid], (err, data) => {
-    if (err) throw err;
-    return res.json(data);
+  
+  // Get pagination parameters
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 50;
+  const offset = (page - 1) * limit;
+  
+  // Get filters
+  const status = req.query.status || null;
+  const search = req.query.search || null;
+
+  // Base SQL query
+  let sql = `
+    SELECT pt.*, ia.name, ia.int_technology, ip.title 
+    FROM project_tasks pt 
+    JOIN intern_accounts ia ON pt.eti_id = ia.eti_id 
+    JOIN intern_projects ip ON pt.project_id = ip.project_id 
+    WHERE pt.assigned_by = ?
+  `;
+
+  // Add status filter if provided
+  if (status) {
+    if (status === 'Approved') {
+      sql += ` AND pt.approved = 1`;
+    } else if (status === 'Rejected') {
+      sql += ` AND pt.approved = 0`;
+    } else {
+      sql += ` AND pt.task_status = ?`;
+    }
+  }
+
+  // Add search filter if provided
+  if (search) {
+    sql += ` AND (ia.name LIKE ? OR pt.task_title LIKE ? OR ip.title LIKE ?)`;
+  }
+
+  // Add pagination
+  sql += ` LIMIT ? OFFSET ?`;
+
+  // Prepare parameters for query
+  let params = [supid];
+  
+  if (status && status !== 'Approved' && status !== 'Rejected') {
+    params.push(status);
+  }
+  
+  if (search) {
+    const searchParam = `%${search}%`;
+    params.push(searchParam, searchParam, searchParam);
+  }
+  
+  params.push(limit, offset);
+
+  // Count query for pagination
+  let countSql = `
+    SELECT COUNT(*) as total
+    FROM project_tasks pt 
+    JOIN intern_accounts ia ON pt.eti_id = ia.eti_id 
+    JOIN intern_projects ip ON pt.project_id = ip.project_id 
+    WHERE pt.assigned_by = ?
+  `;
+
+  let countParams = [supid];
+
+  if (status) {
+    if (status === 'Approved') {
+      countSql += ` AND pt.approved = 1`;
+    } else if (status === 'Rejected') {
+      countSql += ` AND pt.approved = 0`;
+    } else {
+      countSql += ` AND pt.task_status = ?`;
+      countParams.push(status);
+    }
+  }
+
+  if (search) {
+    const searchParam = `%${search}%`;
+    countSql += ` AND (ia.name LIKE ? OR pt.task_title LIKE ? OR ip.title LIKE ?)`;
+    countParams.push(searchParam, searchParam, searchParam);
+  }
+
+  // Execute both queries
+  connection.query(countSql, countParams, (err, countResult) => {
+    if (err) {
+      console.error("Count query error:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    }
+
+    const total = countResult[0].total;
+    const totalPages = Math.ceil(total / limit);
+
+    connection.query(sql, params, (err, data) => {
+      if (err) {
+        console.error("Data query error:", err);
+        return res.status(500).json({ error: "Database query failed" });
+      }
+
+      return res.json({
+        data: data,
+        pagination: {
+          currentPage: page,
+          totalPages: totalPages,
+          totalItems: total,
+          itemsPerPage: limit
+        }
+      });
+    });
   });
 };
 

@@ -9,6 +9,7 @@ import { Pagination } from "../components/Pagination";
 export const InterviewTest = () => {
   const [token] = useState(sessionStorage.getItem("token"));
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const managerid = sessionStorage.getItem("managerid");
@@ -17,7 +18,7 @@ export const InterviewTest = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [dataLimit, setDataLimit] = useState(50);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // New state for search input
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (!check) {
@@ -25,7 +26,7 @@ export const InterviewTest = () => {
     }
   }, [check, navigate]);
 
-  const getTestIntern = async (page, search = "") => {
+  const getTestIntern = async () => {
     setLoading(true);
     try {
       const res = await axios.get(
@@ -33,14 +34,13 @@ export const InterviewTest = () => {
         {
           headers: { "x-access-token": token },
           params: {
-            page: page,
+            page: currentPage,
             limit: dataLimit,
-            search: search, // Add search parameter to API call
           },
         }
       );
       setData(res.data.data);
-      setCurrentPage(res.data.meta.page);
+      setFilteredData(res.data.data); // Initialize filteredData with all data
       setTotalPages(res.data.meta.totalPages);
       setLoading(false);
     } catch (error) {
@@ -49,21 +49,34 @@ export const InterviewTest = () => {
     }
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    getTestIntern(page, searchTerm); // Fetch data with current search term
+  // Client-side search functionality
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    if (term === "") {
+      setFilteredData(data); // Show all data when search is empty
+    } else {
+      const filtered = data.filter(
+        (intern) =>
+          intern.name.toLowerCase().includes(term) ||
+          intern.email.toLowerCase().includes(term) ||
+          intern.phone.toLowerCase().includes(term) ||
+          intern.technology.toLowerCase().includes(term) ||
+          intern.interview_type?.toLowerCase().includes(term) ||
+          intern.status?.toLowerCase().includes(term)
+      );
+      setFilteredData(filtered);
+    }
   };
 
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    setCurrentPage(1); // Reset to page 1 when search changes
-    getTestIntern(1, value); // Fetch data with new search term
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   useEffect(() => {
-    getTestIntern(currentPage, searchTerm);
-  }, [dataLimit]); // Only re-fetch when dataLimit changes, not currentPage or searchTerm here
+    getTestIntern();
+  }, [currentPage, dataLimit]);
 
   const RemoveTestIntern = (email) => {
     axios
@@ -75,7 +88,7 @@ export const InterviewTest = () => {
       .then((res) => {
         if (res.data === 1) {
           alert("Removed Successfully");
-          getTestIntern(currentPage, searchTerm); // Refresh data after removal
+          getTestIntern(); // Refresh data after removal
         } else {
           alert("Something Went Wrong!!!");
         }
@@ -85,11 +98,9 @@ export const InterviewTest = () => {
         alert("Failed to remove intern");
       });
   };
-  // Function to format phone number for WhatsApp
+
   const formatPhoneNumberForWhatsApp = (phone) => {
-    // Remove any non-numeric characters
     const cleaned = phone.replace(/\D/g, "");
-    // Add the international prefix (e.g., +92 for Pakistan)
     return `+${cleaned}`;
   };
 
@@ -114,15 +125,19 @@ export const InterviewTest = () => {
                         <input
                           type="text"
                           className="form-control mr-2"
-                          placeholder="Search by name..."
+                          placeholder="Search by name, email, phone, etc..."
                           value={searchTerm}
-                          onChange={handleSearchChange}
-                          style={{ width: "200px" }}
+                          onChange={handleSearch}
+                          style={{ width: "300px" }}
                         />
                         <select
                           className="form-control"
                           style={{ width: "100px" }}
-                          onChange={(e) => setDataLimit(Number(e.target.value))}
+                          value={dataLimit}
+                          onChange={(e) => {
+                            setDataLimit(Number(e.target.value));
+                            setCurrentPage(1); // Reset to first page when changing limit
+                          }}
                         >
                           <option value={50}>50</option>
                           <option value={100}>100</option>
@@ -154,8 +169,8 @@ export const InterviewTest = () => {
                                 <h3>Loading...</h3>
                               </td>
                             </tr>
-                          ) : Array.isArray(data) && data.length > 0 ? (
-                            data.map((rs) => {
+                          ) : Array.isArray(filteredData) && filteredData.length > 0 ? (
+                            filteredData.map((rs, index) => {
                               const {
                                 id,
                                 name,
@@ -166,12 +181,11 @@ export const InterviewTest = () => {
                                 status,
                               } = rs;
 
-                              // Format phone number for WhatsApp
                               const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(phone)}`;
                               return (
                                 <tr key={id}>
                                   <th className="border px-1" scope="row">
-                                    {id}
+                                    {(currentPage - 1) * dataLimit + index + 1}
                                   </th>
                                   <td className="border px-1">{name}</td>
                                   <td className="border px-1">{email}</td>
@@ -199,21 +213,14 @@ export const InterviewTest = () => {
                                       >
                                         Action
                                       </button>
-                                      <div>
-                                        <ul className="dropdown-menu">
-                                          <li>
-                                            <a
-                                              className="dropdown-item"
-                                              href="#"
-                                              type="button"
-                                              onClick={() =>
-                                                RemoveTestIntern(email)
-                                              }
-                                            >
-                                              Remove
-                                            </a>
-                                          </li>
-                                        </ul>
+                                      <div className="dropdown-menu">
+                                        <button
+                                          className="dropdown-item"
+                                          type="button"
+                                          onClick={() => RemoveTestIntern(email)}
+                                        >
+                                          Remove
+                                        </button>
                                       </div>
                                     </div>
                                   </td>
@@ -223,7 +230,7 @@ export const InterviewTest = () => {
                           ) : (
                             <tr>
                               <td colSpan="8" className="text-center">
-                                No data found
+                                {searchTerm ? "No matching interns found" : "No data found"}
                               </td>
                             </tr>
                           )}

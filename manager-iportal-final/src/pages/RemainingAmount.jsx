@@ -9,8 +9,9 @@ export const RemainingAmount = () => {
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const [data, setData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // New state for search input
-  const [loading, setLoading] = useState(false); // Loading state for better UX
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!check) {
@@ -18,16 +19,14 @@ export const RemainingAmount = () => {
     }
   }, [check, navigate]);
 
-  const GetRemainingAmount = async (search = "") => {
+  const GetRemainingAmount = async () => {
     setLoading(true);
     try {
       const res = await axios.get("https://api.ezitech.org/pending-amount", {
         headers: { "x-access-token": token },
-        params: {
-          search: search, // Add search parameter to API call
-        },
       });
       setData(res.data);
+      setFilteredData(res.data); // Initialize filteredData with all data
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -35,23 +34,35 @@ export const RemainingAmount = () => {
     }
   };
 
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    GetRemainingAmount(value); // Fetch data with new search term
+  // Client-side search functionality
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    if (term === "") {
+      setFilteredData(data); // Show all data when search is empty
+    } else {
+      const filtered = data.filter(
+        (item) =>
+          item.name.toLowerCase().includes(term) ||
+          item.email.toLowerCase().includes(term) ||
+          item.contact.toLowerCase().includes(term) ||
+          item.remaining_amount.toString().includes(term)
+      );
+      setFilteredData(filtered);
+    }
   };
 
   useEffect(() => {
-    GetRemainingAmount(searchTerm);
-  }, []); // Initial fetch without search term
+    GetRemainingAmount();
+  }, []); // Initial fetch
 
   // Function to format phone number for WhatsApp
   const formatPhoneNumberForWhatsApp = (phone) => {
-    // Remove any non-numeric characters
     const cleaned = phone.replace(/\D/g, "");
-    // Add the international prefix (e.g., +92 for Pakistan)
     return `+${cleaned}`;
   };
+
   return (
     <>
       <ManagerTopbar />
@@ -72,10 +83,10 @@ export const RemainingAmount = () => {
                         <input
                           type="text"
                           className="form-control mr-2"
-                          placeholder="Search by name..."
+                          placeholder="Search by name, email, phone, amount..."
                           value={searchTerm}
-                          onChange={handleSearchChange}
-                          style={{ width: "200px" }}
+                          onChange={handleSearch}
+                          style={{ width: "300px" }}
                         />
                         <button
                           type="button"
@@ -105,8 +116,8 @@ export const RemainingAmount = () => {
                                 <h3>Loading...</h3>
                               </td>
                             </tr>
-                          ) : Array.isArray(data) && data.length > 0 ? (
-                            data.map((rs) => {
+                          ) : Array.isArray(filteredData) && filteredData.length > 0 ? (
+                            filteredData.map((rs) => {
                               const {
                                 id,
                                 name,
@@ -114,8 +125,7 @@ export const RemainingAmount = () => {
                                 contact,
                                 remaining_amount,
                               } = rs;
-// Format phone number for WhatsApp
-const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(contact)}`;
+                              const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(contact)}`;
                               return (
                                 <tr key={id}>
                                   <td className="border px-1">{name}</td>
@@ -139,7 +149,7 @@ const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(contact)}`;
                           ) : (
                             <tr>
                               <td colSpan="4" className="text-center">
-                                No data found
+                                {searchTerm ? "No matching records found" : "No data found"}
                               </td>
                             </tr>
                           )}

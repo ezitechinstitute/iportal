@@ -10,6 +10,7 @@ import { Pagination } from "../components/Pagination";
 export const InternCompleted = () => {
   const [token] = useState(sessionStorage.getItem("token"));
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const managerid = sessionStorage.getItem("managerid");
@@ -19,7 +20,7 @@ export const InternCompleted = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [dataLimit, setDataLimit] = useState(50);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // New state for search input
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (!check) {
@@ -27,7 +28,7 @@ export const InternCompleted = () => {
     }
   }, [check, navigate]);
 
-  const getTestComplete = async (page, search = "") => {
+  const getTestComplete = async () => {
     setLoading(true);
     try {
       const res = await axios.get(
@@ -35,14 +36,13 @@ export const InternCompleted = () => {
         {
           headers: { "x-access-token": token },
           params: {
-            page: page,
+            page: currentPage,
             limit: dataLimit,
-            search: search, // Add search parameter to API call
           },
         }
       );
       setData(res.data.data);
-      setCurrentPage(res.data.meta.page);
+      setFilteredData(res.data.data); // Initialize filteredData with all data
       setTotalPages(res.data.meta.totalPages);
       setLoading(false);
     } catch (error) {
@@ -51,21 +51,32 @@ export const InternCompleted = () => {
     }
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    getTestComplete(page, searchTerm); // Fetch data with current search term
+  // Client-side search functionality
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    if (term === "") {
+      setFilteredData(data); // Show all data when search is empty
+    } else {
+      const filtered = data.filter(
+        (intern) =>
+          intern.name.toLowerCase().includes(term) ||
+          intern.email.toLowerCase().includes(term) ||
+          intern.phone.toLowerCase().includes(term) ||
+          intern.technology.toLowerCase().includes(term)
+      );
+      setFilteredData(filtered);
+    }
   };
 
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    setCurrentPage(1); // Reset to page 1 when search changes
-    getTestComplete(1, value); // Fetch data with new search term
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   useEffect(() => {
-    getTestComplete(currentPage, searchTerm);
-  }, [dataLimit]); // Only re-fetch when dataLimit changes
+    getTestComplete();
+  }, [currentPage, dataLimit]);
 
   const RemoveCompletedIntern = (email) => {
     axios
@@ -77,7 +88,7 @@ export const InternCompleted = () => {
       .then((res) => {
         if (res.data.status) {
           alert(res.data.msg);
-          getTestComplete(currentPage, searchTerm); // Refresh data after removal
+          getTestComplete(); // Refresh data after removal
         } else {
           alert("Something Went Wrong!!!");
         }
@@ -87,6 +98,7 @@ export const InternCompleted = () => {
         alert("Failed to remove intern");
       });
   };
+
   // Function to format phone number for WhatsApp
   const formatPhoneNumberForWhatsApp = (phone) => {
     // Remove any non-numeric characters
@@ -116,15 +128,19 @@ export const InternCompleted = () => {
                         <input
                           type="text"
                           className="form-control mr-2"
-                          placeholder="Search by name..."
+                          placeholder="Search by name, email, phone, etc..."
                           value={searchTerm}
-                          onChange={handleSearchChange}
-                          style={{ width: "200px" }}
+                          onChange={handleSearch}
+                          style={{ width: "300px" }}
                         />
                         <select
                           className="form-control"
                           style={{ width: "100px" }}
-                          onChange={(e) => setDataLimit(Number(e.target.value))}
+                          value={dataLimit}
+                          onChange={(e) => {
+                            setDataLimit(Number(e.target.value));
+                            setCurrentPage(1); // Reset to first page when changing limit
+                          }}
                         >
                           <option value={50}>50</option>
                           <option value={100}>100</option>
@@ -154,15 +170,15 @@ export const InternCompleted = () => {
                                 <h3>Loading...</h3>
                               </td>
                             </tr>
-                          ) : Array.isArray(data) && data.length > 0 ? (
-                            data.map((rs) => {
+                          ) : Array.isArray(filteredData) && filteredData.length > 0 ? (
+                            filteredData.map((rs, index) => {
                               const { id, name, email, phone, technology } = rs;
                               const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(phone)}`;
 
                               return (
                                 <tr key={id}>
                                   <th className="border px-1" scope="row">
-                                    {id}
+                                    {(currentPage - 1) * dataLimit + index + 1}
                                   </th>
                                   <td className="border px-1">{name}</td>
                                   <td className="border px-1">{email}</td>
@@ -228,7 +244,7 @@ export const InternCompleted = () => {
                           ) : (
                             <tr>
                               <td colSpan="6" className="text-center">
-                                No data found
+                                {searchTerm ? "No matching interns found" : "No data found"}
                               </td>
                             </tr>
                           )}

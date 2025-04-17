@@ -16,12 +16,15 @@ const InternTasks = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
   const [loader, setLoader] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [dataLimit, setDataLimit] = useState(50);
 
+  // Task Details Modal
+  const [showTaskDetails, setShowTaskDetails] = useState(false);
   const [taskData, setTaskData] = useState({ taskId: null });
 
   useEffect(() => {
@@ -39,21 +42,14 @@ const InternTasks = () => {
           params: {
             page: page,
             limit: dataLimit,
+            status: statusFilter === "All" ? null : statusFilter,
+            search: searchTerm || null
           },
           headers: { "x-access-token": token },
         }
       );
 
-      console.log("API Response:", response.data); // Debugging
-
-      // Handle response structure
-      let tasksData = response.data.data || response.data;
-
-      // Ensure tasksData is an array
-      if (!Array.isArray(tasksData)) {
-        console.warn("tasksData is not an array:", tasksData);
-        tasksData = []; // Fallback to empty array
-      }
+      const { data: tasksData, pagination } = response.data;
 
       const formattedData = tasksData.map((item) => ({
         ...item,
@@ -67,12 +63,8 @@ const InternTasks = () => {
 
       setData(formattedData);
       setFilteredData(formattedData);
-
-      // Handle pagination metadata
-      if (response.data.meta) {
-        setCurrentPage(response.data.meta.page || 1);
-        setTotalPages(response.data.meta.totalPages || 1);
-      }
+      setCurrentPage(pagination.currentPage || 1);
+      setTotalPages(pagination.totalPages || 1);
     } catch (err) {
       console.error("Error fetching tasks:", err);
       setData([]);
@@ -82,33 +74,25 @@ const InternTasks = () => {
     }
   };
 
-  useEffect(() => {
-    if (statusFilter === "All") {
-      setFilteredData(data);
-    } else {
-      setFilteredData(
-        data.filter((item) => {
-          if (statusFilter === "Approved") {
-            return item.task_approve === 1;
-          } else if (statusFilter === "Rejected") {
-            return item.task_approve === 0;
-          }
-          return (
-            item.task_status &&
-            item.task_status.toLowerCase() === statusFilter.toLowerCase()
-          );
-        })
-      );
-    }
-  }, [statusFilter, data]);
-
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
+  const handleViewTask = (taskId) => {
+    setTaskData({ taskId });
+    setShowTaskDetails(true);
+  };
+
   useEffect(() => {
-    GetTasks(currentPage);
-  }, [currentPage, dataLimit]);
+    const delayDebounceFn = setTimeout(() => {
+      if (searchTerm) {
+        setCurrentPage(1);
+      }
+      GetTasks(currentPage);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [currentPage, dataLimit, statusFilter, searchTerm]);
 
   return (
     <>
@@ -128,8 +112,16 @@ const InternTasks = () => {
                     <div className="card-header d-flex justify-content-between align-items-center flex-wrap">
                       <h4 className="card-title mb-2 mb-md-0">Intern Tasks</h4>
 
-                      <div className="d-flex align-items-center flex-wrap">
-                        {/* Rows per page selector */}
+                      <div className="d-flex align-items-center flex-wrap gap-2">
+                        {/* <input
+                          type="text"
+                          className="form-control"
+                          placeholder="Search by name or title"
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          style={{ width: '250px' }}
+                        /> */}
+
                         <div className="btn-group mr-2 mb-2 mb-md-0">
                           <button
                             className={`btn ${
@@ -157,7 +149,6 @@ const InternTasks = () => {
                           </button>
                         </div>
 
-                        {/* Status filter buttons */}
                         <div className="btn-group">
                           <button
                             className={`btn ${
@@ -281,9 +272,7 @@ const InternTasks = () => {
                                           type="button"
                                           data-toggle="modal"
                                           data-target="#xlarge"
-                                          onClick={() =>
-                                            setTaskData({ taskId: rs.task_id })
-                                          }
+                                          onClick={() => handleViewTask(rs.task_id)}
                                         >
                                           View
                                         </button>
@@ -302,7 +291,7 @@ const InternTasks = () => {
                           </table>
                         </div>
 
-                        {!loader && filteredData.length > 0 && (
+                        {!loader && totalPages > 1 && (
                           <div className="d-flex justify-content-center mt-2">
                             <Pagination
                               currentPage={currentPage}
@@ -318,8 +307,7 @@ const InternTasks = () => {
               </div>
             </section>
 
-            {/* Task Details Modal */}
-            <TaskDetails values={taskData} />
+            {showTaskDetails && <TaskDetails values={taskData} />}
           </div>
         </div>
       </div>

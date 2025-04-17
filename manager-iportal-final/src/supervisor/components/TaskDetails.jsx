@@ -5,28 +5,42 @@ import "../../App.css";
 export const TaskDetails = ({ values }) => {
   const [review, setReview] = useState("");
   const [data, setData] = useState([]);
+  const [hasFetched, setHasFetched] = useState(false);
 
   const website = {
     title: "Example Site",
-    screenshot:
-      "https://via.placeholder.com/800x400.png?text=Website+Screenshot",
+    screenshot: "https://via.placeholder.com/800x400.png?text=Website+Screenshot",
     liveLink: "https://www.example.com",
   };
 
   const GetSubmittedTask = async () => {
-    await axios
-      .get(`https://api.ezitech.org/get-submit-task/${values.taskId}`)
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (!values.taskId || hasFetched) return;
+    
+    try {
+      const res = await axios.get(`https://api.ezitech.org/get-submit-task/${values.taskId}`);
+      setData(res.data);
+      setHasFetched(true);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
     GetSubmittedTask();
-  }, [values, GetSubmittedTask]);
+  }, [values.taskId]);
+
+  useEffect(() => {
+    const modal = document.getElementById('xlarge');
+    const handleModalClose = () => {
+      setHasFetched(false);
+    };
+
+    modal.addEventListener('hidden.bs.modal', handleModalClose);
+    
+    return () => {
+      modal.removeEventListener('hidden.bs.modal', handleModalClose);
+    };
+  }, []);
 
   const handleReviewChange = (e) => {
     const { name, value } = e.target;
@@ -37,52 +51,45 @@ export const TaskDetails = ({ values }) => {
     e.preventDefault();
 
     if (review.points !== undefined && review.desc !== undefined) {
-      await axios
-        .put(`https://api.ezitech.org/submit-review/${values.taskId}`, {
+      try {
+        const res = await axios.put(`https://api.ezitech.org/submit-review/${values.taskId}`, {
           review,
-        })
-        .then((res) => {
-          alert(res.data.msg);
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log(err);
         });
+        alert(res.data.msg);
+        window.location.reload();
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       alert("Please fill empty fields first!!!");
     }
   };
 
   const ApprovedTask = async () => {
-    await axios
-      .put(`https://api.ezitech.org/approve-task/${values.taskId}`)
-      .then((res) => {
-        alert(res.data.msg);
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const res = await axios.put(`https://api.ezitech.org/approve-task/${values.taskId}`);
+      alert(res.data.msg);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const RejectTask = async () => {
-    await axios
-      .put(`https://api.ezitech.org/reject-task/${values.taskId}`)
-      .then((res) => {
-        alert(res.data.msg);
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const res = await axios.put(`https://api.ezitech.org/reject-task/${values.taskId}`);
+      alert(res.data.msg);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
-    // <!-- Modal -->
     <div
       className="modal fade text-left"
       id="xlarge"
-      tabindex="-1"
+      tabIndex="-1"
       role="dialog"
       aria-labelledby="myModalLabel16"
       aria-hidden="true"
@@ -104,9 +111,9 @@ export const TaskDetails = ({ values }) => {
           </div>
           <div className="modal-body">
             <div className="container my-5">
-              {Array.isArray(data) ? (
+              {Array.isArray(data) && data.length > 0 ? (
                 data.map((rs) => (
-                  <>
+                  <React.Fragment key={rs.task_id}>
                     <div className="card">
                       <img
                         src={rs.task_screenshot}
@@ -151,7 +158,6 @@ export const TaskDetails = ({ values }) => {
                             id="points"
                             className="form-control"
                             value={rs.task_points}
-                            // onChange={handlePointsChange}
                             min="0"
                             readOnly
                           />
@@ -182,7 +188,7 @@ export const TaskDetails = ({ values }) => {
                         </button>
                       </div>
                     </form>
-                  </>
+                  </React.Fragment>
                 ))
               ) : (
                 <div className="card">
@@ -195,9 +201,6 @@ export const TaskDetails = ({ values }) => {
                     <h5 className="card-title">{website.title}</h5>
                     <div>
                       <h6>Description:</h6>
-                      {/* <div
-                        dangerouslySetInnerHTML={{ __html: rs.description }}
-                      ></div> */}
                     </div>
                     <a
                       href={website.liveLink}

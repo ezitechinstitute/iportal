@@ -9,6 +9,7 @@ import { Pagination } from "../components/Pagination";
 export const OnsiteInterns = () => {
   const [token] = useState(sessionStorage.getItem("token"));
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
   const managerid = sessionStorage.getItem("managerid");
@@ -17,8 +18,8 @@ export const OnsiteInterns = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [dataLimit, setDataLimit] = useState(50);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(""); // Search by name
-  const [interviewType, setInterviewType] = useState(""); // Filter by Onsite/Remote
+  const [searchTerm, setSearchTerm] = useState("");
+  const [interviewType, setInterviewType] = useState("");
 
   useEffect(() => {
     if (!check) {
@@ -26,7 +27,7 @@ export const OnsiteInterns = () => {
     }
   }, [check, navigate]);
 
-  const getOnsiteRegister = async (page, search = "", type = "") => {
+  const getOnsiteRegister = async () => {
     setLoading(true);
     try {
       const res = await axios.get(
@@ -34,15 +35,14 @@ export const OnsiteInterns = () => {
         {
           headers: { "x-access-token": token },
           params: {
-            page: page,
+            page: currentPage,
             limit: dataLimit,
-            search: search, // Search by name
-            interviewType: type, // Filter by interview_type
+            interview_type: interviewType,
           },
         }
       );
       setData(res.data.data);
-      setCurrentPage(res.data.meta.page);
+      setFilteredData(res.data.data); // Initialize filteredData
       setTotalPages(res.data.meta.totalPages);
       setLoading(false);
     } catch (error) {
@@ -51,28 +51,34 @@ export const OnsiteInterns = () => {
     }
   };
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    getOnsiteRegister(page, searchTerm, interviewType); // Fetch with current filters
-  };
+  // Search functionality
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
 
-  const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    setCurrentPage(1); // Reset to page 1
-    getOnsiteRegister(1, value, interviewType); // Fetch with new search term
+    const filtered = data.filter(
+      (intern) =>
+        intern.name.toLowerCase().includes(term) ||
+        intern.email.toLowerCase().includes(term) ||
+        intern.phone.toLowerCase().includes(term) ||
+        intern.technology.toLowerCase().includes(term)
+    );
+    setFilteredData(filtered);
   };
 
   const handleInterviewTypeChange = (e) => {
     const value = e.target.value;
     setInterviewType(value);
-    setCurrentPage(1); // Reset to page 1
-    getOnsiteRegister(1, searchTerm, value); // Fetch with new interview type
+    setCurrentPage(1);
   };
 
   useEffect(() => {
-    getOnsiteRegister(currentPage, searchTerm, interviewType);
-  }, [dataLimit]); // Re-fetch when dataLimit changes
+    getOnsiteRegister();
+  }, [currentPage, dataLimit, interviewType]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   const RemoveOnsite = (email) => {
     axios
@@ -84,7 +90,7 @@ export const OnsiteInterns = () => {
       .then((res) => {
         if (res.data === 1) {
           alert("Removed Successfully");
-          getOnsiteRegister(currentPage, searchTerm, interviewType); // Refresh data
+          getOnsiteRegister();
         } else {
           alert("Something Went Wrong!!!");
         }
@@ -105,7 +111,7 @@ export const OnsiteInterns = () => {
       .then((res) => {
         if (res.data === 1) {
           alert("Status Updated from Interview to Contact");
-          getOnsiteRegister(currentPage, searchTerm, interviewType); // Refresh data
+          getOnsiteRegister();
         } else {
           alert("Something Went Wrong!!!");
         }
@@ -115,11 +121,9 @@ export const OnsiteInterns = () => {
         alert("Failed to update status");
       });
   };
-  // Function to format phone number for WhatsApp
+
   const formatPhoneNumberForWhatsApp = (phone) => {
-    // Remove any non-numeric characters
     const cleaned = phone.replace(/\D/g, "");
-    // Add the international prefix (e.g., +92 for Pakistan)
     return `+${cleaned}`;
   };
 
@@ -144,10 +148,10 @@ export const OnsiteInterns = () => {
                         <input
                           type="text"
                           className="form-control mr-2"
-                          placeholder="Search by name..."
+                          placeholder="Search by name, email, phone or technology..."
                           value={searchTerm}
-                          onChange={handleSearchChange}
-                          style={{ width: "200px" }}
+                          onChange={handleSearch}
+                          style={{ width: "300px" }}
                         />
                         <select
                           className="form-control mr-2"
@@ -162,7 +166,11 @@ export const OnsiteInterns = () => {
                         <select
                           className="form-control mr-2"
                           style={{ width: "100px" }}
-                          onChange={(e) => setDataLimit(Number(e.target.value))}
+                          value={dataLimit}
+                          onChange={(e) => {
+                            setDataLimit(Number(e.target.value));
+                            setCurrentPage(1);
+                          }}
                         >
                           <option value={50}>50</option>
                           <option value={100}>100</option>
@@ -202,8 +210,8 @@ export const OnsiteInterns = () => {
                                 <h3>Loading...</h3>
                               </td>
                             </tr>
-                          ) : Array.isArray(data) && data.length > 0 ? (
-                            data.map((rs) => {
+                          ) : Array.isArray(filteredData) && filteredData.length > 0 ? (
+                            filteredData.map((rs, index) => {
                               const {
                                 id,
                                 name,
@@ -217,7 +225,7 @@ export const OnsiteInterns = () => {
                               return (
                                 <tr key={id}>
                                   <th className="border px-1" scope="row">
-                                    {id}
+                                    {(currentPage - 1) * dataLimit + index + 1}
                                   </th>
                                   <td className="border px-1">{name}</td>
                                   <td className="border px-1">{email}</td>
@@ -245,29 +253,21 @@ export const OnsiteInterns = () => {
                                       >
                                         Action
                                       </button>
-                                      <div>
-                                        <ul className="dropdown-menu">
-                                          <li>
-                                            <a
-                                              className="dropdown-item"
-                                              href="#"
-                                              type="button"
-                                              onClick={() => ContactWith(email)}
-                                            >
-                                              Contact With
-                                            </a>
-                                          </li>
-                                          <li>
-                                            <a
-                                              className="dropdown-item"
-                                              href="#"
-                                              type="button"
-                                              onClick={() => RemoveOnsite(email)}
-                                            >
-                                              Remove
-                                            </a>
-                                          </li>
-                                        </ul>
+                                      <div className="dropdown-menu">
+                                        <button
+                                          className="dropdown-item"
+                                          type="button"
+                                          onClick={() => ContactWith(email)}
+                                        >
+                                          Contact With
+                                        </button>
+                                        <button
+                                          className="dropdown-item"
+                                          type="button"
+                                          onClick={() => RemoveOnsite(email)}
+                                        >
+                                          Remove
+                                        </button>
                                       </div>
                                     </div>
                                   </td>
@@ -277,7 +277,7 @@ export const OnsiteInterns = () => {
                           ) : (
                             <tr>
                               <td colSpan="8" className="text-center">
-                                No data found
+                                {searchTerm ? "No matching interns found" : "No data found"}
                               </td>
                             </tr>
                           )}

@@ -101,6 +101,8 @@ const InternProjects = () => {
 
   useEffect(() => {
     GetProjects(currentPage);
+    console.log(currentPage)
+    console.log(dataLimit)
   }, [currentPage, dataLimit]);
 
   return (
