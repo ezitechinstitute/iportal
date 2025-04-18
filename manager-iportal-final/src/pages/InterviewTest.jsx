@@ -185,7 +185,7 @@ export const InterviewTest = () => {
                               return (
                                 <tr key={id}>
                                   <th className="border px-1" scope="row">
-                                    {(currentPage - 1) * dataLimit + index + 1}
+                                    {id}
                                   </th>
                                   <td className="border px-1">{name}</td>
                                   <td className="border px-1">{email}</td>

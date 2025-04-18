@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { ManagerTopbar } from "../components/ManagerTopbar";
 import { ManagerSidebar } from "../components/ManagerSidebar";
 import axios from "axios";
@@ -8,7 +8,7 @@ import { Pagination } from "../components/Pagination";
 
 export const OnsiteInterns = () => {
   const [token] = useState(sessionStorage.getItem("token"));
-  const [allData, setAllData] = useState([]);
+  const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
@@ -27,18 +27,23 @@ export const OnsiteInterns = () => {
     }
   }, [check, navigate]);
 
-  const getOnsiteRegister = async () => {
+  const getOnsiteRegister = async (page) => {
     setLoading(true);
     try {
       const res = await axios.get(
         `https://api.ezitech.org/get-interns/${managerid}`,
         {
           headers: { "x-access-token": token },
+          params: {
+            page: page,
+            limit: dataLimit,
+          },
         }
       );
-      setAllData(res.data.data);
-      setFilteredData(res.data.data);
-      setTotalPages(Math.ceil(res.data.data.length / dataLimit));
+      setData(res.data.data);
+      setFilteredData(res.data.data); // Initialize filteredData with all data
+      setCurrentPage(res.data.meta.page);
+      setTotalPages(res.data.meta.totalPages);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -46,42 +51,57 @@ export const OnsiteInterns = () => {
     }
   };
 
-  useEffect(() => {
-    let result = [...allData];
-    
+  // Client-side search and filter functionality
+  const applyFilters = () => {
+    let filtered = [...data];
+
+    // Apply search term filter
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      result = result.filter(item => 
-        item.name.toLowerCase().includes(term) || 
-        item.email.toLowerCase().includes(term) ||
-        item.phone.toLowerCase().includes(term) ||
-        item.technology.toLowerCase().includes(term)
+      filtered = filtered.filter(
+        (intern) =>
+          intern.name.toLowerCase().includes(term) ||
+          intern.email.toLowerCase().includes(term) ||
+          intern.phone.toLowerCase().includes(term) ||
+          intern.technology.toLowerCase().includes(term) ||
+          intern.interview_type?.toLowerCase().includes(term) ||
+          intern.status?.toLowerCase().includes(term)
       );
     }
-    
+
+    // Apply interview type filter
     if (interviewType) {
-      result = result.filter(item => item.interview_type === interviewType);
+      filtered = filtered.filter(
+        (intern) => intern.interview_type?.toLowerCase() === interviewType.toLowerCase()
+      );
     }
-    
-    setFilteredData(result);
-    setTotalPages(Math.ceil(result.length / dataLimit));
+
+    setFilteredData(filtered);
+  };
+
+  const handleSearch = (e) => {
+    const term = e.target.value;
+    setSearchTerm(term);
+  };
+
+  const handleInterviewTypeChange = (e) => {
+    const value = e.target.value;
+    setInterviewType(value);
     setCurrentPage(1);
-  }, [searchTerm, interviewType, allData, dataLimit]);
+  };
 
-  const currentData = useMemo(() => {
-    const startIndex = (currentPage - 1) * dataLimit;
-    const endIndex = startIndex + dataLimit;
-    return filteredData.slice(startIndex, endIndex);
-  }, [currentPage, dataLimit, filteredData]);
-
-  // Add the missing handlePageChange function
   const handlePageChange = (page) => {
     setCurrentPage(page);
+    getOnsiteRegister(page);
   };
 
   useEffect(() => {
-    getOnsiteRegister();
-  }, []);
+    getOnsiteRegister(currentPage);
+  }, [dataLimit, currentPage]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [searchTerm, interviewType, data]);
 
   const RemoveOnsite = (email) => {
     axios
@@ -93,7 +113,7 @@ export const OnsiteInterns = () => {
       .then((res) => {
         if (res.data === 1) {
           alert("Removed Successfully");
-          getOnsiteRegister();
+          getOnsiteRegister(currentPage);
         } else {
           alert("Something Went Wrong!!!");
         }
@@ -114,7 +134,7 @@ export const OnsiteInterns = () => {
       .then((res) => {
         if (res.data === 1) {
           alert("Status Updated from Interview to Contact");
-          getOnsiteRegister();
+          getOnsiteRegister(currentPage);
         } else {
           alert("Something Went Wrong!!!");
         }
@@ -151,15 +171,15 @@ export const OnsiteInterns = () => {
                         <input
                           type="text"
                           className="form-control mr-2"
-                          placeholder="Search by name, email, phone or tech..."
+                          placeholder="Search by name, email, phone, etc..."
                           value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                          style={{ width: "200px" }}
+                          onChange={handleSearch}
+                          style={{ width: "300px" }}
                         />
                         <select
                           className="form-control mr-2"
                           value={interviewType}
-                          onChange={(e) => setInterviewType(e.target.value)}
+                          onChange={handleInterviewTypeChange}
                           style={{ width: "150px" }}
                         >
                           <option value="">All</option>
@@ -169,7 +189,10 @@ export const OnsiteInterns = () => {
                         <select
                           className="form-control mr-2"
                           style={{ width: "100px" }}
-                          onChange={(e) => setDataLimit(Number(e.target.value))}
+                          onChange={(e) => {
+                            setDataLimit(Number(e.target.value));
+                            setCurrentPage(1);
+                          }}
                         >
                           <option value={50}>50</option>
                           <option value={100}>100</option>
@@ -209,8 +232,8 @@ export const OnsiteInterns = () => {
                                 <h3>Loading...</h3>
                               </td>
                             </tr>
-                          ) : currentData.length > 0 ? (
-                            currentData.map((rs) => {
+                          ) : Array.isArray(filteredData) && filteredData.length > 0 ? (
+                            filteredData.map((rs) => {
                               const {
                                 id,
                                 name,
@@ -252,29 +275,21 @@ export const OnsiteInterns = () => {
                                       >
                                         Action
                                       </button>
-                                      <div>
-                                        <ul className="dropdown-menu">
-                                          <li>
-                                            <a
-                                              className="dropdown-item"
-                                              href="#"
-                                              type="button"
-                                              onClick={() => ContactWith(email)}
-                                            >
-                                              Contact With
-                                            </a>
-                                          </li>
-                                          <li>
-                                            <a
-                                              className="dropdown-item"
-                                              href="#"
-                                              type="button"
-                                              onClick={() => RemoveOnsite(email)}
-                                            >
-                                              Remove
-                                            </a>
-                                          </li>
-                                        </ul>
+                                      <div className="dropdown-menu">
+                                        <button
+                                          className="dropdown-item"
+                                          type="button"
+                                          onClick={() => ContactWith(email)}
+                                        >
+                                          Contact With
+                                        </button>
+                                        <button
+                                          className="dropdown-item"
+                                          type="button"
+                                          onClick={() => RemoveOnsite(email)}
+                                        >
+                                          Remove
+                                        </button>
                                       </div>
                                     </div>
                                   </td>
@@ -284,7 +299,7 @@ export const OnsiteInterns = () => {
                           ) : (
                             <tr>
                               <td colSpan="8" className="text-center">
-                                No data found
+                                {searchTerm || interviewType ? "No matching interns found" : "No data found"}
                               </td>
                             </tr>
                           )}
