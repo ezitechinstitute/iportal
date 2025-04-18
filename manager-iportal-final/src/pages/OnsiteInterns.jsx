@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { ManagerTopbar } from "../components/ManagerTopbar";
 import { ManagerSidebar } from "../components/ManagerSidebar";
 import axios from "axios";
@@ -8,7 +8,7 @@ import { Pagination } from "../components/Pagination";
 
 export const OnsiteInterns = () => {
   const [token] = useState(sessionStorage.getItem("token"));
-  const [data, setData] = useState([]);
+  const [allData, setAllData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
   const check = sessionStorage.getItem("isLoggedIn");
@@ -34,14 +34,11 @@ export const OnsiteInterns = () => {
         `https://api.ezitech.org/get-interns/${managerid}`,
         {
           headers: { "x-access-token": token },
-          params: {
-            page: currentPage,
-            limit: dataLimit,
-          },
         }
       );
-      setData(res.data.data);
-      setTotalPages(res.data.meta.totalPages);
+      setAllData(res.data.data);
+      setFilteredData(res.data.data);
+      setTotalPages(Math.ceil(res.data.data.length / dataLimit));
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -49,56 +46,42 @@ export const OnsiteInterns = () => {
     }
   };
 
-  // Enhanced search and filter functionality
-  const applyFilters = () => {
-    let result = [...data];
-
-    // Apply interview type filter
-    if (interviewType) {
-      result = result.filter(
-        (intern) => intern.interview_type === interviewType
-      );
-    }
-
-    // Apply search filter
+  useEffect(() => {
+    let result = [...allData];
+    
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      result = result.filter(
-        (intern) =>
-          (intern.name && intern.name.toLowerCase().includes(term)) ||
-          (intern.email && intern.email.toLowerCase().includes(term)) ||
-          (intern.phone && intern.phone.toLowerCase().includes(term)) ||
-          (intern.technology && intern.technology.toLowerCase().includes(term))
+      result = result.filter(item => 
+        item.name.toLowerCase().includes(term) || 
+        item.email.toLowerCase().includes(term) ||
+        item.phone.toLowerCase().includes(term) ||
+        item.technology.toLowerCase().includes(term)
       );
     }
-
+    
+    if (interviewType) {
+      result = result.filter(item => item.interview_type === interviewType);
+    }
+    
     setFilteredData(result);
-  };
+    setTotalPages(Math.ceil(result.length / dataLimit));
+    setCurrentPage(1);
+  }, [searchTerm, interviewType, allData, dataLimit]);
 
-  const handleSearch = (e) => {
-    const term = e.target.value.toLowerCase();
-    setSearchTerm(term);
-  };
+  const currentData = useMemo(() => {
+    const startIndex = (currentPage - 1) * dataLimit;
+    const endIndex = startIndex + dataLimit;
+    return filteredData.slice(startIndex, endIndex);
+  }, [currentPage, dataLimit, filteredData]);
 
-  const handleInterviewTypeChange = (e) => {
-    const value = e.target.value;
-    setInterviewType(value);
-    setCurrentPage(1); // Reset to first page when filter changes
-  };
-
-  // Fetch data when page or limit changes
-  useEffect(() => {
-    getOnsiteRegister();
-  }, [currentPage, dataLimit]);
-
-  // Apply filters whenever data, searchTerm, or interviewType changes
-  useEffect(() => {
-    applyFilters();
-  }, [data, searchTerm, interviewType]);
-
+  // Add the missing handlePageChange function
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+
+  useEffect(() => {
+    getOnsiteRegister();
+  }, []);
 
   const RemoveOnsite = (email) => {
     axios
@@ -165,47 +148,28 @@ export const OnsiteInterns = () => {
                     <div className="card-header d-flex justify-content-between align-items-center">
                       <h4 className="card-title">New Interns</h4>
                       <div className="d-flex align-items-center">
-                        <div className="input-group" style={{ width: "300px" }}>
-                          {/* <span className="input-group-text">
-                            <i className="fas fa-search"></i>
-                          </span> */}
-                          <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Search by name, email, phone or technology..."
-                            value={searchTerm}
-                            onChange={handleSearch}
-                          />
-                          {searchTerm && (
-                            <button
-                              className="btn btn-outline-secondary"
-                              type="button"
-                              onClick={() => {
-                                setSearchTerm("");
-                              }}
-                            >
-                              <i className="fas fa-times"></i>
-                            </button>
-                          )}
-                        </div>
+                        <input
+                          type="text"
+                          className="form-control mr-2"
+                          placeholder="Search by name, email, phone or tech..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          style={{ width: "200px" }}
+                        />
                         <select
-                          className="form-control mx-2"
+                          className="form-control mr-2"
                           value={interviewType}
-                          onChange={handleInterviewTypeChange}
+                          onChange={(e) => setInterviewType(e.target.value)}
                           style={{ width: "150px" }}
                         >
-                          <option value="">All Types</option>
+                          <option value="">All</option>
                           <option value="Onsite">Onsite</option>
                           <option value="Remote">Remote</option>
                         </select>
                         <select
-                          className="form-control mx-2"
+                          className="form-control mr-2"
                           style={{ width: "100px" }}
-                          value={dataLimit}
-                          onChange={(e) => {
-                            setDataLimit(Number(e.target.value));
-                            setCurrentPage(1);
-                          }}
+                          onChange={(e) => setDataLimit(Number(e.target.value))}
                         >
                           <option value={50}>50</option>
                           <option value={100}>100</option>
@@ -225,8 +189,8 @@ export const OnsiteInterns = () => {
                     </div>
 
                     <div className="card-body overflow-x-scroll text-center">
-                      <table className="table table-hover">
-                        <thead className="table-light">
+                      <table className="table">
+                        <thead>
                           <tr>
                             <th scope="col">#</th>
                             <th scope="col">Name</th>
@@ -239,14 +203,14 @@ export const OnsiteInterns = () => {
                           </tr>
                         </thead>
                         <tbody>
-                        {loading ? (
+                          {loading ? (
                             <tr>
                               <td colSpan="8" className="text-center">
                                 <h3>Loading...</h3>
                               </td>
                             </tr>
-                          ) : filteredData.length > 0 ? (
-                            filteredData.map((rs, index) => {
+                          ) : currentData.length > 0 ? (
+                            currentData.map((rs) => {
                               const {
                                 id,
                                 name,
@@ -259,56 +223,59 @@ export const OnsiteInterns = () => {
                               const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(phone)}`;
                               return (
                                 <tr key={id}>
-                                  <th scope="row">
-                                    {(currentPage - 1) * dataLimit + index + 1}
+                                  <th className="border px-1" scope="row">
+                                    {id}
                                   </th>
-                                  <td>{name}</td>
-                                  <td>{email}</td>
-                                  <td>
+                                  <td className="border px-1">{name}</td>
+                                  <td className="border px-1">{email}</td>
+                                  <td className="border px-1">
                                     <a
                                       href={whatsappLink}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="text-success"
+                                      style={{ color: "#25D366", textDecoration: "none" }}
                                     >
                                       {phone}
                                     </a>
                                   </td>
-                                  <td>{technology}</td>
-                                  <td>{interview_type}</td>
-                                  <td>{status}</td>
-                                  <td>
+                                  <td className="border px-1">{technology}</td>
+                                  <td className="border px-1">
+                                    {interview_type}
+                                  </td>
+                                  <td className="border px-1">{status}</td>
+                                  <td className="border px-1">
                                     <div className="dropdown">
                                       <button
-                                        className="btn btn-sm btn-warning dropdown-toggle"
                                         type="button"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
+                                        className="btn btn-warning dropdown-toggle"
+                                        data-toggle="dropdown"
                                       >
-                                        Actions
+                                        Action
                                       </button>
-                                      <ul className="dropdown-menu">
-                                        <li>
-                                          <button
-                                            className="dropdown-item"
-                                            type="button"
-                                            onClick={() => ContactWith(email)}
-                                          >
-                                            <i className="fas fa-phone me-2"></i>
-                                            Contact With
-                                          </button>
-                                        </li>
-                                        <li>
-                                          <button
-                                            className="dropdown-item text-danger"
-                                            type="button"
-                                            onClick={() => RemoveOnsite(email)}
-                                          >
-                                            <i className="fas fa-trash me-2"></i>
-                                            Remove
-                                          </button>
-                                        </li>
-                                      </ul>
+                                      <div>
+                                        <ul className="dropdown-menu">
+                                          <li>
+                                            <a
+                                              className="dropdown-item"
+                                              href="#"
+                                              type="button"
+                                              onClick={() => ContactWith(email)}
+                                            >
+                                              Contact With
+                                            </a>
+                                          </li>
+                                          <li>
+                                            <a
+                                              className="dropdown-item"
+                                              href="#"
+                                              type="button"
+                                              onClick={() => RemoveOnsite(email)}
+                                            >
+                                              Remove
+                                            </a>
+                                          </li>
+                                        </ul>
+                                      </div>
                                     </div>
                                   </td>
                                 </tr>
@@ -316,27 +283,8 @@ export const OnsiteInterns = () => {
                             })
                           ) : (
                             <tr>
-                              <td colSpan="8" className="text-center py-4">
-                                {searchTerm || interviewType ? (
-                                  <>
-                                    <i className="fas fa-search fa-2x text-muted mb-2"></i>
-                                    <p>No interns found matching your filters</p>
-                                    <button
-                                      className="btn btn-sm btn-outline-primary"
-                                      onClick={() => {
-                                        setSearchTerm("");
-                                        setInterviewType("");
-                                      }}
-                                    >
-                                      Clear filters
-                                    </button>
-                                  </>
-                                ) : (
-                                  <>
-                                    <i className="fas fa-users fa-2x text-muted mb-2"></i>
-                                    <p>No interns found</p>
-                                  </>
-                                )}
+                              <td colSpan="8" className="text-center">
+                                No data found
                               </td>
                             </tr>
                           )}
