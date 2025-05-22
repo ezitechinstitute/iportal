@@ -1,7 +1,17 @@
 import React, { useState } from "react";
-import { FiDollarSign, FiHome, FiUserCheck, FiUsers, FiPhone, FiClipboard, 
-         FiCheckSquare, FiCalendar, FiMonitor, FiFileText } from "react-icons/fi";
-         import { FaBullhorn } from "react-icons/fa";
+import {
+  FiDollarSign,
+  FiHome,
+  FiUserCheck,
+  FiUsers,
+  FiPhone,
+  FiClipboard,
+  FiCheckSquare,
+  FiCalendar,
+  FiMonitor,
+  FiFileText,
+} from "react-icons/fi";
+import { FaBullhorn } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
 // import "../../styles/ManagerStyle.css";
 
@@ -87,6 +97,19 @@ export const ManagerSidebar = () => {
                 <FiUserCheck />
                 <span className="menu-title text-truncate" data-i18n="User">
                   Active Interns
+                </span>
+              </NavLink>
+            </li>
+
+            <li className={activeLink === "international" ? "active " : "undefined"}>
+              <NavLink
+                className="d-flex align-items-center"
+                onClick={() => setActive("international")}
+                to={"/intl-interns"}
+              >
+                <FiUserCheck />
+                <span className="menu-title text-truncate" data-i18n="User">
+                  International Interns
                 </span>
               </NavLink>
             </li>

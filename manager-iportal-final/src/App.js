@@ -23,7 +23,7 @@ import InternProjects from "./supervisor/pages/InternProjects";
 import InternTasks from "./supervisor/pages/InternTasks";
 import SupervisorLeave from "./supervisor/pages/SupervisorLeave";
 import SupervisorBalance from "./supervisor/pages/SupervisorBalance";
-import  InternProjTasks  from "./supervisor/pages/InternProjTasks";
+import InternProjTasks from "./supervisor/pages/InternProjTasks";
 import Profile from "./pages/Profile";
 import Payment_vochar from "./pages/Payment_vochar";
 import { RecipientPaymentVoucher } from "./pages/Recept_payemnt ";
@@ -34,6 +34,7 @@ import ReviewLogin from "./review/pages/Login";
 import Home from "./review/pages/Home";
 import Review_intern from "./review/pages/Review_intern";
 import NonReview_intern from "./review/pages/NonReview_intern";
+import { InternationalInterns } from "./pages/InternationalInterns";
 
 function App() {
   return (
@@ -46,7 +47,11 @@ function App() {
           <Route index path="/" element={<Login />} />
           <Route index path="/manager-dashboard" element={<ManagerHome />} />
           <Route exact path="/manager-interns" element={<OnsiteInterns />} />
-          {/* <Route exact path="/remote-interns" element={<RemoteInterns />} /> */}
+          <Route
+            exact
+            path="/intl-interns"
+            element={<InternationalInterns />}
+          />
           <Route exact path="/contact-with" element={<ContactWith />} />
           <Route exact path="/interview-test" element={<InterviewTest />} />
           <Route exact path="/intern-projects" element={<InternProjects />} />

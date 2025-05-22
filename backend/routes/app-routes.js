@@ -37,6 +37,7 @@ const {
   GetTestInternsFrameWork,
   GetTestCompleteInternsFrameWork,
   GetInternStats,
+  GetNewGlobalInternsFrameWork,
 } = require("../controller/hr/get-interns-controller");
 const {
   GetAllOfferLetterRequests,
@@ -349,10 +350,11 @@ function verifyToken(req, res, next) {
   }
 }
 
-
 router.get("/test", (req, res) => {
   res.send("Hello from NodeJs Server");
 });
+
+router.get("/get-intl-interns/:managerid", GetNewGlobalInternsFrameWork);
 
 // Combine Routes
 router.post("/verify-email", VerifyUniEmail);
