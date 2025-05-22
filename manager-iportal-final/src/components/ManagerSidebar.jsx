@@ -10,7 +10,9 @@ import {
   FiCalendar,
   FiMonitor,
   FiFileText,
+  FiGlobe
 } from "react-icons/fi";
+// import { FaGlobe, FaUserAstronaut } from 'react-icons/fi';
 import { FaBullhorn } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
 // import "../../styles/ManagerStyle.css";
@@ -107,7 +109,7 @@ export const ManagerSidebar = () => {
                 onClick={() => setActive("international")}
                 to={"/intl-interns"}
               >
-                <FiUserCheck />
+                <FiGlobe />
                 <span className="menu-title text-truncate" data-i18n="User">
                   International Interns
                 </span>
