@@ -376,7 +376,7 @@ const GetNewInternsFrameWork = (req, res) => {
         managerInterview.push(data[i].interview_type);
       }
 
-      let query = "SELECT * FROM intern_table WHERE 1 = 1";
+      let query = "SELECT * FROM intern_table WHERE 1 = 1 AND country = 'Pakistan'";
       const techFilter = managerTech.map((t) => t).join("','");
 
       if (techFilter.length > 0) {
