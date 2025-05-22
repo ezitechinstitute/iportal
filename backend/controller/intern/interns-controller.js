@@ -26,7 +26,7 @@ const RegisterInterns = (req, res) => {
     internJoinDate,
     internDob,
     internUniversity,
-    internDegree,
+    country,
     interviewType,
     internTechnology,
     internDuration,
@@ -46,7 +46,7 @@ const RegisterInterns = (req, res) => {
     internJoinDate,
     internDob,
     internUniversity,
-    internDegree,
+    country,
     interviewType,
     internTechnology,
     internDuration,
@@ -71,7 +71,7 @@ const RegisterInterns = (req, res) => {
 
       if (flag === 0) {
         const sql1 =
-          "INSERT INTO `intern_table`(`name`, `email`, `city`, `phone`, `gender`, `image`, `join_date`, `birth_date`, `university`, `degree`, `interview_type`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
+          "INSERT INTO `intern_table`(`name`, `email`, `city`, `phone`, `gender`, `image`, `join_date`, `birth_date`, `university`, `country`, `interview_type`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
 
         connection.query(sql1, [interndata], (err, data) => {
           if (err) {

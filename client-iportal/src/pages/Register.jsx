@@ -7,6 +7,7 @@ import "../styles/custom.css";
 import logo from "../assets/AdminAssets/logo-1.png";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../components/Spinner";
+import countries from "world-countries";
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -149,7 +150,7 @@ export const Register = () => {
         value.internCity !== undefined &&
         value.internGender !== undefined &&
         value.internUniversity !== undefined &&
-        value.internDegree !== undefined &&
+        value.country !== undefined &&
         value.interviewType !== undefined &&
         value.internTechnology !== undefined &&
         value.internDuration !== undefined &&
@@ -325,6 +326,42 @@ export const Register = () => {
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label
+                                for="register-email"
+                                className="form-label"
+                              >
+                                Country
+                              </label>
+                              <select
+                                className="form-control"
+                                name="country"
+                                id=""
+                                onChange={handleInput}
+                                required
+                              >
+                                <option selected disabled>
+                                  --Select Country--
+                                </option>
+
+                                {countries.map((rs) => (
+                                  <option value={rs.name.common}>
+                                    {rs.cca2
+                                      .toUpperCase()
+                                      .replace(/./g, (char) =>
+                                        String.fromCodePoint(
+                                          127397 + char.charCodeAt()
+                                        )
+                                      ) +
+                                      " " +
+                                      rs.name.common}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div className="col-sm-6">
+                            <div className="form-group">
+                              <label
                                 for="register-username"
                                 className="form-label"
                               >
@@ -342,34 +379,6 @@ export const Register = () => {
                                 onChange={handleInput}
                                 required
                               />
-                            </div>
-                          </div>
-
-                          <div className="col-sm-6">
-                            <div className="form-group">
-                              <label
-                                for="register-email"
-                                className="form-label"
-                              >
-                                WhatsApp
-                              </label>
-                              <PhoneInput
-                                international
-                                defaultCountry="PK"
-                                value={tel}
-                                onChange={setTel}
-                                name="internPhone"
-                                placeholder="Enter phone number"
-                                className="form-control"
-                                limitMaxLength="10"
-                              />
-                              {checkPhone ? (
-                                <span style={{ color: "limegreen" }}>
-                                  Valid
-                                </span>
-                              ) : (
-                                ""
-                              )}
                             </div>
                           </div>
                         </div>
@@ -407,6 +416,34 @@ export const Register = () => {
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label
+                                for="register-email"
+                                className="form-label"
+                              >
+                                WhatsApp
+                              </label>
+                              <PhoneInput
+                                international
+                                defaultCountry="PK"
+                                value={tel}
+                                onChange={setTel}
+                                name="internPhone"
+                                placeholder="Enter phone number"
+                                className="form-control"
+                                limitMaxLength="10"
+                              />
+                              {checkPhone ? (
+                                <span style={{ color: "limegreen" }}>
+                                  Valid
+                                </span>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="col-sm-6">
+                            <div className="form-group">
+                              <label
                                 for="register-gender"
                                 className="form-label"
                               >
@@ -429,7 +466,8 @@ export const Register = () => {
                               </select>
                             </div>
                           </div>
-
+                        </div>
+                        <div className="row">
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label
@@ -450,8 +488,7 @@ export const Register = () => {
                               />
                             </div>
                           </div>
-                        </div>
-                        <div className="row">
+
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label
@@ -469,7 +506,8 @@ export const Register = () => {
                               />
                             </div>
                           </div>
-
+                        </div>
+                        <div className="row">
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label
@@ -489,8 +527,6 @@ export const Register = () => {
                               />
                             </div>
                           </div>
-                        </div>
-                        <div className="row">
                           <div className="col-sm-6">
                             <div className="form-group">
                               <label
@@ -518,17 +554,17 @@ export const Register = () => {
                             </div>
                           </div>
 
-                          <div className="col-sm-6">
+                          {/* <div className="col-sm-6">
                             <div className="form-group">
                               <label
                                 for="register-email"
                                 className="form-label"
                               >
-                                Degree Program
+                                Country
                               </label>
                               <select
                                 className="form-control"
-                                name="internDegree"
+                                name="country"
                                 id=""
                                 onChange={handleInput}
                                 required
@@ -536,16 +572,23 @@ export const Register = () => {
                                 <option selected disabled>
                                   --Select--
                                 </option>
-                                <option value="Others">Others</option>
-                                <option value="Matric">Matric</option>
-                                <option value="Inter">Inter</option>
-                                <option value="Bs">Bs</option>
-                                <option value="Ms">Ms</option>
-                                <option value="Bsc">Bsc</option>
-                                <option value="Msc">Msc</option>
+
+                                {countries.map((rs) => (
+                                  <option value={rs.name.common}>
+                                    {rs.cca2
+                                      .toUpperCase()
+                                      .replace(/./g, (char) =>
+                                        String.fromCodePoint(
+                                          127397 + char.charCodeAt()
+                                        )
+                                      ) +
+                                      " " +
+                                      rs.name.common}
+                                  </option>
+                                ))}
                               </select>
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                         <div className="row">
                           <div className="col-sm-6">
