@@ -285,7 +285,7 @@ const GetNewGlobalInternsFrameWork = (req, res) => {
         managerInterview.push(data[i].interview_type);
       }
 
-      let query = "SELECT * FROM intern_table WHERE 1 = 1";
+      let query = "SELECT * FROM intern_table WHERE 1 = 1 AND country != 'Pakistan'";
       const techFilter = managerTech.map((t) => t).join("','");
 
       if (techFilter.length > 0) {
@@ -314,7 +314,7 @@ const GetNewGlobalInternsFrameWork = (req, res) => {
             return res.json(reject);
           } else {
             let countquery =
-              "SELECT COUNT(*) as count FROM intern_table WHERE 1= 1 AND country != 'Pakistan'";
+              "SELECT COUNT(*) as count FROM intern_table WHERE 1= 1";
 
             if (techFilter.length > 0) {
               countquery += ` AND technology IN ('${techFilter}')`;
