@@ -122,6 +122,7 @@ export const InternLogin = () => {
         }
       );
       alert(res.data.message);
+      window.location.reload();
     } catch (error) {
       console.error("Error:", error);
       alert("Failed to send reset email.");
