@@ -1,23 +1,27 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 export const ResetPassword = () => {
   const [searchParams] = useSearchParams();
-  const token = searchParams.get("token");
+  // const token = searchParams.get("token");
   const [newPassword, setNewPassword] = useState("");
   const navigate = useNavigate();
+  const token = useParams();
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post("https://api.ezitech.org/intern-reset-password", {
-        token,
-        newPassword,
-      });
+      const res = await axios.post(
+        "https://api.ezitech.org/intern-reset-password",
+        {
+          token,
+          newPassword,
+        }
+      );
       alert(res.data.message);
-      navigate("/intern-login");
+      navigate("/");
     } catch (error) {
       console.error("Error resetting password:", error);
       alert("Failed to reset password.");

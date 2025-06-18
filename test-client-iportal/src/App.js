@@ -48,7 +48,7 @@ function App() {
           <Route path="/internPost" element={<Post/>}/>
           <Route path="/offer-letter" element={<OfferLetter/>}/>
           <Route path="/intern-profile" element={<Profile/>}/>
-          <Route path="/intern-reset-password" element={<ResetPassword/>}/>
+          <Route path="/intern-reset-password/:token" element={<ResetPassword/>}/>
           <Route path="/Intern-Birthday-Wisher" element={<BirthdayWisher/>}/>
           <Route path="/supervisor-complaint" element={<Supervisor_compliant/>}/>
           <Route path="/manager-complaint" element={<Manager_compliant/>}/>

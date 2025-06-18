@@ -18,7 +18,7 @@ export const InternLogin = () => {
     interntype: sessionStorage.getItem("intern_type"),
     duration: sessionStorage.getItem("duration"),
     join_date: sessionStorage.getItem("join_date"),
-    int_id: sessionStorage.getItem("int_id")
+    int_id: sessionStorage.getItem("int_id"),
   });
   const [formData, setFormData] = useState({
     email: "",
@@ -54,7 +54,7 @@ export const InternLogin = () => {
               duration: res.data.intern.duration,
               interntype: res.data.intern.intern_type,
               join_date: res.data.intern.join_date,
-              int_id: res.data.intern.int_id
+              int_id: res.data.intern.int_id,
             });
             sessionStorage.setItem("isLoggedIn", true);
             sessionStorage.setItem("token", res.data.token);
@@ -62,11 +62,14 @@ export const InternLogin = () => {
             sessionStorage.setItem("email", res.data.intern.email);
             sessionStorage.setItem("phone", res.data.intern.phone);
             sessionStorage.setItem("internStatus", res.data.intern.int_status);
-            sessionStorage.setItem("technology", res.data.intern.int_technology);
+            sessionStorage.setItem(
+              "technology",
+              res.data.intern.int_technology
+            );
             sessionStorage.setItem("duration", res.data.intern.duration);
-            sessionStorage.setItem("interntype",res.data.intern.intern_type);
-            sessionStorage.setItem("join_date",res.data.intern.join_date);
-            sessionStorage.setItem("int_id",res.data.intern.int_id)
+            sessionStorage.setItem("interntype", res.data.intern.intern_type);
+            sessionStorage.setItem("join_date", res.data.intern.join_date);
+            sessionStorage.setItem("int_id", res.data.intern.int_id);
             alert("Login Successfully");
             navigate("/intern-dashboard");
           }
@@ -83,7 +86,7 @@ export const InternLogin = () => {
               interntype: res.data.intern.intern_type,
               duration: res.data.intern.duration,
               join_date: res.data.intern.join_date,
-              int_id: res.data.intern.int_id
+              int_id: res.data.intern.int_id,
             });
             sessionStorage.setItem("isLoggedIn", true);
             sessionStorage.setItem("token", res.data.token);
@@ -94,8 +97,8 @@ export const InternLogin = () => {
             sessionStorage.setItem("interntype", res.data.intern.intern_type);
             sessionStorage.setItem("internStatus", res.data.intern.int_status);
             sessionStorage.setItem("duration", res.data.intern.duration);
-            sessionStorage.setItem("join_date",res.data.intern.join_date);
-            sessionStorage.setItem("int_id",res.data.intern.int_id)
+            sessionStorage.setItem("join_date", res.data.intern.join_date);
+            sessionStorage.setItem("int_id", res.data.intern.int_id);
             alert("Login Successfully");
             navigate("/intern-dashboard");
           }
@@ -110,10 +113,14 @@ export const InternLogin = () => {
   };
 
   const handleForgotPassword = async () => {
+    alert(formData.email);
     try {
-      const res = await axios.post("https://api.ezitech.org/intern-forget-password", {
-        email: formData.email,
-      });
+      const res = await axios.post(
+        "https://api.ezitech.org/intern-forget-password",
+        {
+          email: formData.email,
+        }
+      );
       alert(res.data.message);
     } catch (error) {
       console.error("Error:", error);
@@ -169,7 +176,11 @@ export const InternLogin = () => {
                 <div className="form-group">
                   <div className="d-flex justify-content-between">
                     <label htmlFor="login-password">Password</label>
-                    <a href="#" data-toggle="modal" data-target="#exampleModalCenter">
+                    <a
+                      href="#"
+                      data-toggle="modal"
+                      data-target="#exampleModalCenter"
+                    >
                       <small>Forgot Password?</small>
                     </a>
                   </div>
@@ -195,7 +206,10 @@ export const InternLogin = () => {
                       type="checkbox"
                       tabIndex="3"
                     />
-                    <label className="custom-control-label" htmlFor="remember-me">
+                    <label
+                      className="custom-control-label"
+                      htmlFor="remember-me"
+                    >
                       Remember Me
                     </label>
                   </div>
@@ -210,7 +224,11 @@ export const InternLogin = () => {
               </form>
               <p className="text-center mt-2">
                 <span>New on our platform?</span>
-                <a href="https://register.ezitech.org" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://register.ezitech.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <span> Register </span>
                 </a>
               </p>

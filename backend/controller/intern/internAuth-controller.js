@@ -8,13 +8,20 @@ const secretKey = process.env.SECRETKEY;
 
 // Existing controllers
 const InternAuth = (req, res) => {
-  if (!req.body.values || !req.body.values.loginEmail || !req.body.values.loginPassword) {
-    return res.status(400).json({ error: 'Missing loginEmail or loginPassword' });
+  if (
+    !req.body.values ||
+    !req.body.values.loginEmail ||
+    !req.body.values.loginPassword
+  ) {
+    return res
+      .status(400)
+      .json({ error: "Missing loginEmail or loginPassword" });
   }
 
   const { loginEmail, loginPassword } = req.body.values;
 
-  const sql = "SELECT ia.*, it.technology, it.intern_type, it.join_date, it.duration FROM intern_accounts ia JOIN intern_table it ON ia.email = it.email  WHERE ia.email = ?";
+  const sql =
+    "SELECT ia.*, it.technology, it.intern_type, it.join_date, it.duration FROM intern_accounts ia JOIN intern_table it ON ia.email = it.email  WHERE ia.email = ?";
   connection.query(sql, [loginEmail], (err, data) => {
     if (err) throw err;
 
@@ -43,7 +50,7 @@ const ForgotInternPassword = async (req, res) => {
       return res.status(400).json({ error: "Email is required." });
     }
 
-    const resetToken = jwt.sign({ email }, secretKey, { expiresIn: "15m" });
+    const resetToken = jwt.sign({ email }, secretKey, { expiresIn: "30m" });
 
     const sql = "UPDATE `intern_accounts` SET `reset_token`=? WHERE `email`=?";
     connection.query(sql, [resetToken, email], (err, data) => {
@@ -56,9 +63,14 @@ const ForgotInternPassword = async (req, res) => {
         return res.status(404).json({ error: "Email not found." });
       }
 
-      sendPasswordResetEmail(email, resetToken)
+      // let resetLink = `http://localhost:3000/intern-reset-password/${resetToken}`;
+      let resetLink = `https://interns.ezitech.org/intern-reset-password/${resetToken}`;
+
+      sendPasswordResetEmail(email, resetLink)
         .then(() => {
-          return res.status(200).json({ message: "Password reset email sent!" });
+          return res
+            .status(200)
+            .json({ message: "Password reset email sent!" });
         })
         .catch((error) => {
           console.error("Error sending email:", error);
@@ -74,17 +86,21 @@ const ForgotInternPassword = async (req, res) => {
 const ResetInternPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
+    const actualToken = token.token;
 
     if (!token || !newPassword) {
-      return res.status(400).json({ error: "Token and new password are required." });
+      return res
+        .status(400)
+        .json({ error: "Token and new password are required." });
     }
 
-    const decoded = jwt.verify(token, secretKey);
+    const decoded = jwt.verify(actualToken, secretKey);
     const email = decoded.email;
 
     const hashPassword = await bcrypt.hash(newPassword, 8);
 
-    const sql = "UPDATE `intern_accounts` SET `password`=?, `reset_token`=NULL WHERE `email`=?";
+    const sql =
+      "UPDATE `intern_accounts` SET `password`=?, `reset_token`=NULL WHERE `email`=?";
     connection.query(sql, [hashPassword, email], (err, data) => {
       if (err) {
         console.error("Database error:", err);
@@ -144,7 +160,8 @@ const GetInternDetails = async (req, res) => {
       return res.status(400).json({ error: "Email is required." });
     }
 
-    const sql = "SELECT ia.name, ia.email, ia.password, ia.phone, it.image FROM intern_accounts ia JOIN intern_table it ON ia.email = it.email WHERE ia.email = ?";
+    const sql =
+      "SELECT ia.name, ia.email, ia.password, ia.phone, it.image FROM intern_accounts ia JOIN intern_table it ON ia.email = it.email WHERE ia.email = ?";
     connection.query(sql, [email], (err, data) => {
       if (err) {
         console.error("Database error:", err);
@@ -194,7 +211,9 @@ const UpdateInternDetails = async (req, res) => {
         }
 
         if (data.affectedRows === 0) {
-          return res.status(404).json({ error: "Email not found in intern_accounts." });
+          return res
+            .status(404)
+            .json({ error: "Email not found in intern_accounts." });
         }
 
         // Update intern_table table
@@ -209,14 +228,20 @@ const UpdateInternDetails = async (req, res) => {
           (err, data) => {
             if (err) {
               console.error("Database error:", err);
-              return res.status(500).json({ error: "Database error occurred." });
+              return res
+                .status(500)
+                .json({ error: "Database error occurred." });
             }
 
             if (data.affectedRows === 0) {
-              return res.status(404).json({ error: "Email not found in intern_table." });
+              return res
+                .status(404)
+                .json({ error: "Email not found in intern_table." });
             }
 
-            return res.status(200).json({ message: "Intern details updated successfully!" });
+            return res
+              .status(200)
+              .json({ message: "Intern details updated successfully!" });
           }
         );
       }
