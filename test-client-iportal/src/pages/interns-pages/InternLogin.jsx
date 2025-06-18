@@ -113,7 +113,6 @@ export const InternLogin = () => {
   };
 
   const handleForgotPassword = async () => {
-    alert(formData.email);
     try {
       const res = await axios.post(
         "https://api.ezitech.org/intern-forget-password",
