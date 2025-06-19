@@ -73,10 +73,10 @@ const ActivateUniAccount = (req, res) => {
 };
 
 const AddNewUni = (req, res) => {
-  const { name } = req.body.uniData;
+  const { uniName } = req.body.values;
 
   const sql = "INSERT INTO `universities`(`uni_name`) VALUES (?)";
-  connection.query(sql, [name], (err, data) => {
+  connection.query(sql, [uniName], (err, data) => {
     if (err) throw err;
     return res.json({ msg: "University added successfuly" });
   });
