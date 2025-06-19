@@ -72,7 +72,8 @@ export const OnsiteInterns = () => {
     // Apply interview type filter
     if (interviewType) {
       filtered = filtered.filter(
-        (intern) => intern.interview_type?.toLowerCase() === interviewType.toLowerCase()
+        (intern) =>
+          intern.interview_type?.toLowerCase() === interviewType.toLowerCase()
       );
     }
 
@@ -220,6 +221,7 @@ export const OnsiteInterns = () => {
                             <th scope="col">Email</th>
                             <th scope="col">Contact</th>
                             <th scope="col">Technology</th>
+                            <th scope="col">University</th>
                             <th scope="col">Interview</th>
                             <th scope="col">Status</th>
                             <th scope="col">Action</th>
@@ -232,7 +234,8 @@ export const OnsiteInterns = () => {
                                 <h3>Loading...</h3>
                               </td>
                             </tr>
-                          ) : Array.isArray(filteredData) && filteredData.length > 0 ? (
+                          ) : Array.isArray(filteredData) &&
+                            filteredData.length > 0 ? (
                             filteredData.map((rs) => {
                               const {
                                 id,
@@ -240,10 +243,13 @@ export const OnsiteInterns = () => {
                                 email,
                                 phone,
                                 technology,
+                                university,
                                 interview_type,
                                 status,
                               } = rs;
-                              const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(phone)}`;
+                              const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(
+                                phone
+                              )}`;
                               return (
                                 <tr key={id}>
                                   <th className="border px-1" scope="row">
@@ -256,12 +262,17 @@ export const OnsiteInterns = () => {
                                       href={whatsappLink}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      style={{ color: "#25D366", textDecoration: "none" }}
+                                      style={{
+                                        color: "#25D366",
+                                        textDecoration: "none",
+                                      }}
                                     >
                                       {phone}
                                     </a>
                                   </td>
                                   <td className="border px-1">{technology}</td>
+                                  <td className="border px-1">{university}</td>
+
                                   <td className="border px-1">
                                     {interview_type}
                                   </td>
@@ -299,7 +310,9 @@ export const OnsiteInterns = () => {
                           ) : (
                             <tr>
                               <td colSpan="8" className="text-center">
-                                {searchTerm || interviewType ? "No matching interns found" : "No data found"}
+                                {searchTerm || interviewType
+                                  ? "No matching interns found"
+                                  : "No data found"}
                               </td>
                             </tr>
                           )}
