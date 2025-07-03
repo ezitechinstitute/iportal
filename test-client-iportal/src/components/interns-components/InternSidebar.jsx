@@ -285,7 +285,7 @@ export const InternSidebar = () => {
                   </NavLink>
                 </li>
 
-                <li className="undefined" style={{ opacity: "0.1" }}>
+                <li className="undefined" style={{ opacity: "0.9" }}>
                   <NavLink className="d-flex align-items-center" to="#">
                     <FiUser />
                     <span

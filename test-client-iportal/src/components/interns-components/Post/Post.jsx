@@ -21,11 +21,7 @@ const Post = () => {
   const checkLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
   const email = sessionStorage.getItem("email");
 
-  useEffect(() => {
-    if (!checkLoggedIn) {
-      navigate("/");
-    }
-  }, [checkLoggedIn, navigate]);
+  
 
   useEffect(() => {
     const fetchUserDetails = async () => {
