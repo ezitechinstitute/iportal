@@ -1,4 +1,5 @@
 const express = require("express");
+const { connection } = require("../config/connection");
 const {
   RegisterInterns,
   SendVerificationCode,
@@ -11,6 +12,7 @@ const {
   InsertOfferLetterRequest,
   GetManagerDetails,
 } = require("../controller/intern/offer-letter");
+
 const {
   HrAuth,
   HrForgotPassword,
@@ -101,6 +103,16 @@ const {
   AssignPermissions,
   RemovePermission,
 } = require("../controller/admin/manager-controller");
+
+const{
+  SubmitCertificateReq,
+  SupApproveCert,
+  ManApproveCert,
+  CertificateIssuance,
+  GetAllCertificates,
+  GetCertificatesByEmail
+} = require("../controller/intern/certificate-request");
+
 const {
   AddTechnology,
   FreezeTech,
@@ -412,6 +424,15 @@ router.get("/manager-complaints", GetManagerComplaints);
 router.get("/supervisor-complaints", GetSupervisorComplaints);
 router.post("/intern-feedback", InsertFeedback);
 router.get("/get-intern-feedback", GetFeedback);
+
+
+//Certificate Request
+router.post("/submit-certificate-request", SubmitCertificateReq);
+router.put("/sup-approve-cert/:id", SupApproveCert);
+router.put("/manager-approve-cert/:id", ManApproveCert, CertificateIssuance);
+router.get("/get-all-certificates", GetAllCertificates);
+router.get('/get-certificates/:email', GetCertificatesByEmail);
+
 
 //offer Letter
 router.post("/intern-offer-letter", InsertOfferLetterRequest);
