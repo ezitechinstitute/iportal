@@ -183,7 +183,7 @@ export const InternDashboard = () => {
     fetchTotalTasks();
     fetchTasksInProgress();
     fetchTasksComplete();
-    getTopIntern(); 
+    getTopIntern();
     fetchAnnouncements();
   }, []);
 
@@ -217,11 +217,11 @@ export const InternDashboard = () => {
 
   // Simple placeholder chart component
   const PlaceholderChart = () => (
-    <div style={{ 
-      width: '100%', 
-      height: '300px', 
-      display: 'flex', 
-      alignItems: 'center', 
+    <div style={{
+      width: '100%',
+      height: '300px',
+      display: 'flex',
+      alignItems: 'center',
       justifyContent: 'center',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       borderRadius: '10px',
@@ -254,6 +254,13 @@ export const InternDashboard = () => {
                     </p>
                   </marquee>
                 </div>
+
+
+                <h1>
+                  <span className="ezi">Ezitech</span> Intern Dashboard
+                  <span className="year" style={{ fontSize: "28px", color: "#f88a1b" }}> {currentYear}</span>
+                </h1>
+
 
                 <div className="row">
                   <div className="col-lg-8 col-12">
@@ -486,9 +493,9 @@ export const InternDashboard = () => {
                                           style={{ width: "35px", height: "35px", borderRadius: "20%", marginRight: "7px" }}
                                         />
                                       </td>
-                                      <td style={{fontSize:"13px"}}>{topIntern.name}</td>
-                                      <td style={{fontSize:"13px"}}>{topIntern.technology}</td>
-                                      <td style={{fontSize:"13px"}}>{topIntern.average}%</td>
+                                      <td style={{ fontSize: "13px" }}>{topIntern.name}</td>
+                                      <td style={{ fontSize: "13px" }}>{topIntern.technology}</td>
+                                      <td style={{ fontSize: "13px" }}>{topIntern.average}%</td>
                                     </tr>
                                   ) : (
                                     <tr>
@@ -519,11 +526,11 @@ export const InternDashboard = () => {
                     </div>
                   </div>
                 </marquee>
-                
+
               </div>
             </section>
-            <footer className="footer footer-static footer-light" style={{ padding: "0px", marginTop: "0px", marginBottom:"10px" }}>
-              <p className="clearfix mb-0 " style={{ marginLeft: "10px"  }}>
+            <footer className="footer footer-static footer-light" style={{ padding: "0px", marginTop: "0px", marginBottom: "10px" }}>
+              <p className="clearfix mb-0 " style={{ marginLeft: "10px" }}>
                 <br />
                 <span className="mt-25 ">
                   COPYRIGHT © 2016-{currentYear}

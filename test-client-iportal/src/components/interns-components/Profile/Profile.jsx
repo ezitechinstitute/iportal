@@ -22,11 +22,11 @@ const Profile = () => {
   const internEmail = sessionStorage.getItem("email"); // Assuming email is stored in sessionStorage
 
   // Check login status
-  useEffect(() => {
-    if (!check || !token) {
-      navigate("/");
-    }
-  }, [check, token, navigate]);
+  // useEffect(() => {
+  //   if (!check || !token) {
+  //     navigate("/");
+  //   }
+  // }, [check, token, navigate]);
 
   // Fetch profile data
   useEffect(() => {

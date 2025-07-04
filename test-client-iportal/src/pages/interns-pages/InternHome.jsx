@@ -16,6 +16,7 @@ export const InternHome = () => {
       <InternTopbar />
       <InternSidebar />
       
+      
       <Routes>
         <Route path="/internDashboard" element={<InternDashboard />} />
         <Route path="/internFeedback" element={<Feedback />} />
@@ -25,6 +26,7 @@ export const InternHome = () => {
         <Route path="/internAnnouncement" element={<Announcement />} />
       </Routes>
    
+    
     </>
   );
 };

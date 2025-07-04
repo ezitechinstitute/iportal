@@ -29,7 +29,7 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
-          <Route index path="/" element={<InternHome />} /> {/* remove at end */}
+          <Route index path="/" element={<InternDashboard />} /> {/* remove at end */}
           {/* <Route index path="/" element={<InternLogin />} />  remove at end */}
           <Route path="/intern-test" element={<InternTest />} />
           <Route path="/intern-dashboard" element={<InternDashboard />} />
