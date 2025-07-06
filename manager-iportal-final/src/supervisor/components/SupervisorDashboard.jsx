@@ -11,7 +11,8 @@ export const SupervisorDashboard = () => {
     active: 0,
     test: 0,
     progress: 0,
-    completed: 0
+    completed: 0,
+   certificateRequests: []
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -33,18 +34,20 @@ export const SupervisorDashboard = () => {
       setLoading(true);
       const baseUrl = "https://api.ezitech.org";
       
-      const [activeRes, testRes, progressRes, completedRes] = await Promise.all([
+      const [activeRes, testRes, progressRes, completedRes, certificateRes] = await Promise.all([
         axios.get(`${baseUrl}/active-interns/${managerid}`),
         axios.get(`${baseUrl}/test-interns/${managerid}`),
         axios.get(`${baseUrl}/progress-interns/${managerid}`),
-        axios.get(`${baseUrl}/completed-interns/${managerid}`)
+        axios.get(`${baseUrl}/completed-interns/${managerid}`),
+        axios.get(`${baseUrl}/get-certificate-requests`)
       ]);
 
       setStats({
         active: activeRes.data.active_interns_count || 0,
         test: testRes.data.test_interns_count || 0,
         progress: progressRes.data.progress_interns_count || 0,
-        completed: completedRes.data.completed_interns_count || 0
+        completed: completedRes.data.completed_interns_count || 0,
+        certificateRequests: certificateRes.data.requests || []
       });
     } catch (err) {
       console.error("Error fetching stats:", err);
@@ -602,6 +605,59 @@ useEffect(() => {
                   </div>
                 </div>
                 {/* <!-- Absentees Table End --> */}
+                {/* <!-- Certificate Requests Start --> */}
+                <section id="certificate-requests" className="mt-3">
+  <div className="card">
+    <div className="card-header">
+      <h4 className="card-title">Certificate Requests</h4>
+    </div>
+    <div className="card-body">
+      {loading ? (
+        <p>Loading requests...</p>
+      ) : certificateRequests.length === 0 ? (
+        <p className="text-muted">No certificate requests found.</p>
+      ) : (
+        <div className="table-responsive">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Tech</th>
+                <th>Projects</th>
+                <th>Experience</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {certificateRequests.map((req) => (
+                <tr key={req.id}>
+                  <td>{req.username}</td>
+                  <td>{req.tech}</td>
+                  <td>{req.project_count}</td>
+                  <td>{req.duration}</td>
+                  <td>
+                    <span className={`badge badge-${req.status === "supervisor_approved" ? "success" : "warning"}`}>
+                      {req.status}
+                    </span>
+                  </td>
+                  <td>
+                    if(req.status === "supervisor_approved"){
+                      <button className="btn btn-secondary btn-sm" disabled>
+                        Approved
+                      </button>
+                    }
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
               </div>
             </section>
           </div>

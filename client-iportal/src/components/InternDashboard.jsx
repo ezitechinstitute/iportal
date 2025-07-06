@@ -10,7 +10,7 @@ export const InternDashboard = () => {
   useEffect(() => {
     const fetchCertificates = async () => {
       try {
-        const res = await axios.get(`http://localhost:8088/get-certificates/${email}`);
+        const res = await axios.get(`http://api.ezitech.org/get-certificates/${email}`);
         setCertificates(res.data.certificates || []);
       } catch (error) {
         console.error("Error fetching certificates:", error);
@@ -36,6 +36,17 @@ export const InternDashboard = () => {
     boxShadow: "0 10px 20px rgba(0, 123, 255, 0.15)",
     borderColor: "#cfe2ff",
   };
+
+ const handleDownload = (cert) => {
+  // Directly create link (no fetch needed if file is publicly accessible)
+  const a = document.createElement('a');
+  a.href = `http://api.ezitech.org${cert.certificate_url}`;
+  a.download = cert.certificate_url.split('/').pop() || 'certificate.pdf';
+  a.target = '_blank'; // Open in new tab as fallback
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+};
 
   return (
     <div className="app-content content">
@@ -71,6 +82,27 @@ export const InternDashboard = () => {
                       <p><strong>Experience:</strong> {cert.experience_duration}</p>
                       <p><strong>Issued by:</strong> {cert.issued_by}</p>
                       <p><strong>Issued on:</strong> {new Date(cert.issued_at).toLocaleDateString()}</p>
+                      
+
+                      <button style={{
+                              backgroundColor: '#4e73df',
+                              color: 'white',
+                              border: 'none',
+                              padding: '8px 16px',
+                              borderRadius: '4px',
+                              fontWeight: '600',
+                              cursor: 'pointer',
+                              transition: 'all 0.3s ease',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '8px',
+                              width: '100%',
+                              ':hover': {
+                              backgroundColor: '#2e59d9',
+                              transform: 'translateY(-1px)'}
+                              }}
+      onClick={() => handleDownload(cert)}>Download Certificate</button>
                     </div>
                   </div>
                 ))}

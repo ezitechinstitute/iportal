@@ -110,7 +110,8 @@ const{
   ManApproveCert,
   CertificateIssuance,
   GetAllCertificates,
-  GetCertificatesByEmail
+  GetCertificatesByEmail,
+  GetAllCertificateReqs
 } = require("../controller/intern/certificate-request");
 
 const {
@@ -427,12 +428,12 @@ router.get("/get-intern-feedback", GetFeedback);
 
 
 //Certificate Request
-router.post("/submit-certificate-request", SubmitCertificateReq);
+router.post("/certificate-request/:id", SubmitCertificateReq);
 router.put("/sup-approve-cert/:id", SupApproveCert);
 router.put("/manager-approve-cert/:id", ManApproveCert, CertificateIssuance);
 router.get("/get-all-certificates", GetAllCertificates);
 router.get('/get-certificates/:email', GetCertificatesByEmail);
-
+router.get("/get-certificate-requests", GetAllCertificateReqs);
 
 //offer Letter
 router.post("/intern-offer-letter", InsertOfferLetterRequest);

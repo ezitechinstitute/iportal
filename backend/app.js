@@ -6,8 +6,10 @@ const bodyParser = require("body-parser");
 const RunJob = require("./controller/combine/Run-Scheduler");
 const { VerifyEmail } = require("./controller/combine/Verify-Email");
 const dotenv = require("dotenv").config();
+const downloadRoutes = require("./routes/downloadRoutes");
+
 const PORT = 8088;
-// const path = require('path')
+const path = require('path')
 
 const app = express();
 app.use(bodyParser.json({ limit: "35mb" })); // Adjust the limit as needed
@@ -32,7 +34,22 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+
+const certPath = path.join(__dirname, 'public/certificates');
+app.use('/certificates', express.static(path.join(__dirname, '/controller/public/certificates')));
+
 app.use(router);
+app.use('/', downloadRoutes);
+const fs = require('fs');
+app.get('/list-certs', (req, res) => {
+  const dir = path.join(__dirname, 'public/certificates');
+  fs.readdir(dir, (err, files) => {
+    if (err) return res.status(500).send('Cannot read directory');
+    res.send(files);
+  });
+});
+
 DataBase();
 
 app.listen(PORT, () => {
