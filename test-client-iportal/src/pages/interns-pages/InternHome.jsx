@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import { InternTopbar } from "../../components/interns-components/InternTopbar/InternTopbar";
-// import { InternSidebar } from "../../components/interns-components/InternSidebar";
+import { InternTopbar } from "../../components/interns-components/InternTopbar/InternTopbar";
+import { InternSidebar } from "../../components/interns-components/InternSidebar";
 import { InternDashboard } from "../../components/interns-components/Dashboard/InternDashboard";
 import Feedback from "../../components/interns-components/Feedback/Feedback";
 import Projects from "../../components/interns-components/Projects/Projects";
@@ -12,9 +12,11 @@ import Announcement from "../../components/interns-components/Announcement/Annou
 export const InternHome = () => {
   return (
     <>
-    {/* <BrowserRouter>
+  
       <InternTopbar />
       <InternSidebar />
+      
+      
       <Routes>
         <Route path="/internDashboard" element={<InternDashboard />} />
         <Route path="/internFeedback" element={<Feedback />} />
@@ -23,7 +25,8 @@ export const InternHome = () => {
         <Route path="/internTask" element={<Task />} />
         <Route path="/internAnnouncement" element={<Announcement />} />
       </Routes>
-    </BrowserRouter> */}
+   
+    
     </>
   );
 };

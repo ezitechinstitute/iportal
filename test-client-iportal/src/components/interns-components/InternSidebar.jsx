@@ -134,7 +134,7 @@ export const InternSidebar = () => {
               </>
             ) : (
               <>
-                <li className={activeLink === "dashboard" ? "active" : "undefined"}>
+                {/* <li className={activeLink === "dashboard" ? "active" : "undefined"}>
                   <NavLink
                     className="d-flex align-items-center"
                     onClick={() => setActive("dashboard")}
@@ -148,7 +148,7 @@ export const InternSidebar = () => {
                       Dashboard
                     </span>
                   </NavLink>
-                </li>
+                </li> */}
 
                 <li className={activeLink === "projects" ? "active" : "undefined"}>
                   <NavLink
@@ -285,7 +285,20 @@ export const InternSidebar = () => {
                   </NavLink>
                 </li>
 
-                <li className="undefined" style={{ opacity: "0.1" }}>
+                <li className={activeLink === "offerLetter" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center bg-secondary text-white rounded mt-1"
+                    onClick={() => setActive("offerLetter")}
+                    to="/intern-profile"
+                  >
+                    <FiUser />
+                    <span className="menu-item" data-i18n="OfferLetter">
+                      Public Profile
+                    </span>
+                  </NavLink>
+                </li>
+
+                {/* <li className="undefined" style={{ opacity: "0.9" }}>
                   <NavLink className="d-flex align-items-center" to="#">
                     <FiUser />
                     <span
@@ -295,7 +308,7 @@ export const InternSidebar = () => {
                       Public Profile
                     </span>
                   </NavLink>
-                </li>
+                </li> */}
               </>
             )}
           </ul>
