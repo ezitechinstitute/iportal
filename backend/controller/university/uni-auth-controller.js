@@ -1,4 +1,4 @@
-const { connection } = require("../../config/connection");
+// const { connection } = require("../../config/connection");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 const secretKey = process.env.SECRETKEY;

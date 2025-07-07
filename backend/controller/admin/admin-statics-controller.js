@@ -1,4 +1,4 @@
-const { connection } = require("../../config/connection");
+// const { connection } = require("../../config/connection");
 
 /* Manager Statistics */
 const AdminInterviewCount = (req, res) => {

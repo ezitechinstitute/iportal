@@ -1,4 +1,4 @@
-const { connection } = require("../../config/connection");
+// const { connection } = require("../../config/connection");
 
 const CreateManager = (req, res) => {
   const { etiId, name, email, password, phone, joinDate, role } = req.body.manager;

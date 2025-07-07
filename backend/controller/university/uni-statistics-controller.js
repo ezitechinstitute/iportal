@@ -1,4 +1,4 @@
-const { connection } = require("../../config/connection");
+// const { connection } = require("../../config/connection");
 
 /* Intern Statistics */
 const UniCountAllInterns = (req, res) => {

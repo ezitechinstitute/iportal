@@ -1,5 +1,4 @@
 const express = require("express");
-const { connection } = require("../config/connection");
 const {
   RegisterInterns,
   SendVerificationCode,
@@ -309,7 +308,7 @@ const {
   CountReviewInterns,
   CountNonReviewInterns,
   UpdateReviewStatus,
-} = require("../controller/review/intern-review");
+} = require("../controller/affiliate/affiliate-iportal");
 
 //supervisor-intern-stats
 
@@ -678,4 +677,7 @@ router.get("/get-sup-withdraw-req", verifyToken, GetSupWithdrawReq);
 
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);
+
+// Remove old affiliate routes since they are now in affiliate-routes.js
+
 module.exports = router;

@@ -1,51 +1,37 @@
-const express = require("express");
-const cors = require("cors");
-const { DataBase } = require("./config/connection");
-const router = require("./routes/app-routes");
-const bodyParser = require("body-parser");
-const RunJob = require("./controller/combine/Run-Scheduler");
-const { VerifyEmail } = require("./controller/combine/Verify-Email");
-const dotenv = require("dotenv").config();
-const PORT = 8088;
-// const path = require('path')
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const connectDB = require('./config/mongodb');
+
+// Import routes
+const affiliateRoutes = require('./routes/affiliate-routes');
+const appRoutes = require('./routes/app-routes');
 
 const app = express();
-app.use(bodyParser.json({ limit: "35mb" })); // Adjust the limit as needed
-app.use(bodyParser.urlencoded({ limit: "35mb", extended: true }));
+
+// Middleware
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Configure CORS options
-const corsOptions = {
-  origin: [
-    "https://interns.ezitech.org",
-    "https://manager.ezitech.org",
-    "https://admin.ezitech.org",
-    "https://register.ezitech.org",
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://localhost:3002",
-    "http://localhost:3003",
-  ],
-  methods: ["GET", "POST", "PUT", "DELETE"], // Optional: Allowed methods
-  // allowedHeaders: ["Content-Type", "Authorization"], // Optional: Allowed headers
-  // credentials: true, // Optional: Enable credentials if needed
-};
+// Connect to MongoDB
+connectDB();
 
-app.use(cors(corsOptions));
-app.use(router);
-DataBase();
+// Routes
+app.use('/api/affiliate', affiliateRoutes); // Use existing affiliate routes
+app.use('/', appRoutes);
 
-app.listen(PORT, () => {
-  console.log(`Server Running on: ${PORT}`);
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    error: process.env.NODE_ENV === 'production' ? 'Something went wrong!' : err.message 
+  });
 });
 
-// Serve static assets from the build folder
-// app.use(express.static(path.join(__dirname, "build")));
-
-// // Fallback route to handle React routes on refresh
-// app.get("*", (req, res) => {
-//   res.sendFile(path.resolve(__dirname, "build", "index.html"));
-// });
-
-RunJob();
-// VerifyEmail()
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`📊 MongoDB connected successfully`);
+  console.log(`🔗 API available at http://localhost:${PORT}/api/affiliate`);
+});

@@ -1,4 +1,4 @@
-const { connection } = require("../../config/connection");
+// const { connection } = require("../../config/connection");
 
 const GetEmployeeLeaves = (req, res) => {
   const sql = "SELECT * FROM `employe_leaves`";

@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Auth.css';
 
-const Register = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
-    fullName: '',
     email: '',
     password: '',
-    confirmPassword: '',
-    agreeToTerms: false
+    rememberMe: false
   });
 
   const handleChange = (e) => {
@@ -21,8 +19,8 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement registration logic
-    console.log('Registration attempt:', formData);
+    // TODO: Implement login logic
+    console.log('Login attempt:', formData);
   };
 
   return (
@@ -45,24 +43,11 @@ const Register = () => {
                 alt="Ezitech Logo" 
                 className="auth-logo"
               />
-              <h1>Adventure starts here 🚀</h1>
-              <p>Make your app management easy and fun!</p>
+              <h1>Welcome to Ezitech! 👋</h1>
+              <p>Please sign in to your account and start the adventure</p>
             </div>
 
             <form onSubmit={handleSubmit} className="auth-form">
-              <div className="form-group">
-                <label htmlFor="fullName">Full Name</label>
-                <input
-                  type="text"
-                  id="fullName"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
-
               <div className="form-group">
                 <label htmlFor="email">Email</label>
                 <input
@@ -71,7 +56,7 @@ const Register = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="john@example.com"
+                  placeholder="admin@gmail.com"
                   required
                 />
               </div>
@@ -89,43 +74,30 @@ const Register = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="············"
-                  required
-                />
-              </div>
-
               <div className="form-options">
                 <div className="remember-me">
                   <input
                     type="checkbox"
-                    id="agreeToTerms"
-                    name="agreeToTerms"
-                    checked={formData.agreeToTerms}
+                    id="rememberMe"
+                    name="rememberMe"
+                    checked={formData.rememberMe}
                     onChange={handleChange}
-                    required
                   />
-                  <label htmlFor="agreeToTerms">
-                    I agree to the Terms & Conditions
-                  </label>
+                  <label htmlFor="rememberMe">Remember Me</label>
                 </div>
+                <Link to="/forgot-password" className="forgot-password">
+                  Forgot Password?
+                </Link>
               </div>
 
               <button type="submit" className="auth-button">
-                Sign up
+                Sign in
               </button>
 
               <div className="auth-footer">
                 <p>
-                  Already have an account? {' '}
-                  <Link to="/login">Sign in instead</Link>
+                  New on our platform? {' '}
+                  <Link to="/register">Create an account</Link>
                 </p>
               </div>
             </form>
@@ -139,4 +111,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login; 

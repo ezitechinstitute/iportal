@@ -1,4 +1,4 @@
-const { connection } = require("../../config/connection");
+// const { connection } = require("../../config/connection");
 
 const AdminInterviewInt = (req, res) => {
   const page = parseInt(req.query.page) || 1;

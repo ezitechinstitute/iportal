@@ -55,97 +55,102 @@ const RegisterInterns = (req, res) => {
     interviewTime,
   ];
 
-  const sql0 = "SELECT * FROM `intern_table` WHERE `email`= (?)";
-  connection.query(sql0, [internemail], (err, data) => {
-    if (err) {
-      return res.json(err);
-    } else {
-      let flag = 0;
+  try {
+    const sql0 = "SELECT * FROM `intern_table` WHERE `email`= (?)";
+    connection.query(sql0, [internemail], (err, data) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      } else {
+        let flag = 0;
 
-      for (let i = 0; i < data.length; i++) {
-        if (data[0].email === internemail) {
-          flag = 1;
-          return res.json({ exist: true });
+        for (let i = 0; i < data.length; i++) {
+          if (data[0].email === internemail) {
+            flag = 1;
+            return res.json({ exist: true });
+          }
+        }
+
+        if (flag === 0) {
+          const sql1 =
+            "INSERT INTO `intern_table`(`name`, `email`, `city`, `phone`, `gender`, `image`, `join_date`, `birth_date`, `university`, `country`, `interview_type`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
+
+          connection.query(sql1, [interndata], (err, data) => {
+            if (err) {
+              console.log(err);
+              return res.json(err);
+            } else {
+              // console.log(data)
+              if (data.affectedRows === 1) {
+                SendMailRegister(
+                  internUsername,
+                  internemail,
+                  internTechnology,
+                  internType,
+                  interviewType
+                );
+                // if (interviewType === "Remote") {
+                //   if (
+                //     internTechnology === "Digital Marketing" ||
+                //     internTechnology === "Search Engine Optimization (SEO)" ||
+                //     internTechnology === "WordPress Development"
+                //   ) {
+                //     createOtherQueue(internPhone);
+                //     setInterval(() => {
+                //       if (dataOther.length > 0) {
+                //         SendMessageOther(getOtherQueue().slice(1, 13));
+                //       }
+                //     }, 60000);
+                //   } else {
+                //     createQueueRemote(internPhone);
+                //     setInterval(() => {
+                //       if (dataRemote.length > 0) {
+                //         SendMessageRemote(getRemoteQueue().slice(1, 13));
+                //       }
+                //     }, 60000);
+                //   }
+
+                //   // SendMailRemote(
+                //   //   internUsername,
+                //   //   internemail,
+                //   //   interviewDate,
+                //   //   interviewTime
+                //   // );
+                // } else {
+                //   if (
+                //     internTechnology === "Digital Marketing" ||
+                //     internTechnology === "Search Engine Optimization (SEO)" ||
+                //     internTechnology === "WordPress Development"
+                //   ) {
+                //     createOtherQueue(internPhone);
+                //     setInterval(() => {
+                //       if (dataOther.length > 0) {
+                //         SendMessageOther(getOtherQueue().slice(1, 13));
+                //       }
+                //     }, 60000);
+                //   } else {
+                //     createQueueOnsite(internPhone);
+                //     setInterval(() => {
+                //       if (dataOnsite.length > 0) {
+                //         SendMessageOnsite(getOnisteQueue().slice(1, 13));
+                //       }
+                //     }, 60000);
+                //   }
+                //   // getOnisteQueue();
+
+                //   // SendMailOnsite(internUsername, internemail);
+                // }
+
+                return res.json(data.affectedRows);
+              }
+            }
+          });
         }
       }
-
-      if (flag === 0) {
-        const sql1 =
-          "INSERT INTO `intern_table`(`name`, `email`, `city`, `phone`, `gender`, `image`, `join_date`, `birth_date`, `university`, `country`, `interview_type`, `technology`, `duration`, `intern_type`, `interview_date`, `interview_time`) VALUES (?)";
-
-        connection.query(sql1, [interndata], (err, data) => {
-          if (err) {
-            console.log(err);
-            return res.json(err);
-          } else {
-            // console.log(data)
-            if (data.affectedRows === 1) {
-              SendMailRegister(
-                internUsername,
-                internemail,
-                internTechnology,
-                internType,
-                interviewType
-              );
-              // if (interviewType === "Remote") {
-              //   if (
-              //     internTechnology === "Digital Marketing" ||
-              //     internTechnology === "Search Engine Optimization (SEO)" ||
-              //     internTechnology === "WordPress Development"
-              //   ) {
-              //     createOtherQueue(internPhone);
-              //     setInterval(() => {
-              //       if (dataOther.length > 0) {
-              //         SendMessageOther(getOtherQueue().slice(1, 13));
-              //       }
-              //     }, 60000);
-              //   } else {
-              //     createQueueRemote(internPhone);
-              //     setInterval(() => {
-              //       if (dataRemote.length > 0) {
-              //         SendMessageRemote(getRemoteQueue().slice(1, 13));
-              //       }
-              //     }, 60000);
-              //   }
-
-              //   // SendMailRemote(
-              //   //   internUsername,
-              //   //   internemail,
-              //   //   interviewDate,
-              //   //   interviewTime
-              //   // );
-              // } else {
-              //   if (
-              //     internTechnology === "Digital Marketing" ||
-              //     internTechnology === "Search Engine Optimization (SEO)" ||
-              //     internTechnology === "WordPress Development"
-              //   ) {
-              //     createOtherQueue(internPhone);
-              //     setInterval(() => {
-              //       if (dataOther.length > 0) {
-              //         SendMessageOther(getOtherQueue().slice(1, 13));
-              //       }
-              //     }, 60000);
-              //   } else {
-              //     createQueueOnsite(internPhone);
-              //     setInterval(() => {
-              //       if (dataOnsite.length > 0) {
-              //         SendMessageOnsite(getOnisteQueue().slice(1, 13));
-              //       }
-              //     }, 60000);
-              //   }
-              //   // getOnisteQueue();
-
-              //   // SendMailOnsite(internUsername, internemail);
-              // }
-
-              return res.json(data.affectedRows);
-            }
-          }
-        });
-      }
-    }
-  });
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Database query failed" });
+  }
 };
 
 const GetRegisterUni = (req, res) => {
