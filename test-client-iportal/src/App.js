@@ -23,13 +23,14 @@ import {ResetPassword} from "./pages/interns-pages/InternResetPassword";
 import BirthdayWisher from "./components/interns-components/Birthday_wisher/Birthday_wisher";
 import Supervisor_compliant from "./components/interns-components/Feedback/Supervisor_compaliant";
 import Manager_compliant from "./components/interns-components/Feedback/Manager_compliant";
+import RecommendIntern from "./components/Recommendation/RecommendIntern";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route index path="/" element={<InternDashboard />} /> {/* remove at end */}
+          <Route index path="/" element={<RecommendIntern />} /> {/* remove at end */}
           {/* <Route index path="/" element={<InternLogin />} />  remove at end */}
           <Route path="/intern-test" element={<InternTest />} />
           <Route path="/intern-dashboard" element={<InternDashboard />} />

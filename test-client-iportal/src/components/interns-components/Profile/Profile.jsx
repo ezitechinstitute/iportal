@@ -1,23 +1,23 @@
 import React, { useState, useRef } from 'react';
-import { 
-  User, 
-  Edit3, 
-  Save, 
-  X, 
-  Camera, 
-  Shield, 
-  Briefcase, 
-  Building, 
-  MapPin, 
-  DollarSign, 
-  BookOpen, 
-  Clock, 
-  Check, 
-  FileText, 
-  Video, 
-  Mail, 
-  Phone, 
-  CheckCircle, 
+import {
+  User,
+  Edit3,
+  Save,
+  X,
+  Camera,
+  Shield,
+  Briefcase,
+  Building,
+  MapPin,
+  DollarSign,
+  BookOpen,
+  Clock,
+  Check,
+  FileText,
+  Video,
+  Mail,
+  Phone,
+  CheckCircle,
   AlertCircle,
   Menu,
   Bell,
@@ -26,17 +26,24 @@ import {
   Users,
   Calendar,
   Settings,
-  LogOut
+  LogOut,
+  Share2,
+  Download,
+  Upload,
+  Copy,
+  ExternalLink,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Link2
 } from 'lucide-react';
-import './Profile.css';
-
-import { InternTopbar } from '../InternTopbar/InternTopbar';
 import { InternSidebar } from '../InternSidebar';
-
+import { InternTopbar } from '../InternTopbar/InternTopbar';
+import './Profile.css';
 
 export default function Profile() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
+
   // Mock data - replace with actual data
   const [studentData] = useState({
     profileStatus: 'approved',
@@ -92,7 +99,16 @@ export default function Profile() {
   const [activeTab, setActiveTab] = useState('overview');
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [pendingChanges, setPendingChanges] = useState({});
-  
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [showDocumentModal, setShowDocumentModal] = useState(false);
+  const [uploadedDocuments, setUploadedDocuments] = useState([]);
+  const [shareUrl, setShareUrl] = useState('');
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  // Document upload refs
+  const cnicRef = useRef(null);
+  const videoRef = useRef(null);
+  const additionalDocsRef = useRef(null);
   const profilePictureRef = useRef(null);
   const bannerRef = useRef(null);
 
@@ -132,10 +148,98 @@ export default function Profile() {
     setIsEditing(false);
   };
 
-
   // Use currentData with pending changes for display
   const displayData = { ...currentData, ...pendingChanges };
 
+  // Share Profile Functions
+  const generateShareUrl = () => {
+    const baseUrl = window.location.origin;
+    const profileId = 'student123'; // Replace with actual student ID
+    return `${baseUrl}/profile/share/${profileId}`;
+  };
+
+  const shareProfile = (platform) => {
+    const url = generateShareUrl();
+    const text = `Check out ${currentData.name}'s profile - ${currentData.position} at ${currentData.currentCompany}`;
+
+    switch (platform) {
+      case 'facebook':
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+        break;
+      case 'twitter':
+        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+        break;
+      case 'linkedin':
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`);
+        break;
+      case 'copy':
+        navigator.clipboard.writeText(url).then(() => {
+          setCopySuccess(true);
+          setTimeout(() => setCopySuccess(false), 2000);
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Document Upload Functions
+
+  const handleDocumentUpload = (type, file) => {
+    if (file) {
+      const newDocument = {
+        id: Date.now(),
+        type: type,
+        name: file.name,
+        size: file.size,
+        uploadDate: new Date().toISOString(),
+        status: 'pending' // pending, approved, rejected
+      };
+
+      setUploadedDocuments(prev => [...prev, newDocument]);
+
+      // Clear the file input after upload
+      if (type === 'cnic' && cnicRef.current) {
+        cnicRef.current.value = '';
+      } else if (type === 'video' && videoRef.current) {
+        videoRef.current.value = '';
+      } else if (type === 'additional' && additionalDocsRef.current) {
+        additionalDocsRef.current.value = '';
+      }
+
+      // Update verification status based on document type
+      if (type === 'cnic') {
+        console.log('CNIC document uploaded');
+      } else if (type === 'video') {
+        console.log('Video document uploaded');
+      }
+    }
+  };
+
+  const removeDocument = (documentId) => {
+    setUploadedDocuments(prev => prev.filter(doc => doc.id !== documentId));
+  };
+
+  const getDocumentIcon = (type) => {
+    switch (type) {
+      case 'cnic':
+        return <FileText size={16} />;
+      case 'video':
+        return <Video size={16} />;
+      default:
+        return <FileText size={16} />;
+    }
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  // Modal Components
   const VerificationModal = () => (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -174,10 +278,137 @@ export default function Profile() {
     </div>
   );
 
+  const ShareModal = () => (
+    <div className="modal-overlay">
+      <div className="modal-content share-modal">
+        <div className="modal-header">
+          <h3>Share Profile</h3>
+          <button
+            onClick={() => setShowShareModal(false)}
+            className="modal-close"
+          >
+            <X size={20} />
+          </button>
+        </div>
+        <div className="modal-body">
+          <p>Share your profile with others:</p>
+
+          <div className="share-url-container">
+            <input
+              type="text"
+              value={shareUrl}
+              readOnly
+              className="share-url-input"
+            />
+            <button
+              onClick={() => shareProfile('copy')}
+              className={`copy-btn ${copySuccess ? 'success' : ''}`}
+            >
+              {copySuccess ? <Check size={16} /> : <Copy size={16} />}
+            </button>
+          </div>
+
+          <div className="share-buttons">
+            <button
+              onClick={() => shareProfile('facebook')}
+              className="share-option facebook"
+            >
+              <Facebook size={20} />
+              <span>Facebook</span>
+            </button>
+            <button
+              onClick={() => shareProfile('twitter')}
+              className="share-option twitter"
+            >
+              <Twitter size={20} />
+              <span>Twitter</span>
+            </button>
+            <button
+              onClick={() => shareProfile('linkedin')}
+              className="share-option linkedin"
+            >
+              <Linkedin size={20} />
+              <span>LinkedIn</span>
+            </button>
+            <button
+              onClick={() => shareProfile('copy')}
+              className="share-option copy"
+            >
+              <Link2 size={20} />
+              <span>Copy Link</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const DocumentModal = () => (
+    <div className="modal-overlay">
+      <div className="modal-content document-modal">
+        <div className="modal-header">
+          <h3>Upload Documents</h3>
+          <button
+            onClick={() => setShowDocumentModal(false)}
+            className="modal-close"
+          >
+            <X size={20} />
+          </button>
+        </div>
+        <div className="modal-body">
+          <p>Upload your verification documents:</p>
+
+          <div className="upload-sections">
+            <div className="upload-section">
+              <h4>CNIC Picture</h4>
+              <button
+                onClick={() => cnicRef.current?.click()}
+                className="upload-btn"
+              >
+                <Upload size={16} />
+                <span>Upload CNIC</span>
+              </button>
+              <p className="upload-hint">Supported formats: JPG, PNG, PDF (Max 5MB)</p>
+              {/* Show selected file name */}
+              <div className="selected-file" id="cnic-selected"></div>
+            </div>
+
+            <div className="upload-section">
+              <h4>Introduction Video</h4>
+              <button
+                onClick={() => videoRef.current?.click()}
+                className="upload-btn"
+              >
+                <Upload size={16} />
+                <span>Upload Video</span>
+              </button>
+              <p className="upload-hint">Supported formats: MP4, AVI, MOV (Max 50MB)</p>
+              {/* Show selected file name */}
+              <div className="selected-file" id="video-selected"></div>
+            </div>
+
+            <div className="upload-section">
+              <h4>Additional Documents</h4>
+              <button
+                onClick={() => additionalDocsRef.current?.click()}
+                className="upload-btn"
+              >
+                <Upload size={16} />
+                <span>Upload Documents</span>
+              </button>
+              <p className="upload-hint">Certificates, transcripts, etc.</p>
+              {/* Show selected file name */}
+              <div className="selected-file" id="additional-selected"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    
     <div className="app-container">
-      <InternSidebar/>
+      <InternSidebar />
       <InternTopbar />
       <div className={`main-content ${sidebarOpen ? 'sidebar-open' : ''}`}>
         <div className="profile-container">
@@ -188,7 +419,7 @@ export default function Profile() {
                 <h1>Student Profile</h1>
                 <p>Manage your profile and track your progress</p>
               </div>
-              
+
               {/* Action Buttons */}
               <div className="header-actions">
                 {/* Profile Status */}
@@ -215,7 +446,7 @@ export default function Profile() {
                     </span>
                   )}
                 </div>
-                
+
                 {/* Verification Badge */}
                 <button
                   onClick={() => setShowVerificationModal(true)}
@@ -226,8 +457,18 @@ export default function Profile() {
                     {studentData.verification.isVerified ? 'Verified' : 'Verify Profile'}
                   </span>
                 </button>
-                
 
+                {/* Share Profile Button */}
+                <button
+                  onClick={() => {
+                    setShareUrl(generateShareUrl());
+                    setShowShareModal(true);
+                  }}
+                  className="share-btn"
+                >
+                  <Share2 size={16} />
+                  <span>Share Profile</span>
+                </button>
 
                 {/* Edit Button */}
                 {!isEditing ? (
@@ -255,16 +496,12 @@ export default function Profile() {
                       <span>Save Changes</span>
                     </button>
                   </div>
-                  
                 )}
 
                 <button className="logout-btn">
                   <LogOut size={16} />
-                  <span>
-                    Logout
-                  </span>
+                  <span>Logout</span>
                 </button>
-
               </div>
             </div>
           </div>
@@ -273,7 +510,7 @@ export default function Profile() {
           <div className="profile-card">
             {/* Banner Section */}
             <div className="banner-section">
-              <div 
+              <div
                 className="banner-background"
                 style={{
                   backgroundImage: displayData.bannerBackground ? `url(${displayData.bannerBackground})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
@@ -289,15 +526,15 @@ export default function Profile() {
                   </button>
                 )}
               </div>
-              
+
               {/* Profile Picture */}
               <div className="profile-picture-container">
                 <div className="profile-picture-wrapper">
                   <div className="profile-picture">
                     {displayData.profilePicture ? (
-                      <img 
-                        src={displayData.profilePicture} 
-                        alt="Profile" 
+                      <img
+                        src={displayData.profilePicture}
+                        alt="Profile"
                       />
                     ) : (
                       <div className="default-avatar">
@@ -336,7 +573,7 @@ export default function Profile() {
                       <Shield size={24} className="verified-icon" />
                     )}
                   </div>
-                  
+
                   <div className="profile-meta">
                     <div className="meta-item">
                       <Briefcase size={16} />
@@ -351,7 +588,7 @@ export default function Profile() {
                       <span>{displayData.location}</span>
                     </div>
                   </div>
-                  
+
                   {/* Performance Metrics */}
                   <div className="metrics-grid">
                     <div className="metric-item">
@@ -372,7 +609,7 @@ export default function Profile() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Salary Info */}
                 <div className="salary-info">
                   <div className="salary-display">
@@ -428,7 +665,7 @@ export default function Profile() {
                         <span className="performance-value attendance">{studentData.attendance}%</span>
                       </div>
                       <div className="progress-bar">
-                        <div 
+                        <div
                           className="progress-fill attendance"
                           style={{ width: `${studentData.attendance}%` }}
                         ></div>
@@ -440,7 +677,7 @@ export default function Profile() {
                         <span className="performance-value rating">{studentData.overallRating}/5</span>
                       </div>
                       <div className="progress-bar">
-                        <div 
+                        <div
                           className="progress-fill rating"
                           style={{ width: `${(studentData.overallRating / 5) * 100}%` }}
                         ></div>
@@ -489,7 +726,7 @@ export default function Profile() {
                           <span>{project.completion}%</span>
                         </div>
                         <div className="progress-bar">
-                          <div 
+                          <div
                             className={`progress-fill ${project.completion === 100 ? 'completed' : 'in-progress'}`}
                             style={{ width: `${project.completion}%` }}
                           ></div>
@@ -512,7 +749,7 @@ export default function Profile() {
                         <span className="skill-level">{skill.level}%</span>
                       </div>
                       <div className="progress-bar">
-                        <div 
+                        <div
                           className="progress-fill skill"
                           style={{ width: `${skill.level}%` }}
                         ></div>
@@ -525,7 +762,17 @@ export default function Profile() {
 
             {activeTab === 'verification' && (
               <div className="verification-section">
-                <h3>Verification Status</h3>
+                <div className="verification-header-section">
+                  <h3>Verification Status</h3>
+                  <button
+                    onClick={() => setShowDocumentModal(true)}
+                    className="upload-docs-btn"
+                  >
+                    <Upload size={16} />
+                    <span>Upload Documents</span>
+                  </button>
+                </div>
+
                 <div className="verification-grid">
                   {[
                     { icon: FileText, label: 'CNIC Picture', status: studentData.verification.cnicPicture, description: 'Upload your CNIC for identity verification' },
@@ -551,6 +798,41 @@ export default function Profile() {
                     </div>
                   ))}
                 </div>
+
+                {/* Uploaded Documents Section */}
+                {uploadedDocuments.length > 0 && (
+                  <div className="uploaded-documents">
+                    <h4>Uploaded Documents</h4>
+                    <div className="documents-list">
+                      {uploadedDocuments.map((doc) => (
+                        <div key={doc.id} className="document-item">
+                          <div className="document-info">
+                            <div className="document-icon">
+                              {getDocumentIcon(doc.type)}
+                            </div>
+                            <div className="document-details">
+                              <span className="document-name">{doc.name}</span>
+                              <span className="document-meta">
+                                {formatFileSize(doc.size)} • {new Date(doc.uploadDate).toLocaleDateString()}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="document-actions">
+                            <span className={`document-status ${doc.status}`}>
+                              {doc.status}
+                            </span>
+                            <button
+                              onClick={() => removeDocument(doc.id)}
+                              className="remove-doc-btn"
+                            >
+                              <X size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -572,9 +854,74 @@ export default function Profile() {
         style={{ display: 'none' }}
         onChange={(e) => handleFileUpload('banner', e.target.files[0])}
       />
-
-      {/* Verification Modal */}
+      <input
+        ref={cnicRef}
+        type="file"
+        accept="image/*,.pdf"
+        style={{ display: 'none' }}
+        onChange={(e) => {
+          const file = e.target.files[0];
+          if (file) {
+            // Show selected file name
+            const selectedDiv = document.getElementById('cnic-selected');
+            if (selectedDiv) {
+              selectedDiv.textContent = `Selected: ${file.name}`;
+              selectedDiv.style.display = 'block';
+              selectedDiv.style.color = '#28a745';
+              selectedDiv.style.fontSize = '14px';
+              selectedDiv.style.marginTop = '8px';
+            }
+            handleDocumentUpload('cnic', file);
+          }
+        }}
+      />
+      <input
+        ref={videoRef}
+        type="file"
+        accept="video/*"
+        style={{ display: 'none' }}
+        onChange={(e) => {
+          const file = e.target.files[0];
+          if (file) {
+            // Show selected file name
+            const selectedDiv = document.getElementById('video-selected');
+            if (selectedDiv) {
+              selectedDiv.textContent = `Selected: ${file.name}`;
+              selectedDiv.style.display = 'block';
+              selectedDiv.style.color = '#28a745';
+              selectedDiv.style.fontSize = '14px';
+              selectedDiv.style.marginTop = '8px';
+            }
+            handleDocumentUpload('video', file);
+          }
+        }}
+      />
+      <input
+        ref={additionalDocsRef}
+        type="file"
+        accept=".pdf,.doc,.docx,.txt"
+        multiple
+        style={{ display: 'none' }}
+        onChange={(e) => {
+          const files = Array.from(e.target.files);
+          if (files.length > 0) {
+            // Show selected file names
+            const selectedDiv = document.getElementById('additional-selected');
+            if (selectedDiv) {
+              selectedDiv.textContent = `Selected: ${files.map(f => f.name).join(', ')}`;
+              selectedDiv.style.display = 'block';
+              selectedDiv.style.color = '#28a745';
+              selectedDiv.style.fontSize = '14px';
+              selectedDiv.style.marginTop = '8px';
+            }
+            files.forEach(file => handleDocumentUpload('additional', file));
+          }
+        }}
+      />
+      {/* Modals */}
       {showVerificationModal && <VerificationModal />}
+      {showShareModal && <ShareModal />}
+      {showDocumentModal && <DocumentModal />}
     </div>
   );
 }

@@ -134,7 +134,7 @@ export const InternSidebar = () => {
               </>
             ) : (
               <>
-                {/* <li className={activeLink === "dashboard" ? "active" : "undefined"}>
+                <li className={activeLink === "dashboard" ? "active" : "undefined"}>
                   <NavLink
                     className="d-flex align-items-center"
                     onClick={() => setActive("dashboard")}
@@ -148,7 +148,7 @@ export const InternSidebar = () => {
                       Dashboard
                     </span>
                   </NavLink>
-                </li> */}
+                </li>
 
                 <li className={activeLink === "projects" ? "active" : "undefined"}>
                   <NavLink
