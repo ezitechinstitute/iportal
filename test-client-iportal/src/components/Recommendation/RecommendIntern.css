@@ -1,0 +1,149 @@
+/* Sidebar styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background-color: #fff;
+  border-right: 1px solid #e5e7eb;
+  z-index: 1000;
+  overflow-y: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Topbar styles */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 250px;
+  right: 0;
+  height: 64px;
+  background-color: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* Main content area */
+.main-content {
+  margin-left: 250px;
+  margin-top: 64px;
+  min-height: calc(100vh - 64px);
+  background-color: #f8fafc;
+  padding: 0;
+}
+
+/* Content wrapper for centering */
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 64px);
+  padding: 2rem;
+}
+
+/* Content header */
+.content-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Content title */
+.content-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+/* Content description */
+.content-description {
+  margin-top: 1rem;
+}
+
+.description-text {
+  font-size: 1.125rem;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.description-text:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+  
+  .topbar {
+    left: 200px;
+  }
+  
+  .main-content {
+    margin-left: 200px;
+  }
+  
+  .content-wrapper {
+    padding: 1rem;
+  }
+  
+  .content-title {
+    font-size: 2rem;
+  }
+  
+  .description-text {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .topbar {
+    left: 0;
+  }
+  
+  .main-content {
+    margin-left: 0;
+  }
+  
+  .content-title {
+    font-size: 1.75rem;
+  }
+  
+  .description-text {
+    font-size: 0.9rem;
+  }
+}
+
+.loading-spinner {
+  border: 3px solid #f3f4f6;
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 2rem auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
