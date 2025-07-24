@@ -7,6 +7,7 @@ const RunJob = require("./controller/combine/Run-Scheduler");
 const { VerifyEmail } = require("./controller/combine/Verify-Email");
 const dotenv = require("dotenv").config();
 const downloadRoutes = require("./routes/downloadRoutes");
+const affiliateRoutes = require("./routes/affiliate-routes");
 
 const PORT = 8088;
 const path = require('path')
@@ -35,11 +36,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-
 const certPath = path.join(__dirname, 'public/certificates');
 app.use('/certificates', express.static(path.join(__dirname, '/controller/public/certificates')));
 
 app.use(router);
+app.use('/api/affiliate', affiliateRoutes);
 app.use('/', downloadRoutes);
 const fs = require('fs');
 app.get('/list-certs', (req, res) => {
