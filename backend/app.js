@@ -28,6 +28,7 @@ const corsOptions = {
     "http://localhost:3001",
     "http://localhost:3002",
     "http://localhost:3003",
+    "http://localhost:5173"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"], // Optional: Allowed methods
   // allowedHeaders: ["Content-Type", "Authorization"], // Optional: Allowed headers
@@ -41,6 +42,9 @@ app.use('/certificates', express.static(path.join(__dirname, '/controller/public
 
 app.use(router);
 app.use('/api/affiliate', affiliateRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
 app.use('/', downloadRoutes);
 const fs = require('fs');
 app.get('/list-certs', (req, res) => {
