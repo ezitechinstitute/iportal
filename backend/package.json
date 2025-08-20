@@ -22,7 +22,7 @@
     "luxon": "^3.5.0",
     "moment-timezone": "^0.5.46",
     "mysql": "^2.18.1",
-    "mysql2": "^3.14.3",
+    "mysql2": "^3.14.2",
     "node-cron": "^3.0.3",
     "nodemailer": "^6.10.1",
     "nodemon": "^3.1.0",
@@ -31,5 +31,7 @@
   },
   "keywords": [],
   "type": "commonjs",
+  "devDependencies": {
+  },
   "description": ""
 }
