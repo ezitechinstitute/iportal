@@ -614,7 +614,7 @@ useEffect(() => {
     <div className="card-body">
       {loading ? (
         <p>Loading requests...</p>
-      ) : certificateRequests.length === 0 ? (
+      ) : stats.certificateRequests.length === 0 ? (
         <p className="text-muted">No certificate requests found.</p>
       ) : (
         <div className="table-responsive">
@@ -630,7 +630,7 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-              {certificateRequests.map((req) => (
+              {stats.certificateRequests.map((req) => (
                 <tr key={req.id}>
                   <td>{req.username}</td>
                   <td>{req.tech}</td>
