@@ -1,9 +1,23 @@
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const path = require('path');
 const { connection } = require('../config/connection');
 require('dotenv').config();
 
 const secretKey = process.env.JWT_SECRET || 'fallback-secret-key-for-development-only';
 
+// Multer storage config
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, 'uploads/'),
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({ storage });
+
+// Middleware to verify JWT
 const verifyToken = (req, res, next) => {
   try {
     const token =
@@ -15,7 +29,6 @@ const verifyToken = (req, res, next) => {
 
     const decoded = jwt.verify(token, secretKey);
 
-   
     const sql = 'SELECT * FROM affiliates WHERE id = ? AND status = "active"';
     connection.query(sql, [decoded.id], (err, results) => {
       if (err) {
@@ -51,6 +64,7 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+// Dummy limiters (implement if needed)
 const loginLimiter = (req, res, next) => next();
 const apiLimiter = (req, res, next) => next();
 
@@ -58,4 +72,5 @@ module.exports = {
   verifyToken,
   loginLimiter,
   apiLimiter,
+  upload,
 };
