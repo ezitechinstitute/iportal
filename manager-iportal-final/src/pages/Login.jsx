@@ -1,216 +1,256 @@
-import axios from "axios";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaFacebookF, FaTwitter, FaEnvelope, FaGithub, FaEye } from "react-icons/fa"; // Import React Icons
+'use client';
+
+import axios from 'axios';
+import { useState } from 'react';
+import {
+  FaEnvelope,
+  FaEye,
+  FaEyeSlash,
+  FaFacebookF,
+  FaGithub,
+  FaLock,
+  FaTwitter,
+  FaUser,
+} from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
+import './style/login.css';
 
 export const Login = () => {
   const navigate = useNavigate();
-  const [value, setValue] = useState({ email: "", password: "" });
+  const [value, setValue] = useState({ email: '', password: '' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState({ type: '', text: '' });
 
-  const handleInput = (e) => {
+  const handleInput = e => {
     setValue({ ...value, [e.target.name]: e.target.value });
+    // Clear message when user starts typing
+    if (message.text) {
+      setMessage({ type: '', text: '' });
+    }
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async e => {
     e.preventDefault();
+
     if (!value.email || !value.password) {
-      alert("Please fill in all fields first!");
+      setMessage({ type: 'error', text: 'Please fill in all fields first!' });
       return;
     }
 
-    axios
-      .post("https://api.ezitech.org/manager-auth", value)
-      .then((res) => {
-        console.log("API Response:", res.data);
-        if (res.data.isLoggedIn === true) {
-          const { user, token } = res.data;
-          sessionStorage.setItem("managerid", user.manager_id);
-          sessionStorage.setItem("etiid", user.eti_id);
-          sessionStorage.setItem("username", user.name);
-          sessionStorage.setItem("email", user.email);
-          sessionStorage.setItem("token", token);
-          sessionStorage.setItem("role", "Manager");
-          sessionStorage.setItem("contact", user.contact);
-          sessionStorage.setItem("isLoggedIn", "true");
-          alert("Login Successful!");
-          navigate("/manager-dashboard");
-        } else {
-          alert(res.data.message || "Invalid User!");
-        }
-      })
-      .catch((err) => {
-        console.error("API Error:", err.response?.data || err.message);
-        const errorMsg = err.response?.data?.error || "Login failed. Please try again.";
-        alert(errorMsg);
-      });
+    setLoading(true);
+    setMessage({ type: '', text: '' });
+
+    try {
+      const res = await axios.post(
+        // 'https://api.ezitech.org/manager-auth' ||
+        'http://localhost:8000/manager-auth',
+        value
+      );
+      console.log('API Response:', res.data);
+
+      if (res.data.isLoggedIn === true) {
+        const { user, token } = res.data;
+        sessionStorage.setItem('managerid', user.manager_id);
+        sessionStorage.setItem('etiid', user.eti_id);
+        sessionStorage.setItem('username', user.name);
+        sessionStorage.setItem('email', user.email);
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('role', 'Manager');
+        sessionStorage.setItem('contact', user.contact);
+        sessionStorage.setItem('isLoggedIn', 'true');
+
+        setMessage({
+          type: 'success',
+          text: 'Login Successful! Redirecting...',
+        });
+
+        setTimeout(() => {
+          navigate('/manager-dashboard');
+        }, 1500);
+      } else {
+        setMessage({
+          type: 'error',
+          text: res.data.message || 'Invalid User!',
+        });
+      }
+    } catch (err) {
+      console.error('API Error:', err.response?.data || err.message);
+      const errorMsg =
+        err.response?.data?.error || 'Login failed. Please try again.';
+      setMessage({ type: 'error', text: errorMsg });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
-      <div className="auth-wrapper auth-v2">
-        <div className="auth-inner row m-0">
-          {/* Brand Logo */}
-          <a className="brand-logo" href="javascript:void(0);">
-            <img src="./images/logo.png" alt="Logo" width={150} />
-          </a>
-
-          {/* Left Image (hidden on small screens) */}
-          <div className="d-none d-lg-flex col-lg-8 align-items-center p-5">
-            <div className="w-100 d-lg-flex align-items-center justify-content-center px-5">
+      <div className='login-container'>
+        <div className='main-content'>
+          {/* Left Side - Dark with illustration and Welcome Back */}
+          <div className='left-side'>
+            <div className='illustration-container'>
               <img
-                className="img-fluid"
-                src="../../../app-assets/images/pages/login-v2.svg"
-                alt="Login Illustration"
+                className='login-illustration'
+                src='../../../app-assets/images/pages/login-v2.svg'
+                alt='Login Illustration'
               />
+            </div>
+            <div className='welcome-text'>
+              <h1>Welcome Back!</h1>
             </div>
           </div>
 
-          {/* Login Form */}
-          <div className="d-flex col-lg-4 align-items-center auth-bg px-2 p-lg-5">
-            <div className="col-12 col-sm-8 col-md-6 col-lg-12 px-xl-2 mx-auto">
-              <h4 className="card-title mb-1">Welcome to Ezitech! 👋</h4>
-              <p className="card-text mb-2">
-                Please sign in to your account and start the adventure
-              </p>
+          {/* Right Side - Login Form */}
+          <div className='right-side'>
+            <div className='form-container'>
+              <div className='logo-container'>
+                <img src='./images/logo.png' alt='Logo' width={150} />
+              </div>
+              <h2 className='form-title'>Log in</h2>
 
-              <form className="auth-login-form mt-2" onSubmit={handleLogin}>
-                <div className="form-group">
-                  <label className="form-label" htmlFor="login-email">
-                    Email
-                  </label>
+              {message.text && (
+                <div className={`message ${message.type}`}>{message.text}</div>
+              )}
+
+              <form className='login-form' onSubmit={handleLogin}>
+                <div className='input-group'>
+                  <FaUser className='input-icon' />
                   <input
-                    className="form-control"
-                    id="login-email"
-                    type="email"
-                    name="email"
+                    type='email'
+                    name='email'
                     value={value.email}
                     onChange={handleInput}
-                    placeholder="ezitech@example.com"
-                    aria-describedby="login-email"
-                    autoFocus
-                    tabIndex="1"
+                    placeholder='Username'
+                    className='form-input'
+                    disabled={loading}
                     required
                   />
                 </div>
 
-                <div className="form-group">
-                  <div className="d-flex justify-content-between">
-                    <label htmlFor="login-password">Password</label>
-                    <a href="#" data-toggle="modal" data-target="#exampleModalCenter">
-                      <small>Forgot Password?</small>
-                    </a>
-                  </div>
-                  <div className="input-group input-group-merge form-password-toggle">
-                    <input
-                      className="form-control form-control-merge"
-                      id="login-password"
-                      type="password"
-                      name="password"
-                      value={value.password}
-                      onChange={handleInput}
-                      placeholder="············"
-                      aria-describedby="login-password"
-                      tabIndex="2"
-                      required
-                    />
-                    
-                  </div>
+                <div className='input-group'>
+                  <FaLock className='input-icon' />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name='password'
+                    value={value.password}
+                    onChange={handleInput}
+                    placeholder='Password'
+                    className='form-input'
+                    disabled={loading}
+                    required
+                  />
+                  <button
+                    type='button'
+                    className='password-toggle'
+                    onClick={() => setShowPassword(!showPassword)}
+                    disabled={loading}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
                 </div>
 
-                <div className="form-group">
-                  <div className="custom-control custom-checkbox">
-                    <input
-                      className="custom-control-input"
-                      id="remember-me"
-                      type="checkbox"
-                      tabIndex="3"
-                    />
-                    <label className="custom-control-label" htmlFor="remember-me">
-                      Remember Me
-                    </label>
-                  </div>
+                <div className='form-options'>
+                  <label className='remember-checkbox'>
+                    <input type='checkbox' disabled={loading} />
+                    <span className='checkmark'></span>
+                    Remember Me
+                  </label>
+                  <button
+                    type='button'
+                    className='forgot-link'
+                    data-toggle='modal'
+                    data-target='#exampleModalCenter'
+                    disabled={loading}
+                  >
+                    Forgot Password?
+                  </button>
                 </div>
 
-                <button
-                  className="btn btn-primary btn-block"
-                  type="submit"
-                  tabIndex="4"
-                >
-                  Login
+                <button type='submit' className='login-btn' disabled={loading}>
+                  {loading ? (
+                    <>
+                      <div className='spinner'></div>
+                      Logging in...
+                    </>
+                  ) : (
+                    'Log in'
+                  )}
                 </button>
+
+                <div className='divider'>
+                  <span>Or</span>
+                </div>
+
+                {/* <Link to='/signup' className='signup-btn'>
+                  Sign up
+                </Link> */}
               </form>
 
-              <div className="divider my-2">
-                <div className="divider-text">or</div>
-              </div>
-
-              <div className="auth-footer-btn d-flex justify-content-center">
-                <a className="btn btn-facebook" href="javascript:void(0)">
-                  <FaFacebookF /> {/* Replaced Feather facebook icon */}
-                </a>
-                <a className="btn btn-twitter white" href="javascript:void(0)">
-                  <FaTwitter /> {/* Replaced Feather twitter icon */}
-                </a>
-                <a className="btn btn-google" href="javascript:void(0)">
-                  <FaEnvelope /> {/* Replaced Feather mail icon */}
-                </a>
-                <a className="btn btn-github" href="javascript:void(0)">
-                  <FaGithub /> {/* Replaced Feather github icon */}
-                </a>
+              <div className='social-login'>
+                <Link href='#' className='social-btn facebook'>
+                  <FaFacebookF />
+                </Link>
+                <Link href='#' className='social-btn twitter'>
+                  <FaTwitter />
+                </Link>
+                <Link href='#' className='social-btn google'>
+                  <FaEnvelope />
+                </Link>
+                <Link href='#' className='social-btn github'>
+                  <FaGithub />
+                </Link>
               </div>
             </div>
           </div>
-          {/* End Login Form */}
         </div>
       </div>
 
       {/* Forgot Password Modal */}
       <div
-        className="modal fade"
-        id="exampleModalCenter"
-        tabIndex="-1"
-        role="dialog"
-        aria-labelledby="exampleModalCenterTitle"
-        aria-hidden="true"
+        className='modal fade'
+        id='exampleModalCenter'
+        tabIndex='-1'
+        role='dialog'
+        aria-labelledby='exampleModalCenterTitle'
+        aria-hidden='true'
       >
-        <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalCenterTitle">
+        <div className='modal-dialog modal-dialog-centered' role='document'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h5 className='modal-title' id='exampleModalCenterTitle'>
                 Forgot Password
               </h5>
               <button
-                type="button"
-                className="close"
-                data-dismiss="modal"
-                aria-label="Close"
+                type='button'
+                className='close'
+                data-dismiss='modal'
+                aria-label='Close'
               >
-                <span aria-hidden="true">×</span>
+                <span aria-hidden='true'>×</span>
               </button>
             </div>
-            <div className="modal-body">
+            <div className='modal-body'>
               <input
-                className="form-control"
-                type="email"
-                name="email"
-                placeholder="Email"
-                // Add onChange and logic for password reset if needed
+                className='form-control'
+                type='email'
+                name='email'
+                placeholder='Email'
               />
               <br />
               <input
-                className="form-control"
-                type="password"
-                name="password"
-                placeholder="New Password"
-                // Add onChange and logic for password reset if needed
+                className='form-control'
+                type='password'
+                name='password'
+                placeholder='New Password'
               />
             </div>
-            <div className="modal-footer">
+            <div className='modal-footer'>
               <button
-                type="button"
-                className="btn btn-primary"
-                data-dismiss="modal"
-                // Add onClick handler for password reset if implemented
+                type='button'
+                className='btn btn-primary'
+                data-dismiss='modal'
               >
                 Update
               </button>

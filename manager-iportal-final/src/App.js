@@ -1,112 +1,92 @@
-// import 'react-calendar/dist/Calendar.css';
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import { InternHome } from "./pages/interns-pages/InternHome";
-import { ManagerHome } from "./pages/ManagerHome";
-import { OnsiteInterns } from "./pages/OnsiteInterns";
-import { RemoteInterns } from "./pages/RemoteInterns";
-// import { InternProjects } from "./pages/InternProjects";
-// import { InterViews } from "./pages/InterViews";
-import { InternCompleted } from "./pages/InternCompleted";
-import ManagerLeave from "./pages/ManagerLeave";
-import Balance from "./pages/Balance";
-import Invoice from "./pages/Invoice";
-import { Login } from "./pages/Login";
-import { InterviewTest } from "./pages/InterviewTest";
-import { ActiveInterns } from "./pages/ActiveInterns";
-import { ContactWith } from "./pages/ContactWith";
-import { RemainingAmount } from "./pages/RemainingAmount";
-// import { Test } from "./supervisor/pages/Test";
-import { SupervisorHome } from "./supervisor/pages/SupervisorHome";
-import { SupervisorLogin } from "./supervisor/pages/SupervisorLogin";
-import SupervisorInterns from "./supervisor/pages/SupervisorInterns";
-import InternProjects from "./supervisor/pages/InternProjects";
-import InternTasks from "./supervisor/pages/InternTasks";
-import SupervisorLeave from "./supervisor/pages/SupervisorLeave";
-import SupervisorBalance from "./supervisor/pages/SupervisorBalance";
-import InternProjTasks from "./supervisor/pages/InternProjTasks";
-import Profile from "./pages/Profile";
-import Payment_vochar from "./pages/Payment_vochar";
-import { RecipientPaymentVoucher } from "./pages/Recept_payemnt ";
-import Offer_letter from "./pages/Offer_letter";
-import Supervisor_Profile from "./supervisor/pages/Profile";
-// import Announcement from "./pages/Announcement"
-import ReviewLogin from "./review/pages/Login";
-import Home from "./review/pages/Home";
-import Review_intern from "./review/pages/Review_intern";
-import NonReview_intern from "./review/pages/NonReview_intern";
-import { InternationalInterns } from "./pages/InternationalInterns";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ActiveInterns } from './pages/ActiveInterns';
+import CertificateIssuance from './pages/Certificate_Issuance';
+import { ContactWith } from './pages/ContactWith';
+import { InternationalInterns } from './pages/InternationalInterns';
+import { InternCompleted } from './pages/InternCompleted';
+import { InterviewTest } from './pages/InterviewTest';
+import { Login } from './pages/Login';
+import { ManagerHome } from './pages/ManagerHome';
+import Offer_letter from './pages/Offer_letter';
+import { OnsiteInterns } from './pages/OnsiteInterns';
+import Payment_vochar from './pages/Payment_vochar';
+import Profile from './pages/Profile';
+import { RecipientPaymentVoucher } from './pages/Recept_payemnt '; // Fixed import
+import { RemainingAmount } from './pages/RemainingAmount';
+
+// Supervisor Components
+import InternProjects from './supervisor/pages/InternProjects';
+import InternProjTasks from './supervisor/pages/InternProjTasks';
+import InternTasks from './supervisor/pages/InternTasks';
+import Supervisor_Profile from './supervisor/pages/Profile';
+import SupervisorBalance from './supervisor/pages/SupervisorBalance';
+import { SupervisorHome } from './supervisor/pages/SupervisorHome';
+import SupervisorInterns from './supervisor/pages/SupervisorInterns';
+import SupervisorLeave from './supervisor/pages/SupervisorLeave';
+import { SupervisorLogin } from './supervisor/pages/SupervisorLogin';
+
+// Review Components
+import Home from './review/pages/Home';
+import ReviewLogin from './review/pages/Login';
+import NonReview_intern from './review/pages/NonReview_intern';
+import Review_intern from './review/pages/Review_intern';
+
+import Certificate_temp from './components/Certificate_temp';
+import NotFound from './Not-Found';
+import CertificateIssuance_Details from './pages/CertificateIssuance_Details';
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          {/* Index Routes */}
+    <BrowserRouter>
+      <Routes>
+        {/* ======================== */}
+        {/* COMMON/AUTHENTICATION ROUTES */}
+        {/* ======================== */}
+        <Route index path='/' element={<Login />} />
+        <Route path='*' element={<NotFound />} />
 
-          {/* Manager Routes */}
-          <Route index path="/" element={<Login />} />
-          <Route index path="/manager-dashboard" element={<ManagerHome />} />
-          <Route exact path="/manager-interns" element={<OnsiteInterns />} />
-          <Route
-            exact
-            path="/intl-interns"
-            element={<InternationalInterns />}
-          />
-          <Route exact path="/contact-with" element={<ContactWith />} />
-          <Route exact path="/interview-test" element={<InterviewTest />} />
-          <Route exact path="/intern-projects" element={<InternProjects />} />
-          <Route exact path="/test-completed" element={<InternCompleted />} />
-          <Route exact path="/active-interns" element={<ActiveInterns />} />
-          <Route exact path="/remaining-amount" element={<RemainingAmount />} />
-          <Route path="/manager-profile" element={<Profile />} />
-          <Route path="/payment-vochar" element={<Payment_vochar />} />
-          <Route
-            path="/payment-recepit"
-            element={<RecipientPaymentVoucher />}
-          />
-          <Route path="/offer-letter" element={<Offer_letter />} />
-          {/* <Route path="/manager-announcement" element={<Announcement/>}/> */}
+        {/* ======================== */}
+        {/* MANAGER ROUTES */}
+        {/* ======================== */}
+        <Route path='/manager-dashboard' element={<ManagerHome />} />
+        <Route path='/manager-interns' element={<OnsiteInterns />} />
+        <Route path='/intl-interns' element={<InternationalInterns />} />
+        <Route path='/contact-with' element={<ContactWith />} />
+        <Route path='/interview-test' element={<InterviewTest />} />
+        <Route path='/intern-projects' element={<InternProjects />} />
+        <Route path='/test-completed' element={<InternCompleted />} />
+        <Route path='/active-interns' element={<ActiveInterns />} />
+        <Route path='/remaining-amount' element={<RemainingAmount />} />
+        <Route path='/manager-profile' element={<Profile />} />
+        <Route path='/payment-vochar' element={<Payment_vochar />} />
+        <Route path='/payment-recepit' element={<RecipientPaymentVoucher />} />
+        <Route path='/offer-letter' element={<Offer_letter />} />
+        <Route path='/certificate-issuance' element={<CertificateIssuance />} />
 
-          {/* <Route exact path="/manager-leave" element={<ManagerLeave />} /> */}
-          {/* <Route exact path="/balance" element={<Balance />} /> */}
-          {/* <Route exact path="/invoice" element={<Invoice />} /> */}
+        <Route path='/:email' element={<CertificateIssuance_Details />} />
 
-          {/* Supervisor Routes*/}
-          <Route exact path="/supervisor" element={<SupervisorLogin />} />
-          <Route path="/supervisor-profile" element={<Supervisor_Profile />} />
-          <Route
-            exact
-            path="/supervisor-dashboard"
-            element={<SupervisorHome />}
-          />
-          <Route
-            exact
-            path="/supervisor-interns"
-            element={<SupervisorInterns />}
-          />
-          <Route exact path="/intern-projects" element={<InternProjects />} />
-          <Route exact path="/project-tasks" element={<InternProjTasks />} />
+        {/* ======================== */}
+        {/* SUPERVISOR ROUTES */}
+        {/* ======================== */}
+        <Route path='/supervisor' element={<SupervisorLogin />} />
+        <Route path='/supervisor-profile' element={<Supervisor_Profile />} />
+        <Route path='/supervisor-dashboard' element={<SupervisorHome />} />
+        <Route path='/supervisor-interns' element={<SupervisorInterns />} />
+        <Route path='/project-tasks' element={<InternProjTasks />} />
+        <Route path='/intern-tasks' element={<InternTasks />} />
+        <Route path='/supervisor-leave' element={<SupervisorLeave />} />
+        <Route path='/supervisor-balance' element={<SupervisorBalance />} />
 
-          <Route exact path="/intern-tasks" element={<InternTasks />} />
-          <Route exact path="/supervisor-leave" element={<SupervisorLeave />} />
-          <Route
-            exact
-            path="/supervisor-balance"
-            element={<SupervisorBalance />}
-          />
-
-          {/* review */}
-          <Route exact path="/review" element={<ReviewLogin />} />
-          <Route exact path="/review-dashboard" element={<Home />} />
-          <Route exact path="/review-interns" element={<Review_intern />} />
-          <Route
-            exact
-            path="/non-review-interns"
-            element={<NonReview_intern />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </>
+        {/* ======================== */}
+        {/* REVIEW ROUTES */}
+        {/* ======================== */}
+        <Route path='/review' element={<ReviewLogin />} />
+        <Route path='/review-dashboard' element={<Home />} />
+        <Route path='/review-interns' element={<Review_intern />} />
+        <Route path='/non-review-interns' element={<NonReview_intern />} />
+        <Route path={'/test'} element={<Certificate_temp />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

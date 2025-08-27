@@ -1,0 +1,253 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Screen only content */
+
+.print-button {
+  background: linear-gradient(to right, #2563eb, #1d4ed8);
+  color: white;
+  padding: 16px 40px;
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.print-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+}
+
+.print-button:active {
+  transform: translateY(1px);
+}
+
+.instructions {
+  background-color: white;
+  border-radius: 10px;
+  padding: 25px;
+  margin-top: 40px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 40px auto;
+  text-align: left;
+}
+
+.instructions h3 {
+  color: #2563eb;
+  margin-bottom: 15px;
+}
+
+.instructions ul {
+  padding-left: 20px;
+}
+
+.instructions li {
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+/* Print only content - hidden on screen */
+.print-only {
+  display: none;
+}
+
+/* Certificate styling */
+.certificate-wrapper {
+  position: relative;
+  width: 1024px;
+  height: 768px;
+  margin: 0 auto;
+}
+
+.certificate-background {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.certificate-date {
+  position: absolute;
+  top: 254px;
+  left: 148px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+}
+
+.certificate-name {
+  position: absolute;
+  top: 240px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 40px;
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.certificate-technology {
+  position: absolute;
+  top: 290px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 21px;
+  font-weight: bold;
+  color: #000;
+  text-align: center;
+}
+
+.certificate-eti-id {
+  position: absolute;
+  top: 240px;
+  right: 83px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+}
+.certificate-projects {
+  position: absolute;
+  top: 32px;
+  right: 0px;
+  left: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+}
+
+.certificate-cnic {
+  position: absolute;
+  top: 260px;
+  right: 80px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+}
+
+.certificate-duration-text {
+  position: absolute;
+  top: 352px;
+  left: 490px;
+  right: 150px;
+  font-size: 16px;
+  color: #000;
+  text-align: justify;
+  line-height: 1.4;
+}
+
+.certificate-details {
+  position: absolute;
+  top: 443px;
+  left: 160px;
+  right: 146px;
+  padding: 15px;
+  font-size: 14px;
+  color: #000;
+  line-height: 1.6;
+}
+
+/* Print styles */
+@media print {
+  body,
+  html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: white;
+  }
+
+  .certificate-app {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  .screen-only {
+    display: none;
+  }
+
+  .print-only {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .certificate-wrapper {
+    width: 1024px;
+    height: 768px;
+    margin: 0;
+    page-break-inside: avoid;
+  }
+
+  @page {
+    size: landscape;
+    margin: 0;
+  }
+}
+
+/* Responsive adjustments for screen */
+@media screen and (max-width: 1080px) {
+  .certificate-wrapper {
+    width: 800px;
+    height: 600px;
+  }
+}
+
+@media screen and (max-width: 840px) {
+  .certificate-wrapper {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1024/768;
+  }
+
+  .certificate-date {
+    top: 20%;
+    left: 12%;
+    font-size: 14px;
+  }
+
+  .certificate-name {
+    top: 19%;
+    font-size: 30px;
+  }
+
+  .certificate-eti-id {
+    top: 19%;
+    right: 8%;
+    font-size: 12px;
+  }
+
+  .certificate-cnic {
+    top: 21%;
+    right: 8%;
+    font-size: 12px;
+  }
+
+  .certificate-duration-text {
+    top: 28%;
+    left: 40%;
+    right: 12%;
+    font-size: 14px;
+  }
+
+  .certificate-details {
+    top: 35%;
+    left: 13%;
+    right: 12%;
+    font-size: 12px;
+  }
+}

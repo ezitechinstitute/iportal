@@ -1,78 +1,86 @@
-import React, { useEffect, useState } from "react";
-import { ManagerTopbar } from "../components/ManagerTopbar";
-import { ManagerSidebar } from "../components/ManagerSidebar";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { InternStatics } from "../components/InternStatics";
-import { Pagination } from "../components/Pagination";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { InternStatics } from '../components/InternStatics';
+import { ManagerSidebar } from '../components/ManagerSidebar';
+import { ManagerTopbar } from '../components/ManagerTopbar';
+import { Pagination } from '../components/Pagination';
 
 export const OnsiteInterns = () => {
-  const [token] = useState(sessionStorage.getItem("token"));
+  const [token] = useState(sessionStorage.getItem('token'));
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const navigate = useNavigate();
-  const check = sessionStorage.getItem("isLoggedIn");
-  const managerid = sessionStorage.getItem("managerid");
+  const check = sessionStorage.getItem('isLoggedIn');
+  const managerid = sessionStorage.getItem('managerid');
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [dataLimit, setDataLimit] = useState(50);
   const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [interviewType, setInterviewType] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [interviewType, setInterviewType] = useState('');
 
   useEffect(() => {
     if (!check) {
-      navigate("/");
+      navigate('/');
     }
   }, [check, navigate]);
 
-  const getOnsiteRegister = async (page) => {
-    setLoading(true);
+  const getOnsiteRegister = async page => {
+    setLoading(true); // start loader
     try {
       const res = await axios.get(
         `https://api.ezitech.org/get-interns/${managerid}`,
         {
-          headers: { "x-access-token": token },
+          headers: { 'x-access-token': token },
           params: {
             page: page,
             limit: dataLimit,
           },
         }
       );
-      setData(res.data.data);
-      setFilteredData(res.data.data); // Initialize filteredData with all data
-      setCurrentPage(res.data.meta.page);
-      setTotalPages(res.data.meta.totalPages);
-      setLoading(false);
+
+      // Safe array check
+      const interns = Array.isArray(res.data?.data) ? res.data.data : [];
+
+      setData(interns);
+      setFilteredData(interns);
+      setCurrentPage(res.data?.meta?.page || 1);
+      setTotalPages(res.data?.meta?.totalPages || 1);
     } catch (error) {
-      console.log(error);
-      setLoading(false);
+      console.error('Error fetching interns:', error);
+      setData([]);
+      setFilteredData([]);
+    } finally {
+      setLoading(false); // stop loader
     }
   };
 
-  // Client-side search and filter functionality
   const applyFilters = () => {
+    if (!Array.isArray(data)) {
+      setFilteredData([]);
+      return;
+    }
+
     let filtered = [...data];
 
-    // Apply search term filter
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(
-        (intern) =>
-          intern.name.toLowerCase().includes(term) ||
-          intern.email.toLowerCase().includes(term) ||
-          intern.phone.toLowerCase().includes(term) ||
-          intern.technology.toLowerCase().includes(term) ||
+        intern =>
+          intern.name?.toLowerCase().includes(term) ||
+          intern.email?.toLowerCase().includes(term) ||
+          intern.phone?.toLowerCase().includes(term) ||
+          intern.technology?.toLowerCase().includes(term) ||
           intern.interview_type?.toLowerCase().includes(term) ||
           intern.status?.toLowerCase().includes(term)
       );
     }
 
-    // Apply interview type filter
     if (interviewType) {
       filtered = filtered.filter(
-        (intern) =>
+        intern =>
           intern.interview_type?.toLowerCase() === interviewType.toLowerCase()
       );
     }
@@ -80,18 +88,18 @@ export const OnsiteInterns = () => {
     setFilteredData(filtered);
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = e => {
     const term = e.target.value;
     setSearchTerm(term);
   };
 
-  const handleInterviewTypeChange = (e) => {
+  const handleInterviewTypeChange = e => {
     const value = e.target.value;
     setInterviewType(value);
     setCurrentPage(1);
   };
 
-  const handlePageChange = (page) => {
+  const handlePageChange = page => {
     setCurrentPage(page);
     getOnsiteRegister(page);
   };
@@ -104,50 +112,50 @@ export const OnsiteInterns = () => {
     applyFilters();
   }, [searchTerm, interviewType, data]);
 
-  const RemoveOnsite = (email) => {
+  const RemoveOnsite = email => {
     axios
       .post(
-        "https://api.ezitech.org/remove-intern",
+        'https://api.ezitech.org/remove-intern',
         { email },
-        { headers: { "x-access-token": token } }
+        { headers: { 'x-access-token': token } }
       )
-      .then((res) => {
+      .then(res => {
         if (res.data === 1) {
-          alert("Removed Successfully");
+          alert('Removed Successfully');
           getOnsiteRegister(currentPage);
         } else {
-          alert("Something Went Wrong!!!");
+          alert('Something Went Wrong!!!');
         }
       })
-      .catch((error) => {
-        console.error("Error removing intern:", error);
-        alert("Failed to remove intern");
+      .catch(error => {
+        console.error('Error removing intern:', error);
+        alert('Failed to remove intern');
       });
   };
 
-  const ContactWith = (email) => {
+  const ContactWith = email => {
     axios
       .post(
-        "https://api.ezitech.org/update-contact-status",
+        'https://api.ezitech.org/update-contact-status',
         { email },
-        { headers: { "x-access-token": token } }
+        { headers: { 'x-access-token': token } }
       )
-      .then((res) => {
+      .then(res => {
         if (res.data === 1) {
-          alert("Status Updated from Interview to Contact");
+          alert('Status Updated from Interview to Contact');
           getOnsiteRegister(currentPage);
         } else {
-          alert("Something Went Wrong!!!");
+          alert('Something Went Wrong!!!');
         }
       })
-      .catch((error) => {
-        console.error("Error updating contact status:", error);
-        alert("Failed to update status");
+      .catch(error => {
+        console.error('Error updating contact status:', error);
+        alert('Failed to update status');
       });
   };
 
-  const formatPhoneNumberForWhatsApp = (phone) => {
-    const cleaned = phone.replace(/\D/g, "");
+  const formatPhoneNumberForWhatsApp = phone => {
+    const cleaned = phone.replace(/\D/g, '');
     return `+${cleaned}`;
   };
 
@@ -155,42 +163,42 @@ export const OnsiteInterns = () => {
     <>
       <ManagerTopbar />
       <ManagerSidebar />
-      <div className="app-content content">
-        <div className="content-overlay"></div>
-        <div className="header-navbar-shadow"></div>
-        <div className="content-wrapper">
-          <div className="content-header row"></div>
-          <div className="content-body">
-            <section id="dashboard-ecommerce">
+      <div className='app-content content'>
+        <div className='content-overlay'></div>
+        <div className='header-navbar-shadow'></div>
+        <div className='content-wrapper'>
+          <div className='content-header row'></div>
+          <div className='content-body'>
+            <section id='dashboard-ecommerce'>
               <InternStatics />
-              <div className="row" id="table-hover-animation">
-                <div className="col-12">
-                  <div className="card">
-                    <div className="card-header d-flex justify-content-between align-items-center">
-                      <h4 className="card-title">New Interns</h4>
-                      <div className="d-flex align-items-center">
+              <div className='row' id='table-hover-animation'>
+                <div className='col-12'>
+                  <div className='card'>
+                    <div className='card-header d-flex justify-content-between align-items-center'>
+                      <h4 className='card-title'>New Interns</h4>
+                      <div className='d-flex align-items-center'>
                         <input
-                          type="text"
-                          className="form-control mr-2"
-                          placeholder="Search by name, email, phone, etc..."
+                          type='text'
+                          className='form-control mr-2'
+                          placeholder='Search by name, email, phone, etc...'
                           value={searchTerm}
                           onChange={handleSearch}
-                          style={{ width: "300px" }}
+                          style={{ width: '300px' }}
                         />
                         <select
-                          className="form-control mr-2"
+                          className='form-control mr-2'
                           value={interviewType}
                           onChange={handleInterviewTypeChange}
-                          style={{ width: "150px" }}
+                          style={{ width: '150px' }}
                         >
-                          <option value="">All</option>
-                          <option value="Onsite">Onsite</option>
-                          <option value="Remote">Remote</option>
+                          <option value=''>All</option>
+                          <option value='Onsite'>Onsite</option>
+                          <option value='Remote'>Remote</option>
                         </select>
                         <select
-                          className="form-control mr-2"
-                          style={{ width: "100px" }}
-                          onChange={(e) => {
+                          className='form-control mr-2'
+                          style={{ width: '100px' }}
+                          onChange={e => {
                             setDataLimit(Number(e.target.value));
                             setCurrentPage(1);
                           }}
@@ -202,129 +210,133 @@ export const OnsiteInterns = () => {
                           <option value={500}>500</option>
                         </select>
                         <button
-                          type="button"
-                          className="btn btn-primary"
-                          data-bs-toggle="modal"
-                          data-bs-target="#staticBackdrop"
+                          type='button'
+                          className='btn btn-primary'
+                          data-bs-toggle='modal'
+                          data-bs-target='#staticBackdrop'
                         >
                           Add Intern
                         </button>
                       </div>
                     </div>
 
-                    <div className="card-body overflow-x-scroll text-center">
-                      <table className="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Contact</th>
-                            <th scope="col">Technology</th>
-                            <th scope="col">University</th>
-                            <th scope="col">Interview</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {loading ? (
+                    <div className='card-body overflow-x-scroll text-center'>
+                      {loading ? (
+                        <h3>Loading...</h3>
+                      ) : (
+                        <table className='table'>
+                          <thead>
                             <tr>
-                              <td colSpan="8" className="text-center">
-                                <h3>Loading...</h3>
-                              </td>
+                              <th scope='col'>#</th>
+                              <th scope='col'>Name</th>
+                              <th scope='col'>Email</th>
+                              <th scope='col'>Contact</th>
+                              <th scope='col'>Technology</th>
+                              <th scope='col'>University</th>
+                              <th scope='col'>Interview</th>
+                              <th scope='col'>Status</th>
+                              <th scope='col'>Action</th>
                             </tr>
-                          ) : Array.isArray(filteredData) &&
+                          </thead>
+                          <tbody>
+                            {Array.isArray(filteredData) &&
                             filteredData.length > 0 ? (
-                            filteredData.map((rs) => {
-                              const {
-                                id,
-                                name,
-                                email,
-                                phone,
-                                technology,
-                                university,
-                                interview_type,
-                                status,
-                              } = rs;
-                              const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(
-                                phone
-                              )}`;
-                              return (
-                                <tr key={id}>
-                                  <th className="border px-1" scope="row">
-                                    {id}
-                                  </th>
-                                  <td className="border px-1">{name}</td>
-                                  <td className="border px-1">{email}</td>
-                                  <td className="border px-1">
-                                    <a
-                                      href={whatsappLink}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      style={{
-                                        color: "#25D366",
-                                        textDecoration: "none",
-                                      }}
-                                    >
-                                      {phone}
-                                    </a>
-                                  </td>
-                                  <td className="border px-1">{technology}</td>
-                                  <td className="border px-1">{university}</td>
-
-                                  <td className="border px-1">
-                                    {interview_type}
-                                  </td>
-                                  <td className="border px-1">{status}</td>
-                                  <td className="border px-1">
-                                    <div className="dropdown">
-                                      <button
-                                        type="button"
-                                        className="btn btn-warning dropdown-toggle"
-                                        data-toggle="dropdown"
+                              filteredData.map(rs => {
+                                const {
+                                  id,
+                                  name,
+                                  email,
+                                  phone,
+                                  technology,
+                                  university,
+                                  interview_type,
+                                  status,
+                                } = rs;
+                                const whatsappLink = `https://wa.me/${formatPhoneNumberForWhatsApp(
+                                  phone
+                                )}`;
+                                return (
+                                  <tr key={id}>
+                                    <th className='border px-1' scope='row'>
+                                      {id}
+                                    </th>
+                                    <td className='border px-1'>{name}</td>
+                                    <td className='border px-1'>{email}</td>
+                                    <td className='border px-1'>
+                                      <a
+                                        href={whatsappLink}
+                                        target='_blank'
+                                        rel='noopener noreferrer'
+                                        style={{
+                                          color: '#25D366',
+                                          textDecoration: 'none',
+                                        }}
                                       >
-                                        Action
-                                      </button>
-                                      <div className="dropdown-menu">
+                                        {phone}
+                                      </a>
+                                    </td>
+                                    <td className='border px-1'>
+                                      {technology}
+                                    </td>
+                                    <td className='border px-1'>
+                                      {university}
+                                    </td>
+
+                                    <td className='border px-1'>
+                                      {interview_type}
+                                    </td>
+                                    <td className='border px-1'>{status}</td>
+                                    <td className='border px-1'>
+                                      <div className='dropdown'>
                                         <button
-                                          className="dropdown-item"
-                                          type="button"
-                                          onClick={() => ContactWith(email)}
+                                          type='button'
+                                          className='btn btn-warning dropdown-toggle'
+                                          data-toggle='dropdown'
                                         >
-                                          Contact With
+                                          Action
                                         </button>
-                                        <button
-                                          className="dropdown-item"
-                                          type="button"
-                                          onClick={() => RemoveOnsite(email)}
-                                        >
-                                          Remove
-                                        </button>
+                                        <div className='dropdown-menu'>
+                                          <button
+                                            className='dropdown-item'
+                                            type='button'
+                                            onClick={() => ContactWith(email)}
+                                          >
+                                            Contact With
+                                          </button>
+                                          <button
+                                            className='dropdown-item'
+                                            type='button'
+                                            onClick={() => RemoveOnsite(email)}
+                                          >
+                                            Remove
+                                          </button>
+                                        </div>
                                       </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                              );
-                            })
-                          ) : (
-                            <tr>
-                              <td colSpan="8" className="text-center">
-                                {searchTerm || interviewType
-                                  ? "No matching interns found"
-                                  : "No data found"}
-                              </td>
-                            </tr>
-                          )}
-                        </tbody>
-                      </table>
+                                    </td>
+                                  </tr>
+                                );
+                              })
+                            ) : (
+                              <tr>
+                                <td colSpan='8' className='text-center'>
+                                  {searchTerm || interviewType
+                                    ? 'No matching interns found'
+                                    : 'No data found'}
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      )}
                     </div>
                     <br />
-                    <Pagination
-                      currentPage={currentPage}
-                      totalPages={totalPages}
-                      onPageChange={handlePageChange}
-                    />
+                    {!loading && (
+                      <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                      />
+                    )}
                   </div>
                 </div>
               </div>

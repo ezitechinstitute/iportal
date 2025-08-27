@@ -33,7 +33,7 @@ export const SupervisorDashboard = () => {
     try {
       setLoading(true);
       const baseUrl = "https://api.ezitech.org";
-      
+
       const [activeRes, testRes, progressRes, completedRes, certificateRes] = await Promise.all([
         axios.get(`${baseUrl}/active-interns/${managerid}`),
         axios.get(`${baseUrl}/test-interns/${managerid}`),
@@ -209,7 +209,7 @@ useEffect(() => {
                         <p className="card-text font-small-2 mr-25 mb-0">
                           Updated just now
                         </p>
-                        <button 
+                        <button
                           className="btn btn-sm btn-outline-primary ml-auto"
                           onClick={refreshStats}
                         >
@@ -294,7 +294,7 @@ useEffect(() => {
                     </div>
                     <div className="card-body">
                     <SupervisorChartOne chartData={chartData.onsite} />
-                   
+
                     </div>
                   </div>
                 </div>
@@ -317,10 +317,10 @@ useEffect(() => {
               </div>
             </section>
 
-            
+
             <section id="chartjs-chart">
               <div className="row match-height">
-                
+
                 {/* <!-- Message End --> */}
 
                 {/* <!--Absentees Table Start --> */}
@@ -614,7 +614,7 @@ useEffect(() => {
     <div className="card-body">
       {loading ? (
         <p>Loading requests...</p>
-      ) : certificateRequests.length === 0 ? (
+      ) : stats.certificateRequests.length === 0 ? (
         <p className="text-muted">No certificate requests found.</p>
       ) : (
         <div className="table-responsive">
@@ -630,7 +630,7 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-              {certificateRequests.map((req) => (
+              {stats.certificateRequests.map((req) => (
                 <tr key={req.id}>
                   <td>{req.username}</td>
                   <td>{req.tech}</td>
