@@ -377,7 +377,7 @@ const CertificateIssuanceDetails = () => {
                       <p>
                         {!isEligible
                           ? 'internship not completed'
-                          : 'not published yet'}
+                          : 'not published yet '}
                       </p>
                       {!isEligible && (
                         <small>
