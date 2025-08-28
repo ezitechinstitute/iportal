@@ -326,6 +326,7 @@ const {
   GetAllInternForCertificateIssuance,
   getInernByEmail,
   getInternProjectsByEmail,
+  isCertificateAllowToggle,
 } = require('../controller/hr/Certificate_Issuance.controller');
 
 const router = express.Router();
@@ -501,6 +502,7 @@ router.get(
 );
 router.get('/get-intern-byemail/:email', getInernByEmail);
 router.get('/get-intern-projects-byemail/:email', getInternProjectsByEmail);
+router.put('/iscertificate-allow-toggle/:email', isCertificateAllowToggle);
 // HR Financials
 router.post('/add-amount', verifyToken, AddAmount);
 router.get('/get-manager-amount/:email', verifyToken, GetManagerBalance);

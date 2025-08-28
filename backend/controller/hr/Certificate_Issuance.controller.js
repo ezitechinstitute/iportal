@@ -41,8 +41,8 @@ const getInernByEmail = (req, res) => {
   const { email } = req.params;
   const sql = ` SELECT
     intern_table.*,
-    intern_accounts.eti_id,
-    intern_accounts.int_status
+    intern_accounts.*
+
 FROM intern_table
 JOIN intern_accounts
     ON intern_table.email = intern_accounts.email
@@ -102,8 +102,60 @@ const getInternProjectsByEmail = (req, res) => {
   }
 };
 
+// controller isAllowed to sutdent download certificate .... (controlled by Manager/HR)...
+const isCertificateAllowToggle = (req, res) => {
+  try {
+    const { email } = req.params;
+
+    // Pehle current value fetch karenge
+    const selectSql = `SELECT isCertificate FROM intern_accounts WHERE email = ?`;
+    connection.query(selectSql, [email], (err, data) => {
+      if (err) {
+        return res.status(400).json({
+          message: 'Server error',
+          error: err.message,
+        });
+      }
+      if (data.length === 0) {
+        return res.status(404).json({
+          message: 'No user found with this email',
+        });
+      }
+
+      // Current value ko toggle karenge
+      const currentValue = data[0].isCertificate;
+      const newValue = currentValue ? 0 : 1; // Agar 1 (true) hai to 0 (false) karenge, aur vice versa
+
+      // Ab database mein value update karenge
+      const updateSql = `UPDATE intern_accounts SET isCertificate = ? WHERE email = ?`;
+      connection.query(updateSql, [newValue, email], (err, result) => {
+        if (err) {
+          return res.status(400).json({
+            message: 'Server error while updating',
+            error: err.message,
+          });
+        }
+        const message = `certificate ${newValue ? 'Allowed' : 'notAllowed'}`;
+        return res.status(200).json({
+          message: message,
+          data: {
+            oldValue: currentValue,
+            newValue: newValue,
+          },
+        });
+      });
+    });
+  } catch (error) {
+    console.log(`failed isCertificateAllowToggle :: ${error}`);
+    return res.status(500).json({
+      message: 'Internal server error',
+      error: error.message,
+    });
+  }
+};
 module.exports = {
   GetAllInternForCertificateIssuance,
   getInernByEmail,
   getInternProjectsByEmail,
+  isCertificateAllowToggle,
 };

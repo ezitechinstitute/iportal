@@ -9,7 +9,7 @@ const dotenv = require('dotenv').config();
 const downloadRoutes = require('./routes/downloadRoutes');
 const affiliateRoutes = require('./routes/affiliate-routes');
 
-const PORT = 8088;
+const PORT = process.env.PORT || 8088;
 const path = require('path');
 
 const app = express();

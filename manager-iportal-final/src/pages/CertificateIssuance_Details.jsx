@@ -9,29 +9,40 @@ import { ManagerTopbar } from '../components/ManagerTopbar';
 import './style/CertificateIssuanceDetails.css';
 
 const CertificateIssuanceDetails = () => {
+  // Get email parameter from URL
   const { email } = useParams();
+
+  // State management for intern data and loading states
   const [internData, setInternData] = useState(null);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [projectsLoading, setProjectsLoading] = useState(false);
-  const [certificateLoading, setCertificateLoading] = useState(false);
+
+  // Error states for different API calls
   const [error, setError] = useState(null);
   const [projectsError, setProjectsError] = useState(null);
+
+  // Eligibility and certificate states
   const [isEligible, setIsEligible] = useState(false);
   const [eligibilityMessage, setEligibilityMessage] = useState('');
-  const [isCertificateAllowed, setIsCertificateAllowed] = useState(false);
+  const [allowCertificate, setAllowCertificate] = useState('');
+
+  const [isPublished, setIsPublished] = useState(false);
+  const [publishLoading, setPublishLoading] = useState(false);
 
   // Calculate eligibility based on join date and duration
   const calculateEligibility = (joinDate, duration) => {
     try {
+      // Parse join date and current date
       const joinDateObj = new Date(joinDate);
       const currentDate = new Date();
       const durationMonths = Number.parseInt(duration.split(' ')[0]);
 
-      // Calculate completion date
+      // Calculate when internship should be completed
       const completionDate = new Date(joinDateObj);
       completionDate.setMonth(completionDate.getMonth() + durationMonths);
 
+      // Check if internship is completed
       const isEligible = currentDate >= completionDate;
 
       if (isEligible) {
@@ -40,6 +51,7 @@ const CertificateIssuanceDetails = () => {
           message: `Congratulations! Internship completed on ${completionDate.toLocaleDateString()}. Certificate can be generated.`,
         };
       } else {
+        // Calculate remaining days
         const remainingDays = Math.ceil(
           (completionDate - currentDate) / (1000 * 60 * 60 * 24)
         );
@@ -57,17 +69,22 @@ const CertificateIssuanceDetails = () => {
     }
   };
 
-  // Fetch intern data from API
+  // Fetch intern data from API when component mounts
   useEffect(() => {
     const fetchInternData = async () => {
       try {
+        // Validate email parameter exists
         if (!email) {
           throw new Error('Email parameter is missing in URL');
         }
 
+        // Set loading state and clear previous errors
         setLoading(true);
         setError(null);
 
+        console.log('[v0] Fetching intern data for email:', email);
+
+        // Make API call to get intern data
         const response = await axios.get(
           `http://localhost:8000/get-intern-byemail/${email}`,
           {
@@ -82,6 +99,7 @@ const CertificateIssuanceDetails = () => {
           }
         );
 
+        // Handle different response statuses
         if (response.status === 404) {
           throw new Error(`No intern found with email: ${email}`);
         }
@@ -90,17 +108,23 @@ const CertificateIssuanceDetails = () => {
           throw new Error('Invalid data received from server');
         }
 
+        // Extract intern data and set state
         const intern = response.data.data[0];
         setInternData(intern);
 
-        // Calculate eligibility
+        setIsPublished(intern.isCertificate || false);
+
+        // Calculate and set eligibility status
         const eligibilityResult = calculateEligibility(
           intern.join_date,
           intern.duration
         );
         setIsEligible(eligibilityResult.eligible);
         setEligibilityMessage(eligibilityResult.message);
+
+        console.log('[v0] Successfully fetched intern data:', intern.name);
       } catch (err) {
+        // Handle and log errors
         console.error('Error fetching intern data:', err);
         setError(
           err.response?.data?.message ||
@@ -108,6 +132,7 @@ const CertificateIssuanceDetails = () => {
             'Failed to fetch intern data. Please try again later.'
         );
       } finally {
+        // Always stop loading regardless of success/failure
         setLoading(false);
       }
     };
@@ -115,15 +140,20 @@ const CertificateIssuanceDetails = () => {
     fetchInternData();
   }, [email]);
 
-  // Fetch intern projects from API
+  // Fetch intern projects when intern data is available
   useEffect(() => {
     const fetchInternProjects = async () => {
+      // Don't fetch if no email available
       if (!email) return;
 
       try {
+        // Set loading state for projects
         setProjectsLoading(true);
         setProjectsError(null);
 
+        console.log('[v0] Fetching projects for email:', email);
+
+        // Make API call to get projects
         const response = await axios.get(
           `http://localhost:8000/get-intern-projects-byemail/${email}`,
           {
@@ -138,17 +168,26 @@ const CertificateIssuanceDetails = () => {
           }
         );
 
+        // Handle no projects found
         if (response.status === 404) {
           setProjects([]);
+          console.log('[v0] No projects found for intern');
           return;
         }
 
+        // Handle other errors
         if (response.status !== 200) {
           throw new Error('Failed to fetch projects data');
         }
 
+        // Set projects data
         setProjects(response.data.data || []);
+        console.log(
+          '[v0] Successfully fetched projects:',
+          response.data.data?.length || 0
+        );
       } catch (err) {
+        // Handle projects fetch errors
         console.error('Error fetching intern projects:', err);
         setProjectsError(
           err.response?.data?.message ||
@@ -156,26 +195,77 @@ const CertificateIssuanceDetails = () => {
             'Failed to fetch projects data.'
         );
       } finally {
+        // Stop projects loading
         setProjectsLoading(false);
       }
     };
 
+    // Only fetch projects if intern data is loaded
     if (internData) {
       fetchInternProjects();
     }
   }, [email, internData]);
 
-  // Simulate certificate loading
-  const handleCertificateLoad = () => {
-    if (!isEligible || !isCertificateAllowed) return;
+  const handleAllowedCertificate = async () => {
+    try {
+      // Set loading state for publish button
+      setPublishLoading(true);
+      console.log('[v0] Toggling certificate publish state...');
 
-    setCertificateLoading(true);
-    // Simulate loading for 2 seconds
-    setTimeout(() => {
-      setCertificateLoading(false);
-    }, 2000);
+      // Make API call to toggle certificate allowance
+      const res = await axios.put(
+        `http://localhost:8000/iscertificate-allow-toggle/${email}`
+      );
+
+      console.log('[v0] Toggle response:', res?.data?.data?.newValue);
+
+      // Update local state with new value
+      if (res?.data) {
+        const newPublishState = res?.data?.data?.newValue;
+        setAllowCertificate(newPublishState);
+        setIsPublished(newPublishState); // Update published state
+        console.log('[v0] Updated publish state to:', newPublishState);
+      }
+
+      // Refresh intern data to get updated information
+      console.log('[v0] Refreshing intern data after toggle...');
+      const response = await axios.get(
+        `http://localhost:8000/get-intern-byemail/${email}`,
+        {
+          timeout: 10000,
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          validateStatus: status => {
+            return status >= 200 && status < 500;
+          },
+        }
+      );
+
+      // Handle response errors
+      if (response.status === 404) {
+        throw new Error(`No intern found with email: ${email}`);
+      }
+
+      if (response.status !== 200 || !response.data?.data?.length) {
+        throw new Error('Invalid data received from server');
+      }
+
+      // Update intern data with fresh information
+      const intern = response.data.data[0];
+      setInternData(intern);
+      setIsPublished(intern.isCertificate || false); // Ensure published state is synced
+      console.log('[v0] Successfully refreshed intern data');
+    } catch (error) {
+      console.error('Error toggling certificate allowance:', error);
+      alert('Failed to update certificate status. Please try again.');
+    } finally {
+      setPublishLoading(false);
+    }
   };
 
+  // Show loading spinner while fetching data
   if (loading) {
     return (
       <div className='cert-container'>
@@ -187,6 +277,7 @@ const CertificateIssuanceDetails = () => {
     );
   }
 
+  // Show error message if data fetch failed
   if (error) {
     return (
       <div className='cert-container'>
@@ -201,6 +292,7 @@ const CertificateIssuanceDetails = () => {
     );
   }
 
+  // Show no data message if intern not found
   if (!internData) {
     return (
       <div className='cert-container'>
@@ -214,12 +306,15 @@ const CertificateIssuanceDetails = () => {
 
   return (
     <>
+      {/* Top navigation bar */}
       <ManagerTopbar />
+      {/* Side navigation menu */}
       <ManagerSidebar />
+
       <div className='cert-main-container'>
-        {/* Content Area - Right Side */}
+        {/* Main content area */}
         <div className='cert-content-area'>
-          {/* Eligibility Status Banner */}
+          {/* Eligibility status banner with certificate controls */}
           <div
             className={`cert-eligibility-banner ${
               isEligible ? 'cert-eligible' : 'cert-not-eligible'
@@ -233,73 +328,73 @@ const CertificateIssuanceDetails = () => {
               </h3>
               <p>{eligibilityMessage}</p>
             </div>
+
             <div className='cert-banner-actions'>
-              {/* Toggle Button */}
-              <div
-                className={`cert-toggle-container ${
-                  !isEligible ? 'cert-disabled' : ''
-                }`}
-              >
-                <div className='checkbox-wrapper-35'>
-                  <input
-                    value='private'
-                    name='switch'
-                    id='switch'
-                    type='checkbox'
-                    className='switch'
-                    checked={isCertificateAllowed}
-                    onChange={() =>
-                      setIsCertificateAllowed(!isCertificateAllowed)
-                    }
-                    disabled={!isEligible}
-                  />
-                  <label htmlFor='switch'>
-                    <span className='switch-x-text'>Allow certificate </span>
-                    <span className='switch-x-toggletext'>
-                      <span className='switch-x-unchecked'>
-                        <span className='switch-x-hiddenlabel'>
-                          Unchecked:{' '}
-                        </span>
-                        Off
-                      </span>
-                      <span className='switch-x-checked'>
-                        <span className='switch-x-hiddenlabel'>Checked: </span>
-                        On
-                      </span>
-                    </span>
-                  </label>
+              {/* Publish button container with fixed positioning */}
+              <div className='cert-publish-section'>
+                <div
+                  className={`cert-toggle-container ${
+                    !isEligible ? 'cert-disabled' : ''
+                  }`}
+                >
+                  <button
+                    onClick={handleAllowedCertificate}
+                    className='btn-certificate-toggle'
+                    disabled={!isEligible || publishLoading}
+                  >
+                    {publishLoading ? (
+                      <>
+                        <div className='cert-spinner-small'></div>
+                        {isPublished ? 'Unpublishing...' : 'Publishing...'}
+                      </>
+                    ) : (
+                      <>{isPublished ? 'Unpublish' : 'Publish'}</>
+                    )}
+                  </button>
+
+                  {/* Status indicator for publish state */}
+                  {/* <span className='cert-toggle-label'>
+                    {publishLoading
+                      ? 'Updating status...'
+                      : isPublished
+                      ? 'Certificate generation enabled'
+                      : 'Certificate generation disabled'}
+                  </span> */}
                 </div>
-                <span className='cert-toggle-label'>
-                  {isCertificateAllowed
-                    ? 'Certificate generation enabled'
-                    : 'Certificate generation disabled'}
-                </span>
               </div>
 
-              {/* Certificate Container with Loading State */}
-              <div className='cert-certificate-container'>
-                {!isCertificateAllowed && (
-                  <div
-                    className={`cert-get-certificate-btn ${
-                      isEligible && isCertificateAllowed
-                        ? 'enabled'
-                        : 'disabled'
-                    }`}
-                    onClick={handleCertificateLoad}
-                  >
-                    Get Certificate
-                  </div>
-                )}
-                {/* Show Certificate only when allowed and not loading */}
-                {isCertificateAllowed && !certificateLoading && isEligible && (
-                  <Certificate internData={internData} projects={projects} />
-                )}
+              {/* Certificate section with fixed height container */}
+              <div className='cert-certificate-section'>
+                <div
+                  className={`cert-certificate-container ${
+                    !isPublished || !isEligible ? 'cert-disabled' : ''
+                  }`}
+                >
+                  {isPublished && isEligible ? (
+                    <Certificate internData={internData} projects={projects} />
+                  ) : (
+                    <div className='cert-disabled-message'>
+                      <p>
+                        {!isEligible
+                          ? 'internship not completed'
+                          : 'not published yet'}
+                      </p>
+                      {!isEligible && (
+                        <small>
+                          Complete your internship duration to enable
+                          certificate generation
+                        </small>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Main Content with Scroll */}
+          {/* Scrollable content area with all intern details */}
           <div className='cert-scrollable-content'>
+            {/* Page header with intern identification */}
             <div className='cert-header'>
               <h1>Certificate Issuance Details</h1>
               <div className='cert-ids'>
@@ -308,7 +403,7 @@ const CertificateIssuanceDetails = () => {
               </div>
             </div>
 
-            {/* Personal Information Section */}
+            {/* Personal information section */}
             <div className='cert-section'>
               <h2 className='cert-section-title'>
                 <span className='cert-icon'>👤</span>
@@ -344,7 +439,7 @@ const CertificateIssuanceDetails = () => {
               </div>
             </div>
 
-            {/* Location Information Section */}
+            {/* Location and education information */}
             <div className='cert-section'>
               <h2 className='cert-section-title'>
                 <span className='cert-icon'>📍</span>
@@ -366,7 +461,7 @@ const CertificateIssuanceDetails = () => {
               </div>
             </div>
 
-            {/* Internship Information Section */}
+            {/* Internship details and status */}
             <div className='cert-section'>
               <h2 className='cert-section-title'>
                 <span className='cert-icon'>💼</span>
@@ -414,7 +509,7 @@ const CertificateIssuanceDetails = () => {
               </div>
             </div>
 
-            {/* Projects Information Section */}
+            {/* Projects completed during internship */}
             <div className='cert-section'>
               <h2 className='cert-section-title'>
                 <span className='cert-icon'>🚀</span>
@@ -424,6 +519,7 @@ const CertificateIssuanceDetails = () => {
                 )}
               </h2>
 
+              {/* Handle different project loading states */}
               {projectsLoading ? (
                 <div className='cert-projects-loading'>
                   <div className='cert-spinner-small'></div>
@@ -438,6 +534,7 @@ const CertificateIssuanceDetails = () => {
                   <p>No projects found for this intern.</p>
                 </div>
               ) : (
+                // Display all projects in a grid layout
                 <div className='cert-projects-grid'>
                   {projects.map((project, index) => (
                     <div key={index} className='cert-project-card'>
@@ -445,18 +542,21 @@ const CertificateIssuanceDetails = () => {
                         {project.title || `Project ${index + 1}`}
                       </h3>
                       <div className='cert-project-details'>
+                        {/* Project description */}
                         {project.description && (
                           <div className='cert-project-field'>
                             <label>Description:</label>
                             <span>{project.description}</span>
                           </div>
                         )}
+                        {/* Technologies used */}
                         {project.technologies && (
                           <div className='cert-project-field'>
                             <label>Technologies:</label>
                             <span>{project.technologies}</span>
                           </div>
                         )}
+                        {/* GitHub repository link */}
                         {project.github_link && (
                           <div className='cert-project-field'>
                             <label>GitHub:</label>
@@ -469,6 +569,7 @@ const CertificateIssuanceDetails = () => {
                             </a>
                           </div>
                         )}
+                        {/* Live deployment link */}
                         {project.deployment_link && (
                           <div className='cert-project-field'>
                             <label>Live Demo:</label>
@@ -488,7 +589,7 @@ const CertificateIssuanceDetails = () => {
               )}
             </div>
 
-            {/* Interview Information Section */}
+            {/* Interview details and scheduling */}
             <div className='cert-section'>
               <h2 className='cert-section-title'>
                 <span className='cert-icon'>🎯</span>
@@ -512,7 +613,7 @@ const CertificateIssuanceDetails = () => {
               </div>
             </div>
 
-            {/* System Information Section */}
+            {/* System metadata and tracking information */}
             <div className='cert-section'>
               <h2 className='cert-section-title'>
                 <span className='cert-icon'>⚙️</span>
