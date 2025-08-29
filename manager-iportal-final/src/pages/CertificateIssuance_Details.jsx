@@ -81,11 +81,11 @@ const CertificateIssuanceDetails = () => {
         setLoading(true);
         setError(null);
 
-        console.log('[v0] Fetching intern data for email:', email);
+      
 
         // Make API call to get intern data
         const response = await axios.get(
-          `http://localhost:8000/get-intern-byemail/${email}`,
+          `https://manager.ezitech.org/get-intern-byemail/${email}`,
           {
             timeout: 10000,
             headers: {
@@ -150,11 +150,11 @@ const CertificateIssuanceDetails = () => {
         setProjectsLoading(true);
         setProjectsError(null);
 
-        console.log('[v0] Fetching projects for email:', email);
+        
 
         // Make API call to get projects
         const response = await axios.get(
-          `http://localhost:8000/get-intern-projects-byemail/${email}`,
+          `https://manager.ezitech.org/get-intern-projects-byemail/${email}`,
           {
             timeout: 10000,
             headers: {
@@ -170,7 +170,7 @@ const CertificateIssuanceDetails = () => {
         // Handle no projects found
         if (response.status === 404) {
           setProjects([]);
-          console.log('[v0] No projects found for intern');
+         
           return;
         }
 
@@ -181,9 +181,7 @@ const CertificateIssuanceDetails = () => {
 
         // Set projects data
         setProjects(response.data.data || []);
-        console.log(
-          '[v0] Successfully fetched projects:',
-          response.data.data?.length || 0
+        
         );
       } catch (err) {
         // Handle projects fetch errors
@@ -209,27 +207,27 @@ const CertificateIssuanceDetails = () => {
     try {
       // Set loading state for publish button
       setPublishLoading(true);
-      console.log('[v0] Toggling certificate publish state...');
+     
 
       // Make API call to toggle certificate allowance
       const res = await axios.put(
-        `http://localhost:8000/iscertificate-allow-toggle/${email}`
+        `https://manager.ezitech.org/iscertificate-allow-toggle/${email}`
       );
 
-      console.log('[v0] Toggle response:', res?.data?.data?.newValue);
+      
 
       // Update local state with new value
       if (res?.data) {
         const newPublishState = res?.data?.data?.newValue;
 
         setIsPublished(newPublishState); // Update published state
-        console.log('[v0] Updated publish state to:', newPublishState);
+       
       }
 
       // Refresh intern data to get updated information
-      console.log('[v0] Refreshing intern data after toggle...');
+    
       const response = await axios.get(
-        `http://localhost:8000/get-intern-byemail/${email}`,
+        `https://manager.ezitech.org/get-intern-byemail/${email}`,
         {
           timeout: 10000,
           headers: {
@@ -255,7 +253,7 @@ const CertificateIssuanceDetails = () => {
       const intern = response.data.data[0];
       setInternData(intern);
       setIsPublished(intern.isCertificate || false); // Ensure published state is synced
-      console.log('[v0] Successfully refreshed intern data');
+     
     } catch (error) {
       console.error('Error toggling certificate allowance:', error);
       alert('Failed to update certificate status. Please try again.');
