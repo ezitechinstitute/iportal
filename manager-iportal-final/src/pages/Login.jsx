@@ -43,11 +43,11 @@ export const Login = () => {
 
     try {
       const res = await axios.post(
-        // 'https://api.ezitech.org/manager-auth' ||
-        'http://localhost:8000/manager-auth',
+        'https://api.ezitech.org/manager-auth',
+        
         value
       );
-      console.log('API Response:', res.data);
+     
 
       if (res.data.isLoggedIn === true) {
         const { user, token } = res.data;
