@@ -4,6 +4,7 @@ const GetAllInternForCertificateIssuance = (req, res) => {
   try {
     const sql = `SELECT
     intern_accounts.eti_id,
+    intern_accounts.isCertificate,
     intern_table.status,
     intern_table.name,
     intern_table.email,

@@ -25,7 +25,6 @@ const CertificateIssuanceDetails = () => {
   // Eligibility and certificate states
   const [isEligible, setIsEligible] = useState(false);
   const [eligibilityMessage, setEligibilityMessage] = useState('');
-  const [allowCertificate, setAllowCertificate] = useState('');
 
   const [isPublished, setIsPublished] = useState(false);
   const [publishLoading, setPublishLoading] = useState(false);
@@ -222,7 +221,7 @@ const CertificateIssuanceDetails = () => {
       // Update local state with new value
       if (res?.data) {
         const newPublishState = res?.data?.data?.newValue;
-        setAllowCertificate(newPublishState);
+
         setIsPublished(newPublishState); // Update published state
         console.log('[v0] Updated publish state to:', newPublishState);
       }

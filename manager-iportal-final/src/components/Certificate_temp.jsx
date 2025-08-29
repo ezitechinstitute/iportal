@@ -50,30 +50,10 @@ const Certificate = ({ internData, projects }) => {
     return `${day}-${month}-${year}`;
   };
 
-  // Function to get current date for certificate issuance
-  const getCurrentDate = () => {
-    return formatDate(new Date());
+  // Function to get certificate date (completion date instead of current date)
+  const getCertificateDate = () => {
+    return formatDate(calculateCompletionDate());
   };
-
-  // Function to extract all technologies from projects
-  // const getAllTechnologies = () => {
-  //   if (!projects || projects.length === 0) {
-  //     return 'Web Technologies'; // Default value
-  //   }
-
-  //   const technologiesSet = new Set();
-
-  //   projects.forEach(project => {
-  //     if (project.technologies) {
-  //       // Split technologies by comma and add each one to the set
-  //       project.technologies.split(',').forEach(tech => {
-  //         technologiesSet.add(tech.trim());
-  //       });
-  //     }
-  //   });
-
-  //   return Array.from(technologiesSet).join(', ');
-  // };
 
   // Function to get all project titles
   const getAllProjectTitles = () => {
@@ -83,7 +63,7 @@ const Certificate = ({ internData, projects }) => {
   // Calculate dates
   const joinDate = new Date(internData.join_date);
   const completionDate = calculateCompletionDate();
-  const currentDate = getCurrentDate();
+  const certificateDate = getCertificateDate();
 
   return (
     <div className='certificate-app'>
@@ -99,8 +79,8 @@ const Certificate = ({ internData, projects }) => {
             className='certificate-background'
           />
 
-          {/* Date */}
-          <div className='certificate-date'>{currentDate}</div>
+          {/* Date - Changed from currentDate to certificateDate */}
+          <div className='certificate-date'>{certificateDate}</div>
 
           {/* Name */}
           <div className='certificate-name'>{internData.name}</div>
@@ -126,7 +106,6 @@ const Certificate = ({ internData, projects }) => {
               {internData.duration} ({formatDate(joinDate)} To{' '}
               {formatDate(completionDate)})
             </div>
-            {/* <div>{getAllTechnologies()}</div> */}
             <div className='certificate-projects'>{getAllProjectTitles()}</div>
           </div>
         </div>
