@@ -20,7 +20,7 @@ export default function CertificateIssuance() {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/GetAll-Intern-For-Certificate-Issuance`
+          `https://manager.ezitech.org/GetAll-Intern-For-Certificate-Issuance`
         );
         setData(res.data.data);
         setFilteredData(res.data.data);
