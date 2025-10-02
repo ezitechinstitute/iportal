@@ -6,11 +6,8 @@ const bodyParser = require("body-parser");
 const RunJob = require("./controller/combine/Run-Scheduler");
 const { VerifyEmail } = require("./controller/combine/Verify-Email");
 const dotenv = require("dotenv").config();
-const downloadRoutes = require("./routes/downloadRoutes");
-const affiliateRoutes = require("./routes/affiliate-routes");
-
 const PORT = 8088;
-const path = require('path')
+// const path = require('path')
 
 const app = express();
 app.use(bodyParser.json({ limit: "35mb" })); // Adjust the limit as needed
@@ -28,7 +25,6 @@ const corsOptions = {
     "http://localhost:3001",
     "http://localhost:3002",
     "http://localhost:3003",
-    "http://localhost:5173"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"], // Optional: Allowed methods
   // allowedHeaders: ["Content-Type", "Authorization"], // Optional: Allowed headers
@@ -36,25 +32,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
-const certPath = path.join(__dirname, 'public/certificates');
-app.use('/certificates', express.static(path.join(__dirname, '/controller/public/certificates')));
-
 app.use(router);
-app.use('/api/affiliate', affiliateRoutes);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
-
-app.use('/', downloadRoutes);
-const fs = require('fs');
-app.get('/list-certs', (req, res) => {
-  const dir = path.join(__dirname, 'public/certificates');
-  fs.readdir(dir, (err, files) => {
-    if (err) return res.status(500).send('Cannot read directory');
-    res.send(files);
-  });
-});
-
 DataBase();
 
 app.listen(PORT, () => {

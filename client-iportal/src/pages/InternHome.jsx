@@ -8,7 +8,7 @@ export const InternHome = () => {
     <>
       <InternTopbar />
       <InternSidebar />
-      <InternDashboard />
+      {/* <InternDashboard /> */}
     </>
   );
 };

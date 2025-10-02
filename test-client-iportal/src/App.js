@@ -5,7 +5,7 @@ import Feedback from "./components/interns-components/Feedback/Feedback";
 import Projects from "./components/interns-components/Projects/Projects";
 import Announcement from "./components/interns-components/Announcement/Announcement";
 import Task from "./components/interns-components/Task/Task";
-import Attendence from "./components/interns-components/Attendence/Attendence";
+import { Attendence } from "./components/interns-components/Attendence/Attendence";
 import InternSidebar from "./components/interns-components/InternSidebar";
 import InternTopbar from "./components/interns-components/InternTopbar/InternTopbar";
 import Leave from "./components/interns-components/Leave/Leave";
@@ -23,15 +23,13 @@ import {ResetPassword} from "./pages/interns-pages/InternResetPassword";
 import BirthdayWisher from "./components/interns-components/Birthday_wisher/Birthday_wisher";
 import Supervisor_compliant from "./components/interns-components/Feedback/Supervisor_compaliant";
 import Manager_compliant from "./components/interns-components/Feedback/Manager_compliant";
-import RecommendIntern from "./components/Recommendation/RecommendIntern";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route index path="/" element={<RecommendIntern />} /> {/* remove at end */}
-          {/* <Route index path="/" element={<InternLogin />} />  remove at end */}
+          <Route index path="/" element={<InternLogin />} />
           <Route path="/intern-test" element={<InternTest />} />
           <Route path="/intern-dashboard" element={<InternDashboard />} />
           <Route path="/intern-leave" element={<Leave />} />

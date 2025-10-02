@@ -13,6 +13,11 @@ const Leave = () => {
   const checkLoggedIn = sessionStorage.getItem("isLoggedIn") === "true";
   const eziId = sessionStorage.getItem("eziId");
 
+  useEffect(() => {
+    if (!checkLoggedIn) {
+      navigate("/");
+    }
+  }, [checkLoggedIn, navigate]);
 
   const GetInterLeaves = useCallback(async () => {
     try {

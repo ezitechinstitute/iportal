@@ -285,20 +285,7 @@ export const InternSidebar = () => {
                   </NavLink>
                 </li>
 
-                <li className={activeLink === "offerLetter" ? "active" : "undefined"}>
-                  <NavLink
-                    className="d-flex align-items-center bg-secondary text-white rounded mt-1"
-                    onClick={() => setActive("offerLetter")}
-                    to="/intern-profile"
-                  >
-                    <FiUser />
-                    <span className="menu-item" data-i18n="OfferLetter">
-                      Public Profile
-                    </span>
-                  </NavLink>
-                </li>
-
-                {/* <li className="undefined" style={{ opacity: "0.9" }}>
+                <li className="undefined" style={{ opacity: "0.1" }}>
                   <NavLink className="d-flex align-items-center" to="#">
                     <FiUser />
                     <span
@@ -308,7 +295,7 @@ export const InternSidebar = () => {
                       Public Profile
                     </span>
                   </NavLink>
-                </li> */}
+                </li>
               </>
             )}
           </ul>

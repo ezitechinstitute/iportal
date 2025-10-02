@@ -110,112 +110,6 @@ function SendMailRegister(
   });
 }
 
-//Internship Certificate Mail
-function SendMailCertificate(name, email, tech, duration, projectCount, issued_by) {
-  let year = new Date().getFullYear();
-  let transporter = nodeMailer.createTransport({
-    host: process.env.MAILHOST,
-    port: process.env.MAILPORT,
-    secure: true,
-    auth: {
-      user: process.env.REGMAIL,
-      pass: process.env.MAILPASS,
-    },
-  });
-
-  let mailOptions = {
-    from: process.env.REGMAIL,
-    to: email,
-    subject: "Your Internship Certificate has been Issued!",
-    html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Certificate Issued</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f3f6f9;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 600px;
-      margin: 30px auto;
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-    }
-    .header {
-      background-color: #28a745;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      border-radius: 8px 8px 0 0;
-    }
-    .body {
-      padding: 20px;
-      color: #333;
-      line-height: 1.6;
-    }
-    .footer {
-      background-color: #f6f6f6;
-      text-align: center;
-      padding: 15px;
-      color: #777;
-      font-size: 14px;
-      border-top: 1px solid #e0e0e0;
-    }
-    .footer a {
-      color: #28a745;
-      text-decoration: none;
-    }
-    .bold-text {
-      font-weight: bold;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      Certificate Issued Successfully!
-    </div>
-    <div class="body">
-      <p>Dear ${name},</p>
-      <p>We are pleased to inform you that your <strong>Internship Completion Certificate</strong> for the <strong>${tech}</strong> program has been successfully issued.</p>
-
-      <p><strong>Certificate Details:</strong></p>
-      <p><strong>Technology:</strong> ${tech}</p>
-      <p><strong>Duration:</strong> ${duration}</p>
-      <p><strong>Completed Projects:</strong> ${projectCount}</p>
-      <p><strong>Issued By:</strong> ${issued_by}</p>
-
-      <p>Your certificate will also appear on your public Ezitech profile shortly. Please keep an eye on your dashboard for updates.</p>
-
-      <p>If you have any questions or concerns, feel free to contact our support team at <a href="mailto:help@ezitech.org">help@ezitech.org</a>.</p>
-    </div>
-    <div class="footer">
-      <p>Best Regards,<br>Ezitech Institute - Internship Management Team</p>
-    </div>
-  </div>
-</body>
-</html>`,
-  };
-
-  transporter.sendMail(mailOptions, (err, info) => {
-    if (err) {
-      console.error("Certificate Email Error:", err);
-    } else {
-      console.log("Certificate Email Sent");
-    }
-  });
-}
-
-
 // University Account Create Email
 function SendMailUniAccount(name, email, password) {
   let year = new Date().getFullYear();
@@ -741,7 +635,7 @@ function SendMailInitialInvoice(
     },
   });
 
-  /*let mailOptions = {
+  let mailOptions = {
     from: process.env.REGMAIL, // Sender email address
     to: email, // List of recipients
     subject: "💵 Payment Invoice 💵", // Subject line
@@ -946,7 +840,7 @@ function SendMailInitialInvoice(
                                                   </div>
                                                   
                                                   <!--[if (gte mso 9)|(IE)]>
-                        !     </td><td width="80%" valign="top" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                              </td><td width="80%" valign="top" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
                               <![endif]-->
                                                   
                                                   <div class="column" style="width:100%;max-width:518px;display:inline-block;vertical-align:top;">
@@ -962,7 +856,7 @@ function SendMailInitialInvoice(
                                                           </table></td>
                                                       </tr>
                                                     </table>
-                        `                         </div>
+                                                  </div>
                                                   
                                                   <!--[if (gte mso 9)|(IE)]>
                               </td>
@@ -972,12 +866,12 @@ function SendMailInitialInvoice(
                                               </tr>
                                               <tr>
                                                 <td>&nbsp;</td>
-                                              </tr>
+                                              </tr>
                                             </table></td>
                                         </tr>
                                       </tbody>
                                     </table>
-                  `               </center></td>
+                                  </center></td>
                               </tr>
                             </tbody>
                           </table></td>
@@ -1072,7 +966,7 @@ function SendMailInitialInvoice(
     </center>
     </body>
     </html>`, // Email Template
-  };*/
+  };
 
   transporter.sendMail(mailOptions, (err, info) => {
     if (err) {
@@ -1572,7 +1466,6 @@ module.exports = {
   SendMailInitialInvoice,
   SendMailPartialInvoice,
   SendMailVerifyCode,
-  SendMailCertificate
 };
 
 // function SendMailRemote(name, email, date, time) {
