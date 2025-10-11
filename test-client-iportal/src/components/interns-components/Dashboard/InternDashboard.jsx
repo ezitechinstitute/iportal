@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 import "./InternDashboard.css";
-import ApexChart from './ApexChart';
+import ApexChart from "./ApexChart";
 import logo11 from "./mediaa/logo11.png";
 import logo12 from "./mediaa/logo12.png";
 import logo13 from "./mediaa/logo13.png";
@@ -33,6 +33,7 @@ import {
   FaYoutube,
   FaWhatsapp,
 } from "react-icons/fa";
+import PerformanceChart from "./PerformanceChart";
 
 export const InternDashboard = () => {
   const checkLoggedIn = sessionStorage.getItem("isLoggedIn");
@@ -66,9 +67,11 @@ export const InternDashboard = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const response = await axios.get("https://api.ezitech.org/get-intern-announcement");
+      const response = await axios.get(
+        "https://api.ezitech.org/get-intern-announcement"
+      );
       setAnnouncements(response.data.data); // Set the fetched data to state
-      console.log(response.data)
+      console.log(response.data);
     } catch (err) {
       console.error("Error fetching announcements:", err);
     }
@@ -118,7 +121,10 @@ export const InternDashboard = () => {
 
   const fetchTotalTasks = async () => {
     try {
-      const response = await axios.get(`https://api.ezitech.org/count-total-tasks`, { params: { id } });
+      const response = await axios.get(
+        `https://api.ezitech.org/count-total-tasks`,
+        { params: { id } }
+      );
       setTotalTasks(response.data.totalTasks);
     } catch (error) {
       console.error("Error fetching total tasks:", error);
@@ -127,7 +133,10 @@ export const InternDashboard = () => {
 
   const fetchTasksInProgress = async () => {
     try {
-      const response = await axios.get(`https://api.ezitech.org/count-tasks-in-progress`, { params: { id } });
+      const response = await axios.get(
+        `https://api.ezitech.org/count-tasks-in-progress`,
+        { params: { id } }
+      );
       setTasksInProgress(response.data.totalTasksInProgress);
     } catch (error) {
       console.error("Error fetching tasks in progress:", error);
@@ -136,7 +145,10 @@ export const InternDashboard = () => {
 
   const fetchTasksComplete = async () => {
     try {
-      const response = await axios.get(`https://api.ezitech.org/count-tasks-complete`, { params: { id } });
+      const response = await axios.get(
+        `https://api.ezitech.org/count-tasks-complete`,
+        { params: { id } }
+      );
       setTasksComplete(response.data.totalTasksComplete);
     } catch (error) {
       console.error("Error fetching tasks complete:", error);
@@ -145,17 +157,20 @@ export const InternDashboard = () => {
 
   const getInternAverage = async () => {
     try {
-      const response = await axios.get(`https://api.ezitech.org/get-int-avg`, { params: { id } });
+      const response = await axios.get(`https://api.ezitech.org/get-int-avg`, {
+        params: { id },
+      });
       setAverage(response.data.final_average);
     } catch (error) {
       console.error("Error fetch avg:", error);
     }
   };
 
-  
   const getTopIntern = async () => {
     try {
-      const response = await axios.get(`https://api.ezitech.org/top-intern-by-average`);
+      const response = await axios.get(
+        `https://api.ezitech.org/top-intern-by-average`
+      );
       setTopIntern(response.data.top_intern);
     } catch (error) {
       console.error("Error fetching top intern:", error);
@@ -173,7 +188,7 @@ export const InternDashboard = () => {
     fetchTotalTasks();
     fetchTasksInProgress();
     fetchTasksComplete();
-    getTopIntern(); 
+    getTopIntern();
     fetchAnnouncements();
   }, []);
 
@@ -221,8 +236,10 @@ export const InternDashboard = () => {
                 <div className="row col-lg-12 mt-1/2">
                   <marquee style={{ color: "#f88a1b" }}>
                     <p className="marquee">
-                      14th Year Anniversary. <span className="ezi">Ezitech Institute</span> has completed 14 years. 3963
-                      have completed their internship. Thanks all for your unconditional support.
+                      14th Year Anniversary.{" "}
+                      <span className="ezi">Ezitech Institute</span> has
+                      completed 14 years. 3963 have completed their internship.
+                      Thanks all for your unconditional support.
                     </p>
                   </marquee>
                 </div>
@@ -235,14 +252,38 @@ export const InternDashboard = () => {
                         <div className="card1">
                           <div className="card py-2">
                             <div className="d-flex">
-                              <div className="icon px-1 mx-1" style={{ color: "#776cf0", backgroundColor: "#eae8fd", borderRadius: "5px", padding: "4px 5px" }}>
+                              <div
+                                className="icon px-1 mx-1"
+                                style={{
+                                  color: "#776cf0",
+                                  backgroundColor: "#eae8fd",
+                                  borderRadius: "5px",
+                                  padding: "4px 5px",
+                                }}
+                              >
                                 <FaFolderPlus size={20} />
                               </div>
                               <h3>{totalProjects !== 0 ? totalProjects : 0}</h3>
                             </div>
                             <div className="card-body pl-1 mt-1">
-                              <h4 style={{ marginBottom: "5px", width: "max-content" }}>Total Projects</h4>
-                              <p className="card-text" style={{ display: "flex", paddingBottom: "0%", marginTop: "14px" }}>3.5% Total Progress</p>
+                              <h4
+                                style={{
+                                  marginBottom: "5px",
+                                  width: "max-content",
+                                }}
+                              >
+                                Total Projects
+                              </h4>
+                              <p
+                                className="card-text"
+                                style={{
+                                  display: "flex",
+                                  paddingBottom: "0%",
+                                  marginTop: "14px",
+                                }}
+                              >
+                                3.5% Total Progress
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -254,14 +295,39 @@ export const InternDashboard = () => {
                         <div className="card2">
                           <div className="card py-2">
                             <div className="d-flex">
-                              <div className="icon px-1 mx-1" style={{ color: "#ffa146", backgroundColor: "#fff1e3", borderRadius: "5px", padding: "4px 5px" }}>
+                              <div
+                                className="icon px-1 mx-1"
+                                style={{
+                                  color: "#ffa146",
+                                  backgroundColor: "#fff1e3",
+                                  borderRadius: "5px",
+                                  padding: "4px 5px",
+                                }}
+                              >
                                 <FaSpinner size={20} />
                               </div>
                               <h3>{inPorgress !== 0 ? inPorgress : 0}</h3>
                             </div>
                             <div className="card-body pl-1 mt-1">
-                              <h4 className="" style={{ marginBottom: "5px", width: "max-content" }}>In Progress</h4>
-                              <p className="card-text" style={{ display: "flex", paddingBottom: "0%", marginTop: "14px" }}>3.5% Total Progress</p>
+                              <h4
+                                className=""
+                                style={{
+                                  marginBottom: "5px",
+                                  width: "max-content",
+                                }}
+                              >
+                                In Progress
+                              </h4>
+                              <p
+                                className="card-text"
+                                style={{
+                                  display: "flex",
+                                  paddingBottom: "0%",
+                                  marginTop: "14px",
+                                }}
+                              >
+                                3.5% Total Progress
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -272,14 +338,39 @@ export const InternDashboard = () => {
                         <div className="card3">
                           <div className="card py-2">
                             <div className="d-flex">
-                              <div className="icon px-1 mx-1" style={{ color: "#ec6566", backgroundColor: "#fce5e6", borderRadius: "5px", padding: "4px 5px" }}>
+                              <div
+                                className="icon px-1 mx-1"
+                                style={{
+                                  color: "#ec6566",
+                                  backgroundColor: "#fce5e6",
+                                  borderRadius: "5px",
+                                  padding: "4px 5px",
+                                }}
+                              >
                                 <FaCheckSquare size={20} />
                               </div>
                               <h3>{completed !== 0 ? completed : 0}</h3>
                             </div>
                             <div className="card-body pl-1 mt-1">
-                              <h4 className="" style={{ marginBottom: "5px", width: "max-content" }}>Completed Projects</h4>
-                              <p className="card-text" style={{ display: "flex", paddingBottom: "0%", marginTop: "14px" }}>3.5% Total Progress</p>
+                              <h4
+                                className=""
+                                style={{
+                                  marginBottom: "5px",
+                                  width: "max-content",
+                                }}
+                              >
+                                Completed Projects
+                              </h4>
+                              <p
+                                className="card-text"
+                                style={{
+                                  display: "flex",
+                                  paddingBottom: "0%",
+                                  marginTop: "14px",
+                                }}
+                              >
+                                3.5% Total Progress
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -290,14 +381,39 @@ export const InternDashboard = () => {
                         <div className="card4">
                           <div className="card py-2">
                             <div className="d-flex">
-                              <div className="icon px-1 mx-1" style={{ color: "#29d6eb", backgroundColor: "#d9f8fc", borderRadius: "5px", padding: "4px 5px" }}>
+                              <div
+                                className="icon px-1 mx-1"
+                                style={{
+                                  color: "#29d6eb",
+                                  backgroundColor: "#d9f8fc",
+                                  borderRadius: "5px",
+                                  padding: "4px 5px",
+                                }}
+                              >
                                 <FaCalendarCheck size={20} />
                               </div>
                               <h3>{attendance !== 0 ? attendance : 0}</h3>
                             </div>
                             <div className="card-body pl-1 mt-1">
-                              <h4 className="" style={{ marginBottom: "5px", width: "max-content" }}>Total Attendance</h4>
-                              <p className="card-text" style={{ display: "flex", paddingBottom: "0%", marginTop: "14px" }}>0 Last Week</p>
+                              <h4
+                                className=""
+                                style={{
+                                  marginBottom: "5px",
+                                  width: "max-content",
+                                }}
+                              >
+                                Total Attendance
+                              </h4>
+                              <p
+                                className="card-text"
+                                style={{
+                                  display: "flex",
+                                  paddingBottom: "0%",
+                                  marginTop: "14px",
+                                }}
+                              >
+                                0 Last Week
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -308,14 +424,40 @@ export const InternDashboard = () => {
                         <div className="card5">
                           <div className="card py-2">
                             <div className="d-flex">
-                              <div className="icon px-1 mx-1" style={{ color: "#28c76f", backgroundColor: "#dcf6e8", borderRadius: "5px", padding: "4px 5px" }}>
+                              <div
+                                className="icon px-1 mx-1"
+                                style={{
+                                  color: "#28c76f",
+                                  backgroundColor: "#dcf6e8",
+                                  borderRadius: "5px",
+                                  padding: "4px 5px",
+                                }}
+                              >
                                 <FaCoffee size={20} />
                               </div>
                               <h3>{holidays !== 0 ? holidays : 0}</h3>
                             </div>
                             <div className="card-body pl-1 mt-1">
-                              <h4 className="" style={{ marginBottom: "5px", width: "max-content", marginRight: "4px" }}>Total Holidays</h4>
-                              <p className="card-text" style={{ display: "flex", paddingBottom: "0%", marginTop: "14px" }}>0 Last Week</p>
+                              <h4
+                                className=""
+                                style={{
+                                  marginBottom: "5px",
+                                  width: "max-content",
+                                  marginRight: "4px",
+                                }}
+                              >
+                                Total Holidays
+                              </h4>
+                              <p
+                                className="card-text"
+                                style={{
+                                  display: "flex",
+                                  paddingBottom: "0%",
+                                  marginTop: "14px",
+                                }}
+                              >
+                                0 Last Week
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -326,14 +468,39 @@ export const InternDashboard = () => {
                         <div className="card6">
                           <div className="card py-2">
                             <div className="d-flex">
-                              <div className="icon px-1 mx-1" style={{ color: "#ff8ac9", backgroundColor: "#fff0f8", borderRadius: "5px", padding: "4px 5px" }}>
+                              <div
+                                className="icon px-1 mx-1"
+                                style={{
+                                  color: "#ff8ac9",
+                                  backgroundColor: "#fff0f8",
+                                  borderRadius: "5px",
+                                  padding: "4px 5px",
+                                }}
+                              >
                                 <FaHome size={20} />
                               </div>
                               <h3>{leaves !== 0 ? leaves : 0}</h3>
                             </div>
                             <div className="card-body pl-1 mt-1">
-                              <h4 className="" style={{ marginBottom: "5px", width: "max-content" }}>Total Leaves</h4>
-                              <p className="card-text" style={{ display: "flex", paddingBottom: "0%", marginTop: "14px" }}>0 Last Week</p>
+                              <h4
+                                className=""
+                                style={{
+                                  marginBottom: "5px",
+                                  width: "max-content",
+                                }}
+                              >
+                                Total Leaves
+                              </h4>
+                              <p
+                                className="card-text"
+                                style={{
+                                  display: "flex",
+                                  paddingBottom: "0%",
+                                  marginTop: "14px",
+                                }}
+                              >
+                                0 Last Week
+                              </p>
                             </div>
                           </div>
                         </div>
@@ -344,29 +511,62 @@ export const InternDashboard = () => {
                   <div className="cardd col-lg-4 col-md-6 col-12">
                     <div className="card card-congratulation-meda">
                       <div className="card-body">
-                        <h5 className="notes mr-1" style={{ marginLeft: "20px", fontSize: "23px" }}>Read Notes</h5>
-                        <div className="card shadow-sm" style={{ maxWidth: '450px', margin: 'auto' }}>
-                          <div className="card-body text-center custom-scrollbar" style={{ maxHeight: '250px', overflowY: 'auto', padding: '15px' }}>
-                          {announcements && announcements.length > 0 ? (
-  announcements.map((announcement) => (
-    <div key={announcement.id}>
-      <h5 className="mr-1" style={{ marginLeft: "10px" }}>Hi! {announcement.author_name}</h5>
-      <div className="announcement-card mb-3 shadow-sm p-2 rounded text-left" style={{ backgroundColor: '#DEDFE4', borderLeft: '5px solid #4A90E2' }}>
-        <h5 className="text-dark font-weight-bold">📢 {announcement.title}</h5>
-        <p className="text-dark mb-0">
-          {announcement.message}
-        </p>
-      </div>
-    </div>
-  ))
-) : (
-  <p>No announcements yet</p>
-)}
+                        <h5
+                          className="notes mr-1"
+                          style={{ marginLeft: "20px", fontSize: "23px" }}
+                        >
+                          Read Notes
+                        </h5>
+                        <div
+                          className="card shadow-sm"
+                          style={{ maxWidth: "450px", margin: "auto" }}
+                        >
+                          <div
+                            className="card-body text-center custom-scrollbar"
+                            style={{
+                              maxHeight: "250px",
+                              overflowY: "auto",
+                              padding: "15px",
+                            }}
+                          >
+                            {announcements && announcements.length > 0 ? (
+                              announcements.map((announcement) => (
+                                <div key={announcement.id}>
+                                  <h5
+                                    className="mr-1"
+                                    style={{ marginLeft: "10px" }}
+                                  >
+                                    Hi! {announcement.author_name}
+                                  </h5>
+                                  <div
+                                    className="announcement-card mb-3 shadow-sm p-2 rounded text-left"
+                                    style={{
+                                      backgroundColor: "#DEDFE4",
+                                      borderLeft: "5px solid #4A90E2",
+                                    }}
+                                  >
+                                    <h5 className="text-dark font-weight-bold">
+                                      📢 {announcement.title}
+                                    </h5>
+                                    <p className="text-dark mb-0">
+                                      {announcement.message}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))
+                            ) : (
+                              <p>No announcements yet</p>
+                            )}
                           </div>
                         </div>
                         <div className="card-footer mt-0 mb-0">
-                          <button type="button" className="btn btn-success px-2" style={{ marginLeft: "1px" }}>
-                            <FaWhatsapp size={16} className="mr-1" /> Join WhatsApp Group
+                          <button
+                            type="button"
+                            className="btn btn-success px-2"
+                            style={{ marginLeft: "1px" }}
+                          >
+                            <FaWhatsapp size={16} className="mr-1" /> Join
+                            WhatsApp Group
                           </button>
                         </div>
                       </div>
@@ -375,71 +575,114 @@ export const InternDashboard = () => {
                 </div>
 
                 <div className="row md-col">
-  <div className="col-lg-8">
-    <div className="tracker" style={{ marginLeft: "-14px" }}>
-      <div className="col-lg-12 col-12">
-        <div className="card">
-          <div className="card-header d-flex justify-content-between pb-0">
-            <div className="title-container">
-              <h2 className="card-title font-weight-bolder font-large-1">Project Tracker</h2>
-            </div>
-            <div className="dropdown chart-dropdown"></div>
-          </div>
-          <div className="card-body">
-            <div className="grid-container">
-              {/* Left Column */}
-              <div className="stats-column ml-2">
-                <div className="stat-item">
-                  <h1 className="font-large-2 font-weight-bolder mt-2  mb-0">{completed !== 0 ? completed : 0}</h1>
-                  <h4><span>Total Projects</span></h4>
-                </div>
-                <div className="stat-item">
-                  <div className="icon">
-                    <div className="icon1" style={{ color: "#776cf0", backgroundColor: "#eae8fd", padding: "11px 5px", borderRadius: "10px" }}>
-                      <FaFolderPlus size={20} />
+                  <div className="col-lg-8">
+                    <div className="tracker" style={{ marginLeft: "-14px" }}>
+                      <div className="col-lg-12 col-12">
+                        <div className="card">
+                          <div className="card-header d-flex justify-content-between pb-0">
+                            <div className="title-container">
+                              <h2 className="card-title font-weight-bolder font-large-1">
+                                Project Tracker
+                              </h2>
+                            </div>
+                            <div className="dropdown chart-dropdown"></div>
+                          </div>
+                          <div className="card-body">
+                            <div className="grid-container">
+                              {/* Left Column */}
+                              <div className="stats-column ml-2">
+                                <div className="stat-item">
+                                  <h1 className="font-large-2 font-weight-bolder mt-2  mb-0">
+                                    {completed !== 0 ? completed : 0}
+                                  </h1>
+                                  <h4>
+                                    <span>Total Projects</span>
+                                  </h4>
+                                </div>
+                                <div className="stat-item">
+                                  <div className="icon">
+                                    <div
+                                      className="icon1"
+                                      style={{
+                                        color: "#776cf0",
+                                        backgroundColor: "#eae8fd",
+                                        padding: "11px 5px",
+                                        borderRadius: "10px",
+                                      }}
+                                    >
+                                      <FaFolderPlus size={20} />
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <h4 className="font-weight-bolder">
+                                      Total Tasks
+                                    </h4>
+                                    <p>{totalTasks !== 0 ? totalTasks : 0}</p>
+                                  </div>
+                                </div>
+                                <div className="stat-item">
+                                  <div className="icon">
+                                    <div
+                                      className="icon2"
+                                      style={{
+                                        color: "#ffa146",
+                                        backgroundColor: "#fff1e3",
+                                        padding: "11px 5px",
+                                        borderRadius: "10px",
+                                      }}
+                                    >
+                                      <FaSpinner size={20} />
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <h4 className="font-weight-bolder">
+                                      In Progress
+                                    </h4>
+                                    <p>
+                                      {tasksInProgress !== 0
+                                        ? tasksInProgress
+                                        : 0}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="stat-item">
+                                  <div className="icon">
+                                    <div
+                                      className="icon3"
+                                      style={{
+                                        color: "#ec6566",
+                                        backgroundColor: "#fce5e6",
+                                        padding: "11px 5px",
+                                        borderRadius: "10px",
+                                      }}
+                                    >
+                                      <FaCheckSquare size={20} />
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <h4 className="font-weight-bolder">
+                                      Completed Tasks
+                                    </h4>
+                                    <p>
+                                      {tasksComplete !== 0 ? tasksComplete : 0}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Right Column (Chart) */}
+                              <div className="chart-column">
+                                {showChart ? <ApexChart /> : <p>Loading...</p>}
+                                {/* {showChart ? <PerformanceChart/>: <p>Loading...</p>} */}
+
+                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <h4 className="font-weight-bolder">Total Tasks</h4>
-                    <p>{totalTasks !== 0 ? totalTasks : 0}</p>
-                  </div>
-                </div>
-                <div className="stat-item">
-                  <div className="icon">
-                    <div className="icon2" style={{ color: "#ffa146", backgroundColor: "#fff1e3", padding: "11px 5px", borderRadius: "10px" }}>
-                      <FaSpinner size={20} />
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-weight-bolder">In Progress</h4>
-                    <p>{tasksInProgress !== 0 ? tasksInProgress : 0}</p>
-                  </div>
-                </div>
-                <div className="stat-item">
-                  <div className="icon">
-                    <div className="icon3" style={{ color: "#ec6566", backgroundColor: "#fce5e6", padding: "11px 5px", borderRadius: "10px" }}>
-                      <FaCheckSquare size={20} />
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="font-weight-bolder">Completed Tasks</h4>
-                    <p>{tasksComplete !== 0 ? tasksComplete : 0}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Column (Chart) */}
-              <div className="chart-column">
-                {showChart ? <ApexChart /> : <p>Loading...</p>}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
 
                   {/* Modified Leadership Section */}
                   <div className="col-lg-4">
@@ -467,13 +710,23 @@ export const InternDashboard = () => {
                                         <img
                                           src={topIntern.image}
                                           alt="Top Intern"
-                                          style={{ width: "35px", height: "35px", borderRadius: "20%", marginRight: "7px" }}
+                                          style={{
+                                            width: "35px",
+                                            height: "35px",
+                                            borderRadius: "20%",
+                                            marginRight: "7px",
+                                          }}
                                         />
-
                                       </td>
-                                      <td style={{fontSize:"13px"}}>{topIntern.name}</td>
-                                      <td style={{fontSize:"13px"}}>{topIntern.technology}</td>
-                                      <td style={{fontSize:"13px"}}>{topIntern.average}%</td>
+                                      <td style={{ fontSize: "13px" }}>
+                                        {topIntern.name}
+                                      </td>
+                                      <td style={{ fontSize: "13px" }}>
+                                        {topIntern.technology}
+                                      </td>
+                                      <td style={{ fontSize: "13px" }}>
+                                        {topIntern.average}%
+                                      </td>
                                     </tr>
                                   ) : (
                                     <tr>
@@ -492,48 +745,92 @@ export const InternDashboard = () => {
 
                 {/* Logos and Footer Section remain unchanged */}
                 <div className="logo_heading">
-                  <h1 style={{ textAlign: "center", fontWeight: "700" }}>Our Interns Around The Globe</h1>
+                  <h1 style={{ textAlign: "center", fontWeight: "700" }}>
+                    Our Interns Around The Globe
+                  </h1>
                 </div>
                 <marquee>
                   <div className="row col-lg-12 col-md-12 col-12 ">
                     <div className="align-items-center d-flex">
-                      {[logo11, logo12, logo13, logo14, logo15, logo16, logo17, logo18, logo19, logo20, logo21, logo22, logo23].map((logo, index) => (
+                      {[
+                        logo11,
+                        logo12,
+                        logo13,
+                        logo14,
+                        logo15,
+                        logo16,
+                        logo17,
+                        logo18,
+                        logo19,
+                        logo20,
+                        logo21,
+                        logo22,
+                        logo23,
+                      ].map((logo, index) => (
                         <div key={index} className={`logo${index + 1}`}>
-                          <img style={{ height: "150px", marginRight: "55px" }} src={logo} alt={`Logo ${index + 1}`} />
+                          <img
+                            style={{ height: "150px", marginRight: "55px" }}
+                            src={logo}
+                            alt={`Logo ${index + 1}`}
+                          />
                         </div>
                       ))}
                     </div>
                   </div>
                 </marquee>
-                
               </div>
             </section>
-            <footer className="footer footer-static footer-light" style={{ padding: "0px", marginTop: "0px", marginBottom:"10px" }}>
-                  <p className="clearfix mb-0 " style={{ marginLeft: "10px"  }}>
-                    <br />
-                    <span className="mt-25 ">
-                      COPYRIGHT © 2016-{currentYear}
-                      <a className="ml-25" href="https://ezitech.org/html-css-internship-opportunities/" target="_blank" rel="noopener noreferrer">
-                        Ezitech Institute
-                      </a>
-                      <span className="d-none d-sm-inline-block">, All rights Reserved</span>
-                    </span>
-                    <span className="float-md-right d-none d-md-block">
-                      <a href="https://www.facebook.com/" style={{ color: "#75727f" }}>
-                        <FaFacebookF size={16} className="mr-1" />
-                      </a>
-                      <a href="https://www.instagram.com/">
-                        <FaInstagram size={16} className="mr-1" style={{ marginLeft: "15px" }} />
-                      </a>
-                      <a href="https://www.linkedin.com/">
-                        <FaLinkedin size={16} className="mr-1" style={{ marginLeft: "15px" }} />
-                      </a>
-                      <a href="https://twitter.com/i/flow/login">
-                        <FaYoutube size={16} className="mr-1" style={{ marginLeft: "15px" }} />
-                      </a>
-                    </span>
-                  </p>
-                </footer>
+            <footer
+              className="footer footer-static footer-light"
+              style={{ padding: "0px", marginTop: "0px", marginBottom: "10px" }}
+            >
+              <p className="clearfix mb-0 " style={{ marginLeft: "10px" }}>
+                <br />
+                <span className="mt-25 ">
+                  COPYRIGHT © 2016-{currentYear}
+                  <a
+                    className="ml-25"
+                    href="https://ezitech.org/html-css-internship-opportunities/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Ezitech Institute
+                  </a>
+                  <span className="d-none d-sm-inline-block">
+                    , All rights Reserved
+                  </span>
+                </span>
+                <span className="float-md-right d-none d-md-block">
+                  <a
+                    href="https://www.facebook.com/"
+                    style={{ color: "#75727f" }}
+                  >
+                    <FaFacebookF size={16} className="mr-1" />
+                  </a>
+                  <a href="https://www.instagram.com/">
+                    <FaInstagram
+                      size={16}
+                      className="mr-1"
+                      style={{ marginLeft: "15px" }}
+                    />
+                  </a>
+                  <a href="https://www.linkedin.com/">
+                    <FaLinkedin
+                      size={16}
+                      className="mr-1"
+                      style={{ marginLeft: "15px" }}
+                    />
+                  </a>
+                  <a href="https://twitter.com/i/flow/login">
+                    <FaYoutube
+                      size={16}
+                      className="mr-1"
+                      style={{ marginLeft: "15px" }}
+                    />
+                  </a>
+                </span>
+              </p>
+            </footer>
           </div>
         </div>
       </div>

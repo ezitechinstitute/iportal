@@ -23,6 +23,7 @@ import {ResetPassword} from "./pages/interns-pages/InternResetPassword";
 import BirthdayWisher from "./components/interns-components/Birthday_wisher/Birthday_wisher";
 import Supervisor_compliant from "./components/interns-components/Feedback/Supervisor_compaliant";
 import Manager_compliant from "./components/interns-components/Feedback/Manager_compliant";
+import { GetCertificate } from "./components/GetCertificate";
 
 function App() {
   return (
@@ -38,6 +39,8 @@ function App() {
           <Route path="/project-tasks" element={<ProjectTasks />} />
           <Route path="/intern-tasks" element={<InternTasks />} />
           <Route path="/intern-leave" element={<Leave />} />
+          <Route path="/get-certificate" element={<GetCertificate />} />
+
 
           <Route path="/internFeedback" element={<Feedback />} />
           <Route path="/internAttendence" element={<Attendence />} />

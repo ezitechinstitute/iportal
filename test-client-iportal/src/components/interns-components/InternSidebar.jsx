@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { FiHome, FiClipboard, FiCheckSquare, FiCalendar, FiMessageSquare, 
-         FiImage, FiUser, FiGrid, FiCheckCircle, FiChevronDown, FiChevronUp } from "react-icons/fi";
+         FiImage, FiUser, FiGrid, FiCheckCircle, FiChevronDown, FiChevronUp, 
+         FiFile,
+         FiAward,
+         FiFileText} from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 
 export const InternSidebar = () => {
@@ -278,9 +281,22 @@ export const InternSidebar = () => {
                     onClick={() => setActive("offerLetter")}
                     to="/offer-letter"
                   >
-                    <FiUser />
+                    <FiFileText />
                     <span className="menu-item" data-i18n="OfferLetter">
                       Offer Letter
+                    </span>
+                  </NavLink>
+                </li>
+
+                <li className={activeLink === "certificate" ? "active" : "undefined"}>
+                  <NavLink
+                    className="d-flex align-items-center"
+                    onClick={() => setActive("certificate")}
+                    to="/get-certificate"
+                  >
+                    <FiAward />
+                    <span className="menu-item" data-i18n="OfferLetter">
+                      Certificate
                     </span>
                   </NavLink>
                 </li>

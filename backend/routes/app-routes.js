@@ -322,6 +322,10 @@ const {
 } = require("../controller/intern/intern_announcements");
 const GetVerificationLink = require("../services/GetLink");
 const CheckMailVerified = require("../services/CheckMailVerified");
+const upload = require("../middleware/multer");
+const {
+  UploadVideo,
+} = require("../controller/video-feedback/upload.controller");
 
 const dotenv = require("dotenv").config();
 const router = express.Router();
@@ -654,6 +658,9 @@ router.put("/update-shift/:check", UpdateShift);
 // Supervisor Balance Controller
 router.post("/create-withdraw-req", verifyToken, CreateWithdrawReq);
 router.get("/get-sup-withdraw-req", verifyToken, GetSupWithdrawReq);
+
+// Video Feedback
+router.post("/upload-video", upload.single("video"), UploadVideo);
 
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);
