@@ -326,6 +326,7 @@ const upload = require("../middleware/multer");
 const {
   UploadVideo,
 } = require("../controller/video-feedback/upload.controller");
+const GetCertificate = require("../controller/intern/get-certificate");
 
 const dotenv = require("dotenv").config();
 const router = express.Router();
@@ -661,6 +662,7 @@ router.get("/get-sup-withdraw-req", verifyToken, GetSupWithdrawReq);
 
 // Video Feedback
 router.post("/upload-video", upload.single("video"), UploadVideo);
+router.get("/get-certificate/:email", GetCertificate);
 
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);

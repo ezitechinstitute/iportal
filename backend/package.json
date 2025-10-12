@@ -13,6 +13,7 @@
     "axios": "^1.6.8",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
+    "canvas": "^3.2.0",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -26,7 +27,8 @@
     "mysql2": "^3.9.7",
     "node-cron": "^3.0.3",
     "nodemailer": "^6.10.0",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "qrcode": "^1.5.4"
   },
   "keywords": [],
   "type": "commonjs"

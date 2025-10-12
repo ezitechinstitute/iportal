@@ -69,12 +69,13 @@ const CountLeaves = (req, res) => {
 const CountTotalTasks = (req, res) => {
   const { id } = req.query;
 
-  const sql = "SELECT COUNT(*) as totalTasks FROM `intern_tasks` WHERE `eti_id` = ?";
+  const sql =
+    "SELECT COUNT(*) as totalTasks FROM `intern_tasks` WHERE `eti_id` = ?";
 
   connection.query(sql, [id], (err, data) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: 'Database error' });
+      return res.status(500).json({ error: "Database error" });
     }
 
     return res.json({ totalTasks: data[0].totalTasks });
@@ -84,12 +85,13 @@ const CountTotalTasks = (req, res) => {
 const CountTasksInProgress = (req, res) => {
   const { id } = req.query;
 
-  const sql = "SELECT COUNT(*) as totalTasksInProgress FROM `intern_tasks` WHERE `task_status` = 'ongoing' AND `eti_id` = ?";
+  const sql =
+    "SELECT COUNT(*) as totalTasksInProgress FROM `intern_tasks` WHERE `task_status` = 'ongoing' AND `eti_id` = ?";
 
   connection.query(sql, [id], (err, data) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: 'Database error' });
+      return res.status(500).json({ error: "Database error" });
     }
 
     return res.json({ totalTasksInProgress: data[0].totalTasksInProgress });
@@ -99,33 +101,27 @@ const CountTasksInProgress = (req, res) => {
 const CountTasksComplete = (req, res) => {
   const { id } = req.query;
 
-  const sql = "SELECT COUNT(*) as totalTasksComplete FROM `intern_tasks` WHERE `task_status` = 'Approved' AND `eti_id` = ?";
+  const sql =
+    "SELECT COUNT(*) as totalTasksComplete FROM `intern_tasks` WHERE `task_status` = 'Approved' AND `eti_id` = ?";
 
   connection.query(sql, [id], (err, data) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ error: 'Database error' });
+      return res.status(500).json({ error: "Database error" });
     }
 
     return res.json({ totalTasksComplete: data[0].totalTasksComplete });
   });
 };
 
-
-
-
-
-
 const GetInternAverage = (req, res) => {
-  const { id } = req.query; 
+  const { id } = req.query;
 
-  
   const sqlProject = `
     SELECT SUM(obt_marks) AS total_obt_marks, SUM(project_marks) AS total_marks
     FROM (SELECT obt_marks, project_marks FROM intern_projects WHERE eti_id = ? ORDER BY project_id DESC LIMIT 3) AS subquery
   `;
 
- 
   const sqlAttendance = `
     SELECT SUM(TIMESTAMPDIFF(HOUR, start_shift, end_shift)) AS total_working_hours, 
            COUNT(*) AS total_days
@@ -136,47 +132,54 @@ const GetInternAverage = (req, res) => {
   connection.query(sqlProject, [id], (err, projectData) => {
     if (err) {
       console.error("Error querying project data:", err);
-      return res.status(500).json({ message: 'Error querying project data', error: err.message });
+      return res
+        .status(500)
+        .json({ message: "Error querying project data", error: err.message });
     }
 
-    if (!projectData || projectData.length === 0 || projectData[0].total_marks === 0) {
-      return res.status(404).json({ message: 'No valid project data found for the given intern.' });
+    if (
+      !projectData ||
+      projectData.length === 0 ||
+      projectData[0].total_marks === 0
+    ) {
+      return res
+        .status(404)
+        .json({ message: "No valid project data found for the given intern." });
     }
 
-   
     const totalObtMarks = projectData[0].total_obt_marks || 0;
-    const totalMarks = projectData[0].total_marks || 1; 
+    const totalMarks = projectData[0].total_marks || 1;
     const internProjectAverage = (totalObtMarks / totalMarks) * 100;
-
 
     connection.query(sqlAttendance, [id], (err, attendanceData) => {
       if (err) {
         console.error("Error querying attendance data:", err);
-        return res.status(500).json({ message: 'Error querying attendance data', error: err.message });
+        return res
+          .status(500)
+          .json({
+            message: "Error querying attendance data",
+            error: err.message,
+          });
       }
 
       const totalWorkingHours = attendanceData[0].total_working_hours || 0;
-      const totalDays = attendanceData[0].total_days || 1; 
+      const totalDays = attendanceData[0].total_days || 1;
       const expectedTotalHours = totalDays * 3;
       let attendancePercentage = (totalWorkingHours / expectedTotalHours) * 100;
 
-      
       attendancePercentage = Math.min(attendancePercentage, 100);
 
-      let finalAverage = (internProjectAverage * 0.8) + (attendancePercentage * 0.15);
+      let finalAverage =
+        internProjectAverage * 0.8 + attendancePercentage * 0.15;
 
-     
       finalAverage = Math.min(finalAverage, 100);
 
-    
       finalAverage = parseFloat(finalAverage.toFixed(1));
 
-     
       return res.json({ final_average: finalAverage });
     });
   });
 };
-
 
 const calculateInternAverage = (id, callback) => {
   const sqlProject = `
@@ -207,7 +210,8 @@ const calculateInternAverage = (id, callback) => {
       let attendancePercentage = (totalWorkingHours / expectedTotalHours) * 100;
 
       attendancePercentage = Math.min(attendancePercentage, 100);
-      let finalAverage = (internProjectAverage * 0.8) + (attendancePercentage * 0.15);
+      let finalAverage =
+        internProjectAverage * 0.8 + attendancePercentage * 0.15;
       finalAverage = Math.min(finalAverage, 100);
       finalAverage = parseFloat(finalAverage.toFixed(1));
 
@@ -218,7 +222,6 @@ const calculateInternAverage = (id, callback) => {
 
 // Modified controller
 const GetTopInternByAverage = (req, res) => {
-  
   const sqlInterns = `
     SELECT 
       ia.eti_id,
@@ -231,19 +234,18 @@ const GetTopInternByAverage = (req, res) => {
     WHERE ia.int_status = 'Active'
   `;
 
-
   connection.query(sqlInterns, (err, interns) => {
     if (err) {
       console.error("Error fetching interns:", err);
-      return res.status(500).json({ 
-        message: "Error fetching interns", 
-        error: err.message 
+      return res.status(500).json({
+        message: "Error fetching interns",
+        error: err.message,
       });
     }
 
     if (!interns || interns.length === 0) {
-      return res.status(404).json({ 
-        message: "No interns found" 
+      return res.status(404).json({
+        message: "No interns found",
       });
     }
 
@@ -254,7 +256,10 @@ const GetTopInternByAverage = (req, res) => {
     interns.forEach((intern) => {
       calculateInternAverage(intern.eti_id, (err, average) => {
         if (err) {
-          console.error(`Error calculating average for intern ${intern.eti_id}:`, err);
+          console.error(
+            `Error calculating average for intern ${intern.eti_id}:`,
+            err
+          );
           processedInterns++;
           return;
         }
@@ -265,7 +270,7 @@ const GetTopInternByAverage = (req, res) => {
           name: intern.name,
           technology: intern.technology,
           email: intern.email,
-          average: average
+          average: average,
         });
 
         processedInterns++;
@@ -273,13 +278,15 @@ const GetTopInternByAverage = (req, res) => {
         // When all interns are processed, find the top one
         if (processedInterns === interns.length) {
           if (internsWithAverage.length === 0) {
-            return res.status(404).json({ 
-              message: "No valid intern data available" 
+            return res.status(404).json({
+              message: "No valid intern data available",
             });
           }
 
           // Sort by average in descending order and get the top intern
-          const topIntern = internsWithAverage.sort((a, b) => b.average - a.average)[0];
+          const topIntern = internsWithAverage.sort(
+            (a, b) => b.average - a.average
+          )[0];
 
           return res.json({
             top_intern: {
@@ -288,15 +295,14 @@ const GetTopInternByAverage = (req, res) => {
               name: intern.name,
               technology: topIntern.technology,
               email: topIntern.email,
-              average: topIntern.average
-            }
+              average: topIntern.average,
+            },
           });
         }
       });
     });
   });
 };
-
 
 // const GetAllInternsByAverage = (req, res) => {
 //   // Query to fetch all interns from accounts_table
@@ -327,9 +333,9 @@ const GetTopInternByAverage = (req, res) => {
 
 //       // Query to calculate attendance percentage
 //       const sqlAttendance = `
-//         SELECT SUM(TIMESTAMPDIFF(HOUR, start_shift, end_shift)) AS total_working_hours, 
+//         SELECT SUM(TIMESTAMPDIFF(HOUR, start_shift, end_shift)) AS total_working_hours,
 //                COUNT(*) AS total_days
-//         FROM intern_attendance 
+//         FROM intern_attendance
 //         WHERE eti_id = ?
 //       `;
 
@@ -384,9 +390,6 @@ const GetTopInternByAverage = (req, res) => {
 
 // module.exports = { GetAllInternsByAverage };
 
-
-
-
 module.exports = {
   CountProjects,
   CountInPorgressProjects,
@@ -398,5 +401,5 @@ module.exports = {
   CountTasksComplete,
   CountTotalTasks,
   GetInternAverage,
-  GetTopInternByAverage
+  GetTopInternByAverage,
 };
