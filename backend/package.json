@@ -29,8 +29,7 @@
     "nodemailer": "^6.10.0",
     "nodemon": "^3.1.0",
     "pureimage": "^0.4.18",
-    "qrcode": "^1.5.4",
-    "skia-canvas": "^3.0.8"
+    "qrcode": "^1.5.4"
   },
   "keywords": [],
   "type": "commonjs"
