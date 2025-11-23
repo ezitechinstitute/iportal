@@ -1,6 +1,7 @@
 const { connection } = require("../../config/connection");
-// const { createCanvas, loadImage } = require("@napi-rs/canvas");
-const {createCanvas, loadImage} = require('skia-canvas');
+const PImage = require('pureimage');
+const { PassThrough } = require('stream');
+const fs = require('fs');
 const QrCode = require("qrcode");
 const path = require("path");
 
@@ -182,11 +183,14 @@ const GetCertificate = async (req, res) => {
     // Certificate
 
     const verificationUrl = `https://ezitech.org/internship/verification/${data.id}`;
-    const qrCodeData = await QrCode.toDataURL(verificationUrl);
-    // Load certificate background
-    const background = await loadImage(template);
-    const canvas = createCanvas(background.width, background.height);
-    const ctx = canvas.getContext("2d");
+    // generate QR code as buffer
+    const qrBuffer = await QrCode.toBuffer(verificationUrl);
+
+    // Load certificate background using pureimage (decode PNG stream)
+    const bgStream = fs.createReadStream(template);
+    const background = await PImage.decodePNGFromStream(bgStream);
+    const canvas = PImage.make(background.width, background.height);
+    const ctx = canvas.getContext('2d');
 
     // Draw background (default content already printed)
     ctx.drawImage(background, 0, 0);
@@ -319,7 +323,10 @@ const GetCertificate = async (req, res) => {
     ctx.fillText(designation, x, underlineY + 25); // adjust 25 for spacing
 
     // Load and draw QR code
-    const qrImage = await loadImage(qrCodeData);
+    // decode QR buffer into image usable by pureimage
+    const qrStream = new PassThrough();
+    qrStream.end(qrBuffer);
+    const qrImage = await PImage.decodePNGFromStream(qrStream);
 
     const qrSize = 180;
 
@@ -341,7 +348,7 @@ const GetCertificate = async (req, res) => {
       "Content-Disposition",
       `attachment; filename=${data.name}_certificate.png`
     );
-    canvas.pngStream().pipe(res);
+    await PImage.encodePNGToStream(canvas, res);
 
     // res.json({
     //   success: true,
