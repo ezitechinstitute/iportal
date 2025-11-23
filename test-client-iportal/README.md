@@ -68,3 +68,37 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## RTK Query / Interns pagination (added)
+
+This project now uses RTK Query to fetch paginated interns for the interns grid component.
+
+- API slice: `src/services/internsApi.js` (uses baseUrl `/api` by default)
+- Store: `src/app/store.js` (RTK store with `internsApi` reducer + middleware)
+- Component: `src/components/interns-components/OurInterns/InternsGrid.jsx` uses `useGetInternsQuery({ page, limit })`.
+
+Quick run notes:
+
+1. Start your backend so the frontend can reach the interns endpoint. The frontend expects a paginated endpoint at:
+
+```
+GET /api/interns?page=<number>&limit=<number>
+```
+
+2. Common response shapes supported (RTK slice will normalize):
+
+- { data: [...], total, page, limit }
+- { items: [...], total, page, limit }
+- an array of intern objects (will be treated as a single page)
+
+3. Start the frontend:
+
+```bash
+cd test-client-iportal
+npm install   # if needed
+npm start
+```
+
+4. If your backend runs on a different origin or path, update `baseUrl` in `src/services/internsApi.js` (for example `http://localhost:5000`).
+
+If you want, I can add a mock fallback so the grid shows data even when the backend is offline — tell me and I'll add a small mock provider.

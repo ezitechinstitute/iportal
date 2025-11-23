@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Trainee Performance Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a81368914c.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="performance.css">
+</head>
+<body>
+
+  <div class="dashboard">
+    <header class="header">
+      <div class="header-left">
+        <div class="company-block">
+        
+           <div class="Company_logo">
+<a href="profile.html"><i class="fa-solid fa-arrow-left" style="color: #073b5b;"></i></a>
+      <img src="ezitech.png" alt="Ezitech Logo">
+    </div>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <h1 class="dashboard-title">TRAINEE PERFORMANCE DASHBOARD</h1>
+      </div>
+
+    <div class="top-right">
+          <div class="top-user">
+            <div class="top-user-text">
+              <div class="top-user-name">Charles Deo</div>
+              <div class="top-user-sub muted">Log out</div>
+            </div>
+            <img class="top-avatar" src="intern3.jpg" alt="user">
+          </div>
+        </div>
+    </header>
+
+    <section class="cards-row">
+     <div class="left-avatar">
+  <img src="intern3.jpg" alt="Profile Photo">
+</div>
+
+
+      <div class="metrics">
+        <div class="metric-card">
+          <div class="metric-title">Competency Assessment</div>
+          <div class="progress" data-progress="80">
+            <div class="progress-inner">80.0%</div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-title">Supervisor's Feedback</div>
+          <div class="progress" data-progress="80">
+            <div class="progress-inner">80.0%</div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-title">Average Performance</div>
+          <div class="progress" data-progress="80">
+            <div class="progress-inner">80.0%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-summary">
+        <div class="summary-box">
+          <div class="summary-number">3</div>
+          <div class="summary-label">Training Duration (Months)</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="table-section">
+      <table class="trainee-table">
+        <thead>
+          <tr>
+            <th>Trainee Name</th>
+            <th>Employee ID</th>
+            <th>Training Program</th>
+            <th>Training Start Date</th>
+            <th>Training End Date</th>
+            <th>Training Duration (Days)</th>
+            <th>Training Score (Out of 100)</th>
+            <th>Completion Status</th>
+          </tr>
+        </thead>
+
+        
+        <tbody>
+          <tr>
+            <td class="trainee-name">Ali Raza</td>
+            <td>90123</td>
+            <td>Frontend Developer</td>
+            <td>2024-07-15</td>
+            <td>2024-08-15</td>
+            <td class="num">80</td>
+            <td class="num">95</td>
+            <td><span class="status completed">Completed</span></td>
+          </tr>
+        </tbody>
+         <tbody>
+          <tr>
+            <td class="trainee-name">Usama Javid</td>
+            <td>90123</td>
+            <td>Full Stack Web Developer</td>
+            <td>2024-07-15</td>
+            <td>2024-08-15</td>
+            <td class="num">52</td>
+            <td class="num">90</td>
+            <td><span class="status completed">Completed</span></td>
+          </tr>
+        </tbody>
+
+         <tbody>
+          <tr>
+            <td class="trainee-name">Kashmala Khan</td>
+            <td>90123</td>
+            <td>Mern Stack Developer</td>
+            <td>2024-07-15</td>
+            <td>2024-08-15</td>
+            <td class="num">32</td>
+            <td class="num">80</td>
+            <td><span class="status completed">Completed</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer class="footer-note">
+    </footer>
+  </div>
+
+  <script>
+    document.querySelectorAll('.progress').forEach(function(el){
+      const p = Number(el.getAttribute('data-progress')) || 0;
+      const pc = Math.max(0, Math.min(100, p));
+      el.style.setProperty('--p', pc + 'deg');
+      const inner = el.querySelector('.progress-inner');
+      if(inner) inner.textContent = pc.toFixed(1) + '%';
+    });
+  </script>
+</body>
+</html>

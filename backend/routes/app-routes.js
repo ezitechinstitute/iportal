@@ -6,6 +6,7 @@ const {
   GetInternImage,
   GetInternPost,
 } = require("../controller/intern/interns-controller");
+const { GetPublicInterns } = require("../controller/intern/get-interns-public");
 const {
   GetOfferLetterRequest,
   InsertOfferLetterRequest,
@@ -327,6 +328,11 @@ const {
   UploadVideo,
 } = require("../controller/video-feedback/upload.controller");
 const GetCertificate = require("../controller/intern/get-certificate");
+const {
+  GetVideosFeedBack,
+  ApprovedFeedBack,
+  RejectFeedBack,
+} = require("../controller/hr/get-videos.controller");
 
 const dotenv = require("dotenv").config();
 const router = express.Router();
@@ -379,6 +385,8 @@ router.post("/register-inters", RegisterInterns);
 router.get("/get-reg-uni", GetRegisterUni);
 router.get("/get-int-image", GetInternImage);
 router.get("/get-int-post", GetInternPost);
+// Public paginated interns endpoint (used by frontend)
+router.get('/api/interns', GetPublicInterns);
 // router.post("/verification-code", SendVerificationCode); change this in registration form also send code from frontend remove
 router.post("/intern-auth", InternAuth);
 router.post("/intern-forget-password", ForgotInternPassword);
@@ -663,6 +671,9 @@ router.get("/get-sup-withdraw-req", verifyToken, GetSupWithdrawReq);
 // Video Feedback
 router.post("/upload-video", upload.single("video"), UploadVideo);
 router.get("/get-certificate/:email", GetCertificate);
+router.get("/get-videos-feedback", GetVideosFeedBack);
+router.put("/approved-feedback/:id", ApprovedFeedBack);
+router.put("/rejected-feedback/:id", RejectFeedBack);
 
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);

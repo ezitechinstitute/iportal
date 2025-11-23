@@ -24,6 +24,8 @@ import BirthdayWisher from "./components/interns-components/Birthday_wisher/Birt
 import Supervisor_compliant from "./components/interns-components/Feedback/Supervisor_compaliant";
 import Manager_compliant from "./components/interns-components/Feedback/Manager_compliant";
 import { GetCertificate } from "./components/GetCertificate";
+import { InternsGrid } from "./components/interns-components/OurInterns/InternsGrid";
+import { InternProfile } from "./components/interns-components/OurInterns/InternProfile";
 
 function App() {
   return (
@@ -55,6 +57,10 @@ function App() {
           <Route path="/Intern-Birthday-Wisher" element={<BirthdayWisher/>}/>
           <Route path="/supervisor-complaint" element={<Supervisor_compliant/>}/>
           <Route path="/manager-complaint" element={<Manager_compliant/>}/>
+          <Route path="/our-interns" element={<InternsGrid/>}/>
+          <Route path="/public-profile" element={<InternProfile/>}/>
+
+
 
         </Routes>
       </BrowserRouter>

@@ -304,7 +304,7 @@ const GetCertificate = async (req, res) => {
     const nameWidth = ctx.measureText(name).width;
 
     // Draw underline (a little below the name)
-    const underlineY = z + 10; // adjust spacing below the name
+    const underlineY = z + 15; // adjust spacing below the name
     ctx.beginPath();
     ctx.moveTo(x - nameWidth / 2, underlineY);
     ctx.lineTo(x + nameWidth / 2, underlineY);

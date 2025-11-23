@@ -1,10 +1,11 @@
 {
   "files": {
-    "main.css": "/static/css/main.093030f2.css",
-    "main.js": "/static/js/main.993874d2.js",
+    "main.css": "/static/css/main.d3009e24.css",
+    "main.js": "/static/js/main.d995f015.js",
     "static/js/977.5f02e3d1.chunk.js": "/static/js/977.5f02e3d1.chunk.js",
     "static/js/732.e5525091.chunk.js": "/static/js/732.e5525091.chunk.js",
     "static/js/453.10b8bd7b.chunk.js": "/static/js/453.10b8bd7b.chunk.js",
+    "static/media/interns1.jpg": "/static/media/interns1.99f6f26c9f6f8cf45570.jpg",
     "static/media/welcome_post.png": "/static/media/welcome_post.99f56a6774fd72f264a5.png",
     "static/media/logo19.png": "/static/media/logo19.4ff8eab513df37f9c0ce.png",
     "static/media/logo11.png": "/static/media/logo11.b49f3503e033f44a0681.png",
@@ -19,16 +20,17 @@
     "static/media/logo16.png": "/static/media/logo16.d23941dc5808f3e9f471.png",
     "static/media/logo17.png": "/static/media/logo17.cde71d950818d0442ac2.png",
     "static/media/offer_letter.jpg": "/static/media/offer_letter.1893bb7e268a92c207f3.jpg",
+    "static/media/ezitech.png": "/static/media/ezitech.06752b7b6a160e7495ca.png",
     "static/media/logo21.png": "/static/media/logo21.00e62f40478dbd872781.png",
     "index.html": "/index.html",
-    "main.093030f2.css.map": "/static/css/main.093030f2.css.map",
-    "main.993874d2.js.map": "/static/js/main.993874d2.js.map",
+    "main.d3009e24.css.map": "/static/css/main.d3009e24.css.map",
+    "main.d995f015.js.map": "/static/js/main.d995f015.js.map",
     "977.5f02e3d1.chunk.js.map": "/static/js/977.5f02e3d1.chunk.js.map",
     "732.e5525091.chunk.js.map": "/static/js/732.e5525091.chunk.js.map",
     "453.10b8bd7b.chunk.js.map": "/static/js/453.10b8bd7b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.093030f2.css",
-    "static/js/main.993874d2.js"
+    "static/css/main.d3009e24.css",
+    "static/js/main.d995f015.js"
   ]
 }

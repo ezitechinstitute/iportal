@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Profile Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="profile.css" />
+  </head>
+  <body>
+    <main class="main">
+      <header class="topbar">
+        <div class="logo">
+          <img src="ezitech.png" alt="Ezitech Logo" />
+        </div>
+        <div class="search-box">
+          <input type="search" placeholder="Search" />
+        </div>
+        <div class="top-right">
+          <div class="top-user">
+            <div class="top-user-text">
+              <div class="top-user-name">Charles Deo</div>
+              <div class="top-user-sub muted">
+                <a href="index.html">Log out</a>
+              </div>
+            </div>
+            <img class="top-avatar" src="intern3.jpg" alt="user" />
+          </div>
+        </div>
+      </header>
+
+      <section class="profile-card">
+        <div class="cover" style="background-image: url('interns1.jpg')">
+          <div class="cover-overlay"></div>
+        </div>
+
+        <div class="profile-strip">
+          <div class="avatar">
+            <img src="intern3.jpg" alt="avatar" />
+          </div>
+
+          <div class="profile-info">
+            <h1 class="name">
+              Charles Deo
+              <img
+                src="verified_emoji_64.png"
+                alt="verified"
+                class="verified-icon"
+              />
+            </h1>
+            <p class="role muted">Mern Stack Developer</p>
+          </div>
+
+          <div class="profile-actions">
+            <button class="btn ghost">💬</button>
+            <button
+              class="btn outline"
+              style="background: rgb(49, 112, 174); color: white"
+            >
+              Go to Linkdin Profile
+            </button>
+          </div>
+        </div>
+      </section>
+      <section class="content-grid">
+        <aside class="left-col">
+          <div class="card about-card">
+            <h3>About</h3>
+            <ul class="info-list">
+              <li><i class="fa-solid fa-user icon"></i> Male</li>
+              <li>
+                <i class="fa-solid fa-cake-candles icon"></i> Born June 26, 1990
+              </li>
+              <li>
+                <i class="fa-solid fa-location-dot icon"></i> 2239 Hog Camp
+                Road, Schaumburg
+              </li>
+              <li>
+                <i class="fa-solid fa-envelope icon"></i> charles5182@gmail.com
+              </li>
+              <li><i class="fa-solid fa-phone icon"></i> 33757005467</li>
+            </ul>
+          </div>
+
+          <div class="card followers-card">
+            <h4>Followers</h4>
+            <div class="followers">
+              <img src="intern 2.jpg" alt="" />
+              <img src="intern 3.jpg" alt="" />
+              <img src="intern 2.jpg" alt="" />
+            </div>
+          </div>
+        </aside>
+
+        <main class="center-col">
+          <div class="tabs">
+            <button class="tab">
+              <a href="performance.html">Performance</a>
+            </button>
+            <button class="tab active">Projects</button>
+          </div>
+
+          <div class="post-card card">
+            <div class="post-header">
+              <img class="post-avatar" src="intern3.jpg" alt="" />
+              <div>
+                <div class="post-author">Charles Deo</div>
+                <div class="muted small">1m ago</div>
+              </div>
+              <div class="post-more muted">…</div>
+            </div>
+
+            <div class="post-body">
+              <p class="post-text">Frontend Web Development Project 01</p>
+              <img class="post-img" src="interns1.jpg" alt="post" />
+            </div>
+
+            <div class="post-footer">
+              <div class="engage">
+                <span
+                  ><button class="engage-item">
+                    <i
+                      class="fa-brands fa-github"
+                      style="color: white; font-size: 25px"
+                    ></i>
+                    <strong>GitHub</strong>
+                  </button></span
+                >
+                <span
+                  ><button class="engage-item">
+                    <i
+                      class="fa-solid fa-link"
+                      style="color: white; font-size: 20px"
+                    ></i
+                    ><strong>Live url</strong>
+                  </button></span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="post-card card">
+            <div class="post-header">
+              <img class="post-avatar" src="intern3.jpg" alt="" />
+              <div>
+                <div class="post-author">Charles Deo</div>
+                <div class="muted small">2h ago</div>
+              </div>
+              <div class="post-more muted">…</div>
+            </div>
+
+            <div class="post-body">
+              <p class="post-text">Frontend Web Development Project 02</p>
+              <img class="post-img" src="interns1.jpg" alt="post" />
+            </div>
+
+            <div class="post-footer">
+              <div class="engage">
+                <span
+                  ><button class="engage-item">
+                    <i
+                      class="fa-brands fa-github"
+                      style="color: white; font-size: 25px"
+                    ></i>
+                    <strong>GitHub</strong>
+                  </button></span
+                >
+                <span
+                  ><button class="engage-item">
+                    <i
+                      class="fa-solid fa-link"
+                      style="color: white; font-size: 20px"
+                    ></i
+                    ><strong>Live url</strong>
+                  </button></span
+                >
+              </div>
+            </div>
+          </div>
+        </main>
+
+        <aside class="right-col">
+          <div class="card suggestion-card">
+            <h4>You might know</h4>
+            <div class="suggestion">
+              <img
+                src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=100&auto=format&fit=crop&crop=faces"
+                alt=""
+              />
+              <div>
+                <strong>Eddie Lebonowsky</strong>
+                <div class="muted small">Mern Stack developer</div>
+              </div>
+            </div>
+
+            <div class="suggestion">
+              <img src="intern 3.jpg" alt="" />
+              <div>
+                <strong>Ashley Stone</strong>
+                <div class="muted small">Web Developer</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card active-card">
+            <h4>Active</h4>
+            <div class="suggestion">
+              <img
+                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&auto=format&fit=crop&crop=faces"
+                alt=""
+              />
+              <div>
+                <strong>Shelby Goode</strong>
+                <div class="muted small">Online</div>
+              </div>
+            </div>
+
+            <div class="suggestion">
+              <img
+                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&auto=format&fit=crop&crop=faces"
+                alt=""
+              />
+              <div>
+                <strong>Robert Baxins</strong>
+                <div class="muted small">Busy</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </body>
+</html>
