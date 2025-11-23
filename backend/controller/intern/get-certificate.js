@@ -1,14 +1,15 @@
 const { connection } = require("../../config/connection");
-const PImage = require('pureimage');
-const { PassThrough } = require('stream');
-const fs = require('fs');
+// use pureimage for server-side image generation
+const PImage = require("pureimage");
+const { PassThrough } = require("stream");
+const fs = require("fs");
 const QrCode = require("qrcode");
 const path = require("path");
 
 function ClaculateAverage(email) {
   return new Promise((resolve, reject) => {
     const sqlProject = `
-      SELECT IFNULL(SUM(obt_marks), 0) AS total_obt_marks, IFNULL(SUM(project_marks), 0) AS total_marks
+      SELECT SUM(obt_marks) AS total_obt_marks, SUM(project_marks) AS total_marks
       FROM (SELECT obt_marks, project_marks FROM intern_projects WHERE email = ? ORDER BY project_id DESC LIMIT 3) AS subquery
     `;
 
@@ -20,54 +21,35 @@ function ClaculateAverage(email) {
     `;
 
     connection.query(sqlProject, [email], (err, projectData) => {
-      if (err) return reject(err instanceof Error ? err : new Error(String(err)));
+      if (err) return reject("Error querying project data");
 
-      // Debug: log projectData so we can inspect returned sums
-      console.debug('ClaculateAverage - projectData:', JSON.stringify(projectData));
+      if (
+        !projectData ||
+        projectData.length === 0 ||
+        projectData[0].total_marks === 0
+      )
+        return reject("No valid project data found for the given intern.");
 
-      const totalObtMarks = (projectData && projectData[0]) ? (projectData[0].total_obt_marks || 0) : 0;
-      const totalMarks = (projectData && projectData[0]) ? (projectData[0].total_marks || 0) : 0;
-      const hasProjects = totalMarks > 0 && totalObtMarks >= 0;
+      const totalObtMarks = projectData[0].total_obt_marks || 0;
+      const totalMarks = projectData[0].total_marks || 1;
+      const internProjectAverage = (totalObtMarks / totalMarks) * 100;
 
       connection.query(sqlAttendance, [email], (err, attendanceData) => {
-        if (err) return reject(err instanceof Error ? err : new Error(String(err)));
+        if (err) return reject("Error querying attendance data");
 
-        // Debug: log attendanceData
-        console.debug('ClaculateAverage - attendanceData:', JSON.stringify(attendanceData));
+        const totalWorkingHours = attendanceData[0].total_working_hours || 0;
+        const totalDays = attendanceData[0].total_days || 1;
+        const expectedTotalHours = totalDays * 3;
+        let attendancePercentage =
+          (totalWorkingHours / expectedTotalHours) * 100;
 
-        const totalWorkingHours = (attendanceData && attendanceData[0]) ? (attendanceData[0].total_working_hours || 0) : 0;
-        const totalDays = (attendanceData && attendanceData[0]) ? (attendanceData[0].total_days || 0) : 0;
+        attendancePercentage = Math.min(attendancePercentage, 100);
 
-        // Avoid division by zero; if no days recorded, assume expectedTotalHours = 1 to avoid NaN
-        const expectedTotalHours = totalDays > 0 ? totalDays * 3 : 1;
-        let attendancePercentage = (totalWorkingHours / expectedTotalHours) * 100;
-        attendancePercentage = Math.min(Math.max(attendancePercentage, 0), 100);
+        let finalAverage =
+          internProjectAverage * 0.8 + attendancePercentage * 0.15;
 
-        // If intern has projects, compute weighted average (project 80% + attendance 15%)
-        // Otherwise, fall back to attendance-only average (100% of attendance)
-        let finalAverage;
-        if (hasProjects) {
-          const internProjectAverage = (totalObtMarks / totalMarks) * 100;
-          finalAverage = internProjectAverage * 0.8 + attendancePercentage * 0.15;
-        } else {
-          // No project marks found — use attendance as the deciding metric
-          finalAverage = attendancePercentage;
-        }
-
-        // Normalize and round
         finalAverage = Math.min(finalAverage, 100);
         finalAverage = parseFloat(finalAverage.toFixed(1));
-
-        // Debug: log intermediate values
-        console.debug('ClaculateAverage - computed', {
-          totalObtMarks,
-          totalMarks,
-          hasProjects,
-          totalWorkingHours,
-          totalDays,
-          attendancePercentage,
-          finalAverage,
-        });
 
         resolve(finalAverage);
       });
@@ -173,6 +155,7 @@ const GetCertificate = async (req, res) => {
 
   try {
     const avg = await ClaculateAverage(email);
+    console.log(avg);
 
     if (avg < 70) {
       return res.json({
@@ -184,81 +167,117 @@ const GetCertificate = async (req, res) => {
 
     const data = await getInternData(email);
 
-    if (
-      data.review === null ||
-      data.review === "Pending" ||
-      data.review === "Rejected"
-    ) {
-      return res.json({
-        success: false,
-        message: "You are not eligible to download certificate!!!",
-        review: data.review,
-      });
-    }
+    // if (
+    //   data.review === null ||
+    //   data.review === "Pending" ||
+    //   data.review === "Rejected"
+    // ) {
+    //   return res.json({
+    //     success: false,
+    //     message: "You are not eligible to download certificate!!!",
+    //     review: data.review,
+    //   });
+    // }
 
     const reward = AssignRewards(avg);
     const weeks = CalculateWeeks(parseInt(data.duration));
 
-    // Certificate
+    // Certificate (pureimage)
 
     const verificationUrl = `https://ezitech.org/internship/verification/${data.id}`;
+    // generate QR code as buffer
+    const qrBuffer = await QrCode.toBuffer(verificationUrl);
+
     // ensure template exists
     if (!fs.existsSync(template)) {
       throw new Error(`Certificate template not found: ${template}`);
     }
 
-    // generate QR code as buffer
-    let qrBuffer;
-    try {
-      qrBuffer = await QrCode.toBuffer(verificationUrl);
-    } catch (err) {
-      throw new Error('Failed to generate QR code: ' + (err && err.message ? err.message : String(err)));
+    // Load certificate background using pureimage
+    const bgStream = fs.createReadStream(template);
+    const background = await PImage.decodePNGFromStream(bgStream);
+    const canvas = PImage.make(background.width, background.height);
+    const ctx = canvas.getContext("2d");
+
+    // Register a TTF font if available so pureimage can draw text.
+    // Try repo font first, then common system fonts.
+    const candidateFonts = [
+      path.join(__dirname, "../../fonts/OpenSans-Regular.ttf"),
+      "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+      "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+      "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
+      "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf",
+    ];
+
+    let fontFamily = null;
+    for (const p of candidateFonts) {
+      try {
+        if (fs.existsSync(p)) {
+          const family = path.basename(p).split(/[.-]/)[0];
+          const reg = PImage.registerFont(p, family);
+          reg.loadSync();
+          fontFamily = family;
+          console.info("Registered font", p, "as", family);
+          break;
+        }
+      } catch (e) {
+        console.warn("Error registering font", p, e && e.message);
+      }
     }
 
-    // Load certificate background using pureimage (decode PNG stream)
-    const bgStream = fs.createReadStream(template);
-    let background;
-    try {
-      background = await PImage.decodePNGFromStream(bgStream);
-    } catch (err) {
-      throw new Error('Failed to load certificate template image: ' + (err && err.message ? err.message : String(err)));
+    if (!fontFamily) {
+      console.warn(
+        "No TTF font found. Text rendering may be blank. Put a TTF in backend/fonts/."
+      );
+      // set a fallback name so string templates won't error; pureimage will still not render without registration
+      fontFamily = "sans";
     }
-    const canvas = PImage.make(background.width, background.height);
-    const ctx = canvas.getContext('2d');
 
     // Draw background (default content already printed)
     ctx.drawImage(background, 0, 0);
 
+    // Debug info: template size and chosen font
+    console.info(
+      "Certificate template size:",
+      background.width,
+      "x",
+      background.height
+    );
+    console.info("Using font family for text:", fontFamily);
+
     // Add dynamic intern data
-    ctx.font = "40px Arial";
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
-    ctx.font = "bold 50px Arial";
+    ctx.font = `50px ${fontFamily}`;
 
     // Name
-    ctx.fillText(data.name, 1190, 600);
+    const nameX = canvas.width > 1190 ? 1190 : Math.floor(canvas.width / 2);
+    const nameY = 600;
+    console.debug("Drawing name:", data.name, "at", nameX, nameY);
+    ctx.fillText(data.name || "", nameX, nameY);
 
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
-    ctx.font = "bold 40px Arial";
+    ctx.font = `40px ${fontFamily}`;
 
     // Tech
-    ctx.fillText(`Internship in ${data.tech}`, 1190, 670);
+    const techX = canvas.width > 1190 ? 1190 : Math.floor(canvas.width / 2);
+    const techY = 670;
+    console.debug("Drawing tech:", data.tech, "at", techX, techY);
+    ctx.fillText(`Internship in ${data.tech || ""}`, techX, techY);
 
     //   Issed Date
-    ctx.font = "30px Arial";
+    ctx.font = `30px ${fontFamily}`;
     ctx.textAlign = "left";
-    //   ctx.textDecoration = "underline";
     ctx.fillText(`Issued Date: ${new Date().toLocaleDateString()}`, 275, 590);
 
-    ctx.font = "30px Arial";
+    ctx.font = `30px ${fontFamily}`;
     ctx.textAlign = "end";
     ctx.fillStyle = "black";
-    //   ctx.textDecoration = "underline";
     ctx.fillText(`ID: ${data.id}`, 2060, 550);
 
     //   cnic
-    ctx.font = "30px Arial";
+    ctx.font = `30px ${fontFamily}`;
     ctx.textAlign = "end";
     ctx.fillStyle = "black";
     ctx.fillText(`CNIC: ${data.cnic}`, 2100, 590);
@@ -281,7 +300,7 @@ const GetCertificate = async (req, res) => {
         / /g,
         "-"
       )}). During his/her period of internship, he/she was found attentive, punctual, and hard-working. Punctuality was one of his/her strengths, as he/she consistently arrived on time and met deadlines effectively. Additionally, his/her work ethic was strong, and he/she consistently delivered high-quality work.`;
-    ctx.font = "35px Arial";
+    ctx.font = `35px ${fontFamily}`;
     ctx.textAlign = "center";
     ctx.fillStyle = "black";
 
@@ -306,13 +325,13 @@ const GetCertificate = async (req, res) => {
     ctx.fillText(line, canvas.width / 2, y);
 
     // Duration
-    ctx.font = "30px Arial";
+    ctx.font = `30px ${fontFamily}`;
     ctx.textAlign = "left"; // 👈 important: text will always start from x
     ctx.fillStyle = "black";
     ctx.fillText(weeks, 425, 1012);
 
     //   Projects
-    ctx.font = "30px Arial";
+    ctx.font = `30px ${fontFamily}`;
     ctx.textAlign = "left"; // 👈 important: text will always start from x
     ctx.textBaseline = "middle";
     ctx.fillStyle = "black";
@@ -320,13 +339,13 @@ const GetCertificate = async (req, res) => {
     ctx.fillText(projectTitles, 425, 1043);
 
     // Rewards
-    ctx.font = "30px Arial";
+    ctx.font = `30px ${fontFamily}`;
     ctx.textAlign = "left"; // 👈 important: text will always start from x
     ctx.fillStyle = "black";
     ctx.fillText(`Certificate of ${reward} in Internship`, 425, 1085);
 
     // CEO name and designation
-    ctx.font = "30px Arial";
+    ctx.font = `30px ${fontFamily}`;
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -352,27 +371,21 @@ const GetCertificate = async (req, res) => {
     ctx.stroke();
 
     // Draw designation below the underline
-    ctx.font = "bold 25px Arial";
+    ctx.font = `bold 25px ${fontFamily}`;
 
     ctx.fillText(designation, x, underlineY + 25); // adjust 25 for spacing
 
     // Load and draw QR code
-    // decode QR buffer into image usable by pureimage
     const qrStream = new PassThrough();
     qrStream.end(qrBuffer);
-    let qrImage;
-    try {
-      qrImage = await PImage.decodePNGFromStream(qrStream);
-    } catch (err) {
-      throw new Error('Failed to decode QR image: ' + (err && err.message ? err.message : String(err)));
-    }
+    const qrImage = await PImage.decodePNGFromStream(qrStream);
 
     const qrSize = 180;
 
     ctx.drawImage(qrImage, 1800, 1225, qrSize, qrSize);
 
     // Verifier text
-    ctx.font = "20px Arial";
+    ctx.font = `20px ${fontFamily}`;
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
     ctx.fillText(
