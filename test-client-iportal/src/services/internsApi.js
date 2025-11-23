@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 // Assumes backend exposes paginated interns at GET /api/interns?page=<n>&limit=<m>
 export const internsApi = createApi({
   reducerPath: 'internsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://api.ezitech.org/api' }),
   endpoints: (builder) => ({
     getInterns: builder.query({
       // arg: { page, limit }

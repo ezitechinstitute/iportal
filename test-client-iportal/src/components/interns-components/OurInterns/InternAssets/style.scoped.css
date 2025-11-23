@@ -1,3 +1,54 @@
+/* Pagination styles */
+.our-interns .pagination-bar {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 6px;
+	margin: 24px 0 8px 0;
+	flex-wrap: wrap;
+}
+.our-interns .pagination-btn {
+	background: linear-gradient(90deg, #0a66c2 60%, #0b2540 100%);
+	color: #fff;
+	border: none;
+	border-radius: 22px;
+	padding: 7px 18px;
+	font-weight: 600;
+	font-size: 15px;
+	cursor: pointer;
+	box-shadow: 0 2px 8px rgba(10,102,194,0.08);
+	transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+.our-interns .pagination-btn:disabled {
+	background: #e6e6e6;
+	color: #b0b0b0;
+	cursor: not-allowed;
+	box-shadow: none;
+}
+.our-interns .pagination-num {
+	background: #fff;
+	color: #0a66c2;
+	border: 1.5px solid #0a66c2;
+	border-radius: 50%;
+	width: 36px;
+	height: 36px;
+	font-size: 15px;
+	font-weight: 600;
+	cursor: pointer;
+	margin: 0 2px;
+	transition: background 0.18s, color 0.18s, border 0.18s;
+}
+.our-interns .pagination-num.active,
+.our-interns .pagination-num:disabled {
+	background: #0a66c2;
+	color: #fff;
+	border: 1.5px solid #0a66c2;
+	cursor: default;
+}
+.our-interns .pagination-num:hover:not(:disabled):not(.active) {
+	background: #e6f0fa;
+	color: #0a66c2;
+}
 /* Scoped interns stylesheet (scoped copy) - safe replacement */
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif}
 :root{--card-bg:#fff;--muted:#6b6b6b;--accent:#0a66c2;--border:#e6e6e6;--shadow:0 2px 8px rgba(0,0,0,0.08)}
