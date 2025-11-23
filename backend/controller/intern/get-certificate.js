@@ -20,7 +20,7 @@ function ClaculateAverage(email) {
     `;
 
     connection.query(sqlProject, [email], (err, projectData) => {
-      if (err) return reject("Error querying project data");
+      if (err) return reject(err instanceof Error ? err : new Error(String(err)));
 
       // Debug: log projectData so we can inspect returned sums
       console.debug('ClaculateAverage - projectData:', JSON.stringify(projectData));
@@ -30,7 +30,7 @@ function ClaculateAverage(email) {
       const hasProjects = totalMarks > 0 && totalObtMarks >= 0;
 
       connection.query(sqlAttendance, [email], (err, attendanceData) => {
-        if (err) return reject("Error querying attendance data");
+        if (err) return reject(err instanceof Error ? err : new Error(String(err)));
 
         // Debug: log attendanceData
         console.debug('ClaculateAverage - attendanceData:', JSON.stringify(attendanceData));
@@ -202,12 +202,27 @@ const GetCertificate = async (req, res) => {
     // Certificate
 
     const verificationUrl = `https://ezitech.org/internship/verification/${data.id}`;
+    // ensure template exists
+    if (!fs.existsSync(template)) {
+      throw new Error(`Certificate template not found: ${template}`);
+    }
+
     // generate QR code as buffer
-    const qrBuffer = await QrCode.toBuffer(verificationUrl);
+    let qrBuffer;
+    try {
+      qrBuffer = await QrCode.toBuffer(verificationUrl);
+    } catch (err) {
+      throw new Error('Failed to generate QR code: ' + (err && err.message ? err.message : String(err)));
+    }
 
     // Load certificate background using pureimage (decode PNG stream)
     const bgStream = fs.createReadStream(template);
-    const background = await PImage.decodePNGFromStream(bgStream);
+    let background;
+    try {
+      background = await PImage.decodePNGFromStream(bgStream);
+    } catch (err) {
+      throw new Error('Failed to load certificate template image: ' + (err && err.message ? err.message : String(err)));
+    }
     const canvas = PImage.make(background.width, background.height);
     const ctx = canvas.getContext('2d');
 
@@ -345,7 +360,12 @@ const GetCertificate = async (req, res) => {
     // decode QR buffer into image usable by pureimage
     const qrStream = new PassThrough();
     qrStream.end(qrBuffer);
-    const qrImage = await PImage.decodePNGFromStream(qrStream);
+    let qrImage;
+    try {
+      qrImage = await PImage.decodePNGFromStream(qrStream);
+    } catch (err) {
+      throw new Error('Failed to decode QR image: ' + (err && err.message ? err.message : String(err)));
+    }
 
     const qrSize = 180;
 
