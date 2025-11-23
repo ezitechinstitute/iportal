@@ -8,7 +8,7 @@ const path = require("path");
 function ClaculateAverage(email) {
   return new Promise((resolve, reject) => {
     const sqlProject = `
-      SELECT SUM(obt_marks) AS total_obt_marks, SUM(project_marks) AS total_marks
+      SELECT IFNULL(SUM(obt_marks), 0) AS total_obt_marks, IFNULL(SUM(project_marks), 0) AS total_marks
       FROM (SELECT obt_marks, project_marks FROM intern_projects WHERE email = ? ORDER BY project_id DESC LIMIT 3) AS subquery
     `;
 
@@ -22,33 +22,52 @@ function ClaculateAverage(email) {
     connection.query(sqlProject, [email], (err, projectData) => {
       if (err) return reject("Error querying project data");
 
-      if (
-        !projectData ||
-        projectData.length === 0 ||
-        projectData[0].total_marks === 0
-      )
-        return reject("No valid project data found for the given intern.");
+      // Debug: log projectData so we can inspect returned sums
+      console.debug('ClaculateAverage - projectData:', JSON.stringify(projectData));
 
-      const totalObtMarks = projectData[0].total_obt_marks || 0;
-      const totalMarks = projectData[0].total_marks || 1;
-      const internProjectAverage = (totalObtMarks / totalMarks) * 100;
+      const totalObtMarks = (projectData && projectData[0]) ? (projectData[0].total_obt_marks || 0) : 0;
+      const totalMarks = (projectData && projectData[0]) ? (projectData[0].total_marks || 0) : 0;
+      const hasProjects = totalMarks > 0 && totalObtMarks >= 0;
 
       connection.query(sqlAttendance, [email], (err, attendanceData) => {
         if (err) return reject("Error querying attendance data");
 
-        const totalWorkingHours = attendanceData[0].total_working_hours || 0;
-        const totalDays = attendanceData[0].total_days || 1;
-        const expectedTotalHours = totalDays * 3;
-        let attendancePercentage =
-          (totalWorkingHours / expectedTotalHours) * 100;
+        // Debug: log attendanceData
+        console.debug('ClaculateAverage - attendanceData:', JSON.stringify(attendanceData));
 
-        attendancePercentage = Math.min(attendancePercentage, 100);
+        const totalWorkingHours = (attendanceData && attendanceData[0]) ? (attendanceData[0].total_working_hours || 0) : 0;
+        const totalDays = (attendanceData && attendanceData[0]) ? (attendanceData[0].total_days || 0) : 0;
 
-        let finalAverage =
-          internProjectAverage * 0.8 + attendancePercentage * 0.15;
+        // Avoid division by zero; if no days recorded, assume expectedTotalHours = 1 to avoid NaN
+        const expectedTotalHours = totalDays > 0 ? totalDays * 3 : 1;
+        let attendancePercentage = (totalWorkingHours / expectedTotalHours) * 100;
+        attendancePercentage = Math.min(Math.max(attendancePercentage, 0), 100);
 
+        // If intern has projects, compute weighted average (project 80% + attendance 15%)
+        // Otherwise, fall back to attendance-only average (100% of attendance)
+        let finalAverage;
+        if (hasProjects) {
+          const internProjectAverage = (totalObtMarks / totalMarks) * 100;
+          finalAverage = internProjectAverage * 0.8 + attendancePercentage * 0.15;
+        } else {
+          // No project marks found — use attendance as the deciding metric
+          finalAverage = attendancePercentage;
+        }
+
+        // Normalize and round
         finalAverage = Math.min(finalAverage, 100);
         finalAverage = parseFloat(finalAverage.toFixed(1));
+
+        // Debug: log intermediate values
+        console.debug('ClaculateAverage - computed', {
+          totalObtMarks,
+          totalMarks,
+          hasProjects,
+          totalWorkingHours,
+          totalDays,
+          attendancePercentage,
+          finalAverage,
+        });
 
         resolve(finalAverage);
       });
