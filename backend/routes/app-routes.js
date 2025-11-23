@@ -670,7 +670,7 @@ router.get("/get-sup-withdraw-req", verifyToken, GetSupWithdrawReq);
 
 // Video Feedback
 router.post("/upload-video", upload.single("video"), UploadVideo);
-// router.get("/get-certificate/:email", GetCertificate);
+router.get("/get-certificate/:email", GetCertificate);
 router.get("/get-videos-feedback", GetVideosFeedBack);
 router.put("/approved-feedback/:id", ApprovedFeedBack);
 router.put("/rejected-feedback/:id", RejectFeedBack);
