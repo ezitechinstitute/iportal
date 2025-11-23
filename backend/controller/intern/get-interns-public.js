@@ -1,4 +1,5 @@
 const { connection } = require("../../config/connection");
+console.log('[DEBUG] get-interns-public.js loaded');
 
 /**
  * Public endpoint to return paginated interns.
@@ -6,6 +7,7 @@ const { connection } = require("../../config/connection");
  * Response: { data: [...], total, page, limit }
  */
 const GetPublicInterns = (req, res) => {
+  console.log('[DEBUG] GetPublicInterns called', req.query);
   const page = parseInt(req.query.page, 10) || 1;
   const limit = parseInt(req.query.limit, 10) || 10;
   const offset = (page - 1) * limit;

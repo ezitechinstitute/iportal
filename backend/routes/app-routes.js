@@ -677,4 +677,12 @@ router.put("/rejected-feedback/:id", RejectFeedBack);
 
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);
+// Debug/test endpoint to verify router is working
+router.get('/api/interns-test', (req, res) => {
+  res.json({ ok: true, msg: 'Router is working' });
+});
+
+// Public paginated interns endpoint (used by frontend)
+router.get('/api/interns', GetPublicInterns);
+
 module.exports = router;
