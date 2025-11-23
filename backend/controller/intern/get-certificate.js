@@ -1,5 +1,5 @@
 const { connection } = require("../../config/connection");
-const { createCanvas, loadImage } = require("canvas");
+const { createCanvas, loadImage } = require("@napi-rs/canvas");
 const QrCode = require("qrcode");
 const path = require("path");
 
