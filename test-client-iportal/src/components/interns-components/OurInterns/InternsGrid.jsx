@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./InternAssets/style.scoped.css";
 import logo from "./InternAssets/ezitech.png";
 import { useGetInternsQuery } from "../../../services/internsApi";
+import { InternFooter } from "./InternFooter";
 
 // Inline SVG fallback avatar (small, no external file needed)
 const FALLBACK_AVATAR = `data:image/svg+xml;utf8,${encodeURIComponent(
@@ -20,15 +21,15 @@ export const InternsGrid = () => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           const card = entry.target;
-          const cover = card.querySelector('.cover');
-          const img = card.querySelector('img[data-src]');
+          const cover = card.querySelector(".cover");
+          const img = card.querySelector("img[data-src]");
           try {
             if (cover) {
-              const coverUrl = cover.getAttribute('data-cover');
+              const coverUrl = cover.getAttribute("data-cover");
               if (coverUrl) cover.style.backgroundImage = `url(${coverUrl})`;
             }
             if (img) {
-              const src = img.getAttribute('data-src');
+              const src = img.getAttribute("data-src");
               if (src) img.src = src;
             }
           } catch (err) {
@@ -37,10 +38,10 @@ export const InternsGrid = () => {
           obs.unobserve(card);
         });
       },
-      { rootMargin: '200px 0px', threshold: 0.01 }
+      { rootMargin: "200px 0px", threshold: 0.01 }
     );
 
-    const cards = document.querySelectorAll('.our-interns .card');
+    const cards = document.querySelectorAll(".our-interns .card");
     cards.forEach((c) => io.observe(c));
     return () => io.disconnect();
   }, [data]);
@@ -86,7 +87,9 @@ export const InternsGrid = () => {
                             className="cover"
                             data-cover={intern.cover || ""}
                             style={{
-                              backgroundImage: intern.cover ? "none" : `url(${FALLBACK_AVATAR})`,
+                              backgroundImage: intern.cover
+                                ? "none"
+                                : `url(${FALLBACK_AVATAR})`,
                             }}
                           ></div>
                           <div className="avatar-wrap">
@@ -163,6 +166,8 @@ export const InternsGrid = () => {
           </div>
         </section>
       </div>
+
+      <InternFooter />
     </>
   );
 };
