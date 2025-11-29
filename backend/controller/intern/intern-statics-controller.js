@@ -154,12 +154,10 @@ const GetInternAverage = (req, res) => {
     connection.query(sqlAttendance, [id], (err, attendanceData) => {
       if (err) {
         console.error("Error querying attendance data:", err);
-        return res
-          .status(500)
-          .json({
-            message: "Error querying attendance data",
-            error: err.message,
-          });
+        return res.status(500).json({
+          message: "Error querying attendance data",
+          error: err.message,
+        });
       }
 
       const totalWorkingHours = attendanceData[0].total_working_hours || 0;

@@ -184,7 +184,7 @@ const GetCertificate = async (req, res) => {
 
     // Certificate (pureimage)
 
-    const verificationUrl = `https://ezitech.org/internship/verification/${data.id}`;
+    const verificationUrl = `https://interns.ezitech.org/public-profile/${encodeURIComponent(data.id)}`;
     // generate QR code as buffer
     const qrBuffer = await QrCode.toBuffer(verificationUrl);
 

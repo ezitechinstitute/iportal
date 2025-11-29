@@ -6,7 +6,12 @@ const {
   GetInternImage,
   GetInternPost,
 } = require("../controller/intern/interns-controller");
-const { GetPublicInterns } = require("../controller/intern/get-interns-public");
+const {
+  GetPublicInterns,
+  GetPublicProfile,
+  GetPublicProfileProjects,
+  GetPublicProfilePerformance,
+} = require("../controller/intern/get-interns-public");
 const {
   GetOfferLetterRequest,
   InsertOfferLetterRequest,
@@ -386,7 +391,7 @@ router.get("/get-reg-uni", GetRegisterUni);
 router.get("/get-int-image", GetInternImage);
 router.get("/get-int-post", GetInternPost);
 // Public paginated interns endpoint (used by frontend)
-router.get('/api/interns', GetPublicInterns);
+router.get("/api/interns", GetPublicInterns);
 // router.post("/verification-code", SendVerificationCode); change this in registration form also send code from frontend remove
 router.post("/intern-auth", InternAuth);
 router.post("/intern-forget-password", ForgotInternPassword);
@@ -678,11 +683,17 @@ router.put("/rejected-feedback/:id", RejectFeedBack);
 /* Testing Area */
 // router.get("/count-onsite", CountOnsite);
 // Debug/test endpoint to verify router is working
-router.get('/api/interns-test', (req, res) => {
-  res.json({ ok: true, msg: 'Router is working' });
+router.get("/api/interns-test", (req, res) => {
+  res.json({ ok: true, msg: "Router is working" });
 });
 
 // Public paginated interns endpoint (used by frontend)
-router.get('/api/interns', GetPublicInterns);
+router.get("/api/interns", GetPublicInterns);
+router.get("/api/public-profile/:eti_id", GetPublicProfile);
+router.get("/api/public-profile-projects/:eti_id", GetPublicProfileProjects);
+router.get(
+  "/api/public-profile-performance/:eti_id",
+  GetPublicProfilePerformance
+);
 
 module.exports = router;

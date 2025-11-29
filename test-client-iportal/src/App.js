@@ -58,7 +58,7 @@ function App() {
           <Route path="/supervisor-complaint" element={<Supervisor_compliant/>}/>
           <Route path="/manager-complaint" element={<Manager_compliant/>}/>
           <Route path="/our-interns" element={<InternsGrid/>}/>
-          <Route path="/public-profile" element={<InternProfile/>}/>
+          <Route path="/public-profile/:internId" element={<InternProfile/>}/>
 
 
 

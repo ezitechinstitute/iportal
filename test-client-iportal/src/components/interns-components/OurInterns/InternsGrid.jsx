@@ -3,6 +3,7 @@ import "./InternAssets/style.scoped.css";
 import logo from "./InternAssets/ezitech.png";
 import { useGetInternsQuery } from "../../../services/internsApi";
 import { InternFooter } from "./InternFooter";
+import { Link } from "react-router-dom";
 
 // Inline SVG fallback avatar (small, no external file needed)
 const FALLBACK_AVATAR = `data:image/svg+xml;utf8,${encodeURIComponent(
@@ -60,6 +61,7 @@ export const InternsGrid = () => {
             <h1>Certified Interns</h1>
           </div>
         </section>
+        <br />
 
         <section className="product">
           <div className="widget">
@@ -121,12 +123,16 @@ export const InternsGrid = () => {
                               {intern.technology || intern.title || ""}
                             </div>
                             <div className="spacer"></div>
-                            <a
+                            <Link
                               className="showprofile-btn"
-                              href={intern.profileUrl || "#"}
+                              to={
+                                `/public-profile/${encodeURIComponent(
+                                  intern.eti_id
+                                )}` || "#"
+                              }
                             >
                               View Profile
-                            </a>
+                            </Link>
                           </div>
                         </article>
                       ))}
