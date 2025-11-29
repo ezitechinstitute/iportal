@@ -69,7 +69,7 @@ export const InternProfile = () => {
 
             <div className="profile-strip">
               <div className="avatar">
-                <img src={internData?.avatar} alt="avatar" />
+                <img src={internData?.avatar} alt="avatar" style={{position: "relative"}}/>
               </div>
               <div className="profile-info">
                 <h1 className="name">

@@ -58,7 +58,7 @@ export const InternsGrid = () => {
 
         <section className="hero">
           <div className="overlay">
-            <h1>Certified Interns</h1>
+            <h1>Our Interns</h1>
           </div>
         </section>
         <br />
