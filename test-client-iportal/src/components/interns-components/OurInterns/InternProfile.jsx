@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import logo from "./InternAssets/ezitech.png";
 import interns1 from "./InternAssets/interns1.jpg";
 import verifiedEmoji from "./InternAssets/verified_emoji_64.png";
+import unverifiedEmoji from "./InternAssets/2026_Unverified.png";
 import {
   useGetPublicProfileProjectsQuery,
   useGetPublicProfileQuery,
@@ -68,9 +69,8 @@ export const InternProfile = () => {
 
             <div className="profile-strip">
               <div className="avatar">
-                <img src="intern3.jpg" alt="avatar" />
+                <img src={internData?.avatar} alt="avatar" />
               </div>
-
               <div className="profile-info">
                 <h1 className="name">
                   {internData?.name || "Intern Name"}
@@ -81,7 +81,11 @@ export const InternProfile = () => {
                       className="verified-icon"
                     />
                   ) : (
-                    ""
+                    <img
+                      src={unverifiedEmoji}
+                      alt="unverified"
+                      className="verified-icon"
+                    />
                   )}
                 </h1>
                 <p className="role muted">
@@ -258,7 +262,9 @@ export const InternProfile = () => {
                           <div className="perf-label">Attendance</div>
                         </div>
                         <div className="perf-item">
-                          <div className="perf-value">{scoresData?.performance}%</div>
+                          <div className="perf-value">
+                            {scoresData?.performance}%
+                          </div>
                           <div className="perf-label">Performance Score</div>
                         </div>
                         <div className="perf-item">
