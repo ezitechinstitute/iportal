@@ -29,7 +29,10 @@ function CalculateAverage(email) {
       const totalObtMarks = projectData[0].total_obt_marks ?? 0;
       const totalMarks = projectData[0].total_marks ?? 0;
 
-      if (totalMarks === 0) return reject("No valid project data found.");
+
+      
+
+      if (totalMarks === 0) return reject("No valid project data found.", totalMarks);
 
       const internProjectAverage = (totalObtMarks / totalMarks) * 100;
 
