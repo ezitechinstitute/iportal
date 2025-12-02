@@ -195,13 +195,26 @@ const GetCertificate = async (req, res) => {
     // Try repo font first, then common system fonts.
     // Register regular and bold fonts
     // backend/fonts/Open_Sans/static
-    registerFont(path.join(__dirname, "fonts/Open_Sans/static/OpenSans-Regular.ttf"), {
-      family: "OpenSans",
-    });
-    registerFont(path.join(__dirname, "fonts/Open_Sans/static/OpenSans-Bold.ttf"), {
-      family: "OpenSans",
-      weight: "bold",
-    });
+    // Paths to font files
+    const regularFontPath = path.join(
+      __dirname,
+      "fonts/Open_Sans/static/OpenSans-Regular.ttf"
+    );
+    const boldFontPath = path.join(
+      __dirname,
+      "fonts/Open_Sans/static/OpenSans-Bold.ttf"
+    );
+
+    // Register fonts with unique family names
+    PImage.registerFont(regularFontPath, "OpenSansRegular");
+    PImage.registerFont(boldFontPath, "OpenSansBold");
+
+    // Load fonts synchronously before use
+    const regularFont = PImage.loadFont(regularFontPath);
+    regularFont.loadSync();
+
+    const boldFont = PImage.loadFont(boldFontPath);
+    boldFont.loadSync();
     const candidateFonts = [
       path.join(__dirname, "../../fonts/OpenSans-Regular.ttf"),
       "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
