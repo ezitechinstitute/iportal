@@ -156,7 +156,7 @@ const GetCertificate = async (req, res) => {
   );
 
   try {
-    const avg = await ClaculateAverage(email);
+    const avg = await CalculateAverage(email);
     console.log(avg);
 
     if (avg < 70) {
