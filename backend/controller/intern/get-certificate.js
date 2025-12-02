@@ -6,11 +6,14 @@ const fs = require("fs");
 const QrCode = require("qrcode");
 const path = require("path");
 
-function ClaculateAverage(email) {
+function CalculateAverage(email) {
   return new Promise((resolve, reject) => {
     const sqlProject = `
       SELECT SUM(obt_marks) AS total_obt_marks, SUM(project_marks) AS total_marks
-      FROM (SELECT obt_marks, project_marks FROM intern_projects WHERE email = ? AND pstatus = 'Completed' ORDER BY project_id DESC LIMIT 3) AS subquery
+      FROM (SELECT obt_marks, project_marks 
+            FROM intern_projects 
+            WHERE email = ? AND pstatus = 'Completed' 
+            ORDER BY project_id DESC LIMIT 3) AS subquery
     `;
 
     const sqlAttendance = `
@@ -23,30 +26,29 @@ function ClaculateAverage(email) {
     connection.query(sqlProject, [email], (err, projectData) => {
       if (err) return reject("Error querying project data");
 
-      if (
-        !projectData ||
-        projectData.length === 0 ||
-        projectData[0].total_marks === 0
-      )
-        return reject("No valid project data found for the given intern.");
+      const totalObtMarks = projectData[0].total_obt_marks ?? 0;
+      const totalMarks = projectData[0].total_marks ?? 0;
 
-      const totalObtMarks = projectData[0].total_obt_marks || 0;
-      const totalMarks = projectData[0].total_marks || 1;
+      if (totalMarks === 0) return reject("No valid project data found.");
+
       const internProjectAverage = (totalObtMarks / totalMarks) * 100;
 
       connection.query(sqlAttendance, [email], (err, attendanceData) => {
         if (err) return reject("Error querying attendance data");
 
-        const totalWorkingHours = attendanceData[0].total_working_hours || 0;
-        const totalDays = attendanceData[0].total_days || 1;
+        const totalWorkingHours = attendanceData[0].total_working_hours ?? 0;
+        const totalDays = attendanceData[0].total_days ?? 0;
+
         const expectedTotalHours = totalDays * 3;
         let attendancePercentage =
-          (totalWorkingHours / expectedTotalHours) * 100;
+          expectedTotalHours > 0
+            ? (totalWorkingHours / expectedTotalHours) * 100
+            : 0;
 
         attendancePercentage = Math.min(attendancePercentage, 100);
 
         let finalAverage =
-          internProjectAverage * 0.8 + attendancePercentage * 0.15;
+          internProjectAverage * 0.8 + attendancePercentage * 0.2;
 
         finalAverage = Math.min(finalAverage, 100);
         finalAverage = parseFloat(finalAverage.toFixed(1));
