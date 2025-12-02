@@ -38,7 +38,7 @@ const GetPublicInterns = (req, res) => {
 const GetPublicProfile = (req, res) => {
   console.log("[DEBUG] GetPublicProfile called", req.params);
   const eti_id = req.params.eti_id;
-  const sql = `SELECT it.id, it.name, it.email, it.country, it.city, it.phone, it.gender, it.image as avatar, it.birth_date, it.technology, ia.eti_id, ia.int_status FROM intern_table it JOIN intern_accounts ia ON ia.email = it.email WHERE ia.eti_id = ? AND ia.int_status = 'Active'`;
+  const sql = `SELECT it.id, it.name, it.email, it.country, it.city, it.phone, it.gender, it.image as avatar, it.birth_date, it.technology, ia.eti_id, ia.int_status FROM intern_table it JOIN intern_accounts ia ON ia.email = it.email WHERE ia.eti_id = ? AND ia.int_status = 'Active' OR ia.int_status = 'Completed'`;
   connection.query(sql, [eti_id], (err, results) => {
     if (err) {
       console.error("Query error", err);
