@@ -6,13 +6,13 @@ const fs = require("fs");
 const QrCode = require("qrcode");
 const path = require("path");
 
-function CalculateAverage(email) {
+function CalculateAverage(id, email) {
   return new Promise((resolve, reject) => {
     const sqlProject = `
       SELECT SUM(obt_marks) AS total_obt_marks, SUM(project_marks) AS total_marks
       FROM (SELECT obt_marks, project_marks 
             FROM intern_projects 
-            WHERE email = ? AND pstatus = 'Completed' 
+            WHERE eti_id = ? AND pstatus = 'Completed' 
             ORDER BY project_id DESC LIMIT 3) AS subquery
     `;
 
@@ -23,16 +23,14 @@ function CalculateAverage(email) {
       WHERE email = ?
     `;
 
-    connection.query(sqlProject, [email], (err, projectData) => {
+    connection.query(sqlProject, [id], (err, projectData) => {
       if (err) return reject("Error querying project data");
 
       const totalObtMarks = projectData[0].total_obt_marks ?? 0;
       const totalMarks = projectData[0].total_marks ?? 0;
 
-
-      
-
-      if (totalMarks === 0) return reject("No valid project data found.", totalMarks);
+      if (totalMarks === 0)
+        return reject(`No valid project data found. ${totalMarks}`);
 
       const internProjectAverage = (totalObtMarks / totalMarks) * 100;
 
@@ -159,7 +157,9 @@ const GetCertificate = async (req, res) => {
   );
 
   try {
-    const avg = await CalculateAverage(email);
+    const data = await getInternData(email);
+
+    const avg = await CalculateAverage(data.id, data.email);
     console.log(avg);
 
     if (avg < 70) {
@@ -169,8 +169,6 @@ const GetCertificate = async (req, res) => {
         average: avg,
       });
     }
-
-    const data = await getInternData(email);
 
     const reward = AssignRewards(avg);
     const weeks = CalculateWeeks(parseInt(data.duration));
