@@ -303,6 +303,9 @@ const {
   CountReviewInterns,
   CountNonReviewInterns,
   UpdateReviewStatus,
+  ApproveFeedback,
+  DeleteFeedback,
+  checkVideoStatus,
 } = require("../controller/review/intern-review");
 
 //supervisor-intern-stats
@@ -380,10 +383,12 @@ router.post("/verify-code", VerifyCode);
 
 //intern-review
 router.get("/review-interns", GetReviewInterns);
-router.get("/non-review-interns", GetNonReviewInterns);
-router.get("/count-review-interns", CountReviewInterns);
-router.get("/count-non-review-interns", CountNonReviewInterns);
-router.put("/update-review-status", UpdateReviewStatus);
+router.get("/approved-status-feedback", GetNonReviewInterns);
+router.get("/count-pending-review", CountReviewInterns);
+router.get("/count-approved-review", CountNonReviewInterns);
+router.put("/approved-feedback/:id", ApproveFeedback);
+router.delete("/delete-feedback/:id", DeleteFeedback);
+router.get("/check-video-status/:eti_id", checkVideoStatus);
 
 /* Interns Endpoints */
 router.post("/register-inters", RegisterInterns);

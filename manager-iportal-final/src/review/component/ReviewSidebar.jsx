@@ -1,7 +1,15 @@
 import React, { useState } from "react";
-import {FiHome, FiUserCheck, FiUsers, FiPhone, FiClipboard, 
-          } from "react-icons/fi";
-         
+import { FaFireExtinguisher } from "react-icons/fa";
+import {
+  FiHome,
+  FiUserCheck,
+  FiUsers,
+  FiPhone,
+  FiClipboard,
+  FiUserX,
+  FiUserPlus,
+} from "react-icons/fi";
+
 import { Link, NavLink } from "react-router-dom";
 // import "../../styles/ManagerStyle.css";
 
@@ -84,23 +92,27 @@ export const ReviewSidebar = () => {
                 onClick={() => setActive("activeInterns")}
                 to={"/review-interns"}
               >
-                <FiUserCheck />
+                <FiUserPlus />
                 <span className="menu-title text-truncate" data-i18n="User">
-                  Review Interns
+                  New Feedbacks
                 </span>
               </NavLink>
             </li>
 
-            <li className={activeLink === "nonreviewinterns" ? "active" : "undefined"}>
+            <li
+              className={
+                activeLink === "nonreviewinterns" ? "active" : "undefined"
+              }
+            >
               <NavLink
                 className="d-flex align-items-center"
                 onClick={() => setActive("interns")}
                 id={"2"}
                 to="/non-review-interns"
               >
-                <FiUsers />
+               <FiUserCheck />
                 <span className="menu-item" data-i18n="eCommerce">
-                  Non-Review Interns
+                  Approved Feedbacks
                 </span>
               </NavLink>
             </li>

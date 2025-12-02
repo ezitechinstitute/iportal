@@ -12,8 +12,8 @@ export const GetCertificate = () => {
   const tech = sessionStorage.getItem("tech");
   const [average, setAverage] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [videoUploaded, setVideoUploaded] = useState(false);
-  const [approved, setApproved] = useState(false);
+  // const [videoUploaded, setVideoUploaded] = useState(false);
+  const [feedbackStatus, setFeedbackStatus] = useState("");
 
   const handleFile = async (e) => {
     const file = e.target.files[0];
@@ -31,18 +31,55 @@ export const GetCertificate = () => {
       formData.append("tech", tech);
       formData.append("video", file);
 
+      setLoading(true);
       const res = await axios.post(
-        "http://localhost:8088/upload-video",
+        "https://api.ezitech.org/upload-video",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
+      setLoading(false);
       alert(res.data.message);
+      window.location.reload();
     } catch (error) {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const fetchVideoStatus = async () => {
+      try {
+        const res = await axios.get(
+          `https://api.ezitech.org/check-video-status/${encodeURIComponent(id)}`
+        );
+
+        if (res.data) {
+          setFeedbackStatus(res.data.status);
+        }
+      } catch (err) {
+        console.error("Error fetching video status:", err);
+      }
+    };
+
+    const fetchProgress = async () => {
+      try {
+        const res = await axios.get("https://api.ezitech.org/get-int-avg", {
+          params: { id },
+        });
+
+        if (res.data) {
+          setAverage(res.data.final_average);
+        }
+      } catch (err) {
+        console.error("Error fetching progress data:", err);
+      }
+    };
+
+    fetchProgress();
+
+    fetchVideoStatus();
+  });
 
   return (
     <>
@@ -134,7 +171,6 @@ export const GetCertificate = () => {
                         dashboard. Once approved, you’ll be able to download
                         your certificate.
                       </p>
-
                       <h6
                         className="fw-bold mt-3 mb-2"
                         style={{ color: "#6E3AFF" }}
@@ -162,38 +198,59 @@ export const GetCertificate = () => {
                           <b>15–30 seconds</b>.
                         </li>
                       </ul>
-
-                      {!videoUploaded ? (
-                        <div className="mt-2">
-                          <label
-                            htmlFor="videoUpload"
-                            className="btn text-white"
-                            style={{
-                              backgroundColor: "#6E3AFF",
-                              cursor: "pointer",
-                            }}
-                          >
-                            <FiUploadCloud className="me-1" /> Upload Feedback
-                            Video
-                          </label>
-                          <input
-                            id="videoUpload"
-                            name="video"
-                            type="file"
-                            accept="video/*"
-                            style={{ display: "none" }}
-                            onChange={handleFile}
-                          />
-                        </div>
-                      ) : !approved ? (
+                      {/* {feedbackStatus === "Pending" && (
                         <p className="mt-2 mb-0 fw-bold text-warning">
                           ⏳ Your video has been submitted. Please wait for
                           manager approval.
                         </p>
-                      ) : (
+                      )}
+
+                      {feedbackStatus === "Approved" && (
                         <p className="mt-2 mb-0 fw-bold text-success">
                           ✅ Your video has been approved.
                         </p>
+                      )} */}
+
+                      {feedbackStatus === "Pending" ? (
+                        <p className="mt-2 mb-0 fw-bold text-warning">
+                          ⏳ Your video has been submitted. Please wait for
+                          manager approval.
+                        </p>
+                      ) : feedbackStatus === "Approved" ? (
+                        <p className="mt-2 mb-0 fw-bold text-success">
+                          ✅ Your video has been approved.
+                        </p>
+                      ) : (
+                        <>
+                          {loading ? (
+                            <>
+                              <p>Uploading video...</p>
+                            </>
+                          ) : (
+                            <div className="mt-2">
+                              <label
+                                htmlFor="videoUpload"
+                                className="btn text-white"
+                                style={{
+                                  backgroundColor: "#6E3AFF",
+                                  cursor: "pointer",
+                                }}
+                              >
+                                <FiUploadCloud className="me-1" /> Upload
+                                Feedback Video
+                              </label>
+
+                              <input
+                                id="videoUpload"
+                                name="video"
+                                type="file"
+                                accept="video/*"
+                                style={{ display: "none" }}
+                                onChange={handleFile}
+                              />
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
                   </div>
@@ -216,30 +273,39 @@ export const GetCertificate = () => {
                       </h4>
                     </div>
                     <div className="card-body">
-                      {average < 70 ? (
-                        <p className="fw-bold text-danger">
-                          ❌ You cannot download the certificate yet. Please
-                          complete at least 70% progress.
-                        </p>
-                      ) : !videoUploaded ? (
-                        <p className="fw-bold text-warning">
-                          ⚠️ Please upload your feedback video before
-                          downloading your certificate.
-                        </p>
-                      ) : !approved ? (
-                        <p className="fw-bold text-warning">
-                          ⏳ Your video is under review. You’ll be able to
-                          download your certificate once it’s approved by our
-                          manager.
-                        </p>
-                      ) : (
+                      {average > 70 && feedbackStatus === "Approved" ? (
+                        // ✅ Certificate download button
                         <button
                           className="btn text-white"
                           style={{ backgroundColor: "#6E3AFF" }}
-                          onClick={() => alert("Downloading certificate...")}
+                          onClick={() =>
+                            window.open(
+                              `https://api.ezitech.org/get-certificate/${email}`,
+                              "_blank"
+                            )
+                          }
                         >
                           Download Certificate
                         </button>
+                      ) : average < 70 &&
+                        (!feedbackStatus || feedbackStatus === "") ? (
+                        // ❌ User has low progress + video not uploaded
+                        <p className="fw-bold text-danger">
+                          ❌ You must complete at least 70% progress and upload
+                          your feedback video to unlock your certificate.
+                        </p>
+                      ) : feedbackStatus === "Pending" ? (
+                        // ⏳ Video uploaded but not approved yet
+                        <p className="fw-bold text-warning">
+                          ⏳ Your video is under review. You’ll be able to
+                          download your certificate once approved.
+                        </p>
+                      ) : (
+                        // ❌ Catch-all fallback message
+                        <p className="fw-bold text-danger">
+                          ❌ Please complete 70% progress and get your video
+                          approved.
+                        </p>
                       )}
                     </div>
                   </div>

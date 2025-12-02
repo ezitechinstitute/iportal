@@ -10,7 +10,7 @@ function ClaculateAverage(email) {
   return new Promise((resolve, reject) => {
     const sqlProject = `
       SELECT SUM(obt_marks) AS total_obt_marks, SUM(project_marks) AS total_marks
-      FROM (SELECT obt_marks, project_marks FROM intern_projects WHERE email = ? ORDER BY project_id DESC LIMIT 3) AS subquery
+      FROM (SELECT obt_marks, project_marks FROM intern_projects WHERE email = ? AND pstatus = 'Completed' ORDER BY project_id DESC LIMIT 3) AS subquery
     `;
 
     const sqlAttendance = `
@@ -167,24 +167,14 @@ const GetCertificate = async (req, res) => {
 
     const data = await getInternData(email);
 
-    // if (
-    //   data.review === null ||
-    //   data.review === "Pending" ||
-    //   data.review === "Rejected"
-    // ) {
-    //   return res.json({
-    //     success: false,
-    //     message: "You are not eligible to download certificate!!!",
-    //     review: data.review,
-    //   });
-    // }
-
     const reward = AssignRewards(avg);
     const weeks = CalculateWeeks(parseInt(data.duration));
 
     // Certificate (pureimage)
 
-    const verificationUrl = `https://interns.ezitech.org/public-profile/${encodeURIComponent(data.id)}`;
+    const verificationUrl = `https://interns.ezitech.org/public-profile/${encodeURIComponent(
+      data.id
+    )}`;
     // generate QR code as buffer
     const qrBuffer = await QrCode.toBuffer(verificationUrl);
 
@@ -361,8 +351,8 @@ const GetCertificate = async (req, res) => {
     // Measure name width for underline
     const nameWidth = ctx.measureText(name).width;
 
-    // Draw underline (a little below the name)
-    const underlineY = z + 15; // adjust spacing below the name
+    // Draw underline
+    const underlineY = z + 20; // slightly more spacing
     ctx.beginPath();
     ctx.moveTo(x - nameWidth / 2, underlineY);
     ctx.lineTo(x + nameWidth / 2, underlineY);
@@ -370,10 +360,10 @@ const GetCertificate = async (req, res) => {
     ctx.strokeStyle = "black";
     ctx.stroke();
 
-    // Draw designation below the underline
+    // Draw designation below underline
     ctx.font = `bold 25px ${fontFamily}`;
-
-    ctx.fillText(designation, x, underlineY + 25); // adjust 25 for spacing
+    ctx.textBaseline = "top"; // Essential fix
+    ctx.fillText(designation, x, underlineY + 35);
 
     // Load and draw QR code
     const qrStream = new PassThrough();

@@ -8,20 +8,19 @@ const GetReviewInterns = (req, res) => {
   const offset = (page - 1) * limit;
 
   // Get search term if provided
-  const searchTerm = req.query.search || '';
+  const searchTerm = req.query.search || "";
 
   // Base SQL query
   let sql = `
-    SELECT it.image, it.name, it.technology, it.email, it.join_date, it.phone, it.intern_type
-    FROM intern_table it 
-    JOIN intern_accounts ia 
-    ON it.email = ia.email 
-    WHERE ia.review = 'Review' AND ia.int_status = 'Active'
+    SELECT *
+    FROM video_feedback vf WHERE status = 'Pending'
   `;
 
   // Add search filter if search term exists
   if (searchTerm) {
-    sql += ` AND it.name LIKE '%${connection.escape(searchTerm).replace(/'/g, '')}%'`;
+    sql += ` AND vf.name LIKE '%${connection
+      .escape(searchTerm)
+      .replace(/'/g, "")}%'`;
   }
 
   // Add pagination
@@ -30,14 +29,15 @@ const GetReviewInterns = (req, res) => {
   // Query for total count (for pagination metadata)
   let countSql = `
     SELECT COUNT(*) as total
-    FROM intern_table it 
-    JOIN intern_accounts ia 
-    ON it.email = ia.email 
-    WHERE ia.review = 'Review' AND ia.int_status = 'Active'
+    FROM video_feedback vf 
+    
+    WHERE status = 'Pending'
   `;
 
   if (searchTerm) {
-    countSql += ` AND it.name LIKE '%${connection.escape(searchTerm).replace(/'/g, '')}%'`;
+    countSql += ` AND vf.name LIKE '%${connection
+      .escape(searchTerm)
+      .replace(/'/g, "")}%'`;
   }
 
   // Execute both queries
@@ -56,14 +56,14 @@ const GetReviewInterns = (req, res) => {
         return res.status(500).json({ error: "Database query failed" });
       }
 
-      const results = data.map(row => ({
-        image: row.image,
+      const results = data.map((row) => ({
+        id: row.id,
+        eti_id: row.eti_id,
         name: row.name,
-        technology: row.technology,
-        joinDate: row.join_date,
-        phone: row.phone,
-        internType: row.intern_type,
-        email: row.email
+        email: row.email,
+        technology: row.tech,
+        videoUrl: row.videoUrl,
+        status: row.status,
       }));
 
       return res.json({
@@ -72,8 +72,8 @@ const GetReviewInterns = (req, res) => {
           currentPage: page,
           totalPages: totalPages,
           totalItems: total,
-          itemsPerPage: limit
-        }
+          itemsPerPage: limit,
+        },
       });
     });
   });
@@ -87,20 +87,20 @@ const GetNonReviewInterns = (req, res) => {
   const offset = (page - 1) * limit;
 
   // Get search term if provided
-  const searchTerm = req.query.search || '';
+  const searchTerm = req.query.search || "";
 
   // Base SQL query
   let sql = `
-    SELECT it.image, it.name, it.email, it.technology, it.join_date, it.phone, it.intern_type
-    FROM intern_table it 
-    JOIN intern_accounts ia 
-    ON it.email = ia.email 
-    WHERE ia.review = 'Non-Review' AND ia.int_status = 'Active'
+    SELECT *
+    FROM video_feedback vf WHERE
+    vf.status = 'Approved'
   `;
 
   // Add search filter if search term exists
   if (searchTerm) {
-    sql += ` AND it.name LIKE '%${connection.escape(searchTerm).replace(/'/g, '')}%'`;
+    sql += ` AND vf.name LIKE '%${connection
+      .escape(searchTerm)
+      .replace(/'/g, "")}%'`;
   }
 
   // Add pagination
@@ -109,14 +109,13 @@ const GetNonReviewInterns = (req, res) => {
   // Query for total count (for pagination metadata)
   let countSql = `
     SELECT COUNT(*) as total
-    FROM intern_table it 
-    JOIN intern_accounts ia 
-    ON it.email = ia.email 
-    WHERE ia.review = 'Non-Review' AND ia.int_status = 'Active'
+    FROM video_feedback WHERE status = 'Approved'
   `;
 
   if (searchTerm) {
-    countSql += ` AND it.name LIKE '%${connection.escape(searchTerm).replace(/'/g, '')}%'`;
+    countSql += ` AND vf.name LIKE '%${connection
+      .escape(searchTerm)
+      .replace(/'/g, "")}%'`;
   }
 
   // Execute both queries
@@ -135,14 +134,14 @@ const GetNonReviewInterns = (req, res) => {
         return res.status(500).json({ error: "Database query failed" });
       }
 
-      const results = data.map(row => ({
-        image: row.image,
+      const results = data.map((row) => ({
+        id: row.id,
+        eti_id: row.eti_id,
         name: row.name,
-        technology: row.technology,
-        joinDate: row.join_date,
-        phone: row.phone,
-        internType: row.intern_type,
-        email: row.email
+        email: row.email,
+        technology: row.tech,
+        videoUrl: row.videoUrl,
+        status: row.status,
       }));
 
       return res.json({
@@ -151,8 +150,8 @@ const GetNonReviewInterns = (req, res) => {
           currentPage: page,
           totalPages: totalPages,
           totalItems: total,
-          itemsPerPage: limit
-        }
+          itemsPerPage: limit,
+        },
       });
     });
   });
@@ -161,10 +160,7 @@ const GetNonReviewInterns = (req, res) => {
 const CountReviewInterns = (req, res) => {
   const sql = `
     SELECT COUNT(*) AS totalReviewInterns
-    FROM intern_table it 
-    JOIN intern_accounts ia 
-    ON it.email = ia.email 
-    WHERE ia.review = 'Review' AND ia.int_status = 'Active'`;
+    FROM video_feedback WHERE status = 'Pending'`;
 
   connection.query(sql, (err, data) => {
     if (err) {
@@ -181,10 +177,8 @@ const CountReviewInterns = (req, res) => {
 const CountNonReviewInterns = (req, res) => {
   const sql = `
     SELECT COUNT(*) AS totalNonReviewInterns
-    FROM intern_table it 
-    JOIN intern_accounts ia 
-    ON it.email = ia.email 
-    WHERE ia.review = 'Non-Review' AND ia.int_status = 'Active'`;
+    FROM video_feedback
+    WHERE status = 'Approved'`;
 
   connection.query(sql, (err, data) => {
     if (err) {
@@ -197,38 +191,70 @@ const CountNonReviewInterns = (req, res) => {
   });
 };
 
-const UpdateReviewStatus = (req, res) => {
-    const { email, reviewStatus } = req.body;
-  
-    // Log the request body for debugging
-    console.log('Request body:', req.body);
-  
-    if (!email || !reviewStatus) {
-      return res.status(400).json({ error: "Email and reviewStatus are required" });
+// Update review status of an intern
+const ApproveFeedback = (req, res) => {
+  const { id } = req.params;
+
+  const sql = `
+    UPDATE video_feedback
+    SET status = 'Approved'
+    WHERE id = ?`;
+  connection.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Database query failed" });
     }
-  
-    const sql = `
-      UPDATE intern_accounts 
-      SET review = ?
-      WHERE email = ?`;
-  
-    connection.query(sql, [reviewStatus, email], (err, result) => {
-      if (err) {
-        console.error("Database error:", err);
-        return res.status(500).json({ error: "Database query failed" });
-      }
-  
-      if (result.affectedRows === 0) {
-        return res.status(404).json({ error: "Intern not found" });
-      }
-  
-      return res.json({ message: "Review status updated successfully" });
-    });
-  };
+
+    return res.json({ message: "Feedback Approved successfully" });
+  });
+};
+
+
+
+const DeleteFeedback = (req, res) => {
+  const { id } = req.params;
+
+  const sql = `
+    DELETE FROM video_feedback
+    WHERE id = ?`;
+  connection.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    }
+
+    return res.json({ message: "Feedback Deleted successfully" });
+  });
+};
+
+const checkVideoStatus = (req, res) => {
+  const { eti_id } = req.params;
+
+  const sql = `
+    SELECT status
+    FROM video_feedback
+    WHERE eti_id = ?`;
+  connection.query(sql, [eti_id], (err, data) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ error: "Database query failed" });
+    }
+
+    if (data.length === 0) {
+      return res.json({ status: "No Video Submitted" });
+    }
+
+    const status = data[0].status;
+    return res.json({ status });
+  });
+};
+
 module.exports = {
   GetReviewInterns,
   GetNonReviewInterns,
   CountReviewInterns,
   CountNonReviewInterns,
-  UpdateReviewStatus
+  ApproveFeedback,
+  DeleteFeedback,
+  checkVideoStatus,
 };
