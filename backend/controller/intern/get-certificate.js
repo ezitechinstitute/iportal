@@ -89,36 +89,10 @@ function CalculateWeeks(month) {
 const getInternData = (email) => {
   return new Promise((resolve, reject) => {
     const sql = `
-      SELECT 
-          a.eti_id AS intern_id,
-          a.name AS intern_name,
-          a.int_technology,
-          a.review,
-          t.duration,
-          t.cnic,
-          p.title,
-          last_project.end_date AS last_completed_project_end
-      FROM intern_accounts AS a
-      LEFT JOIN intern_table AS t 
-          ON a.email = t.email
-      LEFT JOIN (
-          SELECT title, pstatus
-          FROM intern_projects
-          WHERE email = ? AND pstatus = 'Completed'
-          ORDER BY project_id DESC
-          LIMIT 3
-      ) AS p ON TRUE
-      LEFT JOIN (
-          SELECT end_date
-          FROM intern_projects
-          WHERE email = ? AND pstatus = 'Completed'
-          ORDER BY end_date DESC
-          LIMIT 1
-      ) AS last_project ON TRUE
-      WHERE a.email = ?;
+     SELECT a.eti_id AS intern_id, a.name AS intern_name, a.int_technology, a.start_date, a.review, t.duration, t.cnic, p.title AS project_title, p.end_date AS project_end_date FROM intern_accounts AS a LEFT JOIN intern_table AS t ON a.email = t.email LEFT JOIN intern_projects AS p ON p.eti_id = a.eti_id AND p.pstatus = 'Completed' WHERE a.email = ? ORDER BY p.end_date DESC LIMIT 3;
     `;
 
-    connection.query(sql, [email, email, email], (err, results) => {
+    connection.query(sql, [email], (err, results) => {
       if (err) {
         console.error("Error fetching intern data:", err);
         return reject(err);
@@ -128,6 +102,8 @@ const getInternData = (email) => {
         return resolve(null);
       }
 
+      // console.log(results);
+
       const intern = {
         id: results[0].intern_id?.trim(),
         cnic: results[0].cnic,
@@ -136,10 +112,10 @@ const getInternData = (email) => {
         duration: results[0].duration,
         start_date: results[0].start_date,
         review: results[0].review,
-        last_project_end_date: results[0].last_completed_project_end,
+        last_project_end_date: results[0].project_end_date,
         projects: results
-          .filter((r) => r.title)
-          .map((r) => ({ title: r.title })),
+          .filter((r) => r.project_title)
+          .map((r) => ({ title: r.project_title })),
       };
 
       resolve(intern);
@@ -157,6 +133,8 @@ const GetCertificate = async (req, res) => {
 
   try {
     const data = await getInternData(email);
+
+    console.log(data);
 
     const avg = await CalculateAverage(data.id, data.email);
     console.log(avg);
