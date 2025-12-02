@@ -209,12 +209,6 @@ const GetCertificate = async (req, res) => {
     PImage.registerFont(regularFontPath, "OpenSansRegular");
     PImage.registerFont(boldFontPath, "OpenSansBold");
 
-    // Load fonts synchronously before use
-    const regularFont = PImage.loadFont(regularFontPath);
-    regularFont.loadSync();
-
-    const boldFont = PImage.loadFont(boldFontPath);
-    boldFont.loadSync();
     const candidateFonts = [
       path.join(__dirname, "../../fonts/OpenSans-Regular.ttf"),
       "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
