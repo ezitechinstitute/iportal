@@ -206,7 +206,7 @@ const ApproveFeedback = (req, res) => {
     connection.query(sql2, [id], (err, result_2) => {
       if (err) throw err;
       console.log(result_2);
-      return res.json("Feedback Approved Successfuly");
+      return res.json({ message: "Feedback Approved Successfuly" });
     });
   });
 };
@@ -216,7 +216,7 @@ const DeleteFeedback = (req, res) => {
 
   const sql = `
     DELETE FROM video_feedback
-    WHERE id = ?`;
+    WHERE eti_id = ?`;
   connection.query(sql, [id], (err, result) => {
     if (err) {
       console.error("Database error:", err);

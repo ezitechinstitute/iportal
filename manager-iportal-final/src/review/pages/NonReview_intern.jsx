@@ -138,7 +138,9 @@ const NonReview_intern = () => {
 
   const DeleteFeedback = async (id) => {
     await axios
-      .delete(`https://api.ezitech.org/delete-feedback/${id}`)
+      .delete(
+        `https://api.ezitech.org/delete-feedback/${encodeURIComponent(id)}`
+      )
       .then((response) => {
         alert(response.data.message);
         // Refresh the list after deletion

@@ -141,7 +141,7 @@ const Review_intern = () => {
 
   const ApproveFeedback = async (id) => {
     await axios
-      .put(`https://api.ezitech.org/approved-feedback/${id}`)
+      .put(`https://api.ezitech.org/approved-feedback/${encodeURIComponent(id)}`)
       .then((response) => {
         alert(response.data.message);
         // Refresh the list after approval
@@ -154,7 +154,7 @@ const Review_intern = () => {
 
   const DeleteFeedback = async (id) => {
     await axios
-      .delete(`https://api.ezitech.org/delete-feedback/${id}`)
+      .delete(`https://api.ezitech.org/delete-feedback/${encodeURIComponent(id)}`)
       .then((response) => {
         alert(response.data.message);
         // Refresh the list after deletion
