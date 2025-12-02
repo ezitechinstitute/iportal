@@ -74,7 +74,10 @@ export const InternLogin = () => {
             navigate("/intern-dashboard");
           }
 
-          if (res.data.intern.int_status === "Active") {
+          if (
+            res.data.intern.int_status === "Active" ||
+            res.data.intern.int_status === "Completed"
+          ) {
             setToken(res.data.token);
             setUser({
               username: res.data.intern.name,

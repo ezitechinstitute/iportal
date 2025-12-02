@@ -2,7 +2,16 @@ import React, { useEffect, useState } from "react";
 import "./InternTopbar.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { FiMenu, FiBell, FiUser, FiPower, FiClock, FiFileText, FiCode, FiCheckCircle } from "react-icons/fi";
+import {
+  FiMenu,
+  FiBell,
+  FiUser,
+  FiPower,
+  FiClock,
+  FiFileText,
+  FiCode,
+  FiCheckCircle,
+} from "react-icons/fi";
 
 export const InternTopbar = () => {
   const navigate = useNavigate();
@@ -148,6 +157,10 @@ export const InternTopbar = () => {
                   <Link to={"/intern-test"}>
                     <button className="btn btn-warning">{user.status}</button>
                   </Link>
+                ) : user.status === "Completed" ? (
+                  <button className="btn btn-danger" disabled>
+                    Internship {user.status}
+                  </button>
                 ) : (
                   <>
                     {shiftStarted === "checkin" && (
@@ -174,7 +187,7 @@ export const InternTopbar = () => {
                 data-toggle="dropdown"
               >
                 <FiBell className="ficon" /> {/* Notification bell */}
-                {/* <span className="badge badge-pill badge-danger badge-up">
+            {/* <span className="badge badge-pill badge-danger badge-up">
                   5
                 </span>
               </a>
@@ -198,11 +211,18 @@ export const InternTopbar = () => {
                 <span className="avatar">
                   <img
                     className="round"
-                    src={avatar || "./app-assets/images/portrait/small/avatar-001.jpeg"}
+                    src={
+                      avatar ||
+                      "./app-assets/images/portrait/small/avatar-001.jpeg"
+                    }
                     alt="User Avatar"
                     height="40"
                     width="40"
-                    onError={() => setAvatar("./app-assets/images/portrait/small/avatar-001.jpeg")}
+                    onError={() =>
+                      setAvatar(
+                        "./app-assets/images/portrait/small/avatar-001.jpeg"
+                      )
+                    }
                   />
                   <span className="avatar-status-online"></span>
                 </span>
@@ -212,25 +232,29 @@ export const InternTopbar = () => {
                 aria-labelledby="dropdown-user"
               >
                 {/* <small> */}
-                  {/* {user.status === "Test" ? ( */}
-                    {/* ""
+                {/* {user.status === "Test" ? ( */}
+                {/* ""
                   ) : (
                     <a className="dropdown-item"> */}
-                      {/* <FiFileText className="mr-50" /> Replaced FiIdCard with FiFileText for ID */}
-                      {/* ID <br /> {user.ezi_id}
+                {/* <FiFileText className="mr-50" /> Replaced FiIdCard with FiFileText for ID */}
+                {/* ID <br /> {user.ezi_id}
                     </a>
                   )}
                   <a className="dropdown-item">
                     <FiCode className="mr-50" /> Technology icon 
                     Tech <br /> {user.tech}
                   </a> */}
-                  {/* <a className="dropdown-item">
+                {/* <a className="dropdown-item">
                     <FiCheckCircle className="mr-50" /> Status icon */}
-                    {/* Status <br /> {user.status}
+                {/* Status <br /> {user.status}
                   </a>
                 </small> */}
-                <Link className="dropdown-item" type="button" to="/intern-profile">
-                  <FiUser className="mr-50" /> 
+                <Link
+                  className="dropdown-item"
+                  type="button"
+                  to="/intern-profile"
+                >
+                  <FiUser className="mr-50" />
                   Profile
                 </Link>
                 <a className="dropdown-item" type="button" onClick={Logout}>

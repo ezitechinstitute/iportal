@@ -195,21 +195,21 @@ const CountNonReviewInterns = (req, res) => {
 const ApproveFeedback = (req, res) => {
   const { id } = req.params;
 
-  const sql = `
-    UPDATE video_feedback
-    SET status = 'Approved'
-    WHERE id = ?`;
-  connection.query(sql, [id], (err, result) => {
-    if (err) {
-      console.error("Database error:", err);
-      return res.status(500).json({ error: "Database query failed" });
-    }
+  const sql =
+    "UPDATE `video_feedback` SET `status`='Approved' WHERE `eti_id` = ?";
 
-    return res.json({ message: "Feedback Approved successfully" });
+  connection.query(sql, [id], (err, result_1) => {
+    if (err) throw err;
+    console.log(result_1);
+    const sql2 =
+      "UPDATE `intern_accounts` SET `review`='Approved' WHERE `eti_id` = ?";
+    connection.query(sql2, [id], (err, result_2) => {
+      if (err) throw err;
+      console.log(result_2);
+      return res.json("Feedback Approved Successfuly");
+    });
   });
 };
-
-
 
 const DeleteFeedback = (req, res) => {
   const { id } = req.params;
@@ -222,8 +222,12 @@ const DeleteFeedback = (req, res) => {
       console.error("Database error:", err);
       return res.status(500).json({ error: "Database query failed" });
     }
-
-    return res.json({ message: "Feedback Deleted successfully" });
+    const sql2 =
+      "UPDATE `intern_accounts` SET `review`='Rejected' WHERE `eti_id` = ?";
+    connection.query(sql2, [id], (err, result_2) => {
+      if (err) throw err;
+      return res.json({ message: "Feedback Deleted Successfuly" });
+    });
   });
 };
 

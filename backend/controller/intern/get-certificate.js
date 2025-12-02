@@ -123,6 +123,29 @@ const getInternData = (email) => {
   });
 };
 
+const MarkInternshipComplete = (email) => {
+  return new Promise((resolve, reject) => {
+    const sql =
+      "UPDATE `intern_accounts` SET `int_status`= 'Completed' WHERE `email` = ?";
+
+    connection.query(sql, [email], (err, data) => {
+      if (err) {
+        return reject(err);
+      } else {
+        const sql2 =
+          "UPDATE `intern_table` SET `status`= 'Completed' WHERE `email` = ?";
+        connection.query(sql2, [email], (err, data2) => {
+          if (err) {
+            return reject(err);
+          } else {
+            return resolve(data2);
+          }
+        });
+      }
+    });
+  });
+};
+
 const GetCertificate = async (req, res) => {
   const { email } = req.params;
 
@@ -133,11 +156,7 @@ const GetCertificate = async (req, res) => {
 
   try {
     const data = await getInternData(email);
-
-    console.log(data);
-
     const avg = await CalculateAverage(data.id, data.email);
-    console.log(avg);
 
     if (avg < 70) {
       return res.json({
@@ -146,6 +165,27 @@ const GetCertificate = async (req, res) => {
         average: avg,
       });
     }
+
+    if (data.projects.length < 3) {
+      return res.json({
+        success: false,
+        message:
+          "You need to complete at least 3 projects to get certificate!!!",
+        average: avg,
+      });
+    }
+
+    if (data.review !== "Approved") {
+      return res.json({
+        success: false,
+        message:
+          "Your internship feedback review is not approved yet. You cannot download certificate.",
+        average: avg,
+      });
+    }
+
+    const markComplete = await MarkInternshipComplete(email);
+    console.log(markComplete);
 
     const reward = AssignRewards(avg);
     const weeks = CalculateWeeks(parseInt(data.duration));

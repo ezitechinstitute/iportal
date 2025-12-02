@@ -281,7 +281,7 @@ const Review_intern = () => {
                                         <button
                                           className="dropdown-item"
                                           onClick={() =>
-                                            ApproveFeedback(intern.id)
+                                            ApproveFeedback(intern.eti_id)
                                           }
                                         >
                                           {" "}
@@ -291,7 +291,7 @@ const Review_intern = () => {
                                         <button
                                           className="dropdown-item"
                                           onClick={() =>
-                                            DeleteFeedback(intern.id)
+                                            DeleteFeedback(intern.eti_id)
                                           }
                                         >
                                           {" "}
