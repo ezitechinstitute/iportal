@@ -173,124 +173,70 @@ const GetCertificate = async (req, res) => {
     const weeks = CalculateWeeks(parseInt(data.duration));
 
     // Certificate (pureimage)
-
     const verificationUrl = `https://interns.ezitech.org/public-profile/${encodeURIComponent(
       data.id
     )}`;
-    // generate QR code as buffer
     const qrBuffer = await QrCode.toBuffer(verificationUrl);
 
-    // ensure template exists
     if (!fs.existsSync(template)) {
       throw new Error(`Certificate template not found: ${template}`);
     }
 
-    // Load certificate background using pureimage
     const bgStream = fs.createReadStream(template);
     const background = await PImage.decodePNGFromStream(bgStream);
     const canvas = PImage.make(background.width, background.height);
     const ctx = canvas.getContext("2d");
 
-    // Register a TTF font if available so pureimage can draw text.
-    // Try repo font first, then common system fonts.
-    // Register regular and bold fonts
-    // backend/fonts/Open_Sans/static
-    // Paths to font files
+    // Assuming fonts are in backend/fonts/Open_Sans/static/
     const regularFontPath = path.join(
       __dirname,
-      "fonts/Open_Sans/static/OpenSans-Regular.ttf"
+      "../../fonts/Open_Sans/static/OpenSans-Regular.ttf"
     );
     const boldFontPath = path.join(
       __dirname,
-      "fonts/Open_Sans/static/OpenSans-Bold.ttf"
+      "../../fonts/Open_Sans/static/OpenSans-Bold.ttf"
     );
 
-    // Register fonts with unique family names
-    PImage.registerFont(regularFontPath, "OpenSansRegular");
-    PImage.registerFont(boldFontPath, "OpenSansBold");
-
-    const candidateFonts = [
-      path.join(__dirname, "../../fonts/OpenSans-Regular.ttf"),
-      "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-      "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
-      "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
-      "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf",
-    ];
-
-    let fontFamily = null;
-    for (const p of candidateFonts) {
-      try {
-        if (fs.existsSync(p)) {
-          const family = path.basename(p).split(/[.-]/)[0];
-          const reg = PImage.registerFont(p, family);
-          reg.loadSync();
-          fontFamily = family;
-          console.info("Registered font", p, "as", family);
-          break;
-        }
-      } catch (e) {
-        console.warn("Error registering font", p, e && e.message);
-      }
-    }
-
-    if (!fontFamily) {
+    if (!fs.existsSync(regularFontPath) || !fs.existsSync(boldFontPath)) {
       console.warn(
-        "No TTF font found. Text rendering may be blank. Put a TTF in backend/fonts/."
+        "Font files missing. Make sure TTF exists in backend/fonts/"
       );
-      // set a fallback name so string templates won't error; pureimage will still not render without registration
-      fontFamily = "sans";
     }
 
-    // Draw background (default content already printed)
+    const regularFont = PImage.registerFont(regularFontPath, "OpenSansRegular");
+    const boldFont = PImage.registerFont(boldFontPath, "OpenSansBold");
+    regularFont.loadSync();
+    boldFont.loadSync();
+
+    // Draw background
     ctx.drawImage(background, 0, 0);
 
-    // Debug info: template size and chosen font
-    console.info(
-      "Certificate template size:",
-      background.width,
-      "x",
-      background.height
-    );
-    console.info("Using font family for text:", fontFamily);
-
-    // Add dynamic intern data
+    // ------------------------------
+    // Draw intern info
+    // ------------------------------
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
-    ctx.font = `50px ${fontFamily}`;
 
     // Name
-    const nameX = canvas.width > 1190 ? 1190 : Math.floor(canvas.width / 2);
-    const nameY = 600;
-    console.debug("Drawing name:", data.name, "at", nameX, nameY);
-    ctx.fillText(data.name || "", nameX, nameY);
-
-    ctx.fillStyle = "black";
-    ctx.textAlign = "center";
-    ctx.font = `40px ${fontFamily}`;
+    ctx.font = "50pt 'OpenSansBold'";
+    ctx.fillText(data.name || "", canvas.width / 2, 600);
 
     // Tech
-    const techX = canvas.width > 1190 ? 1190 : Math.floor(canvas.width / 2);
-    const techY = 670;
-    console.debug("Drawing tech:", data.tech, "at", techX, techY);
-    ctx.fillText(`Internship in ${data.tech || ""}`, techX, techY);
+    ctx.font = "40pt 'OpenSansRegular'";
+    ctx.fillText(`Internship in ${data.tech || ""}`, canvas.width / 2, 670);
 
-    //   Issed Date
-    ctx.font = `30px ${fontFamily}`;
+    // Issued Date
+    ctx.font = "30pt 'OpenSansRegular'";
     ctx.textAlign = "left";
     ctx.fillText(`Issued Date: ${new Date().toLocaleDateString()}`, 275, 590);
 
-    ctx.font = `30px ${fontFamily}`;
+    // ID & CNIC
     ctx.textAlign = "end";
-    ctx.fillStyle = "black";
     ctx.fillText(`ID: ${data.id}`, 2060, 550);
-
-    //   cnic
-    ctx.font = `30px ${fontFamily}`;
-    ctx.textAlign = "end";
-    ctx.fillStyle = "black";
     ctx.fillText(`CNIC: ${data.cnic}`, 2100, 590);
 
-    let paraGraph = `He/She worked with us for an overall period of (${new Date(
+    // Paragraph
+    const paraGraph = `He/She worked with us for an overall period of (${new Date(
       data.start_date
     )
       .toLocaleDateString("en-GB", {
@@ -307,22 +253,20 @@ const GetCertificate = async (req, res) => {
       .replace(
         / /g,
         "-"
-      )}). During his/her period of internship, he/she was found attentive, punctual, and hard-working. Punctuality was one of his/her strengths, as he/she consistently arrived on time and met deadlines effectively. Additionally, his/her work ethic was strong, and he/she consistently delivered high-quality work.`;
-    ctx.font = `35px ${fontFamily}`;
+      )} ). During his/her period of internship, he/she was found attentive, punctual, and hard-working. Punctuality was one of his/her strengths, as he/she consistently arrived on time and met deadlines effectively. Additionally, his/her work ethic was strong, and he/she consistently delivered high-quality work.`;
+
+    ctx.font = "35pt 'OpenSansRegular'";
     ctx.textAlign = "center";
-    ctx.fillStyle = "black";
 
     const words = paraGraph.split(" ");
     let line = "";
     let y = 750;
     const lineHeight = 50;
-    const maxWidth = 1800; // Maximum width for the text
+    const maxWidth = 1800;
 
     for (let n = 0; n < words.length; n++) {
       const testLine = line + words[n] + " ";
-      const metrics = ctx.measureText(testLine);
-      const testWidth = metrics.width;
-      if (testWidth > maxWidth && n > 0) {
+      if (ctx.measureText(testLine).width > maxWidth && n > 0) {
         ctx.fillText(line, canvas.width / 2, y);
         line = words[n] + " ";
         y += lineHeight;
@@ -332,45 +276,27 @@ const GetCertificate = async (req, res) => {
     }
     ctx.fillText(line, canvas.width / 2, y);
 
-    // Duration
-    ctx.font = `30px ${fontFamily}`;
-    ctx.textAlign = "left"; // 👈 important: text will always start from x
-    ctx.fillStyle = "black";
+    // Duration, Projects, Rewards
+    ctx.font = "30pt 'OpenSansRegular'";
+    ctx.textAlign = "left";
     ctx.fillText(weeks, 425, 1012);
 
-    //   Projects
-    ctx.font = `30px ${fontFamily}`;
-    ctx.textAlign = "left"; // 👈 important: text will always start from x
-    ctx.textBaseline = "middle";
-    ctx.fillStyle = "black";
     const projectTitles = data.projects.map((p) => p.title).join(", ");
-    ctx.fillText(projectTitles, 425, 1043);
+    ctx.fillText(projectTitles, 425, 1055);
+    ctx.fillText(`Certificate of ${reward} in Internship`, 425, 1098);
 
-    // Rewards
-    ctx.font = `30px ${fontFamily}`;
-    ctx.textAlign = "left"; // 👈 important: text will always start from x
-    ctx.fillStyle = "black";
-    ctx.fillText(`Certificate of ${reward} in Internship`, 425, 1085);
+    // CEO Name + Designation
+    const ceoName = "Ibrahim Shah";
+    const ceoDesignation = "Chief Executive Ezitech Institute";
+    const x = 600,
+      z = 1300;
 
-    // CEO name and designation
-    ctx.font = `30px ${fontFamily}`;
-    ctx.fillStyle = "black";
+    ctx.font = "30pt 'OpenSansBold'";
     ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+    ctx.fillText(ceoName, x, z);
 
-    const name = "Ibrahim Shah";
-    const designation = "Chief Executive Ezitech Institute";
-    const x = 600;
-    const z = 1300;
-
-    // Draw name
-    ctx.fillText(name, x, z);
-
-    // Measure name width for underline
-    const nameWidth = ctx.measureText(name).width;
-
-    // Draw underline
-    const underlineY = z + 20; // slightly more spacing
+    const nameWidth = ctx.measureText(ceoName).width;
+    const underlineY = z + 20;
     ctx.beginPath();
     ctx.moveTo(x - nameWidth / 2, underlineY);
     ctx.lineTo(x + nameWidth / 2, underlineY);
@@ -378,29 +304,20 @@ const GetCertificate = async (req, res) => {
     ctx.strokeStyle = "black";
     ctx.stroke();
 
-    // Draw designation below underline
-    ctx.font = `bold 25px ${fontFamily}`;
-    ctx.textBaseline = "top"; // Essential fix
-    ctx.fillText(designation, x, underlineY + 35);
+    ctx.font = "25pt 'OpenSansRegular'";
+    ctx.textBaseline = "top";
+    ctx.fillText(ceoDesignation, x, underlineY + 35);
 
-    // Load and draw QR code
+    // QR Code
     const qrStream = new PassThrough();
     qrStream.end(qrBuffer);
     const qrImage = await PImage.decodePNGFromStream(qrStream);
-
     const qrSize = 180;
-
     ctx.drawImage(qrImage, 1800, 1225, qrSize, qrSize);
 
     // Verifier text
-    ctx.font = `20px ${fontFamily}`;
-    ctx.fillStyle = "black";
-    ctx.textAlign = "center";
-    ctx.fillText(
-      "Scan to Verify",
-      1800 + qrSize / 2,
-      1225 + qrSize + 5 // Position below the QR code
-    );
+    ctx.font = "20pt 'OpenSansRegular'";
+    ctx.fillText("Scan to Verify", 1800 + qrSize / 2, 1225 + qrSize + 5);
 
     // Send response
     res.setHeader("Content-Type", "image/png");
@@ -409,14 +326,6 @@ const GetCertificate = async (req, res) => {
       `attachment; filename=${data.name}_certificate.png`
     );
     await PImage.encodePNGToStream(canvas, res);
-
-    // res.json({
-    //   success: true,
-    //   message: "You are eligible to download certificate!!!",
-    //   average: avg,
-    //   reward,
-    //   internData: data,
-    // });
   } catch (err) {
     console.error("Error in GetCertificate:", err);
     res.status(500).json({ success: false, error: "Internal Server Error" });
