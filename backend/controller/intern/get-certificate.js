@@ -93,7 +93,6 @@ const getInternData = (email) => {
           a.eti_id AS intern_id,
           a.name AS intern_name,
           a.int_technology,
-          a.start_date,
           a.review,
           t.duration,
           t.cnic,
