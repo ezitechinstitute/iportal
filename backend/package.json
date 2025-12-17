@@ -12,7 +12,7 @@
   "dependencies": {
     "@napi-rs/canvas": "^0.1.82",
     "axios": "^1.6.8",
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.3",
     "body-parser": "^1.20.2",
     "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.6",
