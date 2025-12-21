@@ -25,7 +25,7 @@
     "multer": "^2.0.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.9.7",
-    "node-cron": "^3.0.3",
+    "node-cron": "^4.2.1",
     "nodemailer": "^7.0.11",
     "nodemon": "^3.1.0",
     "pureimage": "^0.4.18",
